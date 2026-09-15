@@ -1,0 +1,113 @@
+# CampusNav AI — Implementation Status Registry
+
+## Purpose
+Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
+
+## Phase 1 status vocabulary
+- `IMPLEMENTED_VERIFIED` — implementation exists and relevant deterministic evidence passed during this audit; this does not imply browser/device or live-cloud verification unless explicitly stated
+- `IMPLEMENTED_UNVERIFIED` — implementation exists, but a required external, live, or environment-specific check was not freshly performed
+- `PARTIAL` — only part of the canonical contract is implemented
+- `MISSING` — no implementation evidence was found
+- `DEFERRED` — intentionally postponed by an approved architectural decision
+- `BLOCKED` — cannot be completed without approved institutional data or a decision
+- `CONFLICT` — implementation or documentation contradicts a controlling rule and requires explicit resolution
+
+## Phase 1 requirement-to-code alignment matrix
+
+| Subsystem | Canonical references | Relevant implementation | Status and evidence | Gap / risk | Recommended future phase |
+|---|---|---|---|---|---|
+| Project scope | `01`, `02`, `37`, `60` | `src/App.jsx`, `src/pages/` | `IMPLEMENTED_VERIFIED` — route and source audit found campus navigation/information functions and no LMS/ERP implementation | Future work could introduce scope drift | Phase 2 baseline guardrails |
+| 2D navigation | `06`, `07`, `10`, `11`, `58` | `src/pages/Map.jsx`, `src/components/map/IndoorMap2D.jsx` | `IMPLEMENTED_VERIFIED` — navigation, multi-floor, render tests passed | Browser interaction was not freshly tested | Phase 2 browser acceptance |
+| 3D navigation | `03`, `07`, `10`, `11`, `25`, `58` | `src/components/map3d/`, `src/lib/map3d.js` | `IMPLEMENTED_VERIFIED` — shared coordinate, shared-route, WebGL-fallback tests passed | Device/browser QA not reverified; production chunk is about 878 kB | Phase 2 browser/device/performance QA |
+| A* routing | `02`, `10`, `18` | `src/lib/pathfinding.js`, `src/lib/navigation.js` | `IMPLEMENTED_VERIFIED` — same-floor, multi-floor, blocked-edge and wall-crossing tests passed | Distances remain schematic rather than verified metres | Preserve in all future phases |
+| GF–5F spatial data | `04`, `11`, `20`, `34` | `src/data/floors.js`, `facilities.js`, `additionalFloorMaps.js`, `mapNodes.js`, `mapEdges.js`, `stairs.js` | `IMPLEMENTED_VERIFIED` — 95 source-supported facility assignments and graph integrity passed | Exact dimensions remain estimated; institutional final verification is pending | Future approved map-verification phase |
+| QR positioning | `03`, `10`, `20`, `58` | `src/data/qrCheckpoints.js`, `src/lib/checkpointPositioning.js`, `src/components/map/QRScanner.jsx` | `IMPLEMENTED_VERIFIED` — valid, invalid, payload, privacy and A* origin tests passed | Physical installation/label placement not verified | Future deployment QA |
+| Manual positioning | `03`, `10`, `20`, `55`, `58` | `src/lib/checkpointPositioning.js`, `src/pages/Map.jsx` | `IMPLEMENTED_VERIFIED` — manual fallback and state-preservation tests passed | Browser accessibility/interaction not freshly tested | Phase 2 browser acceptance |
+| Emergency routing | `02`, `12`, `20`, `42`, `58` | `src/lib/emergencyNavigation.js`, `src/data/emergencyRoutes.js`, `src/components/map/EmergencyModePanel.jsx` | `IMPLEMENTED_VERIFIED` — approved-only routing, rejected normal edges, blocked routes and safe no-route behavior passed | Digital coverage is limited to source-supported routes | Preserve; future safety-authority review |
+| Emergency equipment/data | `12`, `20`, `45`, `68` | `src/data/emergencyExits.js`, `emergencyEquipment.js`, `emergencyContacts.js` | `PARTIAL` — static source-aligned modules and emergency tests exist | Verified plotted coverage is incomplete on some floors; no full authorized admin workflow | `BLOCKED` pending safety-authority data |
+| Dashboard | `15`, `21`, `22`, `47` | `src/pages/Dashboard.jsx`, `src/components/dashboard/`, `src/services/dashboardService.js`, `src/providers/dashboard/` | `IMPLEMENTED_VERIFIED` locally — lifecycle, priority, deduplication, Manila time, demo isolation and empty states passed | Live content/provider behavior not freshly reverified | Phase 2 live/provider verification |
+| Supabase foundation | `03`, `04`, `19`, `31` | `src/lib/supabaseClient.js`, `supabase/migrations/`, `supabase/config.toml` | `IMPLEMENTED_UNVERIFIED` — client/config/migrations exist and deterministic structure tests passed | Linked schema and current provider configuration were not queried in this audit | Phase 2 linked-environment verification |
+| Authentication | `05`, `43`, `59` | `src/contexts/AuthContext.jsx`, `src/services/authService.js`, `src/providers/auth/`, `src/pages/Login.jsx` | `IMPLEMENTED_UNVERIFIED` — lifecycle and render tests passed; historical live validation is documented | Live login/refresh/logout not freshly reverified | Phase 2 live auth verification |
+| RBAC | `05`, `16`, `43`, `59` | `src/lib/authorization.js`, `src/components/auth/ProtectedRoute.jsx`, `src/App.jsx` | `IMPLEMENTED_UNVERIFIED` — role helpers and route guards passed structural tests | UI guards are not proof of current database authorization | Phase 2 role-boundary verification |
+| RLS | `05`, `19`, `42`, `59` | `supabase/migrations/*.sql`, `supabase/tests/*.sql` | `IMPLEMENTED_UNVERIFIED` — policies and transactional tests exist; structural suites passed | Local pgTAP/linked database policies were not executed during Phase 1 | Phase 2 local/linked RLS verification |
+| Realtime | `15`, `22`, `47` | `src/services/realtimeService.js`, Dashboard provider, `dashboard_refresh_events` migration/triggers | `IMPLEMENTED_UNVERIFIED` — centralized subscription lifecycle tests passed | Authenticated live delivery and cleanup not freshly reverified | Phase 2 authenticated Realtime verification |
+| Admin CMS | `05`, `16`, `45` | `src/pages/admin/AdminOverview.jsx`, `AdminContentPage.jsx`, `src/services/adminService.js` | `IMPLEMENTED_UNVERIFIED` — content validation, route protection, service boundaries and rendering passed | Live CRUD, ownership and RLS were not freshly exercised | Phase 2 live admin acceptance |
+| Audit logging | `16`, `48`, `59` | `src/pages/admin/AdminAudit.jsx`, Phase 8B/8C audit triggers and tests | `IMPLEMENTED_UNVERIFIED` — read-only UI and trigger structure tests passed | Current linked audit creation/access was not reverified | Phase 2 audit/RLS verification |
+| Personnel | `04`, `14`, `16`, `49` | `src/services/personnelService.js`, Phase 8C.1 schema, Phase 8C.2 WIP UI/service | `PARTIAL` — backend rules and current WIP deterministic tests passed | Official data, approved public fields, live role scope and the WIP lifecycle remain unverified | Phase 2 WIP stabilization; institutional-data phase later |
+| Class schedules | `04`, `14`, `16`, `56` | `src/services/scheduleService.js`, Phase 8C.1 schema, Phase 8C.2 WIP | `PARTIAL` — recurrence, exceptions, overlaps and conflict constraints passed deterministic tests | No approved institutional schedule dataset; live database constraints not reverified | Phase 2 WIP/database verification |
+| Availability engine | `14`, `20`, `42`, `56` | `src/services/personnelService.js`, `src/services/scheduleService.js` | `IMPLEMENTED_VERIFIED` locally — precedence, exceptions, Manila time and next-availability overlap tests passed | Live public projections and real approved data not reverified | Phase 2 live projection verification |
+| Check-in logic | `02`, `05`, `14`, `49` | `personnel_checkins` migration/policies, `personnelService.js`, Phase 8C.2 WIP | `IMPLEMENTED_VERIFIED` locally — only an active check-in produces `CHECKED_IN`; schedule-only cases do not | Role-scoped create/close behavior not freshly tested against linked RLS | Phase 2 live authorization verification |
+| Facility information | `13`, `20`, `32` | `src/data/facilities.js`, `src/pages/Facilities.jsx`, `FacilityDetail.jsx` | `PARTIAL` — verified floor assignments, details, search foundation and navigation links exist | Services, public contacts, images and institutional completeness vary | Future approved facility-data phase |
+| Operating hours | `13`, `42`, `56` | pending-state handling in facility UI/data | `BLOCKED` — unknown hours are not invented | No authorized hours, exception calendar, or status engine dataset | Institutional-data decision and owner approval |
+| Notifications | `15`, `22`, `47` | `notifications` schema/RLS, Dashboard provider, Admin content pages | `IMPLEMENTED_UNVERIFIED` — local lifecycle/provider tests passed | Live audience and permission behavior not freshly reverified; optional push/SMS absent | Phase 2 live in-app verification; delivery channels deferred |
+| Events | `15`, `22`, `47` | `events` schema/RLS, `src/pages/Events.jsx`, Dashboard/Admin providers | `IMPLEMENTED_UNVERIFIED` — local lifecycle and rendering evidence passed | Live event CRUD/audience behavior not freshly reverified | Phase 2 live content verification |
+| CLARA | `17`, `18`, `20`, `41`, `60` | `src/pages/Clara.jsx` | `PARTIAL` — UI and conservative local facility matcher exist | No server-side model, tool orchestration, role-aware grounding, or provider endpoint; must not be called production AI | `DEFERRED` until internal services and authorization are accepted |
+| PWA/offline emergency access | `12`, `24`, `30` | `public/manifest.json` only | `MISSING` — no service worker, cache strategy, or versioned emergency cache was found | Manifest alone can create an unsupported offline claim | Future approved PWA/emergency-cache phase |
+| Map administration | `11`, `16`, `45`, `46` | developer verification panel and `src/pages/admin/QRCheckpoints.jsx` | `PARTIAL` — inspection/QR tooling exists | No production floor-plan upload, calibration, geometry editor, map version history or coherent rollback | Future approved map-administration phase |
+| Reports/analytics | `23`, `49`, `60` | no dedicated implementation found | `MISSING` | No report workflow, verification queue, privacy model, or analytics dashboard | Future approved reporting phase |
+| UI registry compliance | `06`, `07`, `21`, `26`, `55` | registered pages/components under `src/pages/` and `src/components/` | `PARTIAL` — named screen/component families and safe empty states exist; route render passed | Responsive, keyboard, screen-reader and device matrix not freshly verified | Phase 2 browser/accessibility QA |
+| Deployment | `08`, `31`, `52`, `62` | `vite.config.js`, `wrangler.jsonc`, `package.json`, GitHub remotes, Cloudflare production URL | `IMPLEMENTED_UNVERIFIED` — production build passed; configuration exists; production URL returned HTTP 200 during Phase 1 | Current worktree was not deployed; production-browser equivalence was not established; both `origin` and `old-origin` remotes require deliberate release targeting | Phase 2 release verification |
+| Testing/QA | `08`, `25`, `55`, `57`, `58`, `73` | `scripts/test-*.mjs`, `supabase/tests/*.sql` | `PARTIAL` — all selected local deterministic non-cloud suites, render, lint, typecheck and build passed in Phase 1 | Local pgTAP, linked-cloud, production browser, responsive and physical-device checks were not run | Phase 2 acceptance baseline |
+
+## Core invariant verification
+
+| Invariant | Status | Phase 1 evidence |
+|---|---|---|
+| One canonical campus/spatial dataset | `ALIGNED` | 2D and 3D import the same floors, facilities, nodes and edges; shared-transform test passed |
+| One A* engine for route consumers | `ALIGNED` | `navigation.js` and `emergencyNavigation.js` call `pathfinding.js`; 2D/3D render the returned route; QR/manual resolve into the same node graph; personnel links enter the normal Map route; CLARA has no independent router |
+| Schedule does not mean physical presence | `ALIGNED` | service precedence and UI wording distinguish `SCHEDULED`/`IN_CLASS`/`CONSULTATION`; Phase 8C tests passed |
+| Only authorized active check-in may produce `CHECKED_IN` | `ALIGNED_NEEDS_LIVE_AUTHORIZATION_QA` | status engine tests passed; linked RLS authorization was not freshly executed |
+| QR/manual are thesis-core indoor positioning | `ALIGNED` | both flows exist and deterministic tests passed; no exact continuous indoor-tracking claim found |
+| Emergency uses verified emergency-approved paths only | `ALIGNED` | approved-edge filter, rejected normal edge and no-route tests passed |
+| No AI-created evacuation path | `ALIGNED` | no AI emergency generator exists; CLARA links to verified emergency information only |
+| Unknown institutional data stays unavailable/pending | `ALIGNED` | normal Dashboard/facility/CLARA states use empty, unavailable or pending wording; demo isolation test passed |
+| No generic LMS/ERP expansion | `ALIGNED` | no grades, exams, learning modules, tuition payment, or enrollment subsystem found |
+| Future CLARA must use verified internal tools/data | `ALIGNED_AS_DEFERRED` | current code is explicitly a local placeholder; production tool/AI integration remains deferred |
+
+## Existing Phase 8C.2 worktree alignment
+
+Phase 8C.2 files are preserved as existing work. They are not marked complete by this Phase 1 audit.
+
+| WIP area | Classification | Evidence / remaining verification |
+|---|---|---|
+| Personnel management | `ALIGNED / NEEDS_VERIFICATION` | protected route, editor, list/detail and activation lifecycle exist; linked RLS and official-field approval remain unverified |
+| Courses and sections | `ALIGNED / NEEDS_VERIFICATION` | CRUD forms and department references exist; linked database role scope not rerun |
+| Class schedules | `ALIGNED / NEEDS_VERIFICATION` | room/professor/section conflict detection plus database exclusion constraints exist; current linked constraint behavior not rerun |
+| Schedule exceptions | `ALIGNED / NEEDS_VERIFICATION` | canonical exception types and schedule linking exist; live update/audit not rerun |
+| Personnel assignments | `ALIGNED / NEEDS_VERIFICATION` | stable facility IDs and scheduled-not-presence wording are used |
+| Consultation hours | `ALIGNED / NEEDS_VERIFICATION` | optional facility and recurring windows exist; live permissions not rerun |
+| Check-in/check-out | `ALIGNED / NEEDS_VERIFICATION` | explicit confirmation, active check-in and close action exist; authoritative role boundaries require live RLS evidence |
+| Availability overrides | `ALIGNED / NEEDS_VERIFICATION` | explicit unavailable/leave/special-assignment windows and safe end action exist |
+| Audit and Dashboard refresh | `ALIGNED / NEEDS_VERIFICATION` | existing audit triggers and centralized `dashboard_refresh_events` are reused; live delivery was not rerun |
+| Lifecycle and deletion | `ALIGNED` | UI uses activation, cancellation, check-out and end-override actions instead of generic destructive deletion |
+| Overall Phase 8C.2 | `NEEDS_VERIFICATION` | deterministic `test:phase8c2` passed, but files remain uncommitted and local pgTAP/live-cloud/browser acceptance was not performed |
+
+## Recorded alignment and documentation conflicts
+
+| Document A | Document B | Observed code/evidence | Recommended decision or treatment |
+|---|---|---|---|
+| `01-project-overview.md`, `09-progress-roadmap.md`, and `28-definition-of-done.md` describe 3D as implemented/completed | Previous version of this registry described 3D as in progress | 3D renderer and shared-data tests pass locally; browser/device QA was not performed | Treat implementation as verified locally and device/browser QA as outstanding; do not merge those claims |
+| Original 14 Sep source required strict grayscale | `DEC-UI-001`, `06`, and `07` allow controlled map colors | Current UI uses restrained brand/category colors | `DEC-UI-001` controls implementation; owner/adviser must still decide final thesis screenshot policy in `64` |
+| `17` defines future grounded CLARA integration | `07` registers a current CLARA screen | Current screen is a local facility matcher with no model/tool endpoint | Keep status `PARTIAL`; do not describe the UI as production grounded AI |
+| A web manifest and PWA-facing language can imply install/offline capability | `24` and `30` require evidence of a real cache strategy | No service worker or versioned emergency cache exists | Keep offline/PWA status `MISSING` until implemented and tested |
+| Previous `09` used historical Phase 1–8C numbering | `DEC-ROADMAP-001` resets active development to canonical alignment Phase 1 | Advanced implementation remains present and must not be discarded | Preserve code as baseline evidence; use the reset roadmap for future work |
+
+## Verification scope for this snapshot
+
+Fresh Phase 1 evidence:
+- `test:data`, `test:navigation`, `test:multi-floor`, `test:qr`, `test:emergency`, `test:3d`, `test:dashboard`
+- `test:phase8a`, `test:phase8b`, `test:phase8c`, `test:phase8c2`, `test:render`
+- `lint`, `typecheck`, and production `build`
+- Cloudflare production endpoint HTTP availability (`200`) and local deployment-topology/config inspection
+
+Not freshly verified:
+- Docker/local pgTAP `test:rls`
+- linked Supabase cloud suites and database advisors
+- production login/RLS/Realtime/Admin behavior
+- current worktree deployment equivalence
+- production-browser, responsive, accessibility, WebGL-device, camera-device and offline behavior
+
+Historical documentation claims are retained as history but are not converted into fresh Phase 1 verification.
+
+## Rule
+When this file conflicts with running code, passing tests, or live verification, record the mismatch and apply the authority rules in `00-agent-entrypoint.md`. Never rewrite a safety/business requirement merely to match existing code.

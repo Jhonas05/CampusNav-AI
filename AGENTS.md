@@ -4,7 +4,9 @@
 
 CampusNav AI is a user-owned React application for campus navigation and school information. Keep changes focused on the user's request and preserve established project conventions.
 
-Start with `README.md` for local setup and build commands.
+Before planning or modifying CampusNav, read `CampusNav_content/00-agent-entrypoint.md` first and follow its baseline reading order and task-specific document map. Treat `CampusNav_content/` as the canonical project specification. Do not invent requirements absent from that documentation, and do not modify canonical documentation unless the task explicitly requires a documentation update. Existing code does not override documented business, privacy, or safety rules. Unknown institutional data must remain unavailable or pending verification.
+
+After the canonical entrypoint, use `README.md` for local setup and build commands.
 
 ## Key files
 
