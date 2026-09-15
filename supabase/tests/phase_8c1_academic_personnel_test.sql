@@ -146,7 +146,7 @@ reset role;
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-000000000c03', true);
 set local role authenticated;
 select lives_ok(
-  $$insert into public.personnel_facility_assignments (department_id, personnel_id, facility_id, day_of_week, start_time, end_time, effective_from, source_type, source_id, created_by) select department_id, id, 'library', extract(dow from current_date)::smallint, '08:00', '17:00', current_date, 'DEVELOPMENT_TEST', 'PHASE8C-DEPT-ASSIGNMENT', '00000000-0000-0000-0000-000000000c03' from public.personnel where employee_reference = 'DEVELOPMENT-ONLY'$$,
+  $$insert into public.personnel_facility_assignments (department_id, personnel_id, facility_id, day_of_week, start_time, end_time, effective_from, source_type, source_id, created_by) select department_id, id, 'library', extract(dow from current_date)::smallint, '08:00', '17:00', current_date, 'DEVELOPMENT_TEST', 'PHASE8C-DEPT-ASSIGNMENT', '00000000-0000-0000-0000-000000000c03' from public.public_personnel where display_name = 'DEMO / DEVELOPMENT / NOT OFFICIAL'$$,
   'department admin can manage own-department assignments'
 );
 select throws_ok(
@@ -159,19 +159,24 @@ reset role;
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-000000000c04', true);
 set local role authenticated;
 select lives_ok(
-  $$insert into public.personnel_checkins (department_id, personnel_id, facility_id, source, source_reference, created_by) select department_id, id, 'library', 'ADMIN', 'DEVELOPMENT TEST — NOT OFFICIAL', '00000000-0000-0000-0000-000000000c04' from public.personnel where employee_reference = 'DEVELOPMENT-ONLY'$$,
+  $$insert into public.personnel_checkins (department_id, personnel_id, facility_id, source, source_reference, created_by) select department_id, id, 'library', 'ADMIN', 'DEVELOPMENT TEST — NOT OFFICIAL', '00000000-0000-0000-0000-000000000c04' from public.public_personnel where display_name = 'DEMO / DEVELOPMENT / NOT OFFICIAL'$$,
   'SUPER_ADMIN can create a trusted active check-in'
 );
 select is((select count(*) from public.active_personnel_checkins), 1::bigint, 'public safe projection exposes only the active authorized check-in');
-select is((select count(*) from public.audit_logs where entity_type = 'personnel_checkin' and action = 'personnel_checkin_created'), 1::bigint, 'check-in creation is audited');
+select is((
+  select count(*)
+  from public.audit_logs
+  where entity_type = 'personnel_checkin'
+    and action = 'personnel_checkin_created'
+    and entity_id = (select id from public.personnel_checkins where status = 'ACTIVE' limit 1)
+), 1::bigint, 'check-in creation is audited');
 select lives_ok(
-  $$update public.personnel_checkins set status = 'CLOSED', checked_out_at = now() where status = 'ACTIVE'$$,
+  $$update public.personnel_checkins set status = 'CLOSED', checked_out_at = clock_timestamp() + interval '1 second' where status = 'ACTIVE'$$,
   'SUPER_ADMIN can close the trusted check-in'
 );
 select is((select count(*) from public.active_personnel_checkins), 0::bigint, 'closed check-in is removed from public presence projection');
 select ok((select count(*) > 0 from public.dashboard_refresh_events), 'schedule/personnel writes emit safe Dashboard refresh events');
 reset role;
-
 select ok(
   exists (
     select 1 from pg_publication_tables

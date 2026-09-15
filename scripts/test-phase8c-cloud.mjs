@@ -187,6 +187,11 @@ try {
   const dashboardClasses = await dashboard.getTodaysClasses()
   assert.ok(dashboardClasses.some((record) => record.courseCode === courseCode && record.relatedFacilityId === "library"), "Live class schedule did not reach the Dashboard provider")
 
+  const beforeClassCancelSignal = realtimeEvents.length
+  requireSuccess(await adminClient.from("class_schedules").update({ status: "CANCELLED" }).eq("id", statusSchedule.id).select("id, status").single(), "cancel live class schedule")
+  await waitFor(() => realtimeEvents.slice(beforeClassCancelSignal).some((event) => event.payload.new?.domain === "ACADEMIC"), "class schedule cancellation Realtime Dashboard refresh")
+  assert.equal((await dashboard.getTodaysClasses()).some((record) => record.courseCode === courseCode), false, "Cancelled class schedule remained in Today's Classes")
+
   const statusAssignment = await createRecord(adminClient, "personnel_facility_assignments", {
     department_id: ids.department,
     personnel_id: ids.statusPerson,
@@ -345,5 +350,5 @@ for (const [table, idsToCheck] of [
 const { error: signOutError } = await adminClient.auth.signOut()
 assert.equal(signOutError, null, `Phase 8C.1 test sign-out failed: ${signOutError?.message}`)
 
-console.log("LIVE CLOUD TEST: Phase 8C.1 SUPER_ADMIN schedule/personnel writes, public projection privacy, anonymous write rejection, class Dashboard data, SCHEDULED→CHECKED_IN→SCHEDULED state transitions, UNAVAILABLE precedence, Realtime refresh, next-availability overlap safety, trusted audit entries, channel cleanup, fixture cleanup, and sign-out: PASS")
+console.log("LIVE CLOUD TEST: Phase 8C.1 SUPER_ADMIN schedule/personnel writes, public projection privacy, anonymous write rejection, class Dashboard insert/cancel data, SCHEDULED→CHECKED_IN→SCHEDULED state transitions, UNAVAILABLE precedence, authenticated Realtime refresh, next-availability overlap safety, trusted audit entries, channel cleanup, fixture cleanup, and sign-out: PASS")
 process.exit(0)

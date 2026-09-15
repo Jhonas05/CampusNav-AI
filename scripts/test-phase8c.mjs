@@ -151,6 +151,7 @@ const service = createScheduleService(mockClient, { now: () => at })
 assert.equal((await service.getTodaysClasses()).length, 1)
 assert.equal((await service.getRoomSchedule("library", "2026-09-15")).length, 1)
 assert.equal((await service.getCurrentClass({ personnelId: 40 }, at)).personnelId, 40)
+assert.equal((await service.getUpcomingClasses({ after: new Date("2026-09-15T04:00:00.000Z"), days: 1 })).length, 1)
 assert.equal((await service.getProfessorClasses(40, { from: "2026-09-15", to: "2026-09-15" })).length, 1)
 assert.equal((await service.getSectionSchedule(30, { from: "2026-09-15", to: "2026-09-15" })).length, 1)
 
