@@ -1,0 +1,17 @@
+{
+  "name": "CampusNav AI",
+  "short_name": "CampusNav",
+  "description": "Campus navigation and information for St. Clare College.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1d1d1f",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

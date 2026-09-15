@@ -1,0 +1,2 @@
+-- CampusNav Phase 8A intentionally seeds no departments, users, or official content.
+-- The fixed application roles are created by the versioned migration.
