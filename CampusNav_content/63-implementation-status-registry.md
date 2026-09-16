@@ -3,6 +3,18 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Phase 3 canonical asset-cleanup checkpoint — 16 September 2026
+
+**Overall classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Area | Classification | Evidence / advisory |
+|---|---|---|
+| SCC runtime logo | `ACCEPTED` | Under owner-approved `DEC-ASSET-001`, `SchoolLogo` requests only the registered high-resolution transparent `public/branding/scc-logo.png`; the JPG is not an automatic fallback, while accessible text and the non-image monogram fallback remain unchanged |
+| Social preview | `ACCEPTED` | Open Graph and Twitter metadata target the registered absolute `/branding/campusnav-og.png` production URL; the production build emits a real 1200×630 PNG |
+| Public build inputs | `ACCEPTED` | Historical `scc-logo.jpg`, obsolete `campusnav-og-v2.png`, and unsupported-claims `campusnav-og-v3.png` were removed from runtime `public/`; source/legacy binaries were preserved outside the repository runtime tree for owner review |
+| Quality and security gates | `ACCEPTED_WITH_ADVISORY` | The transparent PNG preserves the original 600×600 RGB artwork exactly while changing only exterior alpha. ESLint, typecheck, route rendering, and production build pass; the release build contains only the approved SCC PNG and CampusNav OG PNG under `dist/branding`. Existing dependency, manual-device, and 3D chunk advisories remain |
+| Deployment | `IMPLEMENTED_UNVERIFIED` | Cleanup is staged for owner review only. No commit, push, or production deployment/equivalence verification has occurred |
+
 ## Phase 3 release-candidate consolidation — Checkpoint A — 16 September 2026
 
 **Overall classification:** `ACCEPTED_WITH_ADVISORY`
@@ -17,7 +29,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 | Fixture and credential hygiene | `ACCEPTED_WITH_ADVISORY` | Linked fixture audit returned zero across 14 DEVELOPMENT/DEMO categories; the temporary session file is absent/untracked; source/build scans found no real privileged/provider/database/JWT/private-key credential. Intentional rejected-key test canaries remain. Dependency advisories are unchanged |
 | Quality gates | `ACCEPTED_WITH_ADVISORY` | All deterministic data/navigation/QR/Emergency/3D/Dashboard/Auth/Admin/Phase 8 suites, route rendering, ESLint, typecheck, and production build passed. Docker pgTAP and manual device/accessibility QA remain unavailable/pending |
 | Deployment equivalence | `CONFLICT` | No deployment was performed. Cloudflare production must not be treated as equivalent to this staged release candidate until the exact approved revision is deployed and asset fingerprints are verified |
-| Social preview | `DEFERRED` | Metadata and the canonical 1200×630 `campusnav-og.png` were validated as a separate Checkpoint B. The unapproved v3 concept is excluded because it displays unsupported institutional claims |
+| Social preview | `ACCEPTED` | Checkpoint B was committed at `b860cf1`; the canonical 1200×630 `campusnav-og.png` is the active metadata target, and the subsequent asset-cleanup checkpoint excludes obsolete/unapproved public variants |
 
 Checkpoint A is a scoped Git staging boundary, not a release or completion claim. No commit, push, deployment, stash mutation, or Phase 3 feature development was performed.
 

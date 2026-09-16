@@ -33,11 +33,20 @@ The approved emergency/floor-plan material referenced by the master source is th
 | Asset | Identifier | Authority | Allowed use | Prohibited use | Status |
 |---|---|---|---|---|---|
 | CampusNav Ink all-pages HTML | `CampusNav-Ink-all-pages.html` / supplied alias `CampusNav-Ink-all-pages (1).html`, SHA-256 `C57334D51BB01111162C7FA0999A91124B8BA63162A36E4A3BA98F8A65AD1A82` | Owner-approved visual/UX reference under `DEC-UI-002` | Visual hierarchy, typography direction, spacing, neutral/green/red palette, sharp geometry, technical borders, reusable blueprint motifs, and page-composition cues | Runtime source, bundled scripts, copied inline styles, extracted embedded fonts, institutional data, routing truth, backend/RLS policy, or production evidence | ACCEPTED as reference only |
-| St. Clare College seal | `public/branding/scc-logo.jpg`, consumed through `SchoolLogo` | Existing approved project branding asset | Tasteful institutional identification in the global shell, Login, Emergency, and selected institutional surfaces | Repeated decoration, modification that implies a new institutional endorsement, or use as data/routing evidence | ACCEPTED existing asset |
-| CampusNav social preview | `public/branding/campusnav-og.png` | Existing owner-directed social-preview asset | Open Graph/Twitter preview for the current CampusNav identity | Replacement by the bundled design artifact or use as application runtime UI | PRESERVED |
+| St. Clare College seal | `public/branding/scc-logo.png`, consumed through `SchoolLogo` | Owner-approved canonical institutional asset under `DEC-ASSET-001` | Tasteful institutional identification in the global shell, Login, Emergency, and selected institutional surfaces | Redrawing, wording/symbol/color/proportion changes, repeated decoration, implied new institutional endorsement, or use as data/routing evidence | OWNER_APPROVED / RUNTIME YES — high-resolution seal with edge-connected exterior background cleaned to transparency |
+| Legacy St. Clare College seal | historical `public/branding/scc-logo.jpg` | Previous runtime asset retained in Git history and non-runtime owner archive | Historical reference only | Active runtime use or automatic fallback | HISTORICAL_ASSET / RUNTIME NO |
+| CampusNav social preview | `public/branding/campusnav-og.png` | Existing owner-directed social-preview asset | Open Graph/Twitter preview for the current CampusNav identity | Replacement by the bundled design artifact or use as application runtime UI | ACCEPTED active asset |
 | CampusNav favicon | `public/favicon.svg` | Existing application branding asset | Browser/application identity | Institutional-data or routing authority | PRESERVED |
 
 Duplicate filename variants with the same hash represent the same supplied artifact and do not create additional authority. Static controls in the artifact are not evidence that equivalent application behavior exists.
+
+## Current release public-branding boundary
+
+- `public/branding/scc-logo.png` is the only approved SCC runtime logo for the current release.
+- `public/branding/campusnav-og.png` is the only approved CampusNav social-preview image for the current release.
+- the PNG retains its high-resolution source and uses transparency only outside the seal; legitimate internal white/light details remain opaque.
+- the former `scc-logo.jpg` is a historical asset and must not be an active runtime source or automatic fallback.
+- obsolete `campusnav-og-v2.png` and the unsupported-claims concept `campusnav-og-v3.png` must not be runtime public build inputs. Historical documentation references may remain as history.
 
 ## Source conflict rule
 Use `00-agent-entrypoint.md` and `29-decision-log.md`; never choose a source silently when requirements conflict.

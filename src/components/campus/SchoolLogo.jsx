@@ -3,12 +3,10 @@ import { cn } from "@/lib/utils"
 
 /**
  * St. Clare College of Caloocan seal.
- * Sources, in order: `public/branding/scc-logo.png` (drop a high-resolution
- * official file here to upgrade every placement at once), then the bundled
- * `public/branding/scc-logo.jpg` (official seal from the school's public
- * page), then a blue/gold monogram placeholder.
+ * Uses the canonical release asset `public/branding/scc-logo.png`, then the
+ * existing blue/gold monogram placeholder if that approved asset cannot load.
  */
-const SOURCES = ["/branding/scc-logo.png", "/branding/scc-logo.jpg"]
+const SOURCES = ["/branding/scc-logo.png"]
 
 const SIZES = {
   sm: "h-8 w-8",
@@ -28,7 +26,7 @@ export default function SchoolLogo(props) {
         src={SOURCES[sourceIndex]}
         alt="St. Clare College of Caloocan logo"
         onError={() => setSourceIndex((current) => current + 1)}
-        className={cn(SIZES[size], "shrink-0 rounded-full bg-white object-contain ring-1 ring-black/5", className)}
+        className={cn(SIZES[size], "shrink-0 rounded-full object-contain ring-1 ring-black/5", className)}
       />
     )
   }

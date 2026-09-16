@@ -18,6 +18,7 @@ CampusNav uses the owner-approved **CampusNav Ink / architectural-blueprint** pr
 
 ## Branding
 - use St. Clare College logo tastefully in navbar/login/home/admin shell where appropriate
+- use the owner-approved transparent high-resolution `public/branding/scc-logo.png` as the current institutional logo asset
 - support office/lab/classroom/facility photos and galleries
 - use polished placeholders when an image is unavailable
 

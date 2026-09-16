@@ -93,6 +93,18 @@ Proposal materials describe CampusNav AI as tablet-based. The approved technical
 - Supabase for Auth/database/RLS/Realtime
 - AI secret stays server-side when CLARA is added
 
+## DEC-ASSET-001 — High-resolution transparent SCC PNG is the canonical runtime logo
+**Status:** OWNER APPROVED — 16 Sep 2026
+
+`public/branding/scc-logo.png` is the current canonical SCC institutional logo used by CampusNav. The owner approved this exact higher-resolution visual and superseded the temporary release instruction that kept the older JPG as primary.
+
+Rules:
+- runtime UI uses `/branding/scc-logo.png` only; the JPG is not an automatic fallback or active visual
+- only the edge-connected exterior background may be made transparent; wording, symbols, colors, proportions, and legitimate internal white/light details must remain unchanged
+- CSS controls display size so the source is not unnecessarily downscaled
+- the JPG remains historical/legacy evidence outside runtime `public/`
+- any future visual-content change requires a new owner/institutional asset decision
+
 ## How to add a decision
 Use:
 - ID

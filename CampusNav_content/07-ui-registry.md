@@ -160,10 +160,13 @@ Recommended image placements:
 - Dashboard/event cards: optional contextual image
 
 Known school logo asset:
-- `public/branding/scc-logo.jpg`
+- `public/branding/scc-logo.png`
+- `SchoolLogo` must use this approved release asset directly and must not prefer an unregistered filename variant.
+- the transparent high-resolution PNG is used at CSS-controlled display sizes; do not stretch, redraw, recolor, or overuse it.
 
-Social preview asset convention:
-- `public/branding/campusnav-og-*.png`
+Current social preview asset:
+- `public/branding/campusnav-og.png`
+- obsolete or unapproved preview variants must remain outside runtime `public/` build inputs.
 
 ---
 

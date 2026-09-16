@@ -50,3 +50,14 @@
 - `DEFERRED` — social-preview metadata and canonical image are isolated as Checkpoint B and are not included in Checkpoint A
 - `PENDING` — owner approval, commit, deployment-equivalence verification, physical device/browser/QR/WebGL QA, keyboard-only and screen-reader QA
 - `ADVISORY` — the approximately 878 kB minified lazy 3D chunk and dependency audit findings remain; no dependency update was made
+
+## Phase 3 canonical asset-cleanup evidence — 16 September 2026
+
+- `PASS` — `SchoolLogo` has one approved image source: `/branding/scc-logo.png`; no JPG automatic fallback remains, and the existing accessible non-image fallback is preserved
+- `PASS` — the canonical logo is a 600×600 PNG with true exterior alpha; RGB artwork is unchanged, internal white/light details remain opaque, and light/charcoal/green/emergency-red surface inspection passed
+- `PASS` — Open Graph and Twitter metadata consistently target the absolute production URL for `/branding/campusnav-og.png`
+- `PASS` — production `dist/branding` contains only `scc-logo.png` and `campusnav-og.png`
+- `PASS` — legacy `scc-logo.jpg`, obsolete `campusnav-og-v2.png`, and unsupported `campusnav-og-v3.png` are absent from the production build
+- `PASS` — ESLint, typecheck, route rendering, and production build
+- `PASS` — no temporary session file, privileged/provider key, credentialed database URI, private key, JWT/token, or design-reference HTML is emitted
+- `PENDING` — owner approval, commit, push, exact-revision deployment, and production-equivalence verification

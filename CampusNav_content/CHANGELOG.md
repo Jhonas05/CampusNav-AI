@@ -1,5 +1,29 @@
 # CampusNav Content Pack — Changelog
 
+## v3.7 — 16 September 2026
+
+Prepared the owner-approved Phase 3 canonical public-asset cleanup checkpoint.
+
+### Asset reconciliation
+- recorded `DEC-ASSET-001`: the owner-approved high-resolution `public/branding/scc-logo.png` supersedes the preliminary JPG-only release staging decision as the sole canonical SCC runtime logo
+- removed only the PNG's edge-connected exterior background; the 600×600 RGB seal artwork, internal white/light details, wording, symbols, colors, and proportions remain unchanged
+- migrated `SchoolLogo` to `/branding/scc-logo.png` only and removed the JPG automatic fallback
+- reclassified the former `scc-logo.jpg` as a historical asset and removed it from runtime `public/` while preserving it in Git history and the non-runtime owner archive
+- retained `public/branding/campusnav-og.png` as the sole active Open Graph/Twitter preview image
+- removed obsolete `campusnav-og-v2.png` and unsupported-claims `campusnav-og-v3.png` from runtime `public/` build inputs
+- preserved source/legacy/excluded binaries outside the repository runtime tree for owner review; historical documentation references remain history
+
+### Verification
+- ESLint, typecheck, route rendering, and production build passed
+- verified the transparent logo pixel/alpha invariants and its appearance on canonical light, charcoal, green, and emergency-red surfaces
+- verified `dist/branding` contains only the approved SCC PNG and CampusNav OG PNG
+- verified complete OG/Twitter image metadata, real image MIME/content, successful PNG-only `SchoolLogo` resolution, and absence of temporary session/design-reference files
+- reran the credential scan without exposing secret values
+
+### Scope
+- asset/reference cleanup only; no routing, map, QR, Emergency, Auth/RBAC/RLS/Realtime, Dashboard, Admin, personnel, schedule, CLARA, PWA, Supabase, or Cloudflare behavior changed
+- no commit, push, deployment, stash mutation, or production-equivalence claim was made
+
 ## v3.6 — 16 September 2026
 
 Prepared canonical Phase 3 release-candidate Checkpoint A without committing, pushing, or deploying.
