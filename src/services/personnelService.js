@@ -30,7 +30,8 @@ export const resolveRecurringPersonnelInterval = (row, dateKey, type) => {
   if (Number(value(row, "day_of_week", "dayOfWeek")) !== getDateWeekday(dateKey)) return null
   if (!isCampusDateInRange(dateKey, value(row, "effective_from", "effectiveFrom"), value(row, "effective_until", "effectiveUntil"))) return null
   const facilityId = value(row, "facility_id", "facilityId")
-  if (!isKnownFacilityId(facilityId)) return null
+  const facilityOptional = type === PERSONNEL_STATUSES.CONSULTATION
+  if ((!facilityId && !facilityOptional) || (facilityId && !isKnownFacilityId(facilityId))) return null
   return {
     id: Number(value(row, "id", "id")),
     type,

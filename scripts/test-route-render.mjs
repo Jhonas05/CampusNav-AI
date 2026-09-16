@@ -29,6 +29,7 @@ try {
   const { default: AdminOverview } = await vite.ssrLoadModule("/src/pages/admin/AdminOverview.jsx")
   const { default: AdminContentPage } = await vite.ssrLoadModule("/src/pages/admin/AdminContentPage.jsx")
   const { default: AdminAudit } = await vite.ssrLoadModule("/src/pages/admin/AdminAudit.jsx")
+  const { default: AcademicAdminPage } = await vite.ssrLoadModule("/src/pages/admin/AcademicAdminPage.jsx")
   const { default: AccessDenied } = await vite.ssrLoadModule("/src/components/auth/AccessDenied.jsx")
   const { default: MapVerificationPanel } = await vite.ssrLoadModule("/src/components/map/MapVerificationPanel.jsx")
   const { default: EmergencyModePanel } = await vite.ssrLoadModule("/src/components/map/EmergencyModePanel.jsx")
@@ -216,6 +217,22 @@ try {
   const auditHtml = renderAdminPage("/admin/audit", React.createElement(AdminAudit))
   assert.match(auditHtml, /Read-only administrative content events/)
   assert.match(auditHtml, /Audit Activity/)
+
+  const personnelAdminHtml = renderAdminPage("/admin/personnel", React.createElement(AcademicAdminPage, { resource: "personnel" }))
+  assert.match(personnelAdminHtml, /Personnel/)
+  assert.match(personnelAdminHtml, /Academic &amp; Personnel/)
+  assert.match(personnelAdminHtml, /All personnel types/)
+  assert.match(personnelAdminHtml, /Manage approved public and system personnel records/)
+
+  const scheduleAdminHtml = renderAdminPage("/admin/class-schedules", React.createElement(AcademicAdminPage, { resource: "classSchedules" }))
+  assert.match(scheduleAdminHtml, /Class Schedules/)
+  assert.match(scheduleAdminHtml, /All professors/)
+  assert.match(scheduleAdminHtml, /All facilities/)
+  assert.match(scheduleAdminHtml, /conflict protection/)
+
+  const checkInAdminHtml = renderAdminPage("/admin/check-ins", React.createElement(AcademicAdminPage, { resource: "checkIns" }))
+  assert.match(checkInAdminHtml, /Check-ins/)
+  assert.match(checkInAdminHtml, /Schedules alone never prove presence/)
 
   const accessDeniedHtml = renderAdminPage("/admin", React.createElement(AccessDenied))
   assert.match(accessDeniedHtml, /Access denied/)

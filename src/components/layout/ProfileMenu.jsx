@@ -81,8 +81,8 @@ export default function ProfileMenu({ open, onClose }) {
       </section>
 
       <section aria-label="Preferences" className="border-b border-[#E5E5E7] px-2 py-2">
-        {auth.hasRole(APP_ROLES.SUPER_ADMIN) && (
-          <Link to="/admin" onClick={onClose} className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-[#1D1D1F] transition-colors hover:bg-[#F5F5F7] ${focusRing}`}>
+        {auth.hasAnyRole([APP_ROLES.SUPER_ADMIN, APP_ROLES.DEPARTMENT_ADMIN]) && (
+          <Link to={auth.hasRole(APP_ROLES.SUPER_ADMIN) ? "/admin" : "/admin/personnel"} onClick={onClose} className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-[#1D1D1F] transition-colors hover:bg-[#F5F5F7] ${focusRing}`}>
             <LayoutGrid className="h-4 w-4" aria-hidden="true" /> Admin CMS
             <span className="ml-auto rounded-full bg-[#1D1D1F] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">Admin</span>
           </Link>
@@ -93,7 +93,7 @@ export default function ProfileMenu({ open, onClose }) {
             <span className="rounded-full border border-dashed border-[#C7C7CC] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#B8B8BD]">Planned</span>
           </div>
         ))}
-        {developerModeAvailable && (
+        {developerModeAvailable && auth.hasRole(APP_ROLES.SUPER_ADMIN) && (
           <Link to="/admin/qr-checkpoints" onClick={onClose} className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-[#1D1D1F] transition-colors hover:bg-[#F5F5F7] ${focusRing}`}>
             <QrCode className="h-4 w-4" aria-hidden="true" /> QR Checkpoints
             <span className="ml-auto rounded-full bg-[#F5F5F7] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#6E6E73]">Admin</span>

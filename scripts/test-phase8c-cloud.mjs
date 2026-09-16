@@ -187,6 +187,11 @@ try {
   const dashboardClasses = await dashboard.getTodaysClasses()
   assert.ok(dashboardClasses.some((record) => record.courseCode === courseCode && record.relatedFacilityId === "library"), "Live class schedule did not reach the Dashboard provider")
 
+  const beforeClassEditSignal = realtimeEvents.length
+  requireSuccess(await adminClient.from("class_schedules").update({ facility_id: "computer-laboratory" }).eq("id", statusSchedule.id).select("id, facility_id").single(), "edit live class schedule")
+  await waitFor(() => realtimeEvents.slice(beforeClassEditSignal).some((event) => event.payload.new?.domain === "ACADEMIC"), "class schedule edit Realtime Dashboard refresh")
+  assert.ok((await dashboard.getTodaysClasses()).some((record) => record.courseCode === courseCode && record.relatedFacilityId === "computer-laboratory"), "Edited class schedule did not refresh Today's Classes")
+
   const beforeClassCancelSignal = realtimeEvents.length
   requireSuccess(await adminClient.from("class_schedules").update({ status: "CANCELLED" }).eq("id", statusSchedule.id).select("id, status").single(), "cancel live class schedule")
   await waitFor(() => realtimeEvents.slice(beforeClassCancelSignal).some((event) => event.payload.new?.domain === "ACADEMIC"), "class schedule cancellation Realtime Dashboard refresh")

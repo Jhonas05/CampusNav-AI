@@ -1,6 +1,7 @@
 import { NOTIFICATION_CATEGORIES, NOTIFICATION_LIFECYCLES, NOTIFICATION_PRIORITIES } from "../data/dashboardContracts.js"
 import { facilities, getFacilityById } from "../data/facilities.js"
 import { getBackendAvailability, getSupabaseClient } from "../lib/supabaseClient.js"
+import { createAcademicAdminService } from "./academicAdminService.js"
 
 export const ADMIN_RESOURCE_KEYS = Object.freeze({
   ANNOUNCEMENTS: "announcements",
@@ -77,8 +78,15 @@ const enumValue = (value, allowed, label, fallback) => {
 const createAdminError = (code, message, cause = null) => Object.assign(new Error(message), { code, cause })
 
 export const toAdminError = (error) => {
-  if (error?.code && ["VALIDATION_ERROR", "PERMISSION_DENIED", "SESSION_EXPIRED", "NETWORK_ERROR", "BACKEND_UNAVAILABLE", "ADMIN_ERROR"].includes(error.code)) return error
+  if (error?.code && ["VALIDATION_ERROR", "SCHEDULE_CONFLICT", "PERMISSION_DENIED", "SESSION_EXPIRED", "NETWORK_ERROR", "BACKEND_UNAVAILABLE", "ADMIN_ERROR"].includes(error.code)) return error
   const message = String(error?.message || "").toLowerCase()
+  if (error?.code === "23P01") {
+    const constraint = String(error?.constraint || error?.details || "")
+    if (constraint.includes("room_conflict")) return createAdminError("SCHEDULE_CONFLICT", "Room conflict detected.", error)
+    if (constraint.includes("professor_conflict")) return createAdminError("SCHEDULE_CONFLICT", "Professor has another schedule during this time.", error)
+    if (constraint.includes("section_conflict")) return createAdminError("SCHEDULE_CONFLICT", "Section already has a class during this time.", error)
+    return createAdminError("SCHEDULE_CONFLICT", "The schedule overlaps an existing active class.", error)
+  }
   if (error?.code === "42501" || message.includes("permission") || message.includes("row-level security")) {
     return createAdminError("PERMISSION_DENIED", "Your account does not have permission for that action.", error)
   }
@@ -292,6 +300,8 @@ export const createSupabaseAdminService = (client) => {
     return rows.map((row) => ({ ...row, actorName: names.get(row.actor_user_id) || "CampusNav administrator" }))
   }
 
+  const academicAdmin = createAcademicAdminService(client, { mapError: toAdminError })
+
   return {
     facilities,
     getAdminOverview,
@@ -317,6 +327,7 @@ export const createSupabaseAdminService = (client) => {
     createNotification: (input, options) => createResource(ADMIN_RESOURCE_KEYS.NOTIFICATIONS, input, options),
     updateNotification: (id, input, options) => updateResource(ADMIN_RESOURCE_KEYS.NOTIFICATIONS, id, input, options),
     deleteNotification: (id) => deleteResource(ADMIN_RESOURCE_KEYS.NOTIFICATIONS, id),
+    ...academicAdmin,
   }
 }
 

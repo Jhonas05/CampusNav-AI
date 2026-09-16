@@ -44,19 +44,19 @@ select lives_ok(
   $$insert into public.announcements (title, message, category, lifecycle, verification_status, source_type, source_id) values ('DEVELOPMENT DEMO — NOT OFFICIAL', 'Phase 8B test fixture.', 'GENERAL', 'DRAFT', 'DEMO_ONLY', 'DEVELOPMENT_TEST', 'PHASE8B-AUDIT-ANNOUNCEMENT')$$,
   'SUPER_ADMIN can create an announcement through existing RLS'
 );
-select is((select count(*) from public.audit_logs where action = 'announcement_created'), 1::bigint, 'announcement creation is audited');
+select is((select count(*) from public.audit_logs where action = 'announcement_created' and metadata ->> 'source_id' = 'PHASE8B-AUDIT-ANNOUNCEMENT'), 1::bigint, 'announcement creation is audited');
 select lives_ok(
   $$update public.announcements set lifecycle = 'PUBLISHED', is_public = true, published_at = now(), effective_at = now() where source_id = 'PHASE8B-AUDIT-ANNOUNCEMENT'$$,
   'SUPER_ADMIN can publish an announcement through existing RLS'
 );
-select is((select count(*) from public.audit_logs where action = 'announcement_published'), 1::bigint, 'announcement publication is audited');
+select is((select count(*) from public.audit_logs where action = 'announcement_published' and metadata ->> 'source_id' = 'PHASE8B-AUDIT-ANNOUNCEMENT'), 1::bigint, 'announcement publication is audited');
 select lives_ok(
   $$insert into public.events (title, description, starts_at, lifecycle, verification_status, source_type, source_id) values ('DEVELOPMENT DEMO EVENT — NOT OFFICIAL', 'Phase 8B test fixture.', now() + interval '1 day', 'DRAFT', 'DEMO_ONLY', 'DEVELOPMENT_TEST', 'PHASE8B-AUDIT-EVENT')$$,
   'SUPER_ADMIN can create an event through existing RLS'
 );
-select is((select count(*) from public.audit_logs where action = 'event_created'), 1::bigint, 'event creation is audited');
+select is((select count(*) from public.audit_logs where action = 'event_created' and metadata ->> 'source_id' = 'PHASE8B-AUDIT-EVENT'), 1::bigint, 'event creation is audited');
 select lives_ok($$delete from public.events where source_id = 'PHASE8B-AUDIT-EVENT'$$, 'SUPER_ADMIN can delete an event through existing RLS');
-select is((select count(*) from public.audit_logs where action = 'event_deleted'), 1::bigint, 'event deletion is audited');
+select is((select count(*) from public.audit_logs where action = 'event_deleted' and metadata ->> 'source_id' = 'PHASE8B-AUDIT-EVENT'), 1::bigint, 'event deletion is audited');
 select ok((select count(*) >= 4 from public.audit_logs), 'SUPER_ADMIN can read the trusted audit rows');
 select ok((select bool_and(not (metadata ?| array['password', 'token', 'access_token', 'refresh_token'])) from public.audit_logs), 'audit metadata contains no credential fields');
 select throws_ok(

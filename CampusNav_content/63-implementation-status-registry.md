@@ -3,6 +3,24 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Phase 3 release-candidate consolidation — Checkpoint A — 16 September 2026
+
+**Overall classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Area | Classification | Evidence / advisory |
+|---|---|---|
+| Canonical readiness | `ACCEPTED` | The owner authorized the release-consolidation subset of the canonical "Accepted Baseline Release and Manual QA" phase. Goal, evidence, security/privacy boundaries, migration impact, and quality gates are defined; no new feature was started |
+| Phase 8C.2 implementation | `ACCEPTED_WITH_ADVISORY` | The staged candidate is the same preserved implementation accepted during Phase 2 live-cloud testing. Fresh deterministic suites, route rendering, lint, typecheck, and build pass; authenticated graphical Admin QA remains pending |
+| Phase 8C.2 migration | `ACCEPTED` | Migration `20260915052147` is present in local/linked order, adds the three required exclusion constraints and consultation-location optionality, and neither creates replacement tables nor drops tables/columns nor changes RLS policies |
+| RLS, RBAC, audit, and Realtime | `ACCEPTED_WITH_ADVISORY` | Exact-code Phase 2 evidence covers linked RLS/RBAC, trusted audit writes, authenticated Realtime, role scope, class lifecycle, and cleanup. This consolidation performed no new cloud mutation; the prior one-time Realtime timeout remains a timing advisory |
+| Schedule/personnel invariants | `ACCEPTED` | Deterministic and exact-code Phase 2 evidence preserve `SCHEDULED != CHECKED_IN`, authorized active check-in, conflict enforcement, exception handling, precedence, privacy, and overlap-safe next availability |
+| Fixture and credential hygiene | `ACCEPTED_WITH_ADVISORY` | Linked fixture audit returned zero across 14 DEVELOPMENT/DEMO categories; the temporary session file is absent/untracked; source/build scans found no real privileged/provider/database/JWT/private-key credential. Intentional rejected-key test canaries remain. Dependency advisories are unchanged |
+| Quality gates | `ACCEPTED_WITH_ADVISORY` | All deterministic data/navigation/QR/Emergency/3D/Dashboard/Auth/Admin/Phase 8 suites, route rendering, ESLint, typecheck, and production build passed. Docker pgTAP and manual device/accessibility QA remain unavailable/pending |
+| Deployment equivalence | `CONFLICT` | No deployment was performed. Cloudflare production must not be treated as equivalent to this staged release candidate until the exact approved revision is deployed and asset fingerprints are verified |
+| Social preview | `DEFERRED` | Metadata and the canonical 1200×630 `campusnav-og.png` were validated as a separate Checkpoint B. The unapproved v3 concept is excluded because it displays unsupported institutional claims |
+
+Checkpoint A is a scoped Git staging boundary, not a release or completion claim. No commit, push, deployment, stash mutation, or Phase 3 feature development was performed.
+
 ## CampusNav Ink laptop-space optimization — 16 September 2026
 
 **Overall classification:** `IMPLEMENTED_UNVERIFIED`

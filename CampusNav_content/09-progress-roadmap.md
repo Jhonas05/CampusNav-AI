@@ -90,15 +90,35 @@ This checkpoint is presentation-only and does not authorize Phase 3 or any new c
 
 ## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
-**Status:** RECOMMENDED / NOT STARTED / REQUIRES OWNER APPROVAL
+**Status:** IN PROGRESS — owner-authorized release-candidate consolidation; commit, deployment, and manual-device QA not started
+
+### Release-candidate Checkpoint A — prepared 16 September 2026
+
+**Classification:** `ACCEPTED_WITH_ADVISORY`
+
+Completed preparation:
+1. classified every remaining modified/untracked path and isolated accepted Phase 8C.2 implementation from the separate social-preview work
+2. confirmed the implementation under review is the same preserved code that received Phase 2 live-cloud acceptance evidence; the Phase 2 commit changed tracking documents only
+3. reviewed migration `20260915052147_phase_8c2_personnel_academic_admin_ui.sql` for ordering, linked-cloud presence, conflict constraints, consultation-location optionality, and absence of table drops, replacement tables, or RLS-policy changes
+4. reconfirmed zero DEVELOPMENT/DEMO fixtures across all 14 audited categories and reran the repository/build credential audit without exposing secrets
+5. passed all deterministic regressions, route rendering, ESLint, typecheck, and production build
+6. prepared an explicit-path Git staging set for the accepted Phase 8C.2 and Phase 2 support files only
+
+Checkpoint boundaries and advisories:
+- no commit, push, deployment, reset, clean, restore, stash-pop/drop, or dependency upgrade was performed
+- the approved social-preview metadata and image remain a separate unstaged Checkpoint B
+- the alternative `campusnav-og-v3.png` concept contains unsupported institutional claims and is excluded from both checkpoints
+- current production remains non-equivalent until an exact accepted revision is deliberately deployed and verified
+- **MANUAL DEVICE QA PENDING**; the existing approximately 878 kB minified lazy 3D chunk and dependency advisories remain
 
 Recommended scope:
-1. commit/review the accepted preserved worktree as a deliberate release candidate
-2. deploy that exact accepted revision and verify Cloudflare asset equivalence, including the social-preview image response
-3. complete real graphical desktop, tablet, and mobile QA
-4. complete keyboard-only, focus, reduced-motion, contrast, and screen-reader QA without claiming WCAG conformance until evidence supports it
-5. verify physical camera/QR fallback and representative WebGL-capable plus WebGL-fallback devices
-6. triage the dependency advisories through deliberate, regression-tested upgrades
+1. obtain owner review/approval and commit Checkpoint A as a deliberate release candidate
+2. review and commit the separate social-preview Checkpoint B if approved
+3. deploy the exact accepted revisions and verify Cloudflare asset equivalence, including the social-preview image response
+4. complete real graphical desktop, tablet, and mobile QA
+5. complete keyboard-only, focus, reduced-motion, contrast, and screen-reader QA without claiming WCAG conformance until evidence supports it
+6. verify physical camera/QR fallback and representative WebGL-capable plus WebGL-fallback devices
+7. triage the dependency advisories through deliberate, regression-tested upgrades
 
 Do not begin a new facility, PWA, map-editor, reporting, or CLARA capability until this release-equivalence/manual-QA scope is approved or explicitly deferred by the owner.
 

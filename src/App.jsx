@@ -21,7 +21,10 @@ const QRCheckpoints = lazy(() => import('@/pages/admin/QRCheckpoints'));
 const AdminOverview = lazy(() => import('@/pages/admin/AdminOverview'));
 const AdminContentPage = lazy(() => import('@/pages/admin/AdminContentPage'));
 const AdminAudit = lazy(() => import('@/pages/admin/AdminAudit'));
+const AcademicAdminPage = lazy(() => import('@/pages/admin/AcademicAdminPage'));
 const PageNotFound = lazy(() => import('./lib/PageNotFound'));
+
+const academicAdminRoles = [APP_ROLES.DEPARTMENT_ADMIN, APP_ROLES.SUPER_ADMIN]
 
 const RouteFallback = () => (
   <main aria-label="Loading CampusNav" className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-10 sm:px-6">
@@ -63,6 +66,15 @@ function App() {
               <Route path="/admin/notifications" element={<ProtectedRoute requiredRoles={[APP_ROLES.SUPER_ADMIN]}><AdminContentPage resource="notifications" /></ProtectedRoute>} />
               <Route path="/admin/audit" element={<ProtectedRoute requiredRoles={[APP_ROLES.SUPER_ADMIN]}><AdminAudit /></ProtectedRoute>} />
               <Route path="/admin/qr-checkpoints" element={<ProtectedRoute requiredRoles={[APP_ROLES.SUPER_ADMIN]}><QRCheckpoints /></ProtectedRoute>} />
+              <Route path="/admin/personnel" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="personnel" /></ProtectedRoute>} />
+              <Route path="/admin/courses" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="courses" /></ProtectedRoute>} />
+              <Route path="/admin/sections" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="sections" /></ProtectedRoute>} />
+              <Route path="/admin/class-schedules" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="classSchedules" /></ProtectedRoute>} />
+              <Route path="/admin/schedule-exceptions" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="scheduleExceptions" /></ProtectedRoute>} />
+              <Route path="/admin/personnel-assignments" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="personnelAssignments" /></ProtectedRoute>} />
+              <Route path="/admin/consultation-hours" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="consultationHours" /></ProtectedRoute>} />
+              <Route path="/admin/check-ins" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="checkIns" /></ProtectedRoute>} />
+              <Route path="/admin/personnel-availability" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="availabilityOverrides" /></ProtectedRoute>} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Routes>

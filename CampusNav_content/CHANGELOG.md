@@ -1,5 +1,32 @@
 # CampusNav Content Pack — Changelog
 
+## v3.6 — 16 September 2026
+
+Prepared canonical Phase 3 release-candidate Checkpoint A without committing, pushing, or deploying.
+
+### Consolidation
+- classified every remaining modified/untracked file and isolated accepted Phase 8C.2 plus Phase 2 support work from the separate social-preview checkpoint
+- confirmed exact-code continuity with the implementation accepted during Phase 2; the intervening Phase 2 commit changed canonical tracking documents only
+- reviewed migration `20260915052147` for linked ordering, conflict constraints, consultation-location optionality, destructive changes, and RLS-policy impact
+- retained only explicit accepted paths for Checkpoint A staging and preserved `stash@{0}`
+
+### Verification
+- all deterministic data/navigation/QR/Emergency/3D/Dashboard/Auth/Admin/Phase 8 and route-render suites passed
+- ESLint, typecheck, and production build passed; the existing approximately 878 kB minified lazy 3D chunk remains
+- linked migration equivalence and zero DEVELOPMENT/DEMO records across all 14 fixture-audit categories passed
+- repository/build credential audit found no real privileged/provider/database/JWT/private-key credential; the temporary session file remains absent/untracked
+- dependency audit still reports two low, three moderate, one high, and zero critical advisories; no dependency change was made
+
+### Separate social-preview checkpoint
+- validated complete production Open Graph/Twitter metadata and the canonical 1200×630 PNG build output
+- corrected the metadata target to registered asset `/branding/campusnav-og.png`
+- excluded the alternative `campusnav-og-v3.png` concept because it contains unsupported institutional availability, hours, personnel, and routing claims
+- kept all social-preview files unstaged as Checkpoint B
+
+### Scope
+- no commit, push, deployment, cloud-data mutation, reset, clean, restore, stash-pop/drop, dependency upgrade, or new feature was performed
+- production equivalence and manual device/accessibility QA remain pending
+
 ## v3.5 — 16 September 2026
 
 Fresh canonical Phase 2 acceptance rerun against the committed CampusNav Ink baseline `7496a76` and the preserved Phase 8C.2/social-preview worktree.

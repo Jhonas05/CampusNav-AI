@@ -3,7 +3,11 @@ import {
   Building2,
   CalendarClock,
   CalendarDays,
+  CalendarX2,
+  CheckCircle2,
   ClipboardList,
+  Clock3,
+  GraduationCap,
   KeySquare,
   LayoutGrid,
   Map,
@@ -21,29 +25,41 @@ import { useAuth } from "@/contexts/AuthContext"
 import { cn } from "@/lib/utils"
 
 const NAV_GROUPS = [
-  { label: "Overview", items: [{ label: "Overview", icon: LayoutGrid, path: "/admin", exact: true }] },
+  { label: "Overview", items: [{ label: "Overview", icon: LayoutGrid, path: "/admin", exact: true, superAdminOnly: true }] },
   {
     label: "Content",
     items: [
-      { label: "Announcements", icon: Megaphone, path: "/admin/announcements" },
-      { label: "Events", icon: CalendarDays, path: "/admin/events" },
-      { label: "Facility Advisories", icon: Building2, path: "/admin/facility-advisories" },
-      { label: "Notifications", icon: Bell, path: "/admin/notifications" },
+      { label: "Announcements", icon: Megaphone, path: "/admin/announcements", superAdminOnly: true },
+      { label: "Events", icon: CalendarDays, path: "/admin/events", superAdminOnly: true },
+      { label: "Facility Advisories", icon: Building2, path: "/admin/facility-advisories", superAdminOnly: true },
+      { label: "Notifications", icon: Bell, path: "/admin/notifications", superAdminOnly: true },
+    ],
+  },
+  {
+    label: "Academic",
+    items: [
+      { label: "Personnel", icon: UserRound, path: "/admin/personnel" },
+      { label: "Courses", icon: GraduationCap, path: "/admin/courses" },
+      { label: "Sections", icon: Users, path: "/admin/sections" },
+      { label: "Class Schedules", icon: CalendarClock, path: "/admin/class-schedules" },
+      { label: "Schedule Exceptions", icon: CalendarX2, path: "/admin/schedule-exceptions" },
+      { label: "Personnel Assignments", icon: Map, path: "/admin/personnel-assignments" },
+      { label: "Consultation Hours", icon: Clock3, path: "/admin/consultation-hours" },
+      { label: "Check-ins", icon: CheckCircle2, path: "/admin/check-ins" },
+      { label: "Availability Overrides", icon: ShieldAlert, path: "/admin/personnel-availability" },
     ],
   },
   {
     label: "System",
     items: [
-      { label: "Audit Activity", icon: ClipboardList, path: "/admin/audit" },
-      { label: "QR Checkpoints", icon: QrCode, path: "/admin/qr-checkpoints", developerOnly: true },
+      { label: "Audit Activity", icon: ClipboardList, path: "/admin/audit", superAdminOnly: true },
+      { label: "QR Checkpoints", icon: QrCode, path: "/admin/qr-checkpoints", developerOnly: true, superAdminOnly: true },
     ],
   },
   {
     label: "Coming later",
     items: [
       { label: "Facilities", icon: Building2 },
-      { label: "Personnel", icon: UserRound },
-      { label: "Schedules", icon: CalendarClock },
       { label: "Map Management", icon: Map },
       { label: "Users", icon: Users },
       { label: "Roles", icon: KeySquare },
@@ -56,6 +72,7 @@ const NAV_GROUPS = [
 export default function AdminShell({ children }) {
   const location = useLocation()
   const auth = useAuth()
+  const isSuperAdmin = !auth.isAuthenticated || auth.roles?.some((role) => role.code === "SUPER_ADMIN")
   const developerModeAvailable = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_VERIFICATION === "true"
 
   return (
@@ -73,15 +90,16 @@ export default function AdminShell({ children }) {
 
             <div className="mb-2 rounded-2xl bg-[#F5F5F7] px-3 py-2.5">
               <p className="truncate text-xs font-semibold text-[#1D1D1F]">{auth.profile?.display_name || "CampusNav Administrator"}</p>
-              <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.14em] text-[#6E6E73]">SUPER_ADMIN</p>
+              <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.14em] text-[#6E6E73]">{auth.roles?.map((role) => role.code).filter((code) => ["SUPER_ADMIN", "DEPARTMENT_ADMIN"].includes(code)).join(" · ") || "ADMIN"}</p>
             </div>
 
             <nav className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible [&::-webkit-scrollbar]:hidden">
               {NAV_GROUPS.map((group) => (
                 <div key={group.label} className="contents lg:block lg:pt-2">
                   <p className="hidden px-3 pb-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[#86868B] lg:block">{group.label}</p>
-                  {group.items.map(({ label, icon: Icon, path, exact, developerOnly }) => {
+                  {group.items.map(({ label, icon: Icon, path, exact, developerOnly, superAdminOnly }) => {
                     if (developerOnly && !developerModeAvailable) return null
+                    if (superAdminOnly && !isSuperAdmin) return null
                     const active = path && (exact ? location.pathname === path : location.pathname.startsWith(path))
                     if (path) {
                       return (

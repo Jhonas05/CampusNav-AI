@@ -36,6 +36,10 @@ npm run test:dashboard
 npm run test:phase8a
 npm run test:phase8a:cloud
 npm run test:phase8a:realtime
+npm run test:phase8b
+npm run test:phase8c
+npm run test:phase8c2
+npm run test:phase8c2:cloud
 npm run test:rls
 npm run test:render
 ```
@@ -255,6 +259,26 @@ npm run test:phase8c:cloud
 ```
 
 The cloud test uses uniquely identified `DEMO / DEVELOPMENT / NOT OFFICIAL` records, verifies class Dashboard data, public-field privacy, anonymous write rejection, `SCHEDULED → CHECKED_IN → SCHEDULED`, `UNAVAILABLE` precedence, authenticated Realtime refresh, the 2:30–4:00 PM availability window and its overlapping-assignment counterexample, trusted audits, cleanup, and sign-out. It does not store or print the password.
+
+## Personnel and academic Admin management (Phase 8C.2)
+
+Authorized `SUPER_ADMIN` and department-scoped `DEPARTMENT_ADMIN` accounts can manage the existing Phase 8C.1 records at `/admin/personnel`, `/admin/courses`, `/admin/sections`, `/admin/class-schedules`, `/admin/schedule-exceptions`, `/admin/personnel-assignments`, `/admin/consultation-hours`, `/admin/check-ins`, and `/admin/personnel-availability`. The pages reuse the existing services, role-scoped RLS, audit triggers, stable facility IDs, and the non-sensitive Dashboard Realtime signal.
+
+Class schedule forms detect overlapping room, professor, and section assignments before saving. PostgreSQL exclusion constraints enforce the same rule authoritatively. Records with history are deactivated, cancelled, checked out, or ended instead of being destructively deleted. Consultation hours may omit a facility. Only an active authorized check-in produces `CHECKED_IN`; a class, assignment, or consultation remains schedule-derived information.
+
+Run the deterministic Phase 8C.2 UI/service/migration checks with:
+
+```bash
+npm run test:phase8c2
+```
+
+The transactional linked-database suite validates the migration, schedule conflicts, role boundaries, audit entries, and Dashboard refresh signals without leaving fixtures:
+
+```bash
+npx --yes supabase@2.79.0 db query --linked --file supabase/tests/phase_8c2_admin_management_test.sql --output table
+```
+
+With the existing temporary development account credentials supplied only through process environment variables or the ignored `.env.phase8a.session`, `npm run test:phase8c2:cloud` additionally verifies authenticated Data API writes and the Dashboard class insert/edit/cancel and personnel check-in/check-out Realtime transitions. Delete the temporary session file immediately after the run.
 
 ## Emergency Mode
 
