@@ -128,7 +128,7 @@ export default function GlobalSearch({ open, onClose }) {
 
   return (
     <div className="fixed inset-0 z-[70] overflow-y-auto bg-[#1D1D1F]/40 px-4 pb-10 pt-[9vh] backdrop-blur-sm" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}>
-      <div role="dialog" aria-modal="true" aria-label="Search CampusNav" onKeyDown={onKeyDown} className="mx-auto w-full max-w-xl overflow-hidden rounded-[1.75rem] border border-[#E5E5E7] bg-white shadow-[0_32px_80px_rgba(0,0,0,0.25)]">
+      <div role="dialog" aria-modal="true" aria-label="Search CampusNav" onKeyDown={onKeyDown} className="ink-blueprint mx-auto w-full max-w-xl overflow-hidden shadow-[0_18px_42px_rgba(29,31,32,0.16)]">
         <div className="flex items-center gap-3 border-b border-[#E5E5E7] px-5 py-4">
           <Search className="h-5 w-5 shrink-0 text-[#86868B]" aria-hidden="true" />
           <input

@@ -28,10 +28,10 @@ const footerColumns = [
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-white text-[#1D1D1F]">
+    <div className="campusnav-ink min-h-screen bg-[#F2F2F3] text-[#1D1F20]">
       <a
         href="#campusnav-main"
-        className={`sr-only z-[80] rounded-full bg-[#1D1D1F] px-5 py-2.5 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4 ${focusRing}`}
+        className={`sr-only z-[80] rounded bg-[#1D1F20] px-5 py-2.5 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4 ${focusRing}`}
       >
         Skip to content
       </a>
@@ -40,15 +40,15 @@ export default function AppLayout() {
         <main id="campusnav-main">
           <Outlet />
         </main>
-        <footer className="border-t border-[#E5E5E7] bg-white">
-          <div className="mx-auto max-w-7xl px-6 py-14">
-            <div className="flex flex-col justify-between gap-10 md:flex-row">
+        <footer className="border-t border-[#D4D4D7] bg-[#E9E9EA]">
+          <div className="mx-auto max-w-[var(--app-max-width)] px-[var(--app-page-gutter)] py-10">
+            <div className="flex flex-col justify-between gap-8 md:flex-row">
               <div className="max-w-sm">
                 <div className="flex items-center gap-3">
                   <SchoolLogo size="md" />
                   <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#86868B]">St. Clare College of Caloocan</p>
-                    <p className="mt-1 text-xl font-semibold tracking-tight text-brand-800">CampusNav</p>
+                    <p className="font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-[#5D5D60]">St. Clare College of Caloocan</p>
+                    <p className="mt-1 font-display text-2xl font-extrabold uppercase leading-none tracking-[0.02em] text-brand-800">CampusNav</p>
                   </div>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-[#6E6E73]">
@@ -72,7 +72,7 @@ export default function AppLayout() {
                 ))}
               </div>
             </div>
-            <div className="mt-12 flex flex-col gap-2 border-t border-[#E5E5E7] pt-6 text-xs text-[#86868B] sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-8 flex flex-col gap-2 border-t border-[#E5E5E7] pt-5 text-xs text-[#86868B] sm:flex-row sm:items-center sm:justify-between">
               <p>CampusNav AI · St. Clare College</p>
               <p>Independent campus navigation system</p>
             </div>

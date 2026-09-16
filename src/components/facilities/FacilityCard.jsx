@@ -29,8 +29,8 @@ export default function FacilityCard({ facility }) {
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-lg font-semibold leading-snug tracking-tight text-[#1D1D1F]">{facility.name}</h3>
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="text-base font-semibold leading-snug tracking-tight text-[#1D1D1F]">{facility.name}</h3>
         <div className="mt-1.5 flex items-center gap-1.5 text-sm text-[#6E6E73]">
           <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
           <span>{floor?.name || facility.floorId}</span>
@@ -41,7 +41,7 @@ export default function FacilityCard({ facility }) {
           {facility.mapRoomId ? "Source-aligned location estimate." : "Exact location pending verification."}
         </p>
 
-        <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-[#F0F0F2] pt-4">
+        <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-[#F0F0F2] pt-3">
           {underConstruction || facility.status === "PENDING_VERIFICATION" ? (
             <StatusBadge status={facility.status} className="min-h-6 px-2.5 text-[9px]" />
           ) : (

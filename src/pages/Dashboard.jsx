@@ -2,7 +2,7 @@ import { Activity, BellRing, BookOpen, Building2, CalendarDays, Database, Shield
 import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { AdvisoriesSection, AnnouncementsSection, ClassesSection, EventsSection, NavigationNoticesSection, OfficesSection, PersonnelSection, PriorityAlertsSection } from "@/components/dashboard/DashboardSections"
-import { focusRing } from "@/components/campus/ui"
+import { BlueprintPanel, focusRing, InkKicker } from "@/components/campus/ui"
 import { getDashboardSnapshot, loadDashboardSnapshot, subscribeToDashboard } from "@/services/dashboardService"
 import { formatCampusDate, formatCampusTime } from "@/lib/campusTime"
 import { useAuth } from "@/contexts/AuthContext"
@@ -83,22 +83,22 @@ export default function Dashboard() {
   }, [auth.user?.id, demo])
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-9 sm:px-6 sm:py-12">
-      <div className="mx-auto max-w-7xl">
-        <header className="rounded-[2rem] border border-[#E5E5E7] bg-white p-6 sm:p-9">
-          <div className="flex flex-col justify-between gap-7 lg:flex-row lg:items-end">
+    <div className="app-page bg-[#F5F5F7]">
+      <div className="app-container">
+        <BlueprintPanel as="header" className="p-5 sm:p-6">
+          <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#86868B]">Central information view</p>
-              <h1 className="mt-3 text-4xl font-semibold tracking-[-0.035em] text-[#1D1D1F] sm:text-5xl">CampusNav Dashboard</h1>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#6E6E73]">Campus information, schedules, availability, and official updates in one place.</p>
+              <InkKicker>Central information view</InkKicker>
+              <h1 className="mt-2 font-display text-4xl font-extrabold uppercase leading-[0.94] tracking-[0.01em] text-[#1D1F20] sm:text-5xl">CampusNav Dashboard</h1>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#6E6E73]">Campus information, schedules, availability, and official updates in one place.</p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:w-[470px]">
-              <div className="rounded-2xl bg-[#F5F5F7] p-4">
+            <div className="grid gap-2.5 sm:grid-cols-2 lg:w-[450px]">
+              <div className="rounded-2xl bg-[#F5F5F7] p-3.5">
                 <p className="text-[10px] font-semibold uppercase tracking-wide text-[#86868B]">Campus date</p>
                 <p className="mt-2 text-sm font-semibold">{formatCampusDate(now)}</p>
                 <p className="mt-1 font-mono text-xs text-[#6E6E73]">{formatCampusTime(now)} · Asia/Manila</p>
               </div>
-              <div role="status" className="rounded-2xl border-[1.5px] border-brand-700 bg-brand-50/50 p-4">
+              <div role="status" className="rounded-2xl border-[1.5px] border-brand-700 bg-brand-50/50 p-3.5">
                 <div className="flex items-center gap-2">
                   <Database className="h-4 w-4" aria-hidden="true" />
                   <p className="text-[10px] font-semibold uppercase tracking-wide text-[#6E6E73]">Data status</p>
@@ -108,14 +108,14 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <nav aria-label="Dashboard sections" className="mt-7 flex gap-2 overflow-x-auto border-t border-[#E5E5E7] pb-1 pt-5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <nav aria-label="Dashboard sections" className="mt-4 flex gap-1.5 overflow-x-auto border-t border-[#E5E5E7] pb-1 pt-3.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {sectionNav.map((section) => (
-              <a key={section.id} href={`#${section.id}`} className={`shrink-0 rounded-full border border-[#E5E5E7] bg-white px-4 py-2 text-xs font-medium text-[#6E6E73] transition-colors duration-200 hover:border-[#86868B] hover:text-[#1D1D1F] ${focusRing}`}>
+              <a key={section.id} href={`#${section.id}`} className={`shrink-0 rounded-full border border-[#E5E5E7] bg-white px-3 py-1.5 text-[11px] font-medium text-[#6E6E73] transition-colors duration-200 hover:border-[#86868B] hover:text-[#1D1D1F] ${focusRing}`}>
                 {section.label}
               </a>
             ))}
           </nav>
-        </header>
+        </BlueprintPanel>
 
         {demo && (
           <div role="status" className="mt-4 flex items-start gap-3 rounded-2xl border-2 border-[#1D1D1F] bg-[#1D1D1F] p-4 text-white">
@@ -142,14 +142,14 @@ export default function Dashboard() {
             {summaryItems.map(({ key, label, icon: Icon, tile }) => {
               const value = data.summary[key]
               return (
-                <article key={key} className="rounded-3xl border border-[#E5E5E7] bg-white p-5 transition-transform duration-200 hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none sm:p-6">
+                <article key={key} className="rounded-3xl border border-[#E5E5E7] bg-white p-4 transition-transform duration-200 hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none sm:p-5">
                   <div className="flex items-center justify-between gap-3">
                     <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${tile}`}><Icon className="h-5 w-5" aria-hidden="true" /></span>
                     <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide ${value == null ? "border border-dashed border-[#C7C7CC] text-[#86868B]" : "bg-green-50 text-green-700"}`}>
                       {value == null ? "Unavailable" : "Available"}
                     </span>
                   </div>
-                  <p className="mt-6 text-3xl font-semibold tabular-nums tracking-tight" aria-label={`${label}: ${value == null ? "Unavailable" : value}`}>{value ?? "—"}</p>
+                  <p className="mt-3 text-3xl font-semibold tabular-nums tracking-tight" aria-label={`${label}: ${value == null ? "Unavailable" : value}`}>{value ?? "—"}</p>
                   <p className="mt-1 text-xs font-medium text-[#6E6E73]">{label}</p>
                 </article>
               )
@@ -157,14 +157,14 @@ export default function Dashboard() {
           </div>
         </section>
 
-        <div className="mt-5 grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
-          <div className="space-y-5">
+        <div className="mt-4 grid gap-4 lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="space-y-4">
             <PriorityAlertsSection records={data.alerts} verify={verify} />
             <ClassesSection records={data.classes} verify={verify} />
             <OfficesSection records={data.offices} verify={verify} />
             <PersonnelSection records={data.personnel} verify={verify} />
           </div>
-          <div className="space-y-5">
+          <div className="space-y-4">
             <AdvisoriesSection records={data.advisories} verify={verify} />
             <EventsSection events={data.events} verify={verify} />
             <AnnouncementsSection records={data.announcements} verify={verify} />

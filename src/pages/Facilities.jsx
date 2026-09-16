@@ -1,7 +1,7 @@
 import { Layers, Search, SlidersHorizontal } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { button, EmptyState, focusRing, PageHeader } from "@/components/campus/ui"
+import { BlueprintPanel, button, EmptyState, focusRing, PageHeader } from "@/components/campus/ui"
 import FacilityCard from "@/components/facilities/FacilityCard"
 import { FACILITY_DATA_NOTICE, facilities } from "@/data/facilities"
 import { floors, getFloorById } from "@/data/floors"
@@ -53,8 +53,8 @@ export default function Facilities() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-12 sm:px-6 sm:py-14">
-      <div className="mx-auto max-w-7xl">
+    <div className="app-page bg-[#F5F5F7]">
+      <div className="app-container">
         <PageHeader
           eyebrow="Campus directory"
           title="Facilities"
@@ -62,7 +62,8 @@ export default function Facilities() {
           actions={<p className="shrink-0 text-sm text-[#6E6E73]" role="status">{filtered.length} result{filtered.length === 1 ? "" : "s"}</p>}
         />
 
-        <div className="mt-9 rounded-[1.75rem] border border-[#E5E5E7] bg-white p-4 sm:p-6">
+        <div className="mt-6 grid items-start gap-5 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[232px_minmax(0,1fr)]">
+        <BlueprintPanel className="p-4 lg:sticky lg:top-[calc(var(--app-header-height)+1rem)]" aria-label="Facility search and filters">
           <div className="flex items-center gap-3 rounded-2xl bg-[#F5F5F7] px-4">
             <Search className="h-4 w-4 shrink-0 text-[#86868B]" aria-hidden="true" />
             <input
@@ -74,8 +75,9 @@ export default function Facilities() {
             />
           </div>
 
-          <div className="mt-4 flex items-center gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label="Filter by category">
-            <SlidersHorizontal className="mr-1 h-4 w-4 shrink-0 text-[#86868B]" aria-hidden="true" />
+          <div className="mt-4 flex items-center gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:items-stretch lg:overflow-visible [&::-webkit-scrollbar]:hidden" role="group" aria-label="Filter by category">
+            <p className="mb-1 hidden items-center gap-2 font-heading text-xs font-bold uppercase tracking-[0.12em] text-[#6E6E73] lg:flex"><SlidersHorizontal className="h-4 w-4" aria-hidden="true" /> Category</p>
+            <SlidersHorizontal className="mr-1 h-4 w-4 shrink-0 text-[#86868B] lg:hidden" aria-hidden="true" />
             {CATEGORY_FILTERS.map((filter) => {
               const active = category === filter.label
               const filterCategory = filter.categoryKey ? getCategoryByKey(filter.categoryKey) : null
@@ -86,7 +88,7 @@ export default function Facilities() {
                   aria-pressed={active}
                   onClick={() => setCategory(filter.label)}
                   className={cn(
-                    "inline-flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium transition-colors duration-200",
+                    "inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-2 text-xs font-medium transition-colors duration-200 lg:w-full lg:justify-start",
                     active
                       ? filterCategory ? cn("border", filterCategory.chip, "font-semibold shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]") : "bg-brand-700 text-white"
                       : "border border-[#D2D2D7] bg-white text-[#6E6E73] hover:border-brand-600 hover:text-[#1D1D1F]",
@@ -100,7 +102,7 @@ export default function Facilities() {
             })}
           </div>
 
-          <div className="mt-3 flex items-center gap-2 overflow-x-auto border-t border-[#F0F0F2] pb-1 pt-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label="Filter by floor">
+          <div className="mt-3 flex items-center gap-2 overflow-x-auto border-t border-[#F0F0F2] pb-1 pt-3 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-wrap lg:overflow-visible [&::-webkit-scrollbar]:hidden" role="group" aria-label="Filter by floor">
             <Layers className="mr-1 h-4 w-4 shrink-0 text-[#86868B]" aria-hidden="true" />
             <button type="button" aria-pressed={floorId === "ALL"} onClick={() => setFloorId("ALL")} className={chipClass(floorId === "ALL")}>
               All Floors
@@ -111,12 +113,13 @@ export default function Facilities() {
               </button>
             ))}
           </div>
-        </div>
+        </BlueprintPanel>
 
-        <p className="mt-5 rounded-2xl border border-dashed border-[#C7C7CC] bg-white px-4 py-3 text-xs leading-relaxed text-[#6E6E73]">{FACILITY_DATA_NOTICE}</p>
+        <div className="min-w-0">
+        <p className="rounded-2xl border border-dashed border-[#C7C7CC] bg-white px-4 py-3 text-xs leading-relaxed text-[#6E6E73]">{FACILITY_DATA_NOTICE}</p>
 
         {filtered.length > 0 ? (
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
             {filtered.map((facility) => <FacilityCard key={facility.id} facility={facility} />)}
           </div>
         ) : (
@@ -128,6 +131,8 @@ export default function Facilities() {
             className="mt-8 min-h-56"
           />
         )}
+        </div>
+        </div>
       </div>
     </div>
   )

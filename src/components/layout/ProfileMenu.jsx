@@ -47,7 +47,7 @@ export default function ProfileMenu({ open, onClose }) {
       ref={menuRef}
       role="region"
       aria-label="Account menu"
-      className="fixed inset-x-3 top-[72px] z-[60] overflow-hidden rounded-[1.5rem] border border-[#E5E5E7] bg-white shadow-[0_28px_70px_rgba(0,0,0,0.18)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-[320px]"
+      className="ink-blueprint fixed inset-x-3 top-[72px] z-[60] overflow-hidden shadow-[0_18px_42px_rgba(29,31,32,0.14)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-[320px]"
     >
       <header className="border-b border-[#E5E5E7] px-5 py-4">
         <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868B]">CampusNav Account</p>

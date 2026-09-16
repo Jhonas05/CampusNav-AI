@@ -123,7 +123,7 @@ export default function AdminContentPage({ resource }) {
         actions={<button type="button" onClick={() => openEditor()} className={button.primary}><Plus className="h-4 w-4" aria-hidden="true" /> New {config.singular}</button>}
       />
 
-      <section aria-label={`${config.label} filters`} className="mt-8 grid gap-3 rounded-3xl border border-[#E5E5E7] bg-white p-4 md:grid-cols-[minmax(220px,1fr)_180px_180px_180px]">
+      <section aria-label={`${config.label} filters`} className="mt-5 grid gap-2.5 rounded-3xl border border-[#E5E5E7] bg-white p-3 md:grid-cols-[minmax(220px,1fr)_160px_160px_170px]">
         <label className="relative">
           <span className="sr-only">Search by title</span>
           <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-[#86868B]" aria-hidden="true" />
@@ -164,7 +164,7 @@ export default function AdminContentPage({ resource }) {
         </div>
       )}
 
-      <section aria-label={`${config.label} records`} className="mt-5 overflow-hidden rounded-3xl border border-[#E5E5E7] bg-white">
+      <section aria-label={`${config.label} records`} className="mt-4 overflow-hidden rounded-3xl border border-[#E5E5E7] bg-white">
         {loading ? (
           <div className="space-y-3 p-5">{[0, 1, 2].map((item) => <Skeleton key={item} className="h-20 w-full" />)}</div>
         ) : records.length ? (

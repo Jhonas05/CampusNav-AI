@@ -20,7 +20,7 @@ export default class Map3DErrorBoundary extends Component {
   render() {
     if (!this.state.failed) return this.props.children
     return (
-      <div className="flex min-h-[610px] items-center justify-center bg-[#F5F5F7] p-8 text-center">
+      <div className="flex h-full min-h-[inherit] items-center justify-center bg-[#F5F5F7] p-8 text-center">
         <div className="max-w-md rounded-3xl border border-[#1D1D1F] bg-white p-6">
           <h2 className="text-xl font-semibold">3D view is unavailable</h2>
           <p className="mt-3 text-sm leading-relaxed text-[#6E6E73]">Your navigation state is safe. Return to the 2D map to continue.</p>
@@ -30,4 +30,3 @@ export default class Map3DErrorBoundary extends Component {
     )
   }
 }
-

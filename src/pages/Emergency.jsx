@@ -12,15 +12,15 @@ export default function Emergency() {
   const equipmentFloors = supportedFloors(emergencyEquipment)
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-12 sm:px-6 sm:py-14">
-      <div className="mx-auto max-w-6xl">
+    <div className="app-page bg-[#F5F5F7]">
+      <div className="app-container">
         <PageHeader
           eyebrow="Verified safety information"
           title="Emergency Information"
           lead="Serious, verified guidance for campus emergencies — calm, factual, and aligned to the official evacuation plan."
         />
 
-        <div role="status" className="mt-8 flex flex-col gap-4 rounded-[1.75rem] border-2 border-red-700 bg-white p-6 sm:flex-row sm:items-center sm:p-7">
+        <div role="status" className="mt-5 flex flex-col gap-4 rounded-[1.75rem] border-2 border-red-700 bg-white p-5 sm:flex-row sm:items-center">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-red-700 text-white">
             <ShieldAlert className="h-6 w-6" aria-hidden="true" />
           </span>
@@ -42,22 +42,22 @@ export default function Emergency() {
           </Link>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          <article className={`${card} p-6`}>
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <article className={`${card} p-5`}>
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700"><MapPin className="h-5 w-5" aria-hidden="true" /></span>
             <h2 className="mt-4 font-semibold tracking-tight">Current Floor</h2>
             <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">
               Confirm your floor in Emergency Mode by scanning a CampusNav QR checkpoint or selecting your location manually.
             </p>
           </article>
-          <article className={`${card} p-6`}>
+          <article className={`${card} p-5`}>
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50 text-green-700"><DoorOpen className="h-5 w-5" aria-hidden="true" /></span>
             <h2 className="mt-4 font-semibold tracking-tight">Nearest Verified Exit</h2>
             <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">
               Calculated in Emergency Mode from your confirmed location, using only administrator- or source-approved evacuation paths.
             </p>
           </article>
-          <article className={`${card} p-6`}>
+          <article className={`${card} p-5`}>
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-700"><Layers className="h-5 w-5" aria-hidden="true" /></span>
             <h2 className="mt-4 font-semibold tracking-tight">Emergency Floor Plan</h2>
             <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">
@@ -67,7 +67,7 @@ export default function Emergency() {
         </div>
 
         <div className="mt-5 grid gap-5 lg:grid-cols-2">
-          <article className={`${card} p-7`}>
+          <article className={`${card} p-5 sm:p-6`}>
             <h2 className="text-xl font-semibold tracking-tight">Evacuation Guidance</h2>
             <ol className="mt-6 space-y-4">
               {emergencyGuidance.map((item, index) => (
@@ -79,7 +79,7 @@ export default function Emergency() {
             </ol>
           </article>
 
-          <article className={`${card} p-7`}>
+          <article className={`${card} p-5 sm:p-6`}>
             <h2 className="text-xl font-semibold tracking-tight">Emergency Contacts</h2>
             <p className="mt-2 text-xs leading-relaxed text-[#6E6E73]">
               Document-listed contacts are shown for reference. Verification is pending — follow official posted contact information when it differs.

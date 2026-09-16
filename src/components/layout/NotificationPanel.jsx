@@ -113,7 +113,7 @@ export default function NotificationPanel({ open, onClose }) {
       ref={panelRef}
       role="region"
       aria-label="Notifications"
-      className="fixed inset-x-3 top-[72px] z-[60] flex max-h-[min(70vh,560px)] flex-col overflow-hidden rounded-[1.5rem] border border-[#E5E5E7] bg-white shadow-[0_28px_70px_rgba(0,0,0,0.18)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-[380px]"
+      className="ink-blueprint fixed inset-x-3 top-[72px] z-[60] flex max-h-[min(70vh,560px)] flex-col overflow-hidden shadow-[0_18px_42px_rgba(29,31,32,0.14)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-[380px]"
     >
       <header className="flex items-center justify-between border-b border-[#E5E5E7] px-4 py-3.5">
         <h2 className="text-sm font-semibold text-[#1D1D1F]">Notifications</h2>

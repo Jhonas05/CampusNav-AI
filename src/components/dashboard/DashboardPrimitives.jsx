@@ -7,22 +7,22 @@ export const focusClass = campusFocusRing
 
 export function DashboardSection({ id, eyebrow, title, description = null, children, action = null }) {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-24 rounded-[1.75rem] border border-[#E5E5E7] bg-white p-5 sm:p-7">
+    <section id={id} aria-labelledby={`${id}-title`} className="ink-blueprint scroll-mt-20 p-4 sm:p-5">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
         <div>
-          {eyebrow && <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868B]">{eyebrow}</p>}
-          <h2 id={`${id}-title`} className="mt-1.5 text-xl font-semibold tracking-tight text-[#1D1D1F] sm:text-2xl">{title}</h2>
-          {description && <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-[#6E6E73]">{description}</p>}
+          {eyebrow && <p className="ink-kicker">{eyebrow}</p>}
+          <h2 id={`${id}-title`} className="mt-1 font-display text-2xl font-bold uppercase tracking-[0.03em] text-[#1D1F20]">{title}</h2>
+          {description && <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-[#6E6E73]">{description}</p>}
         </div>
         {action}
       </div>
-      <div className="mt-5">{children}</div>
+      <div className="mt-4">{children}</div>
     </section>
   )
 }
 
 export function EmptyState({ title, message = null }) {
-  return <CampusEmptyState title={title} message={message} className="min-h-36" />
+  return <CampusEmptyState title={title} message={message} className="min-h-28" />
 }
 
 export function StatusLabel({ children, strong = false }) {
@@ -43,7 +43,7 @@ export function RecordActions({ record, navigateLabel = "Navigate", facilityLabe
         </Link>
       )}
       {record.navigationHref && (
-        <Link to={record.navigationHref} className={`${focusClass} inline-flex min-h-10 items-center gap-2 rounded-full bg-[#1D1D1F] px-4 text-xs font-semibold text-white transition-colors duration-200 hover:bg-black`}>
+        <Link to={record.navigationHref} className={`${focusClass} inline-flex min-h-10 items-center gap-2 rounded bg-brand-700 px-4 font-heading text-xs font-bold uppercase tracking-[0.06em] text-white transition-colors duration-200 hover:bg-brand-800`}>
           {navigateLabel} <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
         </Link>
       )}

@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils"
  * image insertion needs no code changes.
  */
 const VARIANTS = {
-  banner: "aspect-[3/1] max-h-72 min-h-36 w-full",
-  card: "aspect-[16/10] w-full",
+  banner: "aspect-[3/1] max-h-60 min-h-32 w-full",
+  card: "aspect-[16/8] min-h-32 w-full",
   thumb: "h-20 w-28",
 }
 

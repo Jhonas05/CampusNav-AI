@@ -2,7 +2,7 @@ import { LockKeyhole, LogIn, LogOut } from "lucide-react"
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import SchoolLogo from "@/components/campus/SchoolLogo"
-import { button } from "@/components/campus/ui"
+import { BlueprintPanel, button, InkKicker } from "@/components/campus/ui"
 import { useAuth } from "@/contexts/AuthContext"
 import { BACKEND_MODES } from "@/lib/supabaseClient"
 
@@ -25,15 +25,15 @@ export default function Login() {
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-14 sm:px-6">
-      <section className="mx-auto max-w-md rounded-[2rem] border border-[#E5E5E7] bg-white p-7 sm:p-9" aria-labelledby="login-title">
+      <BlueprintPanel className="mx-auto max-w-md p-7 sm:p-9" aria-labelledby="login-title">
         <div className="flex items-center gap-3">
           <SchoolLogo size="lg" />
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
             <LockKeyhole className="h-5 w-5" aria-hidden="true" />
           </div>
         </div>
-        <p className="mt-7 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-700">St. Clare College of Caloocan · CampusNav account</p>
-        <h1 id="login-title" className="mt-2 text-3xl font-semibold tracking-tight">{auth.isAuthenticated ? "Session active" : "Sign in"}</h1>
+        <InkKicker className="mt-7">St. Clare College of Caloocan · CampusNav account</InkKicker>
+        <h1 id="login-title" className="mt-2 font-display text-4xl font-extrabold uppercase tracking-[0.03em]">{auth.isAuthenticated ? "Session active" : "Sign in"}</h1>
         <p className="mt-3 text-sm leading-relaxed text-[#6E6E73]">Public campus navigation remains available without an account.</p>
 
         <div role="status" className="mt-6 rounded-2xl border border-[#E5E5E7] bg-[#F5F5F7] p-4 text-sm">
@@ -64,7 +64,7 @@ export default function Login() {
             </button>
           </form>
         )}
-      </section>
+      </BlueprintPanel>
     </div>
   )
 }

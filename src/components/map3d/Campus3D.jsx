@@ -62,7 +62,7 @@ export default function Campus3D({
   const canvasCamera = useMemo(() => ({ position: /** @type {[number, number, number]} */ ([16, 15, 18]), fov: 42, near: 0.1, far: 180 }), [])
 
   return (
-    <div data-testid="campus-3d" className="relative min-h-[610px] overflow-hidden bg-[#F5F5F7]">
+    <div data-testid="campus-3d" className="relative h-full min-h-[inherit] overflow-hidden bg-[#F5F5F7]">
       <Map3DControls
         floors={floors}
         selectedFloorId={selectedFloorId}

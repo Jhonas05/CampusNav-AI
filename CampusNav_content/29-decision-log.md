@@ -53,7 +53,7 @@ CLARA uses authorized tools/internal services and verified campus data. AI provi
 Supabase currently owns identity/content/schedule/personnel domains while proven spatial/navigation data remains local/version-controlled unless an explicit migration is approved.
 
 ## DEC-UI-001 — Controlled map colors are allowed in the current working UI
-**Status:** CURRENT PROJECT OVERRIDE
+**Status:** SUPERSEDED BY DEC-UI-002
 
 The 14 Sep master source originally specified strict grayscale. The current working content folder deliberately allows controlled category colors **inside the map** for readability while keeping the surrounding app calm/minimal.
 
@@ -62,6 +62,24 @@ Rules:
 - never rely on color alone
 - emergency/restricted states still require icon/pattern/text
 - if owner/adviser chooses strict grayscale later, update this decision and both UI documents together
+
+## DEC-UI-002 — CampusNav Ink is the approved application-wide visual baseline
+**Status:** OWNER APPROVED — 15 Sep 2026
+
+CampusNav adopts the CampusNav Ink / architectural-blueprint visual direction as the canonical presentation baseline for the existing application.
+
+Rules:
+- neutral off-white, charcoal, and grayscale surfaces remain dominant
+- CampusNav green (`#15703c`, hover `#0f5a2f`) identifies primary actions and selected states
+- emergency red (`#b3261e`) is reserved for urgent, emergency, and destructive meaning
+- controlled semantic map/status colors require labels, icons, patterns, shapes, or other non-color cues
+- use Archivo for readable interface text and Barlow Condensed for compact architectural headings, delivered through maintainable open-source packages or safe fallbacks
+- favor sharp geometry, thin technical borders, restrained shadows, compact uppercase labels, and selective blueprint registration marks
+- preserve mobile behavior, accessibility semantics, routing, domain logic, lazy loading, and provider integrations
+
+This decision supersedes DEC-UI-001 only where the earlier decision limited color and architectural visual language to the map canvas or implied a strict grayscale / Apple-only application shell. DEC-UI-001 remains historical evidence for the rule that color is never the only carrier of meaning.
+
+`CampusNav-Ink-all-pages.html` is a visual and interaction-composition reference only. It is not production source, runtime logic, institutional truth, routing data, backend policy, or authorization evidence. Its inline styles, bundled scripts, embedded fonts, and static controls are not canonical implementation assets.
 
 ## DEC-TITLE-001 — Formal proposal title vs current responsive implementation
 **Status:** REQUIRES THESIS/ADVISER ALIGNMENT, NOT A CODE BLOCKER

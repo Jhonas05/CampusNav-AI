@@ -179,21 +179,21 @@ export default function Clara() {
   const showSuggestions = messages.filter((message) => message.role === "user").length < 2
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-10 sm:px-6 sm:py-12">
-      <div className="mx-auto max-w-4xl">
-        <header className="text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-[1.25rem] bg-brand-900 bg-gradient-to-br from-brand-700 to-brand-900 text-gold-100">
+    <div className="app-page bg-[#F5F5F7]">
+      <div className="app-container grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
+        <header className="text-center lg:sticky lg:top-[calc(var(--app-header-height)+1rem)] lg:text-left">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-[1.25rem] bg-brand-900 bg-gradient-to-br from-brand-700 to-brand-900 text-gold-100 lg:mx-0">
             <Sparkles className="h-6 w-6" aria-hidden="true" />
           </div>
-          <h1 className="mt-5 text-4xl font-semibold tracking-[-0.03em] text-[#1D1D1F] sm:text-5xl">CLARA</h1>
-          <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-700">Campus Learning Alerts &amp; Response Assistant</p>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[#6E6E73] sm:text-base">
+          <h1 className="mt-3 font-display text-5xl font-extrabold uppercase leading-none tracking-[0.04em] text-[#1D1F20] sm:text-6xl">CLARA</h1>
+          <p className="ink-kicker mt-2">Campus Learning Alerts &amp; Response Assistant</p>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#6E6E73] lg:mx-0">
             Ask about campus locations, services, schedules, personnel availability, events, and official campus information.
           </p>
         </header>
 
-        <div className="mt-8 overflow-hidden rounded-[2rem] border border-[#E5E5E7] bg-white shadow-[0_18px_60px_rgba(0,0,0,0.06)]">
-          <div ref={scrollRef} className="h-[46vh] min-h-[340px] space-y-5 overflow-y-auto overscroll-contain px-5 py-7 sm:px-8" aria-live="polite">
+        <div className="ink-blueprint flex min-h-[560px] flex-col overflow-hidden lg:h-[calc(100dvh-var(--app-header-height)-2.5rem)]">
+          <div ref={scrollRef} className="min-h-[340px] flex-1 space-y-4 overflow-y-auto overscroll-contain px-5 py-5 sm:px-6" aria-live="polite">
             {messages.map((message, index) => (
               <div key={`${message.role}-${index}`} className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                 {message.role === "assistant" && (
@@ -222,7 +222,7 @@ export default function Clara() {
             ))}
           </div>
 
-          <div className="border-t border-[#E5E5E7] p-4 sm:p-6">
+          <div className="border-t border-[#E5E5E7] p-4">
             {showSuggestions && (
               <div className="mb-4 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label="Suggested prompts">
                 {SUGGESTED_PROMPTS.map((prompt) => (

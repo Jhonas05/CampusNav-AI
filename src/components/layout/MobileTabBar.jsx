@@ -48,11 +48,11 @@ export default function MobileTabBar() {
             aria-modal="true"
             aria-label="More options"
             onMouseDown={(event) => event.stopPropagation()}
-            className="absolute inset-x-0 bottom-0 rounded-t-[1.75rem] border-t border-[#E5E5E7] bg-white pb-[calc(76px+env(safe-area-inset-bottom))] shadow-[0_-24px_60px_rgba(0,0,0,0.2)]"
+            className="absolute inset-x-0 bottom-0 rounded-t-[7px] border-t border-[#98989B] bg-[#F2F2F3] pb-[calc(76px+env(safe-area-inset-bottom))] shadow-[0_-18px_42px_rgba(29,31,32,0.16)]"
           >
             <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[#D2D2D7]" aria-hidden="true" />
             <div className="flex items-center justify-between px-6 pb-2 pt-4">
-              <h2 className="text-lg font-semibold tracking-tight text-[#1D1D1F]">More</h2>
+              <h2 className="font-display text-2xl font-bold uppercase tracking-[0.04em] text-[#1D1F20]">More</h2>
               <button type="button" onClick={() => setMoreOpen(false)} aria-label="Close menu" className={cn("flex h-9 w-9 items-center justify-center rounded-full bg-[#F5F5F7] text-[#1D1D1F]", focusRing)}>
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>
@@ -123,7 +123,7 @@ export default function MobileTabBar() {
 
       <nav
         aria-label="Primary mobile"
-        className="fixed inset-x-0 bottom-0 z-[56] border-t border-[#E5E5E7] bg-white/92 backdrop-blur-xl lg:hidden print:hidden"
+        className="fixed inset-x-0 bottom-0 z-[56] border-t border-[#98989B] bg-[#F2F2F3]/96 backdrop-blur-xl lg:hidden print:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="grid h-[64px] grid-cols-5">
@@ -134,7 +134,7 @@ export default function MobileTabBar() {
                 key={path}
                 to={path}
                 aria-current={active ? "page" : undefined}
-                className={cn("flex flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-medium transition-colors duration-150", active ? "text-brand-700" : "text-[#86868B]", focusRing)}
+                className={cn("flex flex-col items-center justify-center gap-1 rounded font-heading text-[11px] font-semibold uppercase tracking-[0.04em] transition-colors duration-150", active ? "bg-brand-50 text-brand-700" : "text-[#5D5D60]", focusRing)}
               >
                 <Icon className="h-[21px] w-[21px]" strokeWidth={active ? 2.4 : 2} aria-hidden="true" />
                 {label}
@@ -145,7 +145,7 @@ export default function MobileTabBar() {
             type="button"
             onClick={() => setMoreOpen((current) => !current)}
             aria-expanded={moreOpen}
-            className={cn("flex flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-medium transition-colors duration-150", moreOpen || moreActive ? "text-brand-700" : "text-[#86868B]", focusRing)}
+            className={cn("flex flex-col items-center justify-center gap-1 rounded font-heading text-[11px] font-semibold uppercase tracking-[0.04em] transition-colors duration-150", moreOpen || moreActive ? "bg-brand-50 text-brand-700" : "text-[#5D5D60]", focusRing)}
           >
             <CircleEllipsis className="h-[21px] w-[21px]" strokeWidth={moreOpen || moreActive ? 2.4 : 2} aria-hidden="true" />
             More

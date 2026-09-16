@@ -47,8 +47,13 @@ A full visual floor-plan editor/version rollback is source-required/valuable but
 ## Formal title mismatch risk
 Proposal wording is tablet-based, while current architecture is responsive web-based. This should be explained as broader device compatibility, not hidden. Any formal title revision should go through thesis approval.
 
-## Map color divergence
-Current working UI allows controlled map colors, while the original master source was grayscale-only. This is tracked as `DEC-UI-001` and should be kept consistent across thesis screenshots and documentation.
+## CampusNav Ink adoption verification
+The owner-approved application-wide visual direction is governed by `DEC-UI-002`, which supersedes the older strict grayscale / Apple-only limitation where it conflicts.
+
+- neutral surfaces remain dominant
+- CampusNav green, emergency red, and controlled map/status colors have explicit semantic roles
+- color must not be the only signal
+- full graphical/device/browser confirmation remains pending until supported by real render evidence
 
 ## Source basis
 - CampusNav AI Final Expanded Architecture — thesis feasibility/claims boundaries

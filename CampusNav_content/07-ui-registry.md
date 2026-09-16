@@ -11,20 +11,50 @@ Do not duplicate business logic in UI components. UI must consume the existing s
 
 ---
 
+## Approved design-system baseline
+
+`DEC-UI-002` establishes CampusNav Ink / architectural blueprint as the application-wide presentation baseline. The implementation must use centralized neutral, CampusNav green, emergency red, typography, geometry, border, and motion tokens rather than copying bundled artifact markup or inline styles.
+
+| Pattern | Visual structure | Required behavior/accessibility | React mapping |
+|---|---|---|---|
+| Application shell | Off-white canvas, charcoal typography, thin borders, clear desktop/mobile navigation | Current route exposed; keyboard access; mobile navigation preserved | `AppLayout`, `Navbar`, `MobileTabBar` |
+| Blueprint panel | Sharp bordered surface with optional corner registration marks | Decorative marks hidden from assistive technology; caller supplies content semantics | shared CampusNav UI primitive |
+| Kicker / section label | Compact uppercase condensed label with tracking | Never substitutes for a semantic heading | shared CampusNav UI primitive |
+| Primary action | CampusNav green fill, high-contrast label, compact radius | Visible hover, active, focus, loading, and disabled states | shared button primitives and page actions |
+| Emergency action | Emergency red with icon/text reinforcement | Red is never the only signal; confirmation where destructive | Emergency surfaces and destructive action variants |
+| Data/status chip | Neutral or controlled semantic color, compact technical shape | Text or icon states meaning explicitly | shared badge/status primitives |
+| Map frame | Blueprint panel surrounding the existing 2D/3D renderer | One spatial dataset and one A* engine; 2D fallback; map legend; color-independent cues | Navigate map components |
+| Dialog/drawer | Bordered neutral surface with restrained elevation | Focus management, close behavior, and labelled title | existing dialog/sheet primitives |
+
+---
+
 ## 1. Primary app screens
 
-| Surface | Purpose | Important UI behavior |
-|---|---|---|
-| Home | Entry point and campus overview | Branded hero, quick access, campus highlights, CLARA entry points |
-| Dashboard | Centralized campus information hub | Alerts, classes, office/personnel availability, advisories, events, announcements, navigation notices |
-| Facilities | Campus directory | Search, category filters, floor filters, facility cards |
-| Facility Detail | Facility-specific information | Photo/gallery slot, status, hours, services, personnel/schedule, Navigate/Ask CLARA |
-| Navigate | Core campus navigation | Current location, destination, QR, floor selector, 2D/3D, route summary |
-| Emergency | Verified safety information | Emergency guidance, contacts, Emergency Mode entry |
-| Events | Campus event browsing | Today, upcoming, venue navigation |
-| CLARA | Intelligent digital concierge UI | Conversation + structured facility/personnel/schedule/result cards |
-| Login | Supabase authentication | Email/password, sanitized errors, branded school identity |
-| Admin | Protected CMS shell | Role-aware navigation and content management |
+| Surface / route | Purpose and major components | Approved visual structure | Data source | Responsive/accessibility notes | Status |
+|---|---|---|---|---|---|
+| Home `/` | Entry point, global discovery, primary actions, campus summaries | Architectural hero, compact kicker/title, blueprint summary/action panels | Existing published facility, event, schedule, and advisory selectors only | Preserve mobile stacking, semantic heading order, and labelled actions | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
+| Dashboard `/dashboard` | Today overview, classes, office/personnel availability, advisories | Dense modular grid with bordered sections and compact metadata | Existing Supabase-backed dashboard services and canonical derived status logic | Cards reflow; availability includes text and never implies presence from schedule alone | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
+| Facilities `/facilities` | Search, filters, category/floor browsing, facility cards | Technical filter rail and bordered results grid | Existing published facilities; unknown data remains unavailable/pending verification | Search labelled; filters keyboard operable; result state readable | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
+| Facility Detail `/facilities/:id` | Facility facts, services, hours/availability, nearby facilities, navigation CTA | Blueprint detail header with structured fact and action panels | Existing verified/published facility records only | Semantic labels; no invented room, schedule, or institutional data | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
+| Navigate `/map` | Start/destination, 2D/3D map, route summary, steps | Blueprint map frame with separate controls and route instruction rail | Canonical spatial dataset, one A* engine, existing route state | 2D fallback, keyboard controls, text steps, non-color cues, reduced motion | ACCEPTED_WITH_ADVISORY — 2D desktop render and 2D/3D regressions passed; manual 3D/device QA pending |
+| Events `/events` | Today/upcoming event discovery and details | Calendar/list sections with compact date blocks and bordered entries | Existing published event records | Date/time in text; empty/loading/error states | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
+| Emergency `/emergency` | Emergency contacts, procedures, approved evacuation assistance | High-priority red-accented blueprint panels without decorative urgency | Existing verified emergency contacts, procedures, and emergency-approved graph only | Red reinforced with icons/headings/text; immediate keyboard/touch access | ACCEPTED_WITH_ADVISORY — automated desktop render and safety regressions passed; manual device QA pending |
+| CLARA `/clara` | Current concierge placeholder and suggested prompts | Calm conversational panel with clear capability boundary | Existing placeholder/local behavior; not final grounded Groq/tool integration | Messages and controls labelled; limitations visible | PARTIAL — presentation only; final grounding deferred |
+| Login `/login` | Supabase authentication entry | Focused blueprint sign-in panel on neutral canvas | Existing Supabase Auth integration | Explicit labels/errors, password autocomplete, visible focus | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual authenticated flow QA pending |
+| Admin `/admin/*` | RBAC-protected CMS, personnel/schedules, audit views | Dense technical shell, section navigation, tables/forms/dialogs | Existing Supabase services and RLS-authorized operations | Tables scroll/reflow; errors linked; authorization is not visual-only | IMPLEMENTED_UNVERIFIED visually — render/RBAC regressions pass; authenticated graphical Admin QA pending |
+
+### Global surfaces
+
+| Surface | Purpose | Approved visual structure | Behavior/status |
+|---|---|---|---|
+| Global search | Cross-application discovery | Sharp search trigger and bordered dialog/results | Preserve search logic and keyboard behavior |
+| Notifications | Published notices and activity entry point | Compact trigger, neutral panel, explicit unread text/status | Preserve data behavior; color is not the only unread cue |
+| Profile/account | Identity, roles, account actions, sign out | Compact account trigger and bordered menu | Preserve AuthProvider state, RBAC visibility, and logout cleanup |
+
+Current adoption evidence:
+- `BlueprintPanel`, `InkKicker`, and `InkSectionLabel` are implemented in `src/components/campus/ui.jsx`.
+- Automated desktop renders for Home, Dashboard, Facilities, Navigate, Events, Emergency, CLARA, and Login were inspected after the token/component adoption.
+- **AUTOMATED RENDER VERIFIED / MANUAL VISUAL QA PENDING.**
 
 Known page files include:
 - `src/pages/Home.jsx`
@@ -214,7 +244,7 @@ Core controls:
 - 2D / 3D
 
 ### Map color policy
-Current project decision: the map may use controlled category colors for readability, even though the original master source was grayscale-only. This is a deliberate local UI override recorded in `29-decision-log.md` (`DEC-UI-001`). Do not extend this into unrestricted app-wide color use.
+Under `DEC-UI-002`, controlled map colors remain valid inside the neutral-dominant CampusNav Ink system. CampusNav green identifies the active route/action system, emergency red is reserved for emergency meaning, and other map category/status colors must remain restrained and reinforced by icon, label, pattern, or shape.
 
 Use consistent category colors for:
 - Classrooms
@@ -411,10 +441,17 @@ Loading:
 ## 13. Responsive registry
 
 Target layouts:
-- Desktop: 1440px class
-- Laptop: 1024px class
+- Wide desktop: 1600px+ class with increased breathing room
+- Primary laptop: 1280–1440px class, including 1280×800 and 1366×768 height constraints
+- Compact laptop: 1024×768 class
 - Tablet: 768px class
 - Mobile: ~390px class
+
+Laptop application rules:
+- Use the wide application shell for data-heavy Home, Dashboard, Facilities, Navigate, Events, Emergency, CLARA, and Admin surfaces; keep focused flows such as Login and readable prose intentionally narrower.
+- Use approximately 16–24px practical gutters, compact page headers, and content-driven grids rather than tablet-like vertical stacking where horizontal space is available.
+- Facilities use a compact filter rail plus auto-fitting results grid when space permits. Admin uses a compact navigation rail and wider tables/forms. Navigate uses a compact control rail with the 2D/3D map as the dominant surface.
+- Viewport-aware panels may use deliberate internal scrolling, but must not create unexplained nested or duplicate page scrollbars.
 
 Mobile rules:
 - Do not simply shrink desktop layout.

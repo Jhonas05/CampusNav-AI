@@ -36,7 +36,7 @@ function CampusPreview() {
     <Link
       to="/map"
       aria-label="Open the campus map"
-      className={`group relative block overflow-hidden rounded-[2rem] border border-[#E5E5E7] bg-gradient-to-b from-white to-[#F5F5F7] p-6 transition-all duration-300 hover:border-[#D2D2D7] hover:shadow-[0_28px_70px_rgba(0,0,0,0.1)] motion-reduce:transition-none sm:p-8 ${focusRing}`}
+      className={`ink-blueprint group relative block overflow-hidden p-4 transition-colors duration-200 hover:border-[#98989B] motion-reduce:transition-none sm:p-5 ${focusRing}`}
     >
       <div className="flex items-center justify-between">
         <span className="rounded-full border border-[#D2D2D7] bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#48484A]">3D Campus · GF–5F</span>
@@ -45,7 +45,7 @@ function CampusPreview() {
         </span>
       </div>
 
-      <svg viewBox="0 0 320 330" aria-hidden="true" className="mx-auto mt-4 block w-full max-w-[400px]">
+      <svg viewBox="0 0 320 330" aria-hidden="true" className="mx-auto mt-2 block max-h-[320px] w-full max-w-[390px]">
         <defs>
           <pattern id="home-construction" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <rect width="8" height="8" fill="#F5F5F7" />
@@ -54,14 +54,14 @@ function CampusPreview() {
         </defs>
 
         {/* stair continuity line through the floor stack */}
-        <line x1="196" y1="34" x2="196" y2="286" stroke="#8BA7E5" strokeWidth="1.5" strokeDasharray="3 5" />
+        <line x1="196" y1="34" x2="196" y2="286" stroke="#47A36B" strokeWidth="1.5" strokeDasharray="3 5" />
 
         {HERO_FLOORS.map((floor, index) => {
           const y = 28 + index * 58
           const plate = `M40 ${y + 30} L160 ${y} L280 ${y + 30} L160 ${y + 60} Z`
           return (
             <g key={floor.id}>
-              <path d={plate} fill={floor.construction ? "url(#home-construction)" : floor.emphasized ? "#EEF2FB" : "#FFFFFF"} stroke={floor.emphasized ? "#213A92" : "#D2D2D7"} strokeWidth={floor.emphasized ? 2 : 1.25} />
+              <path d={plate} fill={floor.construction ? "url(#home-construction)" : floor.emphasized ? "#EEF7F1" : "#FFFFFF"} stroke={floor.emphasized ? "#15703C" : "#D4D4D7"} strokeWidth={floor.emphasized ? 2 : 1.25} />
               {floor.emphasized && (
                 <>
                   <rect x="86" y="150" width="30" height="14" rx="2" fill="#DBEAFE" stroke="#93C5FD" strokeWidth="1" transform="skewX(-14)" />
@@ -71,7 +71,7 @@ function CampusPreview() {
                   <circle cx="196" cy="165" r="5.5" fill="#FFFFFF" stroke="#DC2626" strokeWidth="2.5" />
                 </>
               )}
-              <text x="292" y={y + 34} fontSize="12" fontWeight="700" fill={floor.emphasized ? "#213A92" : "#86868B"}>{floor.id}</text>
+              <text x="292" y={y + 34} fontSize="12" fontWeight="700" fill={floor.emphasized ? "#15703C" : "#7A7A7D"}>{floor.id}</text>
             </g>
           )
         })}
@@ -100,18 +100,18 @@ export default function Home() {
 
   return (
     <div>
-      <section className="overflow-hidden border-b border-[#E5E5E7] bg-[radial-gradient(circle_at_top_right,_#DBE4F8,_#FFFFFF_55%),radial-gradient(circle_at_bottom_left,_#FBF6E8,_#FFFFFF_45%)] px-4 pb-16 pt-14 sm:px-6 sm:pb-24 sm:pt-20">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+      <section className="ink-grid-paper overflow-hidden border-b border-[#98989B] px-[var(--app-page-gutter)] py-8 sm:py-10 lg:py-7">
+        <div className="mx-auto grid max-w-[var(--app-max-width)] items-center gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(380px,0.95fr)] xl:gap-10">
           <div>
             <div className="flex items-center gap-3">
               <SchoolLogo size="lg" />
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-800">St. Clare College of Caloocan</p>
+              <p className="ink-kicker">St. Clare College of Caloocan</p>
             </div>
-            <h1 className="mt-5 text-6xl font-semibold leading-[0.96] tracking-[-0.045em] text-[#1D1D1F] sm:text-7xl lg:text-8xl">CampusNav</h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-[#6E6E73] sm:text-xl">
+            <h1 className="mt-3 font-display text-6xl font-extrabold uppercase leading-[0.84] tracking-[0.02em] text-[#1D1F20] sm:text-7xl xl:text-8xl">CampusNav</h1>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-[#6E6E73] sm:text-lg">
               Smart Campus Navigation and Digital Campus Assistance for St. Clare College of Caloocan.
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center gap-2.5">
               <Link to="/map" className={button.primary}>
                 <Navigation className="h-4 w-4" aria-hidden="true" /> Navigate Campus
               </Link>
@@ -127,8 +127,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section aria-labelledby="quick-access-title" className="px-4 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-7xl">
+      <section aria-labelledby="quick-access-title" className="px-[var(--app-page-gutter)] py-10 sm:py-12">
+        <div className="mx-auto max-w-[var(--app-max-width)]">
           <SectionHeader
             eyebrow="Quick Access"
             title="Where do you need to go?"
@@ -136,7 +136,7 @@ export default function Home() {
             action={<Link to="/facilities" className={`hidden items-center gap-1.5 rounded-md text-sm font-medium text-[#1D1D1F] sm:inline-flex ${focusRing}`}>View all facilities <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>}
           />
           <h2 id="quick-access-title" className="sr-only">Quick access</h2>
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
             {quickAccessItems.map(({ facilityId, label, icon, facility }) => (
               <QuickAccessCard
                 key={facilityId}
@@ -155,33 +155,33 @@ export default function Home() {
         </div>
       </section>
 
-      <section aria-label="Campus status" className="border-y border-[#E5E5E7] bg-[#F5F5F7] px-4 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-7xl">
+      <section aria-label="Campus status" className="border-y border-[#D4D4D7] bg-[#E9E9EA] px-[var(--app-page-gutter)] py-10 sm:py-12">
+        <div className="mx-auto max-w-[var(--app-max-width)]">
           <SectionHeader eyebrow="Campus Status" title="Right now on campus" />
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            <article className={`${card} p-6`}>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <article className={`${card} p-5`}>
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700"><Navigation className="h-5 w-5" aria-hidden="true" /></span>
               <p className="mt-5 text-3xl font-semibold tracking-tight">GF–5F</p>
               <p className="mt-1 text-sm font-medium text-[#1D1D1F]">Indoor navigation coverage</p>
               <p className="mt-2 text-xs leading-relaxed text-[#6E6E73]">Source-aligned floor maps with schematic route costs — not measured meters.</p>
             </article>
-            <article className={`${card} p-6`}>
+            <article className={`${card} p-5`}>
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-50 text-gold-700"><Database className="h-5 w-5" aria-hidden="true" /></span>
-              <p className="mt-5 text-lg font-semibold tracking-tight">{snapshot.status.label}</p>
+              <p className="mt-3 text-lg font-semibold tracking-tight">{snapshot.status.label}</p>
               <p className="mt-1 text-sm font-medium text-[#1D1D1F]">Campus data status</p>
               <p className="mt-2 text-xs leading-relaxed text-[#6E6E73]">{snapshot.status.notice}</p>
             </article>
-            <article className={`${card} p-6`}>
+            <article className={`${card} p-5`}>
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-700"><ShieldAlert className="h-5 w-5" aria-hidden="true" /></span>
               {navigationNotice ? (
                 <>
-                  <p className="mt-5 text-lg font-semibold tracking-tight">{navigationNotice.title}</p>
+                  <p className="mt-3 text-lg font-semibold tracking-tight">{navigationNotice.title}</p>
                   <p className="mt-1 text-sm font-medium text-[#1D1D1F]">Navigation notice</p>
                   <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-[#6E6E73]">{navigationNotice.message}</p>
                 </>
               ) : (
                 <>
-                  <p className="mt-5 text-lg font-semibold tracking-tight">No restrictions recorded</p>
+                  <p className="mt-3 text-lg font-semibold tracking-tight">No restrictions recorded</p>
                   <p className="mt-1 text-sm font-medium text-[#1D1D1F]">Navigation notices</p>
                   <p className="mt-2 text-xs leading-relaxed text-[#6E6E73]">Mapped route restrictions will appear here.</p>
                 </>
@@ -191,19 +191,19 @@ export default function Home() {
         </div>
       </section>
 
-      <section aria-labelledby="home-events-title" className="px-4 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-7xl">
+      <section aria-labelledby="home-events-title" className="px-[var(--app-page-gutter)] py-10 sm:py-12">
+        <div className="mx-auto max-w-[var(--app-max-width)]">
           <SectionHeader
             eyebrow="Upcoming Events"
             title="On the campus calendar"
             action={<Link to="/events" className={`inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-[#1D1D1F] ${focusRing}`}>All events <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>}
           />
           <h2 id="home-events-title" className="sr-only">Upcoming events</h2>
-          <div className="mt-8">
+          <div className="mt-5">
             {upcomingEvents.length ? (
               <div className="grid gap-4 md:grid-cols-3">
                 {upcomingEvents.map((event) => (
-                  <article key={event.id} className={`${card} ${cardHover} p-6`}>
+                  <article key={event.id} className={`${card} ${cardHover} p-5`}>
                     <CalendarDays className="h-5 w-5 text-[#6E6E73]" aria-hidden="true" />
                     <h3 className="mt-4 font-semibold tracking-tight">{event.title}</h3>
                     <p className="mt-2 text-sm text-[#6E6E73]">{formatCampusDateTime(event.startAt)}–{formatCampusShortTime(event.endAt)}</p>
@@ -223,13 +223,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section aria-label="Announcements and CLARA" className="border-t border-[#E5E5E7] bg-[#F5F5F7] px-4 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.35fr_1fr]">
+      <section aria-label="Announcements and CLARA" className="border-t border-[#E5E5E7] bg-[#F5F5F7] px-[var(--app-page-gutter)] py-10 sm:py-12">
+        <div className="mx-auto grid max-w-[var(--app-max-width)] gap-5 lg:grid-cols-[1.35fr_1fr]">
           <div>
             <SectionHeader eyebrow="Important Announcements" title="Campus updates" />
-            <div className="mt-7 space-y-3">
+            <div className="mt-5 space-y-3">
               {announcements.map((announcement) => (
-                <article key={announcement.id} className={`${card} p-6`}>
+                <article key={announcement.id} className={`${card} p-5`}>
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="font-semibold tracking-tight text-[#1D1D1F]">{announcement.title}</h3>
@@ -243,12 +243,12 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="flex flex-col justify-between rounded-[2rem] bg-brand-900 bg-gradient-to-br from-brand-800 to-brand-900 p-8 text-white">
+          <aside className="ink-blueprint flex flex-col justify-between border-brand-900 bg-brand-900 p-6 text-white">
             <div>
               <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gold-500/20 text-gold-200">
                 <Sparkles className="h-5 w-5" aria-hidden="true" />
               </span>
-              <h2 className="mt-6 text-2xl font-semibold tracking-tight">Ask CLARA</h2>
+              <h2 className="mt-6 font-display text-3xl font-bold uppercase tracking-[0.04em]">Ask CLARA</h2>
               <p className="mt-2 text-sm leading-relaxed text-white/65">
                 Campus Learning Alerts &amp; Response Assistant — locations, services, schedules, and official campus information.
               </p>

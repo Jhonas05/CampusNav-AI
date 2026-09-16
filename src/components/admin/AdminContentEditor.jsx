@@ -106,14 +106,14 @@ export default function AdminContentEditor({ resource, record, audiences, facili
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-3" onMouseDown={(event) => event.target === event.currentTarget && !busy && onOpenChange(false)}>
-      <section role="dialog" aria-modal="true" aria-labelledby="admin-editor-title" className="relative max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-[1.5rem] border border-[#D2D2D7] bg-white shadow-2xl">
+      <section role="dialog" aria-modal="true" aria-labelledby="admin-editor-title" className="relative max-h-[94dvh] w-full max-w-4xl overflow-y-auto rounded-[1.5rem] border border-[#D2D2D7] bg-white shadow-2xl">
         <header className="border-b border-[#E5E5E7] px-6 pb-5 pt-6 pr-12">
           <h2 id="admin-editor-title" className="text-2xl font-semibold tracking-tight text-[#1D1D1F]">{record ? `Edit ${config.singular}` : `New ${config.singular}`}</h2>
           <p className="mt-1.5 text-sm text-[#6E6E73]">Content is stored as plain text and remains private until explicitly published.</p>
         </header>
         <button type="button" disabled={busy} onClick={() => onOpenChange(false)} aria-label="Close editor" className={cn("absolute right-4 top-4 rounded-full p-2 text-[#6E6E73] hover:bg-[#F5F5F7]", focusRing)}><X className="h-4 w-4" /></button>
 
-        <div className="grid gap-5 px-6 py-5 sm:grid-cols-2">
+        <div className="grid gap-4 px-5 py-4 sm:grid-cols-2 sm:px-6">
           <label className="sm:col-span-2">
             <span className="text-xs font-semibold text-[#48484A]">Title</span>
             <input value={form.title} maxLength={180} onChange={(event) => setField("title", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`} placeholder={`${config.singular} title`} />

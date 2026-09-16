@@ -15,7 +15,7 @@ const TABS = [
 
 function EventCard({ event }) {
   return (
-    <article className={`${card} p-6`}>
+    <article className={`${card} p-5`}>
       <div className="flex items-start justify-between gap-3">
         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-50 text-gold-700">
           <CalendarDays className="h-5 w-5" aria-hidden="true" />
@@ -25,7 +25,7 @@ function EventCard({ event }) {
           {event.demo && <Chip>Demo data</Chip>}
         </div>
       </div>
-      <h3 className="mt-4 text-lg font-semibold tracking-tight">{event.title}</h3>
+      <h3 className="mt-3 text-lg font-semibold tracking-tight">{event.title}</h3>
       <dl className="mt-3 space-y-1.5 text-sm text-[#6E6E73]">
         <div className="flex items-center gap-2">
           <Clock3 className="h-3.5 w-3.5 shrink-0 text-[#86868B]" aria-hidden="true" />
@@ -51,7 +51,7 @@ function EventCard({ event }) {
         )}
       </dl>
       {event.navigationHref && (
-        <Link to={event.navigationHref} className={`mt-5 inline-flex min-h-10 items-center gap-2 rounded-full bg-brand-700 px-4 text-xs font-semibold text-white transition-colors duration-200 hover:bg-brand-800 ${focusRing}`}>
+        <Link to={event.navigationHref} className={`mt-4 inline-flex min-h-10 items-center gap-2 rounded-full bg-brand-700 px-4 text-xs font-semibold text-white transition-colors duration-200 hover:bg-brand-800 ${focusRing}`}>
           Navigate to Venue <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
         </Link>
       )}
@@ -167,8 +167,8 @@ export default function Events() {
   const allEvents = useMemo(() => [...events.today, ...events.upcoming], [events])
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-12 sm:px-6 sm:py-14">
-      <div className="mx-auto max-w-6xl">
+    <div className="app-page bg-[#F5F5F7]">
+      <div className="app-container">
         <PageHeader
           eyebrow="Campus calendar"
           title="Events"
@@ -201,10 +201,10 @@ export default function Events() {
           </div>
         )}
 
-        <div className="mt-8">
+        <div className="mt-6">
           {tab === "today" && (
             events.today.length ? (
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
                 {events.today.map((event) => <EventCard key={event.id} event={event} />)}
               </div>
             ) : (
@@ -219,7 +219,7 @@ export default function Events() {
 
           {tab === "upcoming" && (
             events.upcoming.length ? (
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
                 {events.upcoming.map((event) => <EventCard key={event.id} event={event} />)}
               </div>
             ) : (
@@ -233,7 +233,7 @@ export default function Events() {
           )}
 
           {tab === "calendar" && (
-            <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="grid gap-5 lg:grid-cols-[minmax(420px,0.9fr)_minmax(0,1.1fr)]">
               <MonthCalendar events={allEvents} todayKey={todayKey} />
               <div>
                 <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868B]">All published events</h2>

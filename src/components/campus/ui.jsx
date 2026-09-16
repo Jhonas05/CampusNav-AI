@@ -3,40 +3,56 @@ import { cn } from "@/lib/utils"
 
 /**
  * CampusNav visual language.
- * Calm neutrals for layout, St. Clare royal blue + gold (from the official
- * seal) for identity and key actions, and stronger color reserved for maps,
- * statuses, and priorities. Green is semantic only: routes, exits, and
- * open/verified states. Color is never the only signal — badges keep icons
- * and text labels.
+ * CampusNav Ink uses neutral architectural surfaces, CampusNav green for
+ * primary actions and selected states, and emergency red for urgent meaning.
+ * Map/status colors remain controlled and are never the only signal.
  */
 
 export const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-700 focus-visible:ring-offset-2"
 
 export const button = {
-  primary: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-700 px-6 text-sm font-medium text-white transition-colors duration-200 hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  secondary: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#D2D2D7] bg-white px-6 text-sm font-medium text-[#1D1D1F] transition-colors duration-200 hover:border-brand-600 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  outline: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-brand-700 bg-white px-6 text-sm font-medium text-brand-700 transition-colors duration-200 hover:bg-brand-50 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  danger: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-red-700 px-6 text-sm font-medium text-white transition-colors duration-200 hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  dangerOutline: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-red-700 bg-white px-6 text-sm font-medium text-red-700 transition-colors duration-200 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  ghost: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium text-[#6E6E73] transition-colors duration-200 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  smallPrimary: cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full bg-brand-700 px-4 text-xs font-semibold text-white transition-colors duration-200 hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  smallSecondary: cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full border border-[#D2D2D7] bg-white px-4 text-xs font-semibold text-[#1D1D1F] transition-colors duration-200 hover:border-brand-600 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
+  primary: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded bg-brand-700 px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-white transition-colors duration-200 hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
+  secondary: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded border border-[#D4D4D7] bg-white px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-[#1D1F20] transition-colors duration-200 hover:border-brand-700 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
+  outline: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded border border-brand-700 bg-white px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-brand-700 transition-colors duration-200 hover:bg-brand-50 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
+  danger: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded bg-[#B3261E] px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-white transition-colors duration-200 hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
+  dangerOutline: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded border border-[#B3261E] bg-white px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-[#B3261E] transition-colors duration-200 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
+  ghost: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded px-4 font-heading text-sm font-bold uppercase tracking-[0.08em] text-[#5D5D60] transition-colors duration-200 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
+  smallPrimary: cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded bg-brand-700 px-4 font-heading text-xs font-bold uppercase tracking-[0.08em] text-white transition-colors duration-200 hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
+  smallSecondary: cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded border border-[#D4D4D7] bg-white px-4 font-heading text-xs font-bold uppercase tracking-[0.08em] text-[#1D1F20] transition-colors duration-200 hover:border-brand-700 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
 }
 
-export const card = "rounded-3xl border border-[#E5E5E7] bg-white"
-export const cardHover = "transition-all duration-200 hover:-translate-y-0.5 hover:border-[#D2D2D7] hover:shadow-[0_16px_40px_rgba(0,0,0,0.07)] motion-reduce:transform-none motion-reduce:transition-none"
+export const card = "rounded-[7px] border border-[#D4D4D7] bg-white"
+export const cardHover = "transition-colors duration-200 hover:border-[#98989B] hover:shadow-[0_8px_24px_rgba(29,31,32,0.06)] motion-reduce:transition-none"
+
+/** @param {Record<string, any>} props */
+export function BlueprintPanel(props) {
+  const { as: Element = "section", className, children, ...rest } = props
+  return <Element className={cn("ink-blueprint", className)} {...rest}>{children}</Element>
+}
+
+/** @param {Record<string, any>} props */
+export function InkKicker(props) {
+  const { as: Element = "p", className, children, ...rest } = props
+  return <Element className={cn("ink-kicker", className)} {...rest}>{children}</Element>
+}
+
+/** @param {Record<string, any>} props */
+export function InkSectionLabel(props) {
+  const { as: Element = "p", className, children, ...rest } = props
+  return <Element className={cn("ink-section-label", className)} {...rest}>{children}</Element>
+}
 
 /** @param {Record<string, any>} props */
 export function PageHeader(props) {
   const { eyebrow, title, lead = null, actions = null, className } = props
   return (
-    <header className={cn("flex flex-col justify-between gap-6 md:flex-row md:items-end", className)}>
+    <header className={cn("flex flex-col justify-between gap-4 md:flex-row md:items-end", className)}>
       <div className="max-w-3xl">
-        {eyebrow && <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-700">{eyebrow}</p>}
-        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-[#1D1D1F] sm:text-5xl">{title}</h1>
-        {lead && <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#6E6E73] sm:text-lg">{lead}</p>}
+        {eyebrow && <InkKicker>{eyebrow}</InkKicker>}
+        <h1 className="mt-2 font-display text-4xl font-extrabold uppercase leading-[0.94] tracking-[0.01em] text-[#1D1F20] sm:text-5xl xl:text-[3.5rem]">{title}</h1>
+        {lead && <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-[#6E6E73] sm:text-base">{lead}</p>}
       </div>
-      {actions}
+      {actions && <div className="shrink-0">{actions}</div>}
     </header>
   )
 }
@@ -45,11 +61,11 @@ export function PageHeader(props) {
 export function SectionHeader(props) {
   const { eyebrow, title, description = null, action = null, as: Heading = "h2" } = props
   return (
-    <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+    <div className="flex flex-col justify-between gap-2.5 sm:flex-row sm:items-end">
       <div>
-        {eyebrow && <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-700">{eyebrow}</p>}
-        <Heading className="mt-1.5 text-2xl font-semibold tracking-tight text-[#1D1D1F]">{title}</Heading>
-        {description && <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#6E6E73]">{description}</p>}
+        {eyebrow && <InkKicker>{eyebrow}</InkKicker>}
+        <Heading className="mt-1 font-display text-[1.75rem] font-bold uppercase leading-none tracking-[0.02em] text-[#1D1F20]">{title}</Heading>
+        {description && <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-[#6E6E73]">{description}</p>}
       </div>
       {action}
     </div>
@@ -137,7 +153,7 @@ export function Chip(props) {
 export function EmptyState(props) {
   const { icon: Icon = Inbox, title, message = null, action = null, className } = props
   return (
-    <div role="status" className={cn("flex min-h-40 flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[#C7C7CC] bg-[#FAFAFA] p-8 text-center", className)}>
+    <div role="status" className={cn("flex min-h-36 flex-col items-center justify-center gap-2.5 rounded-2xl border border-dashed border-[#C7C7CC] bg-[#FAFAFA] p-5 text-center", className)}>
       <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-brand-100 bg-brand-50">
         <Icon className="h-5 w-5 text-brand-700" aria-hidden="true" />
       </div>

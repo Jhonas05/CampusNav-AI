@@ -10,7 +10,7 @@ export default function QuickAccessCard(props) {
     <Link
       to={to}
       className={cn(
-        "group flex min-h-[124px] flex-col justify-between rounded-2xl border bg-white p-5",
+        "group flex min-h-[106px] flex-col justify-between rounded-2xl border bg-white p-4",
         emphasis ? "border-[1.5px] border-red-700" : "border-[#E5E5E7]",
         cardHover,
         focusRing
@@ -18,7 +18,7 @@ export default function QuickAccessCard(props) {
     >
       <div className="flex items-start justify-between gap-3">
         <span className={cn(
-          "flex h-10 w-10 items-center justify-center rounded-xl border border-transparent transition-transform duration-200 group-hover:scale-105 motion-reduce:transform-none",
+          "flex h-9 w-9 items-center justify-center rounded-xl border border-transparent transition-transform duration-200 group-hover:scale-105 motion-reduce:transform-none",
           emphasis ? "bg-red-700 text-white" : tileClass || "border-[#E5E5E7] bg-[#FAFAFA] text-[#1D1D1F]"
         )}>
           <Icon className="h-[18px] w-[18px]" aria-hidden="true" />

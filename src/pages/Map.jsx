@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, Circle, CircleAlert, LocateFixed, MapPin, Navigation, QrCode, Search, ShieldAlert } from "lucide-react"
 import { lazy, Suspense, useCallback, useMemo, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
-import { button, focusRing } from "@/components/campus/ui"
+import { button, focusRing, InkKicker } from "@/components/campus/ui"
 import IndoorMap2D from "@/components/map/IndoorMap2D"
 import LocationConfirmationDialog from "@/components/map/LocationConfirmationDialog"
 import MapLegend from "@/components/map/MapLegend"
@@ -349,21 +349,23 @@ export default function Navigate() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-8 sm:px-6 sm:py-12">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+    <div className="app-page bg-[#F5F5F7]">
+      <div className="app-container">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#86868B]">{emergencyMode ? "Source-approved emergency reference" : "Indoor navigation"}</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">{emergencyMode ? "Emergency Mode" : "Navigate"}</h1>
-            <p className="mt-3 max-w-2xl text-[#6E6E73]">{emergencyMode ? "View source-supported emergency equipment and calculate only administrator/source-approved evacuation paths." : "Choose a verified floor assignment, calculate a walkable route, and follow each navigation step."}</p>
+            <InkKicker className={emergencyMode ? "text-[#B3261E]" : undefined}>{emergencyMode ? "Source-approved emergency reference" : "Indoor navigation"}</InkKicker>
+            <h1 className="mt-1.5 font-display text-4xl font-extrabold uppercase leading-[0.94] tracking-[0.01em] sm:text-5xl">{emergencyMode ? "Emergency Mode" : "Navigate"}</h1>
+            <p className="mt-1.5 max-w-2xl text-sm text-[#6E6E73]">{emergencyMode ? "View source-supported emergency equipment and calculate only administrator/source-approved evacuation paths." : "Choose a verified floor assignment, calculate a walkable route, and follow each navigation step."}</p>
           </div>
-          <nav aria-label="Map mode" className="flex shrink-0 rounded-full border border-[#D2D2D7] bg-white p-1 text-xs font-semibold">
-            <Link to={developerMode ? "/map?verify=1" : "/map"} aria-current={!emergencyMode ? "page" : undefined} className={cn("rounded-full px-4 py-2 transition-colors duration-200", !emergencyMode ? "bg-brand-700 text-white" : "text-[#6E6E73] hover:text-[#1D1D1F]", focusRing)}>Navigate</Link>
-            <Link to={`/map?mode=emergency${developerMode ? "&verify=1" : ""}`} aria-current={emergencyMode ? "page" : undefined} className={cn("rounded-full px-4 py-2 transition-colors duration-200", emergencyMode ? "bg-red-700 text-white" : "text-[#6E6E73] hover:text-[#1D1D1F]", focusRing)}>Emergency Mode</Link>
+          <nav aria-label="Map mode" className="flex shrink-0 rounded border border-[#D4D4D7] bg-white p-1 font-heading text-xs font-bold uppercase tracking-[0.06em]">
+            <Link to={developerMode ? "/map?verify=1" : "/map"} aria-current={!emergencyMode ? "page" : undefined} className={cn("rounded px-4 py-2 transition-colors duration-200", !emergencyMode ? "bg-brand-700 text-white" : "text-[#5D5D60] hover:text-[#1D1F20]", focusRing)}>Navigate</Link>
+            <Link to={`/map?mode=emergency${developerMode ? "&verify=1" : ""}`} aria-current={emergencyMode ? "page" : undefined} className={cn("rounded px-4 py-2 transition-colors duration-200", emergencyMode ? "bg-[#B3261E] text-white" : "text-[#5D5D60] hover:text-[#1D1F20]", focusRing)}>Emergency Mode</Link>
           </nav>
         </div>
 
-        <section aria-label="Route planning controls" className={cn("mt-8 grid gap-4 rounded-[1.75rem] border bg-white p-5 md:p-6", emergencyMode ? "border-2 border-red-700 md:grid-cols-2" : "border-[#E5E5E7] md:grid-cols-3")}>
+        <div className="mt-4 grid items-start gap-4 lg:grid-cols-[var(--app-map-control-width)_minmax(0,1fr)]">
+        <aside className="space-y-3 lg:sticky lg:top-[calc(var(--app-header-height)+0.75rem)] lg:max-h-[calc(100dvh-var(--app-header-height)-1.5rem)] lg:overflow-y-auto lg:pr-1">
+        <section aria-label="Route planning controls" className={cn("ink-blueprint grid gap-3 p-4", emergencyMode && "border-2 border-[#B3261E]")}>
           <label className="block">
             <span className={fieldLabelClass}><LocateFixed className="h-4 w-4" aria-hidden="true" /> Current location</span>
             <select id="current-location-selector" value={currentSelectorValue} onChange={(event) => updateCurrentLocation(event.target.value)} className={fieldClass}>
@@ -403,30 +405,30 @@ export default function Navigate() {
             </select>
           </label>
 
-          <div className={cn("flex flex-col gap-3 border-t border-[#F0F0F2] pt-5 sm:flex-row sm:items-center sm:justify-between", emergencyMode ? "md:col-span-2" : "md:col-span-3")}>
+          <div className="flex flex-col gap-3 border-t border-[#F0F0F2] pt-3">
             <p className="text-xs leading-relaxed text-[#6E6E73]">{floor?.map?.geometryNotice || `${floor?.name} map geometry is pending verification.`}</p>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <button type="button" onClick={() => { setScanError(""); setScannerOpen(true) }} className={button.outline}>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+              <button type="button" onClick={() => { setScanError(""); setScannerOpen(true) }} className={`${button.outline} w-full`}>
                 <QrCode className="h-4 w-4" aria-hidden="true" /> Scan QR
               </button>
               {emergencyMode ? (
-                <button type="button" onClick={findEmergencyExit} disabled={!currentPosition.currentNodeId} className={button.danger}>
+                <button type="button" onClick={findEmergencyExit} disabled={!currentPosition.currentNodeId} className={`${button.danger} w-full`}>
                   <ShieldAlert className="h-4 w-4" aria-hidden="true" /> Find Nearest Verified Exit
                 </button>
               ) : (
-                <button onClick={startNavigation} disabled={!canStart} className={button.primary}>
+                <button onClick={startNavigation} disabled={!canStart} className={`${button.primary} w-full`}>
                   <Navigation className="h-4 w-4" aria-hidden="true" /> Start Navigation
                 </button>
               )}
             </div>
           </div>
           {scanError && (
-            <p role="alert" className={cn(alertClass, emergencyMode ? "md:col-span-2" : "md:col-span-3")}>
+            <p role="alert" className={alertClass}>
               <CircleAlert className="mt-0.5 h-4 w-4 shrink-0 text-red-700" aria-hidden="true" /> {scanError}
             </p>
           )}
           {routeError && (
-            <p role="alert" className={cn(alertClass, emergencyMode ? "md:col-span-2" : "md:col-span-3")}>
+            <p role="alert" className={alertClass}>
               <CircleAlert className="mt-0.5 h-4 w-4 shrink-0 text-red-700" aria-hidden="true" /> {routeError}
             </p>
           )}
@@ -462,12 +464,62 @@ export default function Navigate() {
         </section>
         {map3DMessage && <p role="status" className="mt-3 rounded-2xl border-[1.5px] border-[#1D1D1F] bg-white px-4 py-3 text-sm font-medium text-[#1D1D1F]">{map3DMessage}</p>}
 
-        <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_350px]">
-          <div className="min-w-0">
-          <section aria-label="Campus map" className="relative min-h-[610px] overflow-hidden rounded-[1.75rem] border border-[#E5E5E7] bg-white">
+        {emergencyMode ? (
+          <Suspense fallback={<section className="rounded-[1.75rem] border border-[#E5E5E7] bg-white p-4 text-sm text-[#6E6E73]">Loading emergency reference...</section>}>
+            <EmergencyModePanel
+              result={emergencyResult}
+              instructions={emergencyInstructions}
+              currentLocation={currentLocation}
+              currentFloorId={currentPosition.currentFloorId}
+              onFindExit={findEmergencyExit}
+            />
+          </Suspense>
+        ) : route ? (
+          <div className="hidden space-y-3 lg:block">
+            <RouteSummaryPanel
+              route={route}
+              instructions={instructions}
+              navigationStatus={navigationStatus}
+              activeStep={activeStep}
+              currentLocation={currentLocation}
+              destination={destination}
+              currentFloorId={currentPosition.currentFloorId}
+              viewingFloorId={floorId}
+              mapView={mapView}
+              onAdvance={advanceNavigation}
+              onReset={resetRoute}
+              onSwitchView={() => (mapView === "2D" ? enable3DView() : setMapView("2D"))}
+            />
+          </div>
+        ) : (
+          <section className="hidden rounded-[1.5rem] border border-[#E5E5E7] bg-white p-4 lg:block">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E5E5E7] bg-[#FAFAFA]">
+              <Circle className="h-4 w-4 text-[#86868B]" aria-hidden="true" />
+            </span>
+            <h2 className="mt-3 text-base font-semibold tracking-tight">Route summary</h2>
+            <p className="mt-1.5 text-xs leading-relaxed text-[#6E6E73]">Select your current location and destination, then start navigation to calculate the recommended walkable route.</p>
+            <dl className="mt-3 space-y-2 rounded-xl bg-[#F5F5F7] p-3 text-xs">
+              <div className="flex justify-between gap-3">
+                <dt className="shrink-0 text-[#86868B]">Current</dt>
+                <dd className="text-right font-medium">{currentLocation?.name || "Not selected"}</dd>
+              </div>
+              <div className="flex justify-between gap-3 border-t border-[#E5E5E7] pt-2">
+                <dt className="shrink-0 text-[#86868B]">Destination</dt>
+                <dd className="text-right font-medium">{destination ? `${destination.name} — ${destination.floorId}` : "Select from search"}</dd>
+              </div>
+            </dl>
+          </section>
+        )}
+
+        {!emergencyMode && <p className="rounded-xl border border-dashed border-[#C7C7CC] bg-white p-3 text-[11px] leading-relaxed text-[#6E6E73]">{FACILITY_DATA_NOTICE}</p>}
+        <p className="rounded-xl border border-dashed border-[#C7C7CC] bg-white p-3 text-[11px] leading-relaxed text-[#6E6E73]">Accessibility information pending verification.</p>
+        </aside>
+
+        <div className="min-w-0">
+          <section aria-label="Campus map" className="ink-blueprint map-viewport relative overflow-hidden">
             {mapView === "3D" ? (
               <Map3DErrorBoundary resetKey={mapView} onFailure={handle3DFailure} onReturnTo2D={() => setMapView("2D")}>
-                <Suspense fallback={<div className="flex min-h-[610px] items-center justify-center bg-[#F5F5F7] text-sm font-medium text-[#6E6E73]">Loading 3D building...</div>}>
+                <Suspense fallback={<div className="flex h-full min-h-[inherit] items-center justify-center bg-[#F5F5F7] text-sm font-medium text-[#6E6E73]">Loading 3D building...</div>}>
                   <Campus3D
                     floors={floors}
                     facilities={facilities}
@@ -515,7 +567,7 @@ export default function Navigate() {
                 currentNodeId={currentPosition.currentNodeId}
               />
             ) : (
-              <div className="flex min-h-[610px] items-center justify-center p-8 text-center">
+              <div className="flex h-full min-h-[inherit] items-center justify-center p-8 text-center">
                 <div className="max-w-sm">
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-[#E5E5E7] bg-[#FAFAFA]">
                     <MapPin className="h-5 w-5 text-[#86868B]" aria-hidden="true" />
@@ -541,59 +593,7 @@ export default function Navigate() {
           {mapView === "2D" && floor?.map && (
             <MapLegend floorFacilities={viewedFloorFacilities} emergencyMode={emergencyMode} className="mt-3" />
           )}
-          </div>
-
-          <aside className="space-y-4">
-            {emergencyMode ? (
-              <Suspense fallback={<section className="rounded-[1.75rem] border border-[#E5E5E7] bg-white p-6 text-sm text-[#6E6E73]">Loading emergency reference...</section>}>
-                <EmergencyModePanel
-                  result={emergencyResult}
-                  instructions={emergencyInstructions}
-                  currentLocation={currentLocation}
-                  currentFloorId={currentPosition.currentFloorId}
-                  onFindExit={findEmergencyExit}
-                />
-              </Suspense>
-            ) : route ? (
-              <div className="hidden space-y-4 lg:block">
-                <RouteSummaryPanel
-                  route={route}
-                  instructions={instructions}
-                  navigationStatus={navigationStatus}
-                  activeStep={activeStep}
-                  currentLocation={currentLocation}
-                  destination={destination}
-                  currentFloorId={currentPosition.currentFloorId}
-                  viewingFloorId={floorId}
-                  mapView={mapView}
-                  onAdvance={advanceNavigation}
-                  onReset={resetRoute}
-                  onSwitchView={() => (mapView === "2D" ? enable3DView() : setMapView("2D"))}
-                />
-              </div>
-            ) : (
-              <section className="rounded-[1.75rem] border border-[#E5E5E7] bg-white p-6">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E5E5E7] bg-[#FAFAFA]">
-                  <Circle className="h-4 w-4 text-[#86868B]" aria-hidden="true" />
-                </span>
-                <h2 className="mt-4 text-lg font-semibold tracking-tight">Route summary</h2>
-                <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">Select your current location and destination, then start navigation to calculate the recommended walkable route.</p>
-                <dl className="mt-5 space-y-2.5 rounded-2xl bg-[#F5F5F7] p-4 text-sm">
-                  <div className="flex justify-between gap-3">
-                    <dt className="shrink-0 text-[#86868B]">Current</dt>
-                    <dd className="text-right font-medium">{currentLocation?.name || "Not selected"}</dd>
-                  </div>
-                  <div className="flex justify-between gap-3 border-t border-[#E5E5E7] pt-2.5">
-                    <dt className="shrink-0 text-[#86868B]">Destination</dt>
-                    <dd className="text-right font-medium">{destination ? `${destination.name} — ${destination.floorId}` : "Select from search"}</dd>
-                  </div>
-                </dl>
-              </section>
-            )}
-
-            {!emergencyMode && <p className="rounded-2xl border border-dashed border-[#C7C7CC] bg-white p-4 text-xs leading-relaxed text-[#6E6E73]">{FACILITY_DATA_NOTICE}</p>}
-            <p className="rounded-2xl border border-dashed border-[#C7C7CC] bg-white p-4 text-xs leading-relaxed text-[#6E6E73]">Accessibility information pending verification.</p>
-          </aside>
+        </div>
         </div>
 
         {developerMode && floor?.map && verificationReport && (

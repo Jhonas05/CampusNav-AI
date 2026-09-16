@@ -22,8 +22,8 @@ const VERIFICATION_BADGE = {
 function InfoRow({ icon: Icon, label, value, verification = "PENDING_VERIFICATION" }) {
   const badge = VERIFICATION_BADGE[verification] || VERIFICATION_BADGE.PENDING_VERIFICATION
   return (
-    <div className="flex items-start gap-4 border-b border-[#F0F0F2] py-4 last:border-0">
-      <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#E5E5E7] bg-[#FAFAFA]">
+    <div className="flex items-start gap-3 border-b border-[#F0F0F2] py-3 last:border-0">
+      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#E5E5E7] bg-[#FAFAFA]">
         <Icon className="h-[18px] w-[18px] text-[#48484A]" aria-hidden="true" />
       </span>
       <div className="min-w-0 flex-1">
@@ -65,15 +65,16 @@ export default function FacilityDetail() {
   const onToggleSave = () => setSaved(toggleSavedLocation(facility.id))
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-10 sm:px-6 sm:py-12">
-      <div className="mx-auto max-w-6xl">
+    <div className="app-page bg-[#F5F5F7]">
+      <div className="app-container">
         <Link to="/facilities" className={`inline-flex items-center gap-2 rounded-md text-sm font-medium text-[#6E6E73] transition-colors hover:text-[#1D1D1F] ${focusRing}`}>
           <ArrowLeft className="h-4 w-4" aria-hidden="true" /> All facilities
         </Link>
 
-        <article className="mt-6 overflow-hidden rounded-[2rem] border border-[#E5E5E7] bg-white">
-          <FacilityPhoto facility={facility} variant="banner" showHint className="border-b border-[#E5E5E7]" />
-          <div className="border-b border-[#E5E5E7] p-7 sm:p-10">
+        <article className="ink-blueprint mt-4 overflow-hidden">
+          <div className="border-b border-[#E5E5E7] lg:grid lg:grid-cols-[minmax(320px,0.8fr)_minmax(0,1.2fr)]">
+          <FacilityPhoto facility={facility} variant="banner" showHint className="border-b border-[#E5E5E7] lg:h-full lg:max-h-none lg:min-h-0 lg:aspect-auto lg:border-b-0 lg:border-r" />
+          <div className="p-6 sm:p-7">
             <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
@@ -82,7 +83,7 @@ export default function FacilityDetail() {
                     <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full", category.dot)} /> {facility.kind}
                   </span>
                 </div>
-                <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-[-0.03em] sm:text-5xl">{facility.name}</h1>
+                <h1 className="mt-4 font-display text-4xl font-extrabold uppercase leading-[0.94] tracking-[0.01em] sm:text-5xl">{facility.name}</h1>
                 <p className="mt-3 flex items-center gap-2 text-base text-[#6E6E73] sm:text-lg">
                   <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" /> {floor?.name || facility.floorId}
                   <span aria-hidden="true" className="text-[#D2D2D7]">·</span> {category.label}
@@ -93,7 +94,7 @@ export default function FacilityDetail() {
               </div>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-2.5">
+            <div className="mt-6 flex flex-wrap gap-2.5">
               {navigationHref && (
                 <Link to={navigationHref} className={button.primary}>
                   <Navigation className="h-4 w-4" aria-hidden="true" /> Navigate
@@ -108,9 +109,10 @@ export default function FacilityDetail() {
               </button>
             </div>
           </div>
+          </div>
 
-          <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr]">
-            <section aria-label="Facility information" className="p-7 sm:p-10 sm:pt-8">
+          <div className="grid gap-0 lg:grid-cols-[1.2fr_0.8fr]">
+            <section aria-label="Facility information" className="p-5 sm:p-7">
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868B]">Location &amp; availability</h2>
               <div className="mt-2">
                 <InfoRow icon={MapPin} label="Floor assignment" value={floor?.name || facility.floorId} verification={facility.verification.floor} />
@@ -125,7 +127,7 @@ export default function FacilityDetail() {
               </div>
             </section>
 
-            <aside className="border-t border-[#E5E5E7] p-7 sm:p-10 sm:pt-8 md:border-l md:border-t-0">
+            <aside className="border-t border-[#E5E5E7] p-5 sm:p-7 lg:border-l lg:border-t-0">
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868B]">Map preview</h2>
               {floor?.map ? (
                 <div className="mt-4 overflow-hidden rounded-2xl border border-[#E5E5E7]">
@@ -170,7 +172,7 @@ export default function FacilityDetail() {
             </aside>
           </div>
 
-          <div className={`${card} m-5 rounded-2xl border-dashed border-[#C7C7CC] bg-[#FAFAFA] p-4 sm:mx-10 sm:mb-8`}>
+          <div className={`${card} m-5 rounded-2xl border-dashed border-[#C7C7CC] bg-[#FAFAFA] p-4 sm:mx-7 sm:mb-6`}>
             <p className="text-xs leading-relaxed text-[#6E6E73]">{FACILITY_DATA_NOTICE}</p>
           </div>
         </article>

@@ -27,7 +27,7 @@ export function PriorityAlertsSection({ records, verify }) {
             const Icon = priorityIcon(record.category)
             const urgent = record.priority === "URGENT"
             return (
-              <article key={record.id} className={`rounded-2xl p-5 ${priorityStyles[record.priority] || priorityStyles.NORMAL}`}>
+              <article key={record.id} className={`rounded-2xl p-4 ${priorityStyles[record.priority] || priorityStyles.NORMAL}`}>
                 <div className="flex items-start gap-4">
                   <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${urgent ? "bg-red-700 text-white" : "bg-amber-100 text-amber-800"}`}>
                     <Icon className="h-5 w-5" aria-hidden="true" />
@@ -59,7 +59,7 @@ export function ClassesSection({ records, verify }) {
       {!records.length ? <EmptyState title="Schedule information unavailable." message="No authorized class schedule source is connected." /> : (
         <ol className="relative space-y-0">
           {records.map((record, index) => (
-            <li key={record.id} className="relative flex gap-4 pb-5 last:pb-0 sm:gap-6">
+            <li key={record.id} className="relative flex gap-3 pb-4 last:pb-0 sm:gap-4">
               <div className="flex w-[74px] shrink-0 flex-col items-end pt-4 text-right">
                 <span className="text-sm font-semibold tabular-nums text-[#1D1D1F]">{formatCampusShortTime(record.startAt)}</span>
                 <span className="mt-0.5 text-xs tabular-nums text-[#86868B]">{formatCampusShortTime(record.endAt)}</span>
@@ -68,7 +68,7 @@ export function ClassesSection({ records, verify }) {
                 {index < records.length - 1 && <span className="absolute bottom-0 top-6 w-px bg-[#E5E5E7]" />}
                 <span className={`mt-[22px] h-2.5 w-2.5 shrink-0 rounded-full ${record.scheduleStatus === "SCHEDULED_NOW" ? "bg-green-600" : "border-2 border-blue-300 bg-white"}`} />
               </div>
-              <article className="min-w-0 flex-1 rounded-2xl border border-[#E5E5E7] p-5">
+              <article className="min-w-0 flex-1 rounded-2xl border border-[#E5E5E7] p-4">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <h3 className="font-semibold tracking-tight">{record.subject}</h3>
                   <div className="flex flex-wrap gap-2">
@@ -97,7 +97,7 @@ export function OfficesSection({ records, verify }) {
     <DashboardSection id="office-availability" eyebrow="Facility information" title="Office Availability" description="Operating status remains unknown until official hours are connected and verified.">
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {records.map((record) => (
-          <article key={record.id} className="flex flex-col rounded-2xl border border-[#E5E5E7] p-5">
+          <article key={record.id} className="flex flex-col rounded-2xl border border-[#E5E5E7] p-4">
             <div className="flex items-start justify-between gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E5E5E7] bg-[#FAFAFA]"><Building2 className="h-[18px] w-[18px]" aria-hidden="true" /></span>
               {record.demo && <Chip>Demo data</Chip>}
@@ -134,7 +134,7 @@ export function PersonnelSection({ records, verify }) {
       {!records.length ? <EmptyState title="Personnel availability information is not available." message="No authorized personnel schedule or check-in source is connected." /> : (
         <div className="grid gap-3 md:grid-cols-2">
           {records.map((record) => (
-            <article key={record.id} className="rounded-2xl border border-[#E5E5E7] p-5">
+            <article key={record.id} className="rounded-2xl border border-[#E5E5E7] p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E5E5E7] bg-[#FAFAFA] text-sm font-semibold text-[#48484A]">{initials(record.name)}</span>
@@ -167,7 +167,7 @@ export function AdvisoriesSection({ records, verify }) {
       {!records.length ? <EmptyState title="No current facility advisories." message="Official closure, maintenance, restriction, and interruption notices will appear here." /> : (
         <div className="space-y-3">
           {records.map((record) => (
-            <article key={record.id} className="rounded-2xl border-[1.5px] border-amber-400 bg-amber-50/40 p-5">
+            <article key={record.id} className="rounded-2xl border-[1.5px] border-amber-400 bg-amber-50/40 p-4">
               <div className="flex flex-wrap items-center gap-2">
                 <Construction className="h-5 w-5 text-amber-700" aria-hidden="true" />
                 <PriorityBadge priority={record.priority} />
@@ -188,7 +188,7 @@ export function AdvisoriesSection({ records, verify }) {
 const EventList = ({ records, verify, emptyTitle }) => !records.length ? <EmptyState title={emptyTitle} /> : (
   <div className="space-y-3">
     {records.map((record) => (
-      <article key={record.id} className="rounded-2xl border border-[#E5E5E7] p-5">
+      <article key={record.id} className="rounded-2xl border border-[#E5E5E7] p-4">
         <div className="flex items-start justify-between gap-3">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E5E5E7] bg-[#FAFAFA]"><CalendarDays className="h-[18px] w-[18px]" aria-hidden="true" /></span>
           <div className="flex flex-wrap justify-end gap-2">
@@ -234,7 +234,7 @@ export function AnnouncementsSection({ records, verify }) {
       {!records.length ? <EmptyState title="No general announcements are available." /> : (
         <div className="space-y-3">
           {records.map((record) => (
-            <article key={record.id} className="rounded-2xl border border-[#E5E5E7] p-5">
+            <article key={record.id} className="rounded-2xl border border-[#E5E5E7] p-4">
               <div className="flex items-start gap-3">
                 <Megaphone className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
                 <div className="min-w-0 flex-1">
@@ -261,7 +261,7 @@ export function NavigationNoticesSection({ records, verify }) {
       {!records.length ? <EmptyState title="No current navigation notices." /> : (
         <div className="space-y-3">
           {records.map((record) => (
-            <article key={record.id} className="rounded-2xl border border-dashed border-[#86868B] bg-[#FAFAFA] p-5">
+            <article key={record.id} className="rounded-2xl border border-dashed border-[#86868B] bg-[#FAFAFA] p-4">
               <div className="flex flex-wrap items-center gap-2">
                 <Navigation className="h-5 w-5 text-brand-700" aria-hidden="true" />
                 <PriorityBadge priority={record.priority} />

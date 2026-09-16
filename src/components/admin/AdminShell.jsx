@@ -59,19 +59,19 @@ export default function AdminShell({ children }) {
   const developerModeAvailable = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_VERIFICATION === "true"
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7]">
-      <div className="mx-auto flex max-w-[1400px] flex-col gap-6 px-4 py-8 sm:px-6 lg:flex-row lg:py-10">
-        <aside aria-label="Admin navigation" className="lg:w-64 lg:shrink-0">
-          <div className="rounded-[1.5rem] border border-[#E5E5E7] bg-white p-3 lg:sticky lg:top-24">
+    <div className="min-h-[calc(100dvh-var(--app-header-height))] bg-[#F5F5F7]">
+      <div className="mx-auto flex max-w-[var(--app-max-width)] flex-col gap-4 px-[var(--app-page-gutter)] py-5 lg:flex-row lg:py-6">
+        <aside aria-label="Admin navigation" className="lg:w-[var(--app-admin-rail-width)] lg:shrink-0">
+          <div className="ink-blueprint p-2.5 lg:sticky lg:top-[calc(var(--app-header-height)+1rem)] lg:max-h-[calc(100dvh-var(--app-header-height)-2rem)] lg:overflow-y-auto">
             <div className="flex items-center gap-2.5 px-3 pb-3 pt-2">
               <SchoolLogo size="sm" />
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#86868B]">St. Clare College</p>
-                <p className="text-[13px] font-semibold tracking-tight text-[#1D1D1F]">CampusNav Admin</p>
+                <p className="font-heading text-[10px] font-bold uppercase tracking-[0.16em] text-[#5D5D60]">St. Clare College</p>
+                <p className="font-display text-lg font-bold uppercase tracking-[0.04em] text-[#1D1F20]">CampusNav Admin</p>
               </div>
             </div>
 
-            <div className="mb-3 rounded-2xl bg-[#F5F5F7] px-3 py-3">
+            <div className="mb-2 rounded-2xl bg-[#F5F5F7] px-3 py-2.5">
               <p className="truncate text-xs font-semibold text-[#1D1D1F]">{auth.profile?.display_name || "CampusNav Administrator"}</p>
               <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.14em] text-[#6E6E73]">SUPER_ADMIN</p>
             </div>
@@ -90,8 +90,8 @@ export default function AdminShell({ children }) {
                           to={path}
                           aria-current={active ? "page" : undefined}
                           className={cn(
-                            "mb-1 flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-colors duration-150",
-                            active ? "bg-[#1D1D1F] text-white" : "text-[#48484A] hover:bg-[#F5F5F7] hover:text-[#1D1D1F]",
+                            "mb-1 flex min-h-10 shrink-0 items-center gap-2.5 rounded-xl px-3 py-2 text-[12px] font-medium transition-colors duration-150",
+                            active ? "bg-brand-700 text-white" : "text-[#48484A] hover:bg-brand-50 hover:text-brand-800",
                             focusRing
                           )}
                         >

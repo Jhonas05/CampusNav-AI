@@ -3,6 +3,42 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## CampusNav Ink laptop-space optimization — 16 September 2026
+
+**Overall classification:** `IMPLEMENTED_UNVERIFIED`
+
+| Area | Classification | Evidence / advisory |
+|---|---|---|
+| Shared density system | `ACCEPTED` | Centralized application width, gutter, page/section spacing, card padding, header height, Admin rail, and map-control-rail tokens are consumed by shared layout primitives |
+| Public application surfaces | `ACCEPTED_WITH_ADVISORY` | Home, Dashboard, Facilities, Facility Detail, Events, Emergency, and CLARA use wider shells, compact vertical rhythm, and content-driven laptop grids; route rendering and deterministic regressions pass |
+| Navigate 2D/3D shell | `ACCEPTED_WITH_ADVISORY` | Route planning, floor/view controls, summary, and notices occupy a compact laptop rail while the shared 2D/3D map receives the remaining width and viewport-aware height; routing, spatial data, 3D behavior, QR, and Emergency logic are unchanged and their regressions pass |
+| Admin density | `ACCEPTED_WITH_ADVISORY` | Admin rail, content gutter, overview grids, filters, table rows, and logically grouped forms are more compact at laptop widths without RBAC/service changes; authenticated graphical workflow was not rerun |
+| 1280–1440px visual evidence | `IMPLEMENTED_UNVERIFIED` | Layout rules explicitly target 1280×800, 1366×768, and 1440×900, but no connected graphical browser was available for screenshots or visual inspection |
+| Tablet/mobile preservation | `IMPLEMENTED_UNVERIFIED` | Breakpoint fallbacks, mobile navigation, map route sheet, labelled controls, focus styles, and practical control heights remain in code; real tablet/mobile graphical QA was unavailable |
+| Behavior preservation | `ACCEPTED` | ESLint, typecheck, production build, route render, and every existing deterministic data/navigation/QR/Emergency/3D/Dashboard/Auth/Admin/Phase 8 suite pass |
+
+**MANUAL DEVICE QA PENDING.** No browser/device support or WCAG conformance claim is added by this refinement.
+
+## CampusNav Ink baseline adoption — 15 September 2026
+
+**Overall classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Area | Classification | Evidence / advisory |
+|---|---|---|
+| Owner decision and source boundary | `ACCEPTED` | `DEC-UI-002` records the CampusNav Ink / architectural-blueprint baseline; the supplied HTML is registered as visual/UX reference only, not runtime or institutional truth |
+| Centralized design system | `ACCEPTED` | `src/index.css` defines neutral, CampusNav green, emergency red, typography, radius, border, shadow, grid, and blueprint tokens; Tailwind brand compatibility tokens point to the approved green/neutral palette |
+| Reusable primitives | `ACCEPTED` | Shared button/card/header treatments plus `BlueprintPanel`, `InkKicker`, and `InkSectionLabel` provide maintainable React mappings without copied artifact scripts or inline-style systems |
+| Major public surfaces | `ACCEPTED_WITH_ADVISORY` | Home, Dashboard, Facilities, Facility Detail, Navigate shell, Events, Emergency, CLARA, Login, global search, notifications, and profile/account adopt the baseline; automated desktop captures were visually inspected |
+| Admin presentation | `ACCEPTED_WITH_ADVISORY` | Shared Admin shell and existing Admin page primitives adopt the centralized tokens without changing RBAC or write behavior; authenticated graphical Admin interaction was not rerun |
+| 2D/3D navigation presentation | `ACCEPTED` | Map controls/frame/summary surroundings adopt the blueprint system; navigation, multi-floor, 3D, emergency, and route-render regressions passed; spatial data and routing logic were unchanged |
+| Responsive/browser evidence | `IMPLEMENTED_UNVERIFIED` | Existing responsive/mobile navigation code is preserved. Narrow headless screenshots are not treated as device certification. **AUTOMATED RENDER VERIFIED / MANUAL VISUAL QA PENDING.** |
+| Accessibility evidence | `PARTIAL` | Existing semantic labels, focus utilities, reduced-motion handling, status text/icons, and 2D fallback remain; no new WCAG claim, screen-reader session, keyboard-only pass, or full contrast audit was completed |
+| Performance/lazy-loading | `ACCEPTED_WITH_ADVISORY` | 3D, QR scanner, map verification, emergency panel, and Admin routes remain lazy. Production build passes; the existing approximately 878 kB minified 3D chunk warning remains |
+| Behavior preservation | `ACCEPTED` | All deterministic data, A*, same-floor, multi-floor, QR, Emergency, 3D/WebGL, Dashboard, Auth/RBAC, Admin, Phase 8C.1, Phase 8C.2, and route-render suites passed after adoption |
+| Deployment equivalence | `IMPLEMENTED_UNVERIFIED` | No deployment was requested or performed; current worktree must not be assumed equivalent to Cloudflare production |
+
+The review of `25-performance-budget.md`, `26-accessibility-standards.md`, `55-browser-device-compatibility.md`, and `60-core-vs-optional-feature-matrix.md` found no requirement that conflicts with `DEC-UI-002`; their performance, fallback, accessibility, and thesis-core boundaries remain in force.
+
 ## Phase 1 status vocabulary
 - `IMPLEMENTED_VERIFIED` — implementation exists and relevant deterministic evidence passed during this audit; this does not imply browser/device or live-cloud verification unless explicitly stated
 - `IMPLEMENTED_UNVERIFIED` — implementation exists, but a required external, live, or environment-specific check was not freshly performed
@@ -45,7 +81,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 | PWA/offline emergency access | `12`, `24`, `30` | `public/manifest.json` only | `MISSING` — no service worker, cache strategy, or versioned emergency cache was found | Manifest alone can create an unsupported offline claim | Future approved PWA/emergency-cache phase |
 | Map administration | `11`, `16`, `45`, `46` | developer verification panel and `src/pages/admin/QRCheckpoints.jsx` | `PARTIAL` — inspection/QR tooling exists | No production floor-plan upload, calibration, geometry editor, map version history or coherent rollback | Future approved map-administration phase |
 | Reports/analytics | `23`, `49`, `60` | no dedicated implementation found | `MISSING` | No report workflow, verification queue, privacy model, or analytics dashboard | Future approved reporting phase |
-| UI registry compliance | `06`, `07`, `21`, `26`, `55` | registered pages/components under `src/pages/` and `src/components/` | `PARTIAL` — named screen/component families and safe empty states exist; route render passed | Responsive, keyboard, screen-reader and device matrix not freshly verified | Phase 2 browser/accessibility QA |
+| UI registry compliance | `06`, `07`, `21`, `26`, `55` | registered pages/components under `src/pages/` and `src/components/` | `IMPLEMENTED_VERIFIED` for code structure and automated desktop render under `DEC-UI-002` | Keyboard, screen-reader, contrast, and physical-device matrix remain pending | Approved UI adoption follow-up QA |
 | Deployment | `08`, `31`, `52`, `62` | `vite.config.js`, `wrangler.jsonc`, `package.json`, GitHub remotes, Cloudflare production URL | `IMPLEMENTED_UNVERIFIED` — production build passed; configuration exists; production URL returned HTTP 200 during Phase 1 | Current worktree was not deployed; production-browser equivalence was not established; both `origin` and `old-origin` remotes require deliberate release targeting | Phase 2 release verification |
 | Testing/QA | `08`, `25`, `55`, `57`, `58`, `73` | `scripts/test-*.mjs`, `supabase/tests/*.sql` | `PARTIAL` — all selected local deterministic non-cloud suites, render, lint, typecheck and build passed in Phase 1 | Local pgTAP, linked-cloud, production browser, responsive and physical-device checks were not run | Phase 2 acceptance baseline |
 
@@ -87,7 +123,7 @@ Phase 8C.2 files are preserved as existing work. They are not marked complete by
 | Document A | Document B | Observed code/evidence | Recommended decision or treatment |
 |---|---|---|---|
 | `01-project-overview.md`, `09-progress-roadmap.md`, and `28-definition-of-done.md` describe 3D as implemented/completed | Previous version of this registry described 3D as in progress | 3D renderer and shared-data tests pass locally; browser/device QA was not performed | Treat implementation as verified locally and device/browser QA as outstanding; do not merge those claims |
-| Original 14 Sep source required strict grayscale | `DEC-UI-001`, `06`, and `07` allow controlled map colors | Current UI uses restrained brand/category colors | `DEC-UI-001` controls implementation; owner/adviser must still decide final thesis screenshot policy in `64` |
+| Original 14 Sep source required strict grayscale | Owner-approved `DEC-UI-002` adopts neutral-dominant CampusNav Ink with controlled green/red/map color | Current UI uses centralized neutral, CampusNav green, emergency red, and controlled category/status colors | Resolved by explicit owner decision; color still cannot be the only signal |
 | `17` defines future grounded CLARA integration | `07` registers a current CLARA screen | Current screen is a local facility matcher with no model/tool endpoint | Keep status `PARTIAL`; do not describe the UI as production grounded AI |
 | A web manifest and PWA-facing language can imply install/offline capability | `24` and `30` require evidence of a real cache strategy | No service worker or versioned emergency cache exists | Keep offline/PWA status `MISSING` until implemented and tested |
 | Previous `09` used historical Phase 1–8C numbering | `DEC-ROADMAP-001` resets active development to canonical alignment Phase 1 | Advanced implementation remains present and must not be discarded | Preserve code as baseline evidence; use the reset roadmap for future work |

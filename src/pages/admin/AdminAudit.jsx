@@ -33,7 +33,7 @@ export default function AdminAudit() {
 
       {error && <div role="alert" className="mt-7 rounded-2xl border border-[#D2D2D7] bg-white px-5 py-4 text-sm text-[#1D1D1F]">{error}</div>}
 
-      <section aria-label="Audit records" className="mt-8 overflow-hidden rounded-3xl border border-[#E5E5E7] bg-white">
+      <section aria-label="Audit records" className="mt-5 overflow-hidden rounded-3xl border border-[#E5E5E7] bg-white">
         {loading ? <div className="space-y-3 p-5">{[0, 1, 2].map((item) => <Skeleton key={item} className="h-16 w-full" />)}</div> : rows.length ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] border-collapse text-left">
