@@ -39,6 +39,49 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 The review of `25-performance-budget.md`, `26-accessibility-standards.md`, `55-browser-device-compatibility.md`, and `60-core-vs-optional-feature-matrix.md` found no requirement that conflicts with `DEC-UI-002`; their performance, fallback, accessibility, and thesis-core boundaries remain in force.
 
+## Phase 2 acceptance snapshot — freshly revalidated 16 September 2026
+
+### Acceptance vocabulary
+- `ACCEPTED` — current implementation passed the relevant fresh deterministic and/or live acceptance evidence
+- `ACCEPTED_WITH_ADVISORY` — accepted behavior passed, with a named non-blocking limitation or untested environment
+- `IMPLEMENTED_UNVERIFIED` — implementation exists but the required evidence was not available
+- `PARTIAL` — only part of the canonical contract is implemented
+- `BLOCKED` — the check cannot proceed without a missing runtime, institutional input, or approved decision
+- `DEFERRED` — intentionally postponed; it is not an implemented claim
+- `CONFLICT` — current evidence contradicts the claimed or expected state
+
+### Phase 2 evidence matrix
+
+| Acceptance area | Classification | Fresh Phase 2 evidence / advisory |
+|---|---|---|
+| Worktree preservation | `ACCEPTED` | Preserved all pre-existing tracked/untracked work and `stash@{0}`; no reset, restore, clean, discard, stash-pop, or application overwrite was performed |
+| Phase 8C.2 overall | `ACCEPTED_WITH_ADVISORY` | Deterministic UI/service checks, linked database constraints/RLS, authenticated writes, Realtime refresh, Dashboard refetch, audit, lifecycle, and cleanup passed; real graphical Admin interaction remains `MANUAL DEVICE QA PENDING` |
+| Linked Supabase schema | `ACCEPTED` | Linked migration list contains `20260914151900`, `20260914231416`, `20260915002902`, and `20260915052147`; 24/24 public tables have RLS and 9/9 public views use `security_invoker` |
+| Auth and RBAC | `ACCEPTED_WITH_ADVISORY` | Real client login, profile and role load, `SUPER_ADMIN`, `hasRole`, persisted session restoration, token refresh, logout state clearing, protected-access removal, and re-login passed under Node 22; no fresh graphical browser login run |
+| Live cloud RLS | `ACCEPTED` | Linked transactional suites passed 35 + 21 + 34 + 13 assertions; authenticated allowed writes and anonymous administrative-write rejection also passed through `supabase-js` |
+| Realtime | `ACCEPTED_WITH_ADVISORY` | Admin announcement/event INSERT/UPDATE/DELETE and Phase 8C.2 ACADEMIC/PERSONNEL refresh delivery passed under Node 22. The first fresh Auth-suite run timed out after subscription; its cleanup audit was zero, the complete suite passed on the second run, and both independent authenticated Realtime suites passed |
+| Schedule/personnel invariants | `ACCEPTED` | Live `SCHEDULED → CHECKED_IN → SCHEDULED`, `UNAVAILABLE` precedence, public projection privacy, and schedule-only-not-presence behavior passed |
+| Conflict enforcement | `ACCEPTED` | Client detects room/professor/section conflicts; all three live PostgreSQL exclusion constraints exist and linked conflict assertions passed |
+| Next availability | `ACCEPTED` | Live 14:30–16:00 gap and overlapping-assignment counterexample passed in Asia/Manila calculations |
+| Admin CMS and audit logging | `ACCEPTED_WITH_ADVISORY` | Live CRUD for announcements, events, advisories, and notifications; draft privacy; audience links; trusted audit creation; read-only audit boundary; and cleanup passed. Graphical Admin QA remains pending |
+| Dashboard | `ACCEPTED_WITH_ADVISORY` | Local lifecycle/priority/deduplication tests and live public provider reads passed; class insert/edit/cancel emitted Realtime signals and refreshed Today's Classes. Graphical responsive QA remains pending |
+| A*, same-floor, and multi-floor navigation | `ACCEPTED` | Fresh route, wall-crossing, blocked-edge, stair-continuity, construction, and render regressions passed through the single `pathfinding.js` engine |
+| 2D and 3D | `ACCEPTED_WITH_ADVISORY` | Shared route/data/coordinate and WebGL-fallback regressions passed; graphical/device QA pending and the 3D chunk remains approximately 878 kB minified |
+| QR/manual positioning | `ACCEPTED_WITH_ADVISORY` | Valid/invalid payload, graph origin, manual fallback, privacy, and route tests passed; physical camera and installed-label QA pending |
+| Emergency | `ACCEPTED_WITH_ADVISORY` | Approved-edge-only routes, normal-edge rejection, construction/blocked handling, and safe no-route behavior passed; source coverage and safety-authority sign-off remain limited/pending |
+| UI registry | `ACCEPTED_WITH_ADVISORY` | All 54 registered page/component paths are present; protected route rendering and responsive code patterns passed static checks. The color-direction question was later resolved by `DEC-UI-002`; manual device QA remains pending |
+| Responsive/browser QA | `IMPLEMENTED_UNVERIFIED` | Responsive breakpoints, mobile map sheet, mobile Admin cards, and SPA route responses exist. **MANUAL DEVICE QA PENDING** |
+| Accessibility QA | `PARTIAL` | Static labels, dialog roles, focus utilities, reduced-motion handling, and 2D fallback exist; no fresh keyboard-only, screen-reader, touch-target, or full contrast test, so no WCAG conformance claim is made |
+| Credential/security audit | `ACCEPTED_WITH_ADVISORY` | Session file deleted and confirmed absent/untracked; no real service-role, provider, PostgreSQL-password URL, JWT, or private-key credential was found in source/build/local environment. The only source matches are intentional rejected-key test canaries; the build contains a role-name literal, not a key. Dependency audit reports 2 low + 3 moderate + 1 high advisory; Vite has a non-major remediation, while Router/Quill paths require deliberate major upgrades |
+| Fixture cleanup | `ACCEPTED` | Post-test linked audit returned zero records in all 14 DEVELOPMENT/DEMO categories |
+| Build and regression gates | `ACCEPTED_WITH_ADVISORY` | All 12 deterministic suites, route render, linked SQL suites, authenticated cloud suites, ESLint, typecheck, and production build passed. Local `test:rls` is `BLOCKED` only because Docker is unavailable |
+| GitHub / deployment equivalence | `CONFLICT` | Local `HEAD` equals `origin/main` at `7496a765bc3a7135a8a1c44aa23224ed5aa843b3`, but preserved tracked/untracked work changes the build. Production entry/CSS asset names differ from the fresh worktree build, production still references `campusnav-og-v2.png`, and `/branding/campusnav-og.png` returns SPA HTML rather than PNG |
+| Supabase production connection | `ACCEPTED` | Local environment and deployed production bundle both reference the linked project; live Data API, Auth, PostgreSQL, RLS, and Realtime checks passed |
+| PWA/offline | `PARTIAL` | Manifest is valid and served, but no service worker/versioned emergency cache exists. A manifest alone is not offline support |
+| CLARA | `PARTIAL` / `DEFERRED` | Current UI is an explicitly local, conservative facility matcher. It is not the final grounded Groq/tool integration, which remains deferred until an approved later phase |
+
+Phase 2 changes only acceptance tracking documents. It does not deploy, refactor, add a feature, or start Phase 3.
+
 ## Phase 1 status vocabulary
 - `IMPLEMENTED_VERIFIED` — implementation exists and relevant deterministic evidence passed during this audit; this does not imply browser/device or live-cloud verification unless explicitly stated
 - `IMPLEMENTED_UNVERIFIED` — implementation exists, but a required external, live, or environment-specific check was not freshly performed
@@ -100,23 +143,23 @@ The review of `25-performance-budget.md`, `26-accessibility-standards.md`, `55-b
 | No generic LMS/ERP expansion | `ALIGNED` | no grades, exams, learning modules, tuition payment, or enrollment subsystem found |
 | Future CLARA must use verified internal tools/data | `ALIGNED_AS_DEFERRED` | current code is explicitly a local placeholder; production tool/AI integration remains deferred |
 
-## Existing Phase 8C.2 worktree alignment
+## Phase 8C.2 worktree acceptance
 
-Phase 8C.2 files are preserved as existing work. They are not marked complete by this Phase 1 audit.
+Phase 8C.2 files remain preserved as existing work and received fresh Phase 2 acceptance evidence. Acceptance does not mean the dirty worktree is deployed or that graphical/device QA occurred.
 
 | WIP area | Classification | Evidence / remaining verification |
 |---|---|---|
-| Personnel management | `ALIGNED / NEEDS_VERIFICATION` | protected route, editor, list/detail and activation lifecycle exist; linked RLS and official-field approval remain unverified |
-| Courses and sections | `ALIGNED / NEEDS_VERIFICATION` | CRUD forms and department references exist; linked database role scope not rerun |
-| Class schedules | `ALIGNED / NEEDS_VERIFICATION` | room/professor/section conflict detection plus database exclusion constraints exist; current linked constraint behavior not rerun |
-| Schedule exceptions | `ALIGNED / NEEDS_VERIFICATION` | canonical exception types and schedule linking exist; live update/audit not rerun |
-| Personnel assignments | `ALIGNED / NEEDS_VERIFICATION` | stable facility IDs and scheduled-not-presence wording are used |
-| Consultation hours | `ALIGNED / NEEDS_VERIFICATION` | optional facility and recurring windows exist; live permissions not rerun |
-| Check-in/check-out | `ALIGNED / NEEDS_VERIFICATION` | explicit confirmation, active check-in and close action exist; authoritative role boundaries require live RLS evidence |
-| Availability overrides | `ALIGNED / NEEDS_VERIFICATION` | explicit unavailable/leave/special-assignment windows and safe end action exist |
-| Audit and Dashboard refresh | `ALIGNED / NEEDS_VERIFICATION` | existing audit triggers and centralized `dashboard_refresh_events` are reused; live delivery was not rerun |
-| Lifecycle and deletion | `ALIGNED` | UI uses activation, cancellation, check-out and end-override actions instead of generic destructive deletion |
-| Overall Phase 8C.2 | `NEEDS_VERIFICATION` | deterministic `test:phase8c2` passed, but files remain uncommitted and local pgTAP/live-cloud/browser acceptance was not performed |
+| Personnel management | `ACCEPTED_WITH_ADVISORY` | protected route, editor, list/detail, activation lifecycle, authenticated write, linked RLS, privacy projection, audit, and cleanup passed; approved official fields/data remain pending |
+| Courses and sections | `ACCEPTED_WITH_ADVISORY` | CRUD service/forms, department references, authenticated writes, RLS, audit, and cleanup passed; real graphical Admin QA pending |
+| Class schedules | `ACCEPTED` | room/professor/section client validation and all three live exclusion constraints passed; live insert/edit/cancel refreshed Dashboard correctly |
+| Schedule exceptions | `ACCEPTED_WITH_ADVISORY` | canonical types, linking, live RLS, and audit assertions passed; graphical workflow QA pending |
+| Personnel assignments | `ACCEPTED` | stable facility IDs, schedule-derived wording, live status, and next-availability behavior passed |
+| Consultation hours | `ACCEPTED_WITH_ADVISORY` | optional facility, recurring windows, linked permissions, and deterministic status-engine checks passed; graphical workflow QA pending |
+| Check-in/check-out | `ACCEPTED` | explicit active check-in alone produced `CHECKED_IN`; close restored `SCHEDULED`; RLS, audit, Realtime, and cleanup passed |
+| Availability overrides | `ACCEPTED` | `UNAVAILABLE` precedence, role-scoped policies, audit, and safe cleanup passed |
+| Audit and Dashboard refresh | `ACCEPTED` | trusted audit triggers and centralized `dashboard_refresh_events` passed live class edit/cancel and personnel check-in transitions |
+| Lifecycle and deletion | `ACCEPTED` | UI/services use activation, cancellation, check-out, and end-override actions instead of generic destructive deletion |
+| Overall Phase 8C.2 | `ACCEPTED_WITH_ADVISORY` | deterministic, linked PostgreSQL, authenticated Data API, RLS, Realtime, Dashboard, audit, and cleanup evidence passed; files remain uncommitted/not deployment-equivalent and manual device QA is pending |
 
 ## Recorded alignment and documentation conflicts
 

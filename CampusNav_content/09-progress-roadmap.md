@@ -39,20 +39,68 @@ The following capabilities exist in the repository. Their exact evidence level i
 
 This list does not convert historical live or production claims into fresh verification.
 
-## Recommended Phase 2 — Existing Baseline Stabilization and Acceptance
+## Phase 2 — Existing Baseline Stabilization and Acceptance
+
+**Status:** COMPLETE — freshly revalidated 16 September 2026 (`ACCEPTED_WITH_ADVISORY`)
+
+Completed outcomes:
+1. preserved the existing dirty worktree and backup stash without reset, restore, clean, discard, stash-pop, or overwrite
+2. confirmed all four repository migrations are present on the linked Supabase project
+3. ran the Phase 8A, 8B.1, 8C.1, and 8C.2 transactional suites against linked cloud PostgreSQL: 103 assertions passed and rolled back
+4. freshly verified development-user login, profile/role reload, `SUPER_ADMIN`, session restoration/refresh, authorized and anonymous RLS behavior, logout cleanup, and re-login through the real Supabase client
+5. freshly verified Admin CMS CRUD, trusted audit creation, public published reads, authenticated Realtime, and subscription cleanup
+6. freshly verified Phase 8C.2 schedule/personnel writes, class insert/edit/cancel → Realtime → Dashboard refresh, schedule/check-in separation, status precedence, next availability, conflict constraints, public projection privacy, and audit events
+7. reran all deterministic navigation, 2D/3D, QR, Emergency, Dashboard, Auth, Admin, and academic/personnel regressions plus render, lint, typecheck, and production build
+8. deleted the ignored temporary session file and confirmed zero fixture records across all 14 audited DEVELOPMENT/DEMO categories
+9. confirmed local `HEAD` equals GitHub `origin/main` at `7496a765bc3a7135a8a1c44aa23224ed5aa843b3`, while the preserved dirty worktree and its production build do not equal the currently deployed Cloudflare assets
+10. completed static UI-registry, responsive-code, accessibility, credential, dependency, PWA, and CLARA boundary audits without overstating graphical/device evidence
+
+Advisories and non-accepted claims:
+- `MANUAL DEVICE QA PENDING`: no fresh graphical desktop/tablet/mobile, physical camera, keyboard-only, or screen-reader session was available
+- local Docker pgTAP execution is `BLOCKED` because Docker is unavailable; the same repository SQL suites passed against linked cloud PostgreSQL
+- the first fresh Node 22 Auth Realtime run timed out after the channels subscribed; the immediate cleanup audit was zero, the complete Auth suite passed on the second run, and the independent Admin and academic/personnel authenticated Realtime suites also passed
+- Cloudflare production is reachable but is not deployment-equivalent to the preserved worktree; the deployed OG image path currently falls through to SPA HTML
+- the 3D chunk remains approximately 878 kB minified
+- dependency audit reports two low, three moderate, and one high advisory; Vite has a non-major remediation available, while the React Router and Quill dependency paths require deliberate major upgrades. No dependency change was made during acceptance
+- PWA manifest presence is not offline support
+- CLARA remains a conservative local facility matcher, not the final grounded Groq/tool integration
+
+See `63-implementation-status-registry.md` for the evidence matrix.
+
+## Owner-approved UI baseline adoption checkpoint
+
+**Status:** COMPLETE WITH ADVISORY — 15 September 2026 (`ACCEPTED_WITH_ADVISORY`)
+
+Completed without starting Phase 3:
+1. recorded `DEC-UI-002`, superseding the older strict grayscale / Apple-only constraint where it conflicted with the approved CampusNav Ink direction
+2. registered the supplied all-pages HTML as visual/UX reference only
+3. centralized typography, neutral, CampusNav green, emergency red, radius, border, shadow, grid, and blueprint tokens
+4. added reusable React blueprint/kicker/section-label primitives and aligned the global shell, public screens, Navigate surroundings, account surfaces, and Admin shell
+5. preserved all existing routing, spatial data, Supabase, Auth/RBAC, Realtime, Dashboard, schedule/personnel, emergency, QR, 2D/3D, PWA, and CLARA behavior
+6. passed ESLint, typecheck, production build, route rendering, and all deterministic regression suites
+7. inspected automated desktop captures for eight public routes
+
+Advisories:
+- **AUTOMATED RENDER VERIFIED / MANUAL VISUAL QA PENDING.**
+- authenticated Admin visual interaction, physical devices, keyboard-only use, screen readers, physical camera/QR, and representative WebGL devices remain manual QA work
+- no deployment was requested or performed, so production equivalence is not claimed
+- the existing approximately 878 kB minified 3D chunk warning remains
+
+This checkpoint is presentation-only and does not authorize Phase 3 or any new capability.
+
+## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
 **Status:** RECOMMENDED / NOT STARTED / REQUIRES OWNER APPROVAL
 
 Recommended scope:
-1. review and isolate the existing uncommitted Phase 8C.2 work without discarding unrelated changes
-2. run local PostgreSQL/pgTAP RLS suites against a reproducible Supabase environment
-3. rerun linked-cloud Auth, RBAC, RLS, Realtime, Admin CMS, audit, and academic/personnel checks using temporary credentials only
-4. verify Phase 8C.2 department and `SUPER_ADMIN` boundaries, conflict constraints, audit events, Dashboard refresh, and fixture cleanup
-5. perform production-browser and responsive checks for public navigation, 2D/3D fallback, QR/manual fallback, Dashboard, login/logout, and protected Admin routes
-6. verify deployment equivalence between the accepted commit and Cloudflare production assets
-7. update `63`, Definition of Done, and changelog only from the resulting evidence
+1. commit/review the accepted preserved worktree as a deliberate release candidate
+2. deploy that exact accepted revision and verify Cloudflare asset equivalence, including the social-preview image response
+3. complete real graphical desktop, tablet, and mobile QA
+4. complete keyboard-only, focus, reduced-motion, contrast, and screen-reader QA without claiming WCAG conformance until evidence supports it
+5. verify physical camera/QR fallback and representative WebGL-capable plus WebGL-fallback devices
+6. triage the dependency advisories through deliberate, regression-tested upgrades
 
-Phase 2 should stabilize and verify existing work before adding a new product capability.
+Do not begin a new facility, PWA, map-editor, reporting, or CLARA capability until this release-equivalence/manual-QA scope is approved or explicitly deferred by the owner.
 
 ## Later canonical work candidates
 

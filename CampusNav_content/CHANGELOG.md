@@ -1,5 +1,29 @@
 # CampusNav Content Pack — Changelog
 
+## v3.5 — 16 September 2026
+
+Fresh canonical Phase 2 acceptance rerun against the committed CampusNav Ink baseline `7496a76` and the preserved Phase 8C.2/social-preview worktree.
+
+### Live verification
+- confirmed all four local migrations on the linked Supabase project, 24/24 public tables with RLS, 9/9 public views with `security_invoker`, and the five expected Realtime publication tables
+- passed 103 linked-cloud transactional RLS/RBAC/Admin/audit/academic/personnel assertions with rollback
+- passed real-client login, profile and role restoration, `SUPER_ADMIN`, `hasRole`, session refresh, authorized RLS writes, logout cleanup, protected-access removal, and re-login
+- passed authenticated Admin CMS CRUD/audit, draft privacy, anonymous write rejection, public reads, Realtime delivery, and subscription cleanup
+- passed class insert/edit/cancel → Realtime → Dashboard refresh, `SCHEDULED → CHECKED_IN → SCHEDULED`, `UNAVAILABLE` precedence, next-availability overlap safety, privacy, audit, and cleanup
+- confirmed zero remaining records in all 14 DEVELOPMENT/DEMO fixture categories after testing
+
+### Quality and security
+- reran all deterministic navigation, 2D/3D, QR, Emergency, Dashboard, Auth/RBAC, Admin, Phase 8C.1, Phase 8C.2, and route-render suites successfully
+- ESLint, typecheck, and production build passed; the existing approximately 878 kB minified 3D chunk warning remains
+- deleted `.env.phase8a.session`, confirmed it is absent and was never tracked, and found no real privileged/provider/database/JWT/private-key credential in source, build, or local environment
+- dependency audit reports 2 low, 3 moderate, and 1 high advisory; remediation is deferred to a deliberate regression-tested dependency update
+- one fresh Auth Realtime run timed out after subscription, then the complete suite and both independent authenticated Realtime suites passed; retained as a non-blocking timing advisory
+
+### Deployment and scope
+- confirmed `HEAD` and GitHub `origin/main` both resolve to `7496a765bc3a7135a8a1c44aa23224ed5aa843b3`
+- confirmed Cloudflare production is reachable but is not equivalent to the current worktree build; its JS/CSS fingerprints differ and `/branding/campusnav-og.png` currently falls through to SPA HTML
+- no reset, clean, restore, stash-pop/drop, staging, commit, push, deployment, application change, or Phase 3 work was performed
+
 ## v3.4 — 16 September 2026
 
 CampusNav Ink laptop-space and responsive-density refinement.
@@ -49,6 +73,40 @@ Owner-approved CampusNav Ink / architectural-blueprint UI baseline adoption.
 ### Scope
 - no backend, schema, RLS, routing, emergency-path, map-data, institutional-data, PWA, or CLARA integration behavior changed
 - no deployment was performed and production equivalence is not claimed
+- Phase 3 was not started
+
+## v3.2 — 15 September 2026
+
+Canonical Phase 2 existing-baseline stabilization and acceptance.
+
+### Verified
+- preserved the dirty Phase 8C.2/social-preview worktree and backup stash without destructive git actions
+- matched all four repository migrations to the linked Supabase project
+- passed 103 linked-cloud transactional RLS/RBAC/Admin/audit/academic/personnel assertions
+- passed fresh real-client Auth, session persistence/refresh, profile/role reload, `SUPER_ADMIN`, logout cleanup, protected-access removal, and re-login checks
+- passed live public reads, anonymous write rejection, authenticated Admin CMS writes, trusted audit creation, and Realtime cleanup
+- passed Phase 8C.2 class insert/edit/cancel → Realtime → Dashboard refresh, status precedence, check-in separation, next availability, conflict constraints, and privacy checks
+- passed all deterministic navigation, 2D/3D, QR, Emergency, Dashboard, Auth, Admin, schedule/personnel, and route-render regressions
+- passed ESLint, typecheck, and production build
+- deleted the ignored temporary session file and confirmed zero records in all 14 DEVELOPMENT/DEMO fixture categories
+
+### Audited
+- all 24 public cloud tables have RLS; all nine public views use `security_invoker`
+- all 54 registered UI page/component paths exist
+- credential scan found no real privileged/service/provider/database credentials in source or build; scanner canary/CSS false positives were classified without exposing values
+- dependency audit reports two low and two moderate advisories whose offered fixes are breaking upgrades
+- responsive and accessibility implementation signals exist, but `MANUAL DEVICE QA PENDING`; no WCAG conformance claim is made
+- PWA manifest remains manifest-only with no offline cache/service worker
+- CLARA remains a local verified-facility matcher, not the final grounded Groq/tool integration
+
+### Deployment advisory
+- local `HEAD` equals GitHub `origin/main`, but the preserved dirty worktree build does not equal current Cloudflare production assets
+- the production social-preview image path currently falls through to SPA HTML instead of serving a PNG
+- no deployment was performed during Phase 2
+
+### Scope
+- only canonical tracking documents changed in Phase 2
+- no application, migration, map, routing, QR, Emergency, Dashboard, Admin, Auth, schedule/personnel, PWA, or CLARA implementation changed
 - Phase 3 was not started
 
 ## v3.1 — 15 September 2026
