@@ -1,5 +1,26 @@
 # CampusNav Content Pack — Changelog
 
+## v3.8 — 17 September 2026
+
+Deployed and verified the owner-approved canonical Phase 3 exact-revision production baseline.
+
+### Deployment
+- deployed clean revision `128ac403c2fcf57f4f471543ea79b2c4f0ed6369` through the existing Cloudflare Workers Static Assets configuration
+- recorded Cloudflare version `3636917e-ddf5-4b98-9737-c44f0478f226` at the canonical workers.dev endpoint
+- made no application, dependency, Supabase schema, RLS, route, or runtime configuration change during deployment
+
+### Production equivalence
+- matched production HTML, main JavaScript, CSS, and lazy 3D chunk byte-for-byte to the approved local release build
+- verified SPA fallback for Home, Dashboard, Facilities, normal/emergency Map, Login, and Admin routes
+- verified the canonical SCC logo and social-preview assets return real PNG content; obsolete JPG and OG v2/v3 paths are not served as images
+- verified complete canonical OG/Twitter metadata and classified production as `PRODUCTION_MATCHES_CURRENT_BASELINE`
+- verified read-only Supabase Auth settings and public Data API initialization without live-data mutation or credential exposure
+
+### Advisories and scope
+- connected graphical browser automation was unavailable; authenticated graphical Admin, physical device, accessibility, QR-camera, and representative WebGL QA remain **MANUAL DEVICE QA PENDING**
+- the existing approximately 878 kB lazy 3D chunk, dependency advisories, manifest-only PWA status, and deferred grounded CLARA integration remain unchanged
+- stopped after exact-revision deployment and production-equivalence verification; no new canonical workstream was started
+
 ## v3.7 — 16 September 2026
 
 Prepared the owner-approved Phase 3 canonical public-asset cleanup checkpoint.

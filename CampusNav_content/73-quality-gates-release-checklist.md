@@ -61,3 +61,18 @@
 - `PASS` — ESLint, typecheck, route rendering, and production build
 - `PASS` — no temporary session file, privileged/provider key, credentialed database URI, private key, JWT/token, or design-reference HTML is emitted
 - `PENDING` — owner approval, commit, push, exact-revision deployment, and production-equivalence verification
+
+## Phase 3 exact-revision production evidence — 17 September 2026
+
+- `PASS` — clean `HEAD == origin/main == 128ac403c2fcf57f4f471543ea79b2c4f0ed6369`; temporary session file absent and backup stash untouched before deployment
+- `PASS` — all deterministic data/navigation/QR/Emergency/3D/Dashboard/Auth/Admin/Phase 8 suites, route rendering, ESLint, typecheck, and production build
+- `PASS` — Cloudflare Workers Static Assets deployment completed at the canonical endpoint as version `3636917e-ddf5-4b98-9737-c44f0478f226`
+- `PASS` — production HTML, main JavaScript, CSS, and lazy 3D chunk match the local release build byte-for-byte
+- `PASS` — direct SPA access for `/`, `/dashboard`, `/facilities`, `/map`, `/map?mode=emergency`, `/login`, and `/admin`
+- `PASS` — canonical `scc-logo.png` and `campusnav-og.png` return real `image/png`; legacy JPG and OG v2/v3 paths are not image assets
+- `PASS` — complete OG/Twitter metadata targets the canonical `campusnav-og.png`
+- `PASS` — read-only production Supabase Auth settings and public Data API initialization return HTTP 200; no secret-key pattern is present in the deployed JavaScript
+- `PASS` — 3D remains a separately loaded chunk and is absent from initial HTML
+- `PRODUCTION_MATCHES_CURRENT_BASELINE` — exact production fingerprints and assets match the approved release build
+- `PENDING` — graphical authenticated Admin, desktop/tablet/mobile, keyboard-only, screen-reader, physical camera/QR, and representative WebGL-device QA; no manual-device or WCAG completion claim is made
+- `ADVISORY` — connected browser automation was unavailable, the approximately 878 kB lazy 3D chunk remains, and existing dependency advisories were not changed

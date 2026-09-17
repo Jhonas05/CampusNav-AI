@@ -90,7 +90,7 @@ This checkpoint is presentation-only and does not authorize Phase 3 or any new c
 
 ## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
-**Status:** IN PROGRESS — owner-authorized release-candidate consolidation; commit, deployment, and manual-device QA not started
+**Status:** IN PROGRESS — exact-revision production deployment verified 17 September 2026; manual-device QA remains pending
 
 ### Release-candidate Checkpoint A — prepared 16 September 2026
 
@@ -121,6 +121,24 @@ Recommended scope:
 7. triage the dependency advisories through deliberate, regression-tested upgrades
 
 Do not begin a new facility, PWA, map-editor, reporting, or CLARA capability until this release-equivalence/manual-QA scope is approved or explicitly deferred by the owner.
+
+### Exact-revision production deployment — verified 17 September 2026
+
+**Classification:** `PRODUCTION_MATCHES_CURRENT_BASELINE` / `ACCEPTED_WITH_ADVISORY`
+
+Completed outcomes:
+1. deployed clean approved revision `128ac403c2fcf57f4f471543ea79b2c4f0ed6369` (`128ac40`) through the existing Cloudflare Workers Static Assets configuration
+2. recorded Cloudflare version `3636917e-ddf5-4b98-9737-c44f0478f226` at the canonical workers.dev endpoint
+3. matched production HTML, main JavaScript, CSS, and lazy 3D chunk byte-for-byte to the local release build
+4. verified direct SPA responses for `/`, `/dashboard`, `/facilities`, `/map`, `/map?mode=emergency`, `/login`, and `/admin`
+5. verified the canonical SCC logo and social-preview PNGs return real `image/png`, while obsolete JPG/v2/v3 paths return SPA HTML rather than approved image assets
+6. verified complete canonical OG/Twitter metadata, production Supabase Auth settings initialization, and a read-only public Data API request
+7. confirmed the heavy 3D chunk remains lazy and absent from initial HTML
+
+Advisories:
+- the connected graphical browser runtime was unavailable, so authenticated graphical Admin interaction was not repeated; byte-identical production bundles, deterministic Auth/Admin/render suites, direct route responses, and live read-only Supabase initialization provide deployment-equivalence evidence without replacing manual QA
+- **MANUAL DEVICE QA PENDING** for real desktop/tablet/mobile, keyboard-only, screen-reader, physical camera/QR, and representative WebGL-capable/fallback devices
+- the existing approximately 878 kB lazy 3D chunk, dependency advisories, manifest-only PWA status, and deferred grounded CLARA integration remain unchanged
 
 ## Later canonical work candidates
 

@@ -3,6 +3,24 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Phase 3 exact-revision production deployment — 17 September 2026
+
+**Overall classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Area | Classification | Evidence / advisory |
+|---|---|---|
+| Approved release revision | `ACCEPTED` | Clean `main`, fetched `origin/main`, and deployed source all resolved to `128ac403c2fcf57f4f471543ea79b2c4f0ed6369`; `.env.phase8a.session` was absent and `stash@{0}` remained untouched |
+| Cloudflare deployment | `ACCEPTED` | Existing `wrangler.jsonc` Workers Static Assets workflow deployed `campusnav-ai` to the canonical workers.dev endpoint as Cloudflare version `3636917e-ddf5-4b98-9737-c44f0478f226` |
+| Production equivalence | `ACCEPTED` | Production HTML, `index-D88W5mFD.js`, `index-DVdLsi8t.css`, and `Campus3D-DNMDm-2E.js` matched the local release build byte-for-byte; classification is `PRODUCTION_MATCHES_CURRENT_BASELINE` |
+| SPA routes | `ACCEPTED` | `/`, `/dashboard`, `/facilities`, `/map`, `/map?mode=emergency`, `/login`, and `/admin` returned HTTP 200 with the exact release HTML fallback |
+| Branding and metadata | `ACCEPTED` | Canonical SCC and OG URLs returned real PNGs with matching hashes; obsolete JPG/v2/v3 paths returned HTML rather than image assets; all required OG/Twitter tags target `campusnav-og.png` |
+| Supabase production initialization | `ACCEPTED` | Production-safe URL/publishable configuration is present in the exact bundle; Auth settings and a read-only public announcements query both returned HTTP 200; no secret-key pattern was present in production JavaScript |
+| Auth/Admin production boundary | `ACCEPTED_WITH_ADVISORY` | `/login` and `/admin` deliver the exact locally tested protected-route bundle, Supabase Auth initializes, and deterministic Auth/RBAC/Admin/render suites passed. A connected graphical browser was unavailable, so no fresh interactive login/Admin claim is added |
+| 3D production boundary | `ACCEPTED_WITH_ADVISORY` | The approximately 878 kB 3D chunk remains a separate matching asset and is absent from initial HTML; deterministic shared-route and WebGL-fallback tests passed, while representative-device graphical QA remains pending |
+| Manual device/accessibility QA | `IMPLEMENTED_UNVERIFIED` | **MANUAL DEVICE QA PENDING**; no WCAG, physical camera/QR, screen-reader, keyboard-only, or representative WebGL-device completion claim is made |
+
+The earlier checkpoint rows below remain historical evidence of their pre-deployment state. This dated section controls the current production-equivalence classification.
+
 ## Phase 3 canonical asset-cleanup checkpoint — 16 September 2026
 
 **Overall classification:** `ACCEPTED_WITH_ADVISORY`
