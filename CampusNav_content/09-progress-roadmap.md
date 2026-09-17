@@ -90,7 +90,7 @@ This checkpoint is presentation-only and does not authorize Phase 3 or any new c
 
 ## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
-**Status:** IN PROGRESS — exact-revision production deployment plus Phase 3-MQA-1 and MQA-2 responsive viewport acceptance verified; dedicated accessibility and physical-device QA remains pending
+**Status:** IN PROGRESS — exact-revision production deployment plus Phase 3-MQA-1, MQA-2, and MQA-3 manual acceptance evidence recorded; screen-reader, authenticated Admin detail, and physical-device QA remain pending
 
 ### Release-candidate Checkpoint A — prepared 16 September 2026
 
@@ -194,6 +194,29 @@ Evidence boundaries:
 - MQA-2 does not add a WCAG, screen-reader, keyboard-only, physical QR/camera, representative WebGL-device, or exact browser/OS certification claim
 
 MQA-1 and MQA-2 now cover all six canonical responsive viewport targets at the owner-reported evidence level. Phase 3 remains **IN PROGRESS** and may advance to Phase 3-MQA-3 — Keyboard-Only and Accessibility Manual Acceptance.
+
+### Phase 3-MQA-3 — Keyboard-Only and Accessibility Manual Acceptance — owner completed 17 September 2026
+
+**Classification:** `ACCEPTED_WITH_ADVISORY`
+
+Owner-provided manual evidence records `OWNER_REPORTED_KEYBOARD_ACCESSIBILITY_PASS` for the tested behavior, where applicable:
+- keyboard-only navigation using Tab and Shift+Tab
+- Enter activation and Space activation where appropriate
+- Escape/dialog behavior
+- focus visibility, forms/navigation usability, and no observed keyboard blocker or trap
+- readable visual contrast, reduced-motion behavior, and usability at approximately 200% zoom
+- labels, headings, status, and error presentation
+- no blocker requiring an application change was found
+
+The evidence applies to the current approved CampusNav production baseline. Relevant application scope may include global navigation, Login, Dashboard, Facilities, Navigate controls, dialogs/drawers, CLARA controls, and Admin navigation/forms; individual screen and control PASS claims are `NOT SPECIFICALLY_DOCUMENTED`.
+
+Evidence boundaries:
+- exact browser/OS, screenshots, assistive-technology configuration, detailed focus order, individual control behavior, and per-screen findings were not supplied
+- `SCREEN_READER_QA_PENDING`; screen-reader behavior is not inferred from keyboard, visual, or semantic-markup evidence
+- no WCAG conformance, physical tablet/mobile certification, physical QR/camera PASS, representative WebGL-device PASS, or exact browser/OS certification is claimed
+- authenticated Admin was within earlier general owner-reported screen scope, but authentication state and detailed protected-form behavior remain `NOT SPECIFICALLY_DOCUMENTED`
+
+Phase 3 remains **IN PROGRESS** and may advance to **Phase 3-MQA-4 — Screen-Reader and Authenticated Admin Manual Acceptance**. Under `72-definition-of-ready.md`, that subset is `READY`: its goal, contracts, boundaries, security context, and acceptance evidence are defined. Execution still requires a functioning screen-reader/browser environment and temporary ignored-session credentials only if authenticated Admin verification needs them. Physical QR/camera and representative WebGL-device acceptance remain later Phase 3 manual-QA work.
 
 ## Later canonical work candidates
 

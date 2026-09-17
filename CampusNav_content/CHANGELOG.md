@@ -1,5 +1,24 @@
 # CampusNav Content Pack — Changelog
 
+## v3.12 — 17 September 2026
+
+Recorded owner-provided Phase 3-MQA-3 keyboard-only and accessibility manual acceptance evidence.
+
+### Evidence recorded
+- recorded `OWNER_REPORTED_KEYBOARD_ACCESSIBILITY_PASS` for keyboard navigation, Tab/Shift+Tab, Enter, applicable Space activation, Escape/dialog behavior, focus visibility, forms/navigation usability, and no observed keyboard blocker/trap
+- recorded the owner's acceptable result for readable contrast, reduced motion, approximately 200% zoom, and labels/headings/status/error presentation
+- recorded that no blocker requiring an application change was found on the current approved production baseline
+
+### Evidence boundaries
+- marked detailed per-control/per-screen findings, screenshots, exact browser/OS, assistive-technology configuration, detailed focus sequence, and authenticated Admin state/protected-form behavior as `NOT SPECIFICALLY_DOCUMENTED`
+- retained `SCREEN_READER_QA_PENDING`; keyboard, visual, and semantic-markup evidence were not treated as screen-reader evidence
+- made no WCAG, physical tablet/mobile, QR-camera, representative WebGL-device, or exact browser/OS certification claim
+
+### Scope and next subphase
+- documentation-only evidence update; no application code, tests, dependencies, schema, production data, Cloudflare, Supabase, commit, push, or deployment action
+- Phase 3 remains in progress and may advance to Phase 3-MQA-4 Screen-Reader and Authenticated Admin Manual Acceptance
+- MQA-4 is `READY` under the Definition of Ready; execution requires a functioning screen-reader/browser environment, and temporary ignored-session credentials are required only if the authenticated Admin check needs them
+
 ## v3.11 — 17 September 2026
 
 Recorded owner-provided Phase 3-MQA-2 remaining responsive viewport acceptance evidence.

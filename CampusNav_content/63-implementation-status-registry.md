@@ -3,6 +3,25 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Phase 3-MQA-3 keyboard-only and accessibility manual acceptance — owner completed 17 September 2026
+
+**Subset classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Area | Classification | Owner-provided evidence / boundary |
+|---|---|---|
+| Evidence source | `ACCEPTED_WITH_ADVISORY` | The owner reports completing the keyboard-only/accessibility manual check on the current approved production baseline, finding the tested behavior acceptable, and finding no blocker requiring an application change. Detailed per-control, per-screen, browser/OS, screenshot, and assistive-technology evidence was not supplied |
+| Keyboard-only operation | `OWNER_REPORTED_KEYBOARD_ACCESSIBILITY_PASS` | Keyboard-only navigation, Tab, Shift+Tab, Enter, Space where appropriate, and no observed keyboard blocker or trap were reported acceptable |
+| Focus and navigation | `OWNER_REPORTED_KEYBOARD_ACCESSIBILITY_PASS` | Focus visibility and forms/navigation usability were reported acceptable; exact focus sequence and individual control results are `NOT SPECIFICALLY_DOCUMENTED` |
+| Dialogs and forms | `OWNER_REPORTED_KEYBOARD_ACCESSIBILITY_PASS` | Escape/dialog behavior and applicable form use were reported acceptable; no per-dialog or per-form PASS claim is added |
+| Visual and motion accessibility | `OWNER_REPORTED_KEYBOARD_ACCESSIBILITY_PASS` | Readable visual contrast, reduced-motion behavior, approximately 200% zoom usability, and labels/headings/status/error presentation were reported acceptable; formal measurements and per-screen findings are `NOT SPECIFICALLY_DOCUMENTED` |
+| Application scope | `ACCEPTED_WITH_ADVISORY` | Relevant scope may include global navigation, Login, Dashboard, Facilities, Navigate controls, dialogs/drawers, CLARA controls, and Admin navigation/forms. These are scope references, not individual screen PASS claims |
+| Screen reader | `SCREEN_READER_QA_PENDING` | No explicit screen-reader evidence was provided; semantic markup, keyboard behavior, and visual inspection are not substitutes for a screen-reader session |
+| Formal conformance/device claims | `NOT_CLAIMED` | No WCAG conformance, physical tablet/mobile certification, QR-camera PASS, representative WebGL-device PASS, or exact browser/OS certification is added |
+| Authenticated Admin detail | `IMPLEMENTED_UNVERIFIED` | Admin appeared in prior general owner-reported screen scope, but authenticated state and detailed protected navigation/form behavior remain `NOT SPECIFICALLY_DOCUMENTED` |
+| Defect outcome | `ACCEPTED` | Owner reported no blocker requiring application changes; no code fix, test change, service mutation, or redeployment is justified by this evidence |
+
+MQA-3 supersedes earlier pending classifications only for the owner-reported keyboard, focus, dialog/form, contrast, reduced-motion, zoom, and presentation behaviors named above. Phase 3 remains **IN PROGRESS**. The next canonical manual-QA subset is Phase 3-MQA-4 — Screen-Reader and Authenticated Admin Manual Acceptance, classified `READY` under the Definition of Ready with screen-reader/browser and possible temporary credential execution dependencies.
+
 ## Phase 3-MQA-2 remaining responsive viewport acceptance — owner completed 17 September 2026
 
 **Subset classification:** `ACCEPTED_WITH_ADVISORY`

@@ -113,3 +113,15 @@
 - `PENDING` — dedicated keyboard-only/accessibility, screen reader, contrast, reduced motion, physical QR/camera, and representative WebGL-device acceptance
 - `NO CODE CHANGE / NO REDEPLOY` — evidence recording only; existing production equivalence remains unchanged
 - `NEXT` — Phase 3-MQA-3 Keyboard-Only and Accessibility Manual Acceptance
+
+## Phase 3-MQA-3 keyboard-only and accessibility evidence — 17 September 2026
+
+- `OWNER_REPORTED_KEYBOARD_ACCESSIBILITY_PASS` — keyboard-only navigation, Tab, Shift+Tab, Enter, Space where appropriate, Escape/dialog behavior, focus visibility, forms/navigation usability, and no observed keyboard blocker/trap were manually checked and reported acceptable
+- `OWNER_REPORTED_KEYBOARD_ACCESSIBILITY_PASS` — readable visual contrast, reduced-motion behavior, approximately 200% zoom usability, and labels/headings/status/error presentation were manually checked and reported acceptable
+- `PASS` — owner reported no blocker requiring an application change
+- `ACCEPTED_WITH_ADVISORY` — evidence applies to the current approved production baseline; relevant areas may include global navigation, Login, Dashboard, Facilities, Navigate controls, dialogs/drawers, CLARA controls, and Admin navigation/forms, but individual per-screen and per-control PASS results are `NOT SPECIFICALLY_DOCUMENTED`
+- `SCREEN_READER_QA_PENDING` — no explicit screen-reader session evidence was provided
+- `NOT SPECIFICALLY DOCUMENTED` — screenshots, exact browser/OS, assistive-technology configuration, detailed focus sequence, individual control behavior, authenticated Admin state, and detailed protected-form behavior
+- `NOT_CLAIMED` — WCAG conformance, physical tablet/mobile certification, physical QR/camera PASS, representative WebGL-device PASS, and exact browser/OS certification
+- `NO CODE CHANGE / NO REDEPLOY` — evidence recording only; existing production equivalence remains unchanged
+- `NEXT` — Phase 3-MQA-4 Screen-Reader and Authenticated Admin Manual Acceptance; `READY` under the Definition of Ready, with screen-reader/browser and possible temporary credential execution dependencies
