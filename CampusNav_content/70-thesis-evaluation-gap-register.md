@@ -39,3 +39,9 @@ The production baseline and deterministic regressions are verified, but the requ
 - keyboard-only and screen-reader observations
 
 Until those sessions are performed, record `BLOCKED_BY_TOOLING` or `DEVICE_QA_PENDING`; do not convert automated rendering into device certification or WCAG conformance.
+
+### Phase 3-MQA-1 evidence update — 17 September 2026
+
+The owner subsequently completed the primary laptop browser subset at `1366x768` and `1280x800` for Dashboard, Facilities, Navigate 2D/3D, CLARA, Login, Admin, and a basic keyboard smoke check, and reported the result acceptable with no blocker requiring an application change.
+
+This closes only that named subset. Screenshots/device details and finer-grained layout, keyboard, accessibility, performance, and 3D interaction findings are `NOT SPECIFICALLY_DOCUMENTED`. The remaining responsive viewports, screen-reader/contrast/reduced-motion checks, physical QR/camera checks, and representative WebGL-device checks remain evidence gaps. This update does not resolve the separate adviser-dependent research-methodology gap above.

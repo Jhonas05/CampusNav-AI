@@ -1,5 +1,23 @@
 # CampusNav Content Pack — Changelog
 
+## v3.10 — 17 September 2026
+
+Recorded owner-provided Phase 3-MQA-1 primary laptop browser acceptance evidence.
+
+### Evidence recorded
+- recorded owner-reported manual acceptance at `1366x768` and `1280x800`
+- recorded coverage of Dashboard, Facilities, Navigate 2D, Navigate 3D, CLARA, Login, Admin, and a basic keyboard smoke check
+- recorded that the owner found no blocker requiring application changes
+
+### Evidence boundaries
+- marked unprovided screenshot/device/browser details, per-screen findings, detailed keyboard behavior, contrast, touch targets, screen-reader output, reduced motion, and detailed 3D/WebGL behavior as `NOT SPECIFICALLY DOCUMENTED`
+- retained pending status for `1440x900`, `1024x768`, tablet/mobile, physical QR/camera, and representative WebGL-device QA
+- made no WCAG, broad browser-support, or physical-device certification claim
+
+### Scope
+- documentation-only evidence update; no application code, dependency, schema, production data, test fixture, commit, push, or deployment action
+- Phase 3 remains in progress and may advance to Phase 3-MQA-2 Remaining Responsive Viewport Acceptance
+
 ## v3.9 — 17 September 2026
 
 Attempted the remaining canonical Phase 3 manual acceptance subset without changing or redeploying the approved production baseline.

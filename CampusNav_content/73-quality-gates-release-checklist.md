@@ -89,3 +89,14 @@
 - `AUTOMATED WEBGL VERIFIED / REPRESENTATIVE DEVICE QA PENDING` — 3D/WebGL fallback logic passes; no representative physical GPU/device evidence is available
 - `PARTIAL` — static accessibility evidence remains, but contrast, touch-target use, focus order/traps, Escape behavior, and screen-reader output were not manually verified; no WCAG claim is made
 - `NO FIX / NO REDEPLOY` — no reproducible application defect was found in available evidence, so application code and production were left unchanged
+
+## Phase 3-MQA-1 primary laptop browser evidence — 17 September 2026
+
+- `OWNER-REPORTED_MANUAL_BROWSER_PASS` — `1366x768` and `1280x800` were manually checked by the owner and reported acceptable
+- `OWNER-REPORTED_MANUAL_BROWSER_PASS` — Dashboard, Facilities, Navigate 2D, Navigate 3D, CLARA, Login, and Admin were included and reported acceptable
+- `ACCEPTED_WITH_ADVISORY` — a basic keyboard smoke check was included and reported acceptable
+- `PASS` — the owner reported no blocker requiring application changes
+- `NOT SPECIFICALLY DOCUMENTED` — screenshot/device/browser details; per-screen layout findings; exact keyboard commands/focus order/trap behavior; contrast; touch targets; screen-reader output; reduced motion; detailed 3D interaction/performance/WebGL-fallback observations
+- `PENDING` — `1440x900`, `1024x768`, 768px tablet, approximately 390px mobile, physical QR/camera, and representative WebGL-device acceptance
+- `NO CODE CHANGE / NO REDEPLOY` — evidence recording only; existing production equivalence remains unchanged
+- `NEXT` — Phase 3-MQA-2 Remaining Responsive Viewport Acceptance

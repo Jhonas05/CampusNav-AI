@@ -90,7 +90,7 @@ This checkpoint is presentation-only and does not authorize Phase 3 or any new c
 
 ## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
-**Status:** IN PROGRESS — exact-revision production deployment verified 17 September 2026; manual-device QA remains pending
+**Status:** IN PROGRESS — exact-revision production deployment and Phase 3-MQA-1 primary laptop acceptance verified; remaining responsive/device/accessibility QA remains pending
 
 ### Release-candidate Checkpoint A — prepared 16 September 2026
 
@@ -156,6 +156,24 @@ Blocked/pending evidence:
 - authenticated Admin visual QA was blocked by browser tooling before credentials were relevant; no temporary credentials were requested
 
 Phase 3 therefore remains **IN PROGRESS**. The next authorized work is the same remaining manual acceptance matrix in a functioning graphical browser and on representative devices, not a new feature phase.
+
+### Phase 3-MQA-1 — Primary Laptop Browser Acceptance — owner completed 17 September 2026
+
+**Classification:** `ACCEPTED_WITH_ADVISORY`
+
+Owner-provided manual evidence records:
+- `1366x768` and `1280x800` were manually checked and found acceptable
+- Dashboard, Facilities, Navigate 2D, Navigate 3D, CLARA, Login, and Admin were included
+- a basic keyboard smoke check was included
+- no blocker requiring an application change was found
+
+Evidence boundaries:
+- no screenshot set, browser/version, operating system, physical device model, per-screen findings, or detailed per-control results were supplied
+- exact Tab/Shift+Tab order, Enter/Space/Escape and arrow-key behavior, focus-trap behavior, focus visibility, contrast, touch targets, screen-reader output, reduced-motion behavior, 3D interaction details, and performance observations are `NOT SPECIFICALLY DOCUMENTED`
+- this evidence does not cover `1440x900`, `1024x768`, 768px tablet, approximately 390px mobile, physical QR/camera, or representative physical WebGL-device acceptance
+- no WCAG, physical-device, or broad browser-support claim is added
+
+Phase 3-MQA-1 closes the primary laptop-browser subset only. Phase 3 remains **IN PROGRESS** and may advance to Phase 3-MQA-2 — Remaining Responsive Viewport Acceptance.
 
 ## Later canonical work candidates
 

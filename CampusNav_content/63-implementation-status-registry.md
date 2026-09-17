@@ -3,6 +3,24 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Phase 3-MQA-1 primary laptop browser acceptance — owner completed 17 September 2026
+
+**Subset classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Area | Classification | Owner-provided evidence / boundary |
+|---|---|---|
+| Evidence source | `ACCEPTED_WITH_ADVISORY` | The owner reports completing the manual laptop browser pass and finding no blocker requiring application changes. Screenshots, browser/version, operating system, and physical device details were not supplied |
+| `1366x768` | `OWNER-REPORTED_MANUAL_BROWSER_PASS` | Manually checked by the owner and reported acceptable; detailed layout findings are `NOT SPECIFICALLY_DOCUMENTED` |
+| `1280x800` | `OWNER-REPORTED_MANUAL_BROWSER_PASS` | Manually checked by the owner and reported acceptable; detailed layout findings are `NOT SPECIFICALLY_DOCUMENTED` |
+| Covered screens | `OWNER-REPORTED_MANUAL_BROWSER_PASS` | Dashboard, Facilities, Navigate 2D, Navigate 3D, CLARA, Login, and Admin were included and reported acceptable; per-screen subcheck results are `NOT SPECIFICALLY_DOCUMENTED` |
+| Keyboard smoke | `ACCEPTED_WITH_ADVISORY` | A basic keyboard smoke check was included and reported acceptable. Exact focus order, Tab/Shift+Tab, Enter/Space/Escape, arrow-key behavior, traps, dialog exit behavior, and focus visibility are `NOT SPECIFICALLY_DOCUMENTED` |
+| Accessibility claim | `PARTIAL` | MQA-1 adds limited keyboard evidence only. Contrast, touch targets, screen-reader output, reduced motion, detailed semantics, and WCAG conformance remain undocumented/pending |
+| 3D/device claim | `ACCEPTED_WITH_ADVISORY` | Navigate 3D was included in the owner laptop pass. Orbit/camera, floor isolation, stacked/exploded mode, route/marker details, Emergency overlay, performance, WebGL failure, and representative physical GPU/device results are `NOT SPECIFICALLY_DOCUMENTED` |
+| Defect outcome | `ACCEPTED` | Owner reported no blocker requiring an application change; no code fix or redeployment is justified by this evidence |
+| Remaining viewport/device scope | `IMPLEMENTED_UNVERIFIED` | `1440x900`, `1024x768`, 768px tablet, approximately 390px mobile, physical QR/camera, screen reader, and representative WebGL devices remain pending |
+
+This newer owner evidence supersedes the earlier tooling blocker only for the two named laptop viewports and listed screens. It does not rewrite the earlier attempt or convert unreported subchecks into passes. Canonical Phase 3 remains **IN PROGRESS**.
+
 ## Phase 3 manual acceptance attempt — 17 September 2026
 
 **Manual-QA subset classification:** `PARTIAL` / `BLOCKED_BY_TOOLING`
