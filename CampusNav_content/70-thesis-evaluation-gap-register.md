@@ -27,3 +27,15 @@ The software documentation can preserve measurable technical evidence such as:
 
 ## Decision needed
 Finalize research evaluation methodology with the thesis adviser/research coordinator, then add the approved method as a new research-evaluation contract and update `36-thesis-traceability-matrix.md`.
+
+## Current software-acceptance evidence gap — 17 September 2026
+
+The production baseline and deterministic regressions are verified, but the requested Phase 3 manual acceptance matrix could not be completed because the approved graphical browser runtime failed before page launch. The evidence package must continue to distinguish:
+
+- automated/static responsive and accessibility signals
+- real manual browser results at the required viewports
+- physical camera/QR results
+- representative WebGL-device results
+- keyboard-only and screen-reader observations
+
+Until those sessions are performed, record `BLOCKED_BY_TOOLING` or `DEVICE_QA_PENDING`; do not convert automated rendering into device certification or WCAG conformance.

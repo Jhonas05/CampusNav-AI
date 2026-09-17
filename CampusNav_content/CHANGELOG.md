@@ -1,5 +1,25 @@
 # CampusNav Content Pack — Changelog
 
+## v3.9 — 17 September 2026
+
+Attempted the remaining canonical Phase 3 manual acceptance subset without changing or redeploying the approved production baseline.
+
+### Fresh evidence
+- reconfirmed the approved production JavaScript/CSS fingerprints and canonical SCC/social-preview PNG responses; only canonical tracking documents changed after deployed runtime revision `128ac40`
+- reran route rendering, Dashboard, QR, Emergency, 3D/WebGL fallback, Admin CMS, and Phase 8C.2 deterministic checks successfully
+- statically reviewed responsive density and breakpoint code, map/mobile/Admin reflow, accessible names and labels, focus treatment, modal/status/error semantics, reduced-motion rules, and non-color cues
+
+### Manual-QA boundary
+- the approved in-app browser runtime failed before page launch with `failed to write kernel assets` (OS error 3)
+- classified all six requested viewport inspections, keyboard-only testing, and authenticated Admin visual testing as `BLOCKED_BY_TOOLING`, not manual passes
+- retained `LOGIC VERIFIED / PHYSICAL CAMERA QA PENDING` for QR and `AUTOMATED WEBGL VERIFIED / REPRESENTATIVE DEVICE QA PENDING` for 3D
+- retained partial accessibility status and made no WCAG, physical-device, or browser-support claim
+
+### Scope
+- no reproducible application defect was found in available automated/static evidence
+- no application code, dependency, schema, production data, credentials, commit, push, or deployment action was performed
+- canonical Phase 3 remains in progress; no other canonical workstream was started
+
 ## v3.8 — 17 September 2026
 
 Deployed and verified the owner-approved canonical Phase 3 exact-revision production baseline.

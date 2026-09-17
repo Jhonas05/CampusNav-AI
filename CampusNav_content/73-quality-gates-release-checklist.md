@@ -76,3 +76,16 @@
 - `PRODUCTION_MATCHES_CURRENT_BASELINE` — exact production fingerprints and assets match the approved release build
 - `PENDING` — graphical authenticated Admin, desktop/tablet/mobile, keyboard-only, screen-reader, physical camera/QR, and representative WebGL-device QA; no manual-device or WCAG completion claim is made
 - `ADVISORY` — connected browser automation was unavailable, the approximately 878 kB lazy 3D chunk remains, and existing dependency advisories were not changed
+
+## Phase 3 manual acceptance attempt — 17 September 2026
+
+- `PASS` — canonical Phase 3 still authorizes the remaining manual acceptance subset; no new feature scope was entered
+- `PASS` — production still serves the approved `index-D88W5mFD.js`, `index-DVdLsi8t.css`, `scc-logo.png`, and `campusnav-og.png`; only canonical tracking documents changed after deployed runtime revision `128ac40`
+- `PASS` — fresh route rendering, Dashboard, QR/manual fallback, strict Emergency, shared 3D/WebGL fallback, Admin CMS, and Phase 8C.2 deterministic checks
+- `STATIC REVIEW PASS` — responsive variables/breakpoints, laptop rails/grids, mobile navigation/route sheet, focus utilities, semantic labels, modal/status/error roles, reduced-motion rules, and non-color cues remain present
+- `BLOCKED_BY_TOOLING` — approved in-app browser setup failed before page launch with OS error 3; no manual result is claimed for 1366x768, 1280x800, 1440x900, 1024x768, 768px tablet, or 390px mobile
+- `BLOCKED_BY_TOOLING` — keyboard-only and authenticated Admin visual sessions could not start; credentials were not required or requested
+- `LOGIC VERIFIED / PHYSICAL CAMERA QA PENDING` — QR logic passes; no camera-capable device evidence is available
+- `AUTOMATED WEBGL VERIFIED / REPRESENTATIVE DEVICE QA PENDING` — 3D/WebGL fallback logic passes; no representative physical GPU/device evidence is available
+- `PARTIAL` — static accessibility evidence remains, but contrast, touch-target use, focus order/traps, Escape behavior, and screen-reader output were not manually verified; no WCAG claim is made
+- `NO FIX / NO REDEPLOY` — no reproducible application defect was found in available evidence, so application code and production were left unchanged

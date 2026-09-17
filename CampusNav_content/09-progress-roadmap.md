@@ -140,6 +140,23 @@ Advisories:
 - **MANUAL DEVICE QA PENDING** for real desktop/tablet/mobile, keyboard-only, screen-reader, physical camera/QR, and representative WebGL-capable/fallback devices
 - the existing approximately 878 kB lazy 3D chunk, dependency advisories, manifest-only PWA status, and deferred grounded CLARA integration remain unchanged
 
+### Manual acceptance attempt — 17 September 2026
+
+**Classification:** `PARTIAL` / `BLOCKED_BY_TOOLING`
+
+Completed within the available environment:
+1. reconfirmed that production serves the approved main JavaScript/CSS fingerprints and canonical PNG assets, with no runtime-file change after deployed revision `128ac40`
+2. reran route rendering, Dashboard, QR, Emergency, 3D/WebGL fallback, Admin CMS, and Phase 8C.2 deterministic checks successfully
+3. statically reviewed responsive density/breakpoint behavior, map/mobile/Admin reflow, semantic labels, focus treatment, reduced-motion support, error/status roles, and non-color cues
+4. preserved the clean worktree, `stash@{0}`, absent `.env.phase8a.session`, production data, and deployed revision; no fix or redeployment was performed
+
+Blocked/pending evidence:
+- the approved in-app browser failed before page launch with `failed to write kernel assets` (OS error 3), so none of the six requested viewports received a fresh manual graphical pass
+- keyboard-only interaction, contrast, screen-reader output, physical camera/QR, and representative physical WebGL-device checks remain pending
+- authenticated Admin visual QA was blocked by browser tooling before credentials were relevant; no temporary credentials were requested
+
+Phase 3 therefore remains **IN PROGRESS**. The next authorized work is the same remaining manual acceptance matrix in a functioning graphical browser and on representative devices, not a new feature phase.
+
 ## Later canonical work candidates
 
 Do not assign or start these as numbered phases until Phase 2 is approved and completed:

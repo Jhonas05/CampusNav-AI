@@ -3,6 +3,25 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Phase 3 manual acceptance attempt — 17 September 2026
+
+**Manual-QA subset classification:** `PARTIAL` / `BLOCKED_BY_TOOLING`
+
+| Area | Classification | Evidence / advisory |
+|---|---|---|
+| Production baseline | `ACCEPTED` | Production remains available and serves `index-D88W5mFD.js`, `index-DVdLsi8t.css`, the canonical SCC PNG, and the canonical OG PNG. `HEAD` and `origin/main` are `bf9cc9b`; their only changes after deployed runtime revision `128ac40` are canonical tracking documents, so no runtime delta or redeployment was introduced |
+| Requested viewport matrix | `BLOCKED_BY_TOOLING` | The approved in-app browser runtime failed before page launch with `failed to write kernel assets` (OS error 3). No manual claim is made for 1366x768, 1280x800, 1440x900, 1024x768, 768px tablet, or 390px mobile |
+| Public-screen visual QA | `IMPLEMENTED_UNVERIFIED` | Home, Dashboard, Facilities, Facility Detail, Navigate 2D/3D, Events, Emergency, CLARA, and Login remain covered by existing route/static evidence, but no fresh graphical manual inspection was possible |
+| Authenticated Admin visual QA | `IMPLEMENTED_UNVERIFIED` | Deterministic Admin CMS and Phase 8C.2 route/form/security checks passed. The graphical browser failed before authentication, so credentials were not requested and no authenticated visual claim is added |
+| Responsive implementation | `ACCEPTED_WITH_ADVISORY` | Static review confirms centralized responsive density variables, 1024px desktop transition, responsive grids/rails, mobile navigation, mobile route sheet, overflow handling, and viewport-aware map/Admin heights. This is code evidence, not device certification |
+| Keyboard and accessibility | `PARTIAL` | Static review confirms a skip link, semantic page headings/regions, form labels, accessible names, status/error roles, visible-focus utilities, modal semantics, reduced-motion rules, and non-color text/icon cues. Keyboard order/traps, Escape behavior, contrast, touch targets, and screen-reader output remain manually unverified; no WCAG claim is made |
+| QR/camera | `ACCEPTED_WITH_ADVISORY` | Fresh QR payload, valid/invalid checkpoint, manual fallback, location preservation, and QR-to-A* regressions passed. `LOGIC VERIFIED / PHYSICAL CAMERA QA PENDING` |
+| 3D/WebGL | `ACCEPTED_WITH_ADVISORY` | Fresh shared-route, floor conversion, stairs, construction, emergency eligibility, and WebGL-fallback regression passed. `AUTOMATED WEBGL VERIFIED / REPRESENTATIVE DEVICE QA PENDING` |
+| Emergency | `ACCEPTED_WITH_ADVISORY` | Fresh approved-edge-only, normal-edge rejection, blocked/construction handling, inactive/unverified edge, route-cost, and safe no-route regressions passed; graphical readability remains unverified |
+| Defects and changes | `ACCEPTED` | No reproducible application defect was found within available automated/static evidence. No application code, dependency, configuration, schema, production data, or deployment was changed |
+
+Canonical Phase 3 remains **IN PROGRESS**. Exact-revision deployment stays accepted, but the remaining manual acceptance scope cannot be closed until real graphical browser/device, keyboard, camera, and representative WebGL evidence is available.
+
 ## Phase 3 exact-revision production deployment — 17 September 2026
 
 **Overall classification:** `ACCEPTED_WITH_ADVISORY`
