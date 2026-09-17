@@ -45,3 +45,9 @@ Until those sessions are performed, record `BLOCKED_BY_TOOLING` or `DEVICE_QA_PE
 The owner subsequently completed the primary laptop browser subset at `1366x768` and `1280x800` for Dashboard, Facilities, Navigate 2D/3D, CLARA, Login, Admin, and a basic keyboard smoke check, and reported the result acceptable with no blocker requiring an application change.
 
 This closes only that named subset. Screenshots/device details and finer-grained layout, keyboard, accessibility, performance, and 3D interaction findings are `NOT SPECIFICALLY_DOCUMENTED`. The remaining responsive viewports, screen-reader/contrast/reduced-motion checks, physical QR/camera checks, and representative WebGL-device checks remain evidence gaps. This update does not resolve the separate adviser-dependent research-methodology gap above.
+
+### Phase 3-MQA-2 evidence update — 17 September 2026
+
+The owner subsequently reported acceptable responsive viewport results with no blocker at `1440x900`, `1024x768`, 768px tablet viewport, and approximately 390px mobile viewport. Together with MQA-1, all six canonical responsive viewport targets now have owner-reported browser/viewport evidence.
+
+Tablet/mobile physical-device details, screenshots, browser/OS information, per-screen findings, measurements, detailed interactions, and performance observations are `NOT SPECIFICALLY_DOCUMENTED`. Dedicated keyboard-only/accessibility, screen-reader, contrast, reduced-motion, physical QR/camera, and representative WebGL-device evidence remain gaps. This update does not resolve the separate adviser-dependent research-methodology gap.

@@ -90,7 +90,7 @@ This checkpoint is presentation-only and does not authorize Phase 3 or any new c
 
 ## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
-**Status:** IN PROGRESS — exact-revision production deployment and Phase 3-MQA-1 primary laptop acceptance verified; remaining responsive/device/accessibility QA remains pending
+**Status:** IN PROGRESS — exact-revision production deployment plus Phase 3-MQA-1 and MQA-2 responsive viewport acceptance verified; dedicated accessibility and physical-device QA remains pending
 
 ### Release-candidate Checkpoint A — prepared 16 September 2026
 
@@ -174,6 +174,26 @@ Evidence boundaries:
 - no WCAG, physical-device, or broad browser-support claim is added
 
 Phase 3-MQA-1 closes the primary laptop-browser subset only. Phase 3 remains **IN PROGRESS** and may advance to Phase 3-MQA-2 — Remaining Responsive Viewport Acceptance.
+
+### Phase 3-MQA-2 — Remaining Responsive Viewport Acceptance — owner completed 17 September 2026
+
+**Classification:** `ACCEPTED_WITH_ADVISORY`
+
+Owner-provided manual evidence records:
+- `1440x900` — `OWNER_REPORTED_MANUAL_BROWSER_PASS`
+- `1024x768` — `OWNER_REPORTED_MANUAL_BROWSER_PASS`
+- 768px tablet viewport — `OWNER_REPORTED_RESPONSIVE_VIEWPORT_PASS`
+- approximately 390px mobile viewport — `OWNER_REPORTED_RESPONSIVE_VIEWPORT_PASS`
+- the owner reported `NO BLOCKER FOUND`
+
+The responsive application scope included, where applicable, Home, Dashboard, Facilities, Facility Detail, Navigate 2D/3D, Events, Emergency, CLARA, Login, and Admin. This is an overall responsive result only; individual per-screen PASS claims and detailed findings are `NOT SPECIFICALLY DOCUMENTED`.
+
+Evidence boundaries:
+- screenshots, browser/version, operating system, physical-device model, per-screen measurements, detailed interactions, and performance observations were not supplied
+- tablet/mobile evidence is viewport/browser evidence; `PHYSICAL_DEVICE_DETAILS_NOT_DOCUMENTED`
+- MQA-2 does not add a WCAG, screen-reader, keyboard-only, physical QR/camera, representative WebGL-device, or exact browser/OS certification claim
+
+MQA-1 and MQA-2 now cover all six canonical responsive viewport targets at the owner-reported evidence level. Phase 3 remains **IN PROGRESS** and may advance to Phase 3-MQA-3 — Keyboard-Only and Accessibility Manual Acceptance.
 
 ## Later canonical work candidates
 

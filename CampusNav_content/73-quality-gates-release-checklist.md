@@ -100,3 +100,16 @@
 - `PENDING` — `1440x900`, `1024x768`, 768px tablet, approximately 390px mobile, physical QR/camera, and representative WebGL-device acceptance
 - `NO CODE CHANGE / NO REDEPLOY` — evidence recording only; existing production equivalence remains unchanged
 - `NEXT` — Phase 3-MQA-2 Remaining Responsive Viewport Acceptance
+
+## Phase 3-MQA-2 remaining responsive viewport evidence — 17 September 2026
+
+- `OWNER_REPORTED_MANUAL_BROWSER_PASS` — `1440x900` was manually checked and reported acceptable
+- `OWNER_REPORTED_MANUAL_BROWSER_PASS` — `1024x768` was manually checked and reported acceptable
+- `OWNER_REPORTED_RESPONSIVE_VIEWPORT_PASS` — 768px tablet viewport was checked and reported acceptable; `PHYSICAL_DEVICE_DETAILS_NOT_DOCUMENTED`
+- `OWNER_REPORTED_RESPONSIVE_VIEWPORT_PASS` — approximately 390px mobile viewport was checked and reported acceptable; `PHYSICAL_DEVICE_DETAILS_NOT_DOCUMENTED`
+- `ACCEPTED_WITH_ADVISORY` — responsive application scope included, where applicable, Home, Dashboard, Facilities, Facility Detail, Navigate 2D/3D, Events, Emergency, CLARA, Login, and Admin; individual per-screen findings are `NOT SPECIFICALLY_DOCUMENTED`
+- `PASS` — owner reported `NO BLOCKER FOUND`
+- `NOT SPECIFICALLY DOCUMENTED` — screenshots, browser/version, OS, physical-device model, measurements, detailed interactions, per-screen behavior, and performance observations
+- `PENDING` — dedicated keyboard-only/accessibility, screen reader, contrast, reduced motion, physical QR/camera, and representative WebGL-device acceptance
+- `NO CODE CHANGE / NO REDEPLOY` — evidence recording only; existing production equivalence remains unchanged
+- `NEXT` — Phase 3-MQA-3 Keyboard-Only and Accessibility Manual Acceptance

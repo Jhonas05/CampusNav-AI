@@ -3,6 +3,23 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Phase 3-MQA-2 remaining responsive viewport acceptance — owner completed 17 September 2026
+
+**Subset classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Area | Classification | Owner-provided evidence / boundary |
+|---|---|---|
+| Evidence source | `ACCEPTED_WITH_ADVISORY` | The owner reports completing the remaining responsive viewport review and finding `NO BLOCKER FOUND`. Screenshots, browser/version, operating system, measurements, and detailed findings were not supplied |
+| `1440x900` | `OWNER_REPORTED_MANUAL_BROWSER_PASS` | Manually checked and reported acceptable; per-screen and per-control results are `NOT SPECIFICALLY_DOCUMENTED` |
+| `1024x768` | `OWNER_REPORTED_MANUAL_BROWSER_PASS` | Manually checked and reported acceptable; per-screen and per-control results are `NOT SPECIFICALLY_DOCUMENTED` |
+| 768px tablet viewport | `OWNER_REPORTED_RESPONSIVE_VIEWPORT_PASS` | Responsive viewport result reported acceptable; `PHYSICAL_DEVICE_DETAILS_NOT_DOCUMENTED` |
+| Approximately 390px mobile viewport | `OWNER_REPORTED_RESPONSIVE_VIEWPORT_PASS` | Responsive viewport result reported acceptable; `PHYSICAL_DEVICE_DETAILS_NOT_DOCUMENTED` |
+| Responsive screen scope | `ACCEPTED_WITH_ADVISORY` | The current responsive application, including where applicable Home, Dashboard, Facilities, Facility Detail, Navigate 2D/3D, Events, Emergency, CLARA, Login, and Admin, was within scope. Individual screen PASS claims are not added because per-screen findings were not provided |
+| Accessibility/device claim | `PARTIAL` | MQA-2 adds responsive viewport evidence only. WCAG, screen reader, detailed keyboard-only behavior, physical QR/camera, representative WebGL-device, and exact browser/OS certification remain pending |
+| Defect outcome | `ACCEPTED` | Owner reported no blocker requiring an application change; no code fix or redeployment is justified by this evidence |
+
+Together, MQA-1 and MQA-2 provide owner-reported responsive evidence for all six canonical viewport targets. Tablet/mobile physical-device certification is not claimed. Canonical Phase 3 remains **IN PROGRESS** pending dedicated accessibility and physical-device acceptance.
+
 ## Phase 3-MQA-1 primary laptop browser acceptance — owner completed 17 September 2026
 
 **Subset classification:** `ACCEPTED_WITH_ADVISORY`

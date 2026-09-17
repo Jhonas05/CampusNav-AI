@@ -1,5 +1,25 @@
 # CampusNav Content Pack — Changelog
 
+## v3.11 — 17 September 2026
+
+Recorded owner-provided Phase 3-MQA-2 remaining responsive viewport acceptance evidence.
+
+### Evidence recorded
+- recorded `OWNER_REPORTED_MANUAL_BROWSER_PASS` for `1440x900` and `1024x768`
+- recorded `OWNER_REPORTED_RESPONSIVE_VIEWPORT_PASS` for 768px tablet and approximately 390px mobile viewports
+- recorded the overall responsive application scope and the owner's `NO BLOCKER FOUND` result
+- MQA-1 and MQA-2 now provide owner-reported viewport evidence for all six canonical responsive targets
+
+### Evidence boundaries
+- marked screenshots, browser/OS details, physical-device models, measurements, detailed interactions, individual per-screen results, and performance findings as `NOT SPECIFICALLY DOCUMENTED`
+- retained `PHYSICAL_DEVICE_DETAILS_NOT_DOCUMENTED` for tablet/mobile viewport evidence
+- retained pending status for dedicated keyboard-only/accessibility, screen-reader, physical QR/camera, and representative WebGL-device acceptance
+- made no WCAG, physical-device, representative-WebGL-device, QR-camera, or exact browser/OS certification claim
+
+### Scope
+- documentation-only evidence update; no application code, tests, dependencies, schema, production data, commit, push, or deployment action
+- Phase 3 remains in progress and may advance to Phase 3-MQA-3 Keyboard-Only and Accessibility Manual Acceptance
+
 ## v3.10 — 17 September 2026
 
 Recorded owner-provided Phase 3-MQA-1 primary laptop browser acceptance evidence.
