@@ -1,5 +1,32 @@
 # CampusNav Content Pack — Changelog
 
+## v3.16 — 19 September 2026
+
+Recorded successful owner-reported Phase 3-MQA-5 physical QR/camera and manual-fallback acceptance evidence.
+
+### Evidence recorded
+- recorded `MQA5_OWNER_REPORTED_PHYSICAL_QR_CAMERA_PASS` for production HTTPS camera prompting/permission, physical feed, rear/environment-camera behavior, valid `QR-3F-LIBRARY` recognition, Library/Third Floor confirmation, and QR-positioning presentation
+- recorded retained Registrar’s Office destination and the canonical `3F → 4F → 5F` route through the existing A* engine
+- recorded safe invalid/unknown-QR rejection, unchanged valid location, no invented origin/route, retry/manual availability, and successful distinguishable Library/3F manual fallback with the same route
+- recorded usable camera-denied fallback, no camera-flow trap, and camera indicator/feed shutdown after detection, exit, or manual switching
+- recorded that no application blocker or defect was observed
+
+### Evidence boundaries
+- exact device model/type and OS/browser names and versions remain `NOT_DOCUMENTED`; no broad device/browser or iOS/Android certification is added
+- classified the result as `QR_PAYLOAD_CAMERA_ACCEPTANCE`; retained `PHYSICAL_LABEL_PLACEMENT_PENDING` because the QR used a temporary test medium rather than installed campus signage
+- recorded only the owner's observation of no visible recording, upload, or person-identification behavior; no backend/privacy certification is added
+- made no continuous indoor-positioning, AI-routing, A*-as-AI, all-mobile-device, installed-checkpoint, or broad physical-device claim
+
+### Status and next subphase
+- advanced MQA-5 to `ACCEPTED_WITH_ADVISORY`; Phase 3 remains in progress
+- selected Phase 3-MQA-6 — Representative WebGL-Capable and WebGL-Fallback Device Acceptance as the single exact next canonical subphase
+- classified MQA-6 as `READY` under the Definition of Ready and `NOT_STARTED`, with documented capable-device and real WebGL-failure-environment execution dependencies
+- retained broader physical-device evidence and installed QR-label placement verification as later gaps
+- retained AR Guidance as `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
+
+### Scope
+- canonical tracking documentation only; no application source, package, test, fixture, credential, environment file, institutional/production data, schema, QR/routing implementation, Emergency, AR, CLARA, PWA, commit, push, or deployment change
+
 ## v3.15 — 19 September 2026
 
 Recorded the successful resumed Phase 3-MQA-4 screen-reader and authenticated Admin owner-reported manual evidence while preserving the earlier tooling-blocked attempt as history.

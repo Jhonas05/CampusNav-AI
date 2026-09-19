@@ -17,7 +17,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 | Emergency | `DEFERRED_CONDITIONAL` | AR may only present an already-approved emergency route after separate canonical and safety approval; no normal-route fallback |
 | Implementation evidence | `NOT_IMPLEMENTED` | No AR source, route-step adapter, camera-guidance shell, overlay, schema, dependency, test, or deployment is claimed by this documentation task |
 | Definition of Ready | `NOT_READY` | Route-step semantics, device matrix, camera/QR lifecycle, privacy/security verification, performance thresholds, accessibility plan, and emergency-stage authority remain unresolved |
-| Active sequencing | `DEFERRED` | Current Phase 3 remains `IN PROGRESS`; MQA-4 is `ACCEPTED_WITH_ADVISORY`, and Phase 3-MQA-5 Physical QR/Camera and Manual-Fallback Acceptance is the exact next canonical work |
+| Active sequencing | `DEFERRED` | Current Phase 3 remains `IN PROGRESS`; MQA-5 is `ACCEPTED_WITH_ADVISORY`, and Phase 3-MQA-6 Representative WebGL-Capable and WebGL-Fallback Device Acceptance is the exact next canonical work |
 
 `74-ar-assisted-navigation-contract.md` is a future adoption contract, not implementation proof. Do not start AR-0 or any later AR stage until a future roadmap authorization exists and the Definition of Ready passes.
 
@@ -84,6 +84,46 @@ MQA-4 is complete at the supplied owner-reported smoke-evidence level. Its advis
 | Execution dependencies | `PENDING_EXECUTION` | A camera-capable physical device, graphical browser in a secure context, and scannable canonical test label/payload are required when the subphase is started |
 
 MQA-5 is the single exact next Phase 3 subphase. Representative WebGL-device acceptance and broader physical-device evidence remain later gaps; neither is started by this readiness decision.
+
+## Phase 3-MQA-5 physical QR/camera and manual-fallback acceptance — owner completed 19 September 2026
+
+**Subset classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Area | Classification | Owner-provided evidence / boundary |
+|---|---|---|
+| Overall physical result | `MQA5_OWNER_REPORTED_PHYSICAL_QR_CAMERA_PASS` | All prepared physical QR/camera, invalid-QR, manual-fallback, camera-denial, and camera-lifecycle checks were reported passed on the production HTTPS Navigate page; no blocker or defect was observed |
+| Device details | `NOT_DOCUMENTED` | A real camera-capable physical device was used, but exact device model/type and OS/browser names and versions were not supplied |
+| Camera permission/feed | `QR_PAYLOAD_CAMERA_ACCEPTANCE` | Permission prompt appeared, permission was granted, the scanner feed opened, and rear/environment-camera behavior worked as expected |
+| Valid checkpoint/location | `QR_PAYLOAD_CAMERA_ACCEPTANCE` | The canonical QR resolved to `QR-3F-LIBRARY`, Library on the Third Floor, and displayed the QR-confirmed positioning state |
+| Route | `ACCEPTED` | Registrar’s Office remained selected and the existing A* engine generated `3F → 4F → 5F`; QR supplied only the origin checkpoint and no second routing engine was introduced |
+| Invalid/unknown QR | `ACCEPTED` | The invalid QR was rejected without replacing the valid location, inventing an origin, or inventing a route; retry and manual fallback remained available |
+| Manual fallback | `ACCEPTED` | Library on 3F could be set manually, the manual state was distinguishable from QR-confirmed positioning, Registrar’s Office remained selected, and the same multi-floor A* route was generated |
+| Camera denial/accessibility | `ACCEPTED` | Denied/blocked camera access produced a usable error/fallback state; Set Location Manually remained usable and the user was not trapped |
+| Camera lifecycle | `ACCEPTED` | Camera indicator/feed stopped after successful detection, exit, or switching to manual location |
+| Privacy observation | `OWNER_OBSERVED_NO_VISIBLE_RECORDING_UPLOAD_OR_PERSON_IDENTIFICATION` | This is an interface/device observation only and is not backend, privacy, or data-protection certification |
+| Label placement | `PHYSICAL_LABEL_PLACEMENT_PENDING` | The QR came from a temporary test medium. `QR_PAYLOAD_CAMERA_ACCEPTANCE` does not establish installed campus checkpoint/signage acceptance |
+| Claims boundary | `NOT_CLAIMED` | No continuous indoor positioning, AI routing, A*-as-AI, all-mobile-device support, broad browser support, iOS/Android certification, installed-label acceptance, or broad physical-device certification |
+| Change scope | `DOCUMENTATION_ONLY` | No application, source, package, QR, routing, data, environment, deployment, or production change is part of this evidence record |
+
+MQA-5 is complete at the supplied owner-reported physical-evidence level. Its device-detail, label-placement, and certification boundaries remain advisories. Phase 3 remains **IN PROGRESS**.
+
+## Phase 3-MQA-6 representative WebGL-capable and WebGL-fallback device acceptance — next authorized subphase
+
+**Readiness:** `READY`
+
+**Execution:** `NOT_STARTED`
+
+| Definition-of-Ready area | Result | Basis / boundary |
+|---|---|---|
+| Goal and core scope | `READY` | Obtain representative physical-device evidence for thesis-core 3D navigation and its required usable 2D fallback; no new feature is authorized |
+| Contracts/data/state | `READY` | One spatial dataset, central 2D→3D transform, shared A* route, current/destination/path state, floor focus, and fallback contracts are identified |
+| Security/privacy | `READY` | No authenticated role, data write, new sensor collection, or private-data handling is required |
+| Error/fallback behavior | `READY` | WebGL unavailable/failure must provide a clear 2D fallback while preserving current location, destination, route, selected floor, and applicable progress |
+| Acceptance cases | `READY` | Representative WebGL-capable physical-device 3D load/interaction, shared-state rendering, floor focus/isolation, 2D↔3D preservation, and real WebGL-disabled/unsupported/failure fallback are defined |
+| Regression route | `READY` | `Library 3F → Registrar’s Office 5F` is selected; 2D and 3D must retain the same canonical `3F → 4F → 5F` route/node sequence |
+| Execution dependencies | `PENDING_EXECUTION` | Documented device/OS/browser evidence is required for a representative WebGL-capable device and a real reproducible WebGL-disabled/unsupported/failure environment |
+
+MQA-6 is the single exact next Phase 3 subphase and is not started. Broader physical-device evidence and installed QR-label placement verification remain later gaps.
 
 ## Phase 3-MQA-3 keyboard-only and accessibility manual acceptance — owner completed 17 September 2026
 

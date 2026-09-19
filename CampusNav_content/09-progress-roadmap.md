@@ -90,7 +90,7 @@ This checkpoint is presentation-only and does not authorize Phase 3 or any new c
 
 ## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
-**Status:** IN PROGRESS — exact-revision production deployment plus Phase 3-MQA-1 through MQA-4 manual acceptance evidence recorded; the recovered historical Phase 3-MQA-4 attempt remains `PARTIAL` / `BLOCKED_BY_TOOLING`, while the resumed owner-reported MQA-4 run is `ACCEPTED_WITH_ADVISORY`; physical QR/camera, representative WebGL-device, and broader physical-device evidence remain pending
+**Status:** IN PROGRESS — exact-revision production deployment plus Phase 3-MQA-1 through MQA-5 manual acceptance evidence recorded; MQA-5 is `ACCEPTED_WITH_ADVISORY`; representative WebGL-device, broader physical-device, and installed QR-label placement evidence remain pending
 
 ### Release-candidate Checkpoint A — prepared 16 September 2026
 
@@ -292,6 +292,46 @@ Definition-of-Ready basis:
 
 Execution requires a camera-capable physical device, a graphical browser in a secure context, and a scannable canonical test label/payload. Those are execution dependencies, not missing contract decisions. The exact next work is MQA-5 only; representative WebGL-device acceptance remains a later Phase 3 subset and is not started here.
 
+### Phase 3-MQA-5 — Physical QR/Camera and Manual-Fallback Acceptance — owner completed 19 September 2026
+
+**Classification:** `ACCEPTED_WITH_ADVISORY`
+
+Owner-reported physical-device evidence:
+- `MQA5_OWNER_REPORTED_PHYSICAL_QR_CAMERA_PASS` on the production HTTPS Navigate page
+- the camera prompt appeared, permission was granted, the physical scanner feed opened, and rear/environment-camera behavior worked as expected
+- the valid canonical payload resolved to `QR-3F-LIBRARY`, Library on the Third Floor, and displayed the QR-confirmed positioning state
+- Registrar’s Office remained selected and the existing A* engine generated the canonical `3F → 4F → 5F` route; QR established only the origin checkpoint and introduced no separate routing logic
+- an unknown/invalid QR was rejected without replacing the valid location, inventing an origin, or inventing a route; retry and manual fallback remained available
+- manual fallback to Library on 3F worked, remained distinguishable from QR-confirmed positioning, preserved Registrar’s Office, and generated the same multi-floor route through the existing A* engine
+- camera-denied/blocked behavior produced a usable error/fallback state; Set Location Manually remained usable and the user was not trapped
+- the camera indicator/feed stopped after successful detection, exit, or switching to manual location
+- no application blocker or defect was observed
+
+Evidence boundaries:
+- exact device model/type and OS/browser names and versions are `NOT_DOCUMENTED`; this single physical pass is not broad device/browser certification
+- `QR_PAYLOAD_CAMERA_ACCEPTANCE` is recorded, but the QR came from a temporary test medium; `PHYSICAL_LABEL_PLACEMENT_PENDING` remains and the test image is not official installed campus signage
+- the owner observed no visible recording, upload, or person-identification behavior; this is a limited observation, not backend/privacy certification
+- QR/manual positioning establishes a discrete origin only; no continuous indoor positioning, AI routing, or A*-as-AI claim is added
+- no all-mobile-device, iOS, Android, broad-browser, installed-checkpoint, or broad physical-device certification is claimed
+
+MQA-5 therefore advances to `ACCEPTED_WITH_ADVISORY`. Phase 3 remains **IN PROGRESS**.
+
+### Phase 3-MQA-6 — Representative WebGL-Capable and WebGL-Fallback Device Acceptance — next authorized subphase
+
+**Readiness:** `READY` under `72-definition-of-ready.md`
+
+**Execution:** `NOT_STARTED`
+
+Definition-of-Ready basis:
+- the goal is to obtain representative physical-device evidence for the thesis-core 3D navigation path and its required usable 2D fallback
+- controlling contracts are `10-navigation-engine.md`, `11-spatial-map-source-of-truth.md`, `21-error-state-contract.md`, `25-performance-budget.md`, `26-accessibility-standards.md`, `40-state-management-contract.md`, `55-browser-device-compatibility.md`, `58-module-acceptance-criteria.md`, and `60-core-vs-optional-feature-matrix.md`
+- the canonical spatial dataset, central 2D→3D transform, shared A* route, current-location/destination state, floor relationships, and fallback behavior are defined; no authenticated role or data write is required
+- expected unsupported/failed-WebGL behavior is a clear `3D view unavailable; switched to 2D.` state with current location, destination, and route preserved
+- required acceptance cases are successful 3D loading on a representative WebGL-capable physical device, floor focus/isolation and current/destination/path rendering from shared state, 2D↔3D state preservation, and usable automatic or selected 2D fallback in a real WebGL-disabled/unsupported/failure environment
+- `Library 3F → Registrar’s Office 5F` is the selected multi-floor regression route; 2D and 3D must retain the same canonical node sequence across `3F → 4F → 5F`
+
+Execution requires documented device model/type, OS and browser/version for at least one representative WebGL-capable physical device plus a real reproducible WebGL-disabled/unsupported/failure environment. These are execution dependencies, not missing contract decisions. MQA-6 is the single exact next work and is not started here. Broader physical-device evidence and installed QR-label placement verification remain later gaps.
+
 ## Later canonical work candidates
 
 Do not assign or start these as numbered phases until Phase 2 is approved and completed:
@@ -306,7 +346,7 @@ Do not assign or start these as numbered phases until Phase 2 is approved and co
 
 **Status:** `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
 
-The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 remains **IN PROGRESS**; MQA-4 is `ACCEPTED_WITH_ADVISORY`, and Phase 3-MQA-5 — Physical QR/Camera and Manual-Fallback Acceptance is the exact next canonical work.
+The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 remains **IN PROGRESS**; MQA-5 is `ACCEPTED_WITH_ADVISORY`, and Phase 3-MQA-6 — Representative WebGL-Capable and WebGL-Fallback Device Acceptance is the exact next canonical work.
 
 ## Blocked by institutional data or decision
 

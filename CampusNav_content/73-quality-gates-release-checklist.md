@@ -166,3 +166,27 @@
 - `NOT_STARTED` — no QR/camera test or representative WebGL/device test is started by this documentation update
 - `NEXT` — Phase 3-MQA-5 Physical QR/Camera and Manual-Fallback Acceptance
 - `LATER GAPS` — representative WebGL-device acceptance and broader physical-device evidence
+
+## Phase 3-MQA-5 successful physical QR/camera evidence — owner completed 19 September 2026
+
+- `ACCEPTED_WITH_ADVISORY` / `MQA5_OWNER_REPORTED_PHYSICAL_QR_CAMERA_PASS` — every prepared physical QR/camera and fallback check was reported passed; no blocker or defect was observed
+- `NOT_DOCUMENTED` — exact device model/type and OS/browser names and versions
+- `QR_PAYLOAD_CAMERA_ACCEPTANCE` — production HTTPS Navigate page, permission prompt/grant, physical camera feed, rear/environment-camera behavior, valid `QR-3F-LIBRARY` recognition, Library/Third Floor confirmation, and QR-positioning presentation passed
+- `PASS` — Registrar’s Office remained selected and the existing A* engine generated the canonical `3F → 4F → 5F` route; QR provided only the origin checkpoint
+- `PASS` — invalid/unknown QR was rejected without replacing the valid location or inventing an origin/route; retry/manual fallback remained available
+- `PASS` — manual Library/3F fallback remained distinguishable from QR positioning, preserved Registrar’s Office, and generated the same multi-floor A* route
+- `PASS` — denied/blocked camera access retained a usable manual fallback and did not trap the user
+- `PASS` — camera indicator/feed stopped after detection, exit, or switching to manual location
+- `OWNER OBSERVATION ONLY` — no visible recording, upload, or person-identification behavior; no backend/privacy certification
+- `PHYSICAL_LABEL_PLACEMENT_PENDING` — QR came from a temporary test medium; no installed campus checkpoint/signage acceptance
+- `NOT_CLAIMED` — continuous indoor positioning, AI routing, A*-as-AI, broad device/browser support, iOS/Android certification, installed-label acceptance, or broad physical-device certification
+- `DOCUMENTATION ONLY` — no application/source/package/test/QR/routing/data/environment/deployment change
+
+## Phase 3-MQA-6 representative WebGL-capable and WebGL-fallback device readiness — 19 September 2026
+
+- `READY` — thesis-core 3D/fallback goal, controlling contracts, shared spatial/route/state model, error behavior, and acceptance cases satisfy `72-definition-of-ready.md`
+- `READY` — selected regression route is `Library 3F → Registrar’s Office 5F`; 2D and 3D must retain the same canonical `3F → 4F → 5F` route/node sequence
+- `PENDING_EXECUTION` — requires documented device/OS/browser evidence for a representative WebGL-capable physical device and a real reproducible WebGL-disabled/unsupported/failure environment
+- `NOT_STARTED` — no WebGL/device QA is started by this documentation update
+- `NEXT` — Phase 3-MQA-6 Representative WebGL-Capable and WebGL-Fallback Device Acceptance
+- `LATER GAPS` — broader physical-device evidence and installed QR-label placement verification
