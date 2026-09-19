@@ -99,3 +99,15 @@ Physical device model/type, Windows edition/version/build, GPU, exact browser ve
 The approximately 878 kB lazy 3D chunk advisory remains. This representative result does not establish performance certification, universal smoothness, GPU certification, broad device/browser support, or universal WebGL support. 3D remains a presentation layer over canonical spatial data and the existing A* route; A*, Three.js, and WebGL are not described as AI or independent route intelligence.
 
 MQA-6 advances to `ACCEPTED_WITH_ADVISORY`. Phase 3 remains in progress. The single exact next subphase is **Phase 3-MQA-7 — Final Phase 3 Acceptance and Evidence Reconciliation**, classified `READY` under `72-definition-of-ready.md` and `NOT_STARTED`. That reconciliation must classify retained gaps—including broader physical-device evidence, installed QR-label placement, missing execution metadata/probes, the fallback-copy advisory, Department Admin/AccessDenied browser gaps, and other release boundaries—without inventing evidence. The separate adviser-dependent research-methodology gap is unchanged.
+
+## Phase 3-MQA-7 final reconciliation — 19 September 2026
+
+Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. The production/deployment baseline and MQA-1 through MQA-6 evidence satisfy the defined Phase 3 release/manual-QA scope at their recorded evidence levels, and no unresolved Phase 3 blocker is supported.
+
+Remaining items are separated as follows:
+- **software-acceptance advisories:** broader device/browser coverage, installed QR-label placement, missing MQA-5/MQA-6 execution metadata and native probes, exact fallback wording, `ADVISORY_UI_COPY_MISMATCH`, the approximately 878 kB lazy 3D chunk, Department Admin and AccessDenied browser gaps, and earlier evidence granularity
+- **institutional/data dependencies:** authorized map/facility verification, official hours/services and service mappings, official schedule/personnel data and public fields, check-in authority, and emergency coverage/verification/sign-off
+- **adviser/research dependencies:** formal title treatment and the approved evaluation design, instrument, respondents/sample, metrics, thresholds, and statistical treatment
+- **deferred/outside Phase 3:** grounded CLARA integration, PWA/offline emergency caching, map editor/version rollback, reports/analytics, AR Guidance, GPS/BLE/UWB, and other optional expansion
+
+These distinctions close Phase 3 without closing the final-system thesis/demo Definition of Done and without treating the unresolved research-methodology gap as a software defect. The exact next workstream is the **Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate**. It is `READY` for decision coordination, while downstream implementation is `NOT_READY` / `BLOCKED` until applicable adviser approvals, authorized institutional inputs/sign-offs, final defense-scope decisions, and a verified/demo-labeled rehearsal plan exist or are explicitly deferred.

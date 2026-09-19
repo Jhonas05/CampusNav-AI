@@ -216,3 +216,19 @@
 - `NEXT` — Phase 3-MQA-7 Final Phase 3 Acceptance and Evidence Reconciliation
 - `RECONCILIATION INPUTS` — fallback-copy mismatch, approximately 878 kB lazy chunk, broader physical-device evidence, installed QR-label placement, Department Admin/AccessDenied browser gaps, missing device/browser/GPU/probe details, and all other retained claims boundaries
 - `DEFERRED` — AR Guidance remains `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
+
+## Phase 3-MQA-7 final acceptance and gate reconciliation — completed 19 September 2026
+
+- `PASS` — exact-revision production/deployment equivalence and deterministic release evidence remain accepted; subsequent MQA work was documentation/evidence recording only
+- `PASS AT RECORDED EVIDENCE LEVEL` — MQA-1 through MQA-6 are accepted, covering the six target responsive viewports, keyboard/accessibility smoke, Windows Narrator smoke, authenticated `SUPER_ADMIN` smoke, physical QR/camera/manual fallback, and representative WebGL-capable plus reproducible WebGL-fallback behavior
+- `NO PHASE 3 BLOCKER` — no unresolved application defect, unsafe fallback, release-equivalence failure, or defined manual-QA failure is supported by the canonical evidence
+- `NONBLOCKING ADVISORY` — broader device/browser evidence, installed QR-label placement, missing device/OS/browser/GPU/native-probe details, exact fallback wording, fallback-copy mismatch, approximately 878 kB lazy 3D chunk, Department Admin/AccessDenied browser gaps, and earlier evidence granularity remain explicit
+- `OWNER_OR_INSTITUTIONAL_DEPENDENCY` — complete authorized map/facility/hours/services/schedule/personnel data, public fields/check-in authority, and emergency ownership/coverage/sign-off remain outside Phase 3 release acceptance
+- `ADVISER_OR_RESEARCH_DEPENDENCY` — title treatment and evaluation method/instrument/respondents/metrics/thresholds/statistics remain outside software acceptance
+- `DEFERRED_OR_OUTSIDE_PHASE_3` — grounded CLARA, PWA/offline, map editor/version rollback, reports/analytics, AR Guidance, GPS/BLE/UWB, and other optional expansion are not accepted or authorized by this gate
+- `FINAL SYSTEM DOD INCOMPLETE` — `28-definition-of-done.md` retains explicit `UNSATISFIED` and `DEFERRED` items; Phase 3 closure is not final thesis/demo completion
+- `PHASE 3 COMPLETE — ACCEPTED_WITH_ADVISORY` — the accepted-baseline release and manual-QA phase is closed with the listed claims boundaries
+- `NEXT / READY FOR DECISION COORDINATION` — Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate
+- `DOWNSTREAM IMPLEMENTATION NOT_READY / BLOCKED` — requires applicable adviser approvals, authorized institutional datasets/sign-offs, final defense-scope choices, and a verified/demo-labeled rehearsal plan before implementation authorization
+- `NOT_CLAIMED` — WCAG conformance; broad device/browser/GPU/performance support; installed QR signage; complete institutional or emergency data; adviser approval; final thesis/demo readiness; or completion of deferred features
+- `DOCUMENTATION ONLY` — no application/source/package/test/fixture/credential/environment/schema/data/deployment/commit/push change

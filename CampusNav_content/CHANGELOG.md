@@ -1,5 +1,30 @@
 # CampusNav Content Pack — Changelog
 
+## v3.18 — 19 September 2026
+
+Completed Phase 3-MQA-7 final acceptance and evidence reconciliation.
+
+### Final Phase 3 status
+- reconciled the accepted exact-revision production baseline with MQA-1 through MQA-6 and found no supported unresolved Phase 3 release blocker
+- closed Phase 3 as `COMPLETE — ACCEPTED_WITH_ADVISORY`
+- retained all missing execution details and claims boundaries without promoting them into certification
+
+### Reconciliation and gap classification
+- classified broader device/browser evidence, installed QR-label placement, missing device/OS/browser/GPU/native-probe details, exact fallback wording, fallback-copy mismatch, the approximately 878 kB lazy 3D chunk, Department Admin/AccessDenied browser gaps, and earlier evidence granularity as nonblocking advisories
+- classified authorized map/facility/hours/services/schedule/personnel completeness, public fields/check-in authority, and emergency ownership/coverage/sign-off as owner/institutional dependencies
+- kept title treatment and evaluation methodology as adviser/research dependencies
+- kept grounded CLARA, PWA/offline, map editor/version rollback, reports/analytics, AR Guidance, GPS/BLE/UWB, and other optional expansion deferred or outside Phase 3
+- reconciled `28-definition-of-done.md` so final-system items explicitly distinguish `SATISFIED`, `SATISFIED_WITH_ADVISORY`, `UNSATISFIED`, and `DEFERRED`; Phase 3 closure does not imply final thesis/demo completion
+- removed the resolved strict-grayscale question from the open backlog because `DEC-UI-002` already controls it
+
+### Next workstream
+- selected **Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate** as the single exact next canonical workstream
+- classified decision coordination as `READY` and downstream implementation as `NOT_READY` / `BLOCKED` pending applicable adviser approvals, authorized institutional datasets/sign-offs, final defense-scope choices, and a verified/demo-labeled rehearsal plan
+- authorized no new implementation phase or deferred feature
+
+### Scope
+- canonical tracking documentation only; no application source, public asset, package, test, fixture, credential, environment file, schema, institutional/production data, routing/spatial implementation, QR, Emergency, AR, CLARA, PWA, commit, push, or deployment change
+
 ## v3.17 — 19 September 2026
 
 Recorded successful owner-reported Phase 3-MQA-6 representative WebGL-capable and reproducible WebGL-fallback acceptance evidence.

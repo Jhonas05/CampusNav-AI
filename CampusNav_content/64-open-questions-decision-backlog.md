@@ -15,11 +15,16 @@ Only unresolved decisions belong here. Resolved decisions move to `29-decision-l
 - Is the current source-aligned emergency coverage sufficient for the thesis demonstration, or is a new formal safety-authority sign-off required?
 
 ## Product/implementation
-- Is strict grayscale still required for final thesis UI screenshots, or is `DEC-UI-001` controlled map color the final approved direction?
 - Is PWA offline emergency access required for the final defense build or allowed as a scoped roadmap item?
 - Is a full visual map editor/version rollback required before final defense?
 - Which optional delivery channels (web push/SMS) are in final scope?
 - Which concrete browser/device matrix must pass before the responsive implementation may be claimed as production-verified?
+
+The former strict-grayscale question is resolved by `DEC-UI-002` in `29-decision-log.md` and no longer belongs in this unresolved backlog.
+
+## Post-Phase-3 sequencing
+
+Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. The single exact next workstream is the **Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate**. Decision coordination is `READY`; no downstream implementation phase is `READY` until its applicable adviser decisions, authorized institutional datasets/sign-offs, defense-scope choices, and demo-rehearsal plan are supplied or explicitly deferred.
 
 ### AR-Assisted Camera Navigation planning
 - After current Phase 3 acceptance, when—if ever—may AR-0 be authorized on the roadmap?

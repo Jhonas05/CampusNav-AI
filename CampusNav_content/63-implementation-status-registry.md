@@ -3,6 +3,28 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Phase 3-MQA-7 final acceptance and evidence reconciliation — completed 19 September 2026
+
+**Phase 3 classification:** `COMPLETE — ACCEPTED_WITH_ADVISORY`
+
+The exact-revision production baseline and MQA-1 through MQA-6 are accepted at their recorded evidence levels. No supported unresolved Phase 3 release blocker remains. Earlier Phase 1/Phase 2 implementation matrices below remain historical evidence snapshots; this final reconciliation controls current Phase 3 status without rewriting those snapshots as if their earlier verification dates had changed.
+
+| Remaining item class | Current classification | Boundary / disposition |
+|---|---|---|
+| Broader physical-device/browser evidence; installed QR-label placement | `NONBLOCKING_ADVISORY` | Payload/camera/manual behavior and representative WebGL/fallback behavior passed; broad certification and campus installation acceptance are not claimed |
+| MQA-5 device/OS/browser metadata; MQA-6 device/OS/GPU/browser/native-probe metadata; exact fallback wording | `NONBLOCKING_ADVISORY` | Undocumented execution details remain undocumented and do not invalidate the observed behavioral subsets |
+| 3D fallback copy mismatch; approximately 878 kB lazy 3D chunk | `NONBLOCKING_ADVISORY` | Safe fallback passed; exact-copy conformance and performance certification are not claimed |
+| Department Admin and AccessDenied manual-browser coverage | `NONBLOCKING_ADVISORY` | Separate browser evidence is absent; deterministic authorization, linked RLS, and `SUPER_ADMIN` evidence are preserved without converting them into the missing manual passes |
+| Institutional map/facility/hours/services/schedule/personnel completeness, public fields/check-in authority, emergency ownership/coverage/sign-off | `OWNER_OR_INSTITUTIONAL_DEPENDENCY` | Pending/unknown data remains unavailable and strict emergency behavior remains safe; these are final thesis/demo inputs, not Phase 3 release blockers |
+| Thesis title and evaluation methodology | `ADVISER_OR_RESEARCH_DEPENDENCY` | Requires adviser/research approval and is separate from software acceptance |
+| Grounded CLARA, PWA/offline cache, map editor/version rollback, reports/analytics, AR Guidance, GPS/BLE/UWB, and other expansion | `DEFERRED_OR_OUTSIDE_PHASE_3` | Not implemented or accepted by Phase 3; no implementation authorization is implied |
+
+The final-system Definition of Done remains incomplete for its explicitly `UNSATISFIED` and `DEFERRED` items. Phase 3 closure is limited to accepted-baseline release and manual QA and is not a thesis-completion, institutional-data, WCAG, device/browser/GPU/performance, or optional-feature certification.
+
+**Exact next workstream:** Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate.
+
+**Definition of Ready:** `READY` for decision coordination because the questions, evidence boundaries, and required authorities are identified. Any downstream implementation phase remains `NOT_READY` / `BLOCKED` until the applicable adviser decisions, authorized institutional datasets/sign-offs, final defense-scope choices, and demo-rehearsal plan are supplied or explicitly deferred.
+
 ## AR-Assisted Camera Navigation / AR Guidance Mode — canonical planning adoption 19 September 2026
 
 **Classification:** `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
@@ -17,7 +39,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 | Emergency | `DEFERRED_CONDITIONAL` | AR may only present an already-approved emergency route after separate canonical and safety approval; no normal-route fallback |
 | Implementation evidence | `NOT_IMPLEMENTED` | No AR source, route-step adapter, camera-guidance shell, overlay, schema, dependency, test, or deployment is claimed by this documentation task |
 | Definition of Ready | `NOT_READY` | Route-step semantics, device matrix, camera/QR lifecycle, privacy/security verification, performance thresholds, accessibility plan, and emergency-stage authority remain unresolved |
-| Active sequencing | `DEFERRED` | Current Phase 3 remains `IN PROGRESS`; MQA-6 is `ACCEPTED_WITH_ADVISORY`, and Phase 3-MQA-7 Final Phase 3 Acceptance and Evidence Reconciliation is the exact next canonical work |
+| Active sequencing | `DEFERRED` | Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`; the Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate is next, and no AR implementation is authorized |
 
 `74-ar-assisted-navigation-contract.md` is a future adoption contract, not implementation proof. Do not start AR-0 or any later AR stage until a future roadmap authorization exists and the Definition of Ready passes.
 

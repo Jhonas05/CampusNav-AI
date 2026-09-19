@@ -90,7 +90,7 @@ This checkpoint is presentation-only and does not authorize Phase 3 or any new c
 
 ## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
-**Status:** IN PROGRESS — exact-revision production deployment plus Phase 3-MQA-1 through MQA-6 manual acceptance evidence recorded; MQA-6 is `ACCEPTED_WITH_ADVISORY`; final Phase 3 acceptance/evidence reconciliation is next, while broader physical-device and installed QR-label placement evidence remain unresolved advisories
+**Status:** COMPLETE — 19 September 2026 (`ACCEPTED_WITH_ADVISORY`)
 
 ### Release-candidate Checkpoint A — prepared 16 September 2026
 
@@ -370,9 +370,29 @@ Definition-of-Ready basis:
 
 MQA-7 is ready because its scope, sources, boundaries, and acceptance checks are defined and its inputs already exist. It is not started by the MQA-6 evidence update. Broader physical-device evidence and installed QR-label placement verification remain inputs/gaps to classify during reconciliation, not silently inferred passes.
 
+### Phase 3-MQA-7 — Final Phase 3 Acceptance and Evidence Reconciliation — completed 19 September 2026
+
+**Classification:** `ACCEPTED_WITH_ADVISORY`
+
+Final reconciliation:
+- the exact-revision production baseline and MQA-1 through MQA-6 are accepted at their recorded evidence levels; no unresolved Phase 3 release blocker is supported by the canonical record
+- broader physical-device/browser coverage, installed QR-label placement, MQA-5 device/OS/browser details, MQA-6 device/OS/GPU/browser and native-probe details, exact fallback wording, `ADVISORY_UI_COPY_MISMATCH`, the approximately 878 kB lazy 3D chunk, Department Admin browser coverage, AccessDenied manual coverage, and earlier evidence granularity remain nonblocking advisories
+- authorized institutional map/facility/hours/services/schedule/personnel data, check-in authority, and emergency coverage/sign-off are owner/institutional dependencies; conservative pending/unavailable states and strict emergency no-route behavior prevent them from becoming Phase 3 acceptance blockers
+- the adviser-approved title treatment, evaluation instrument, respondents/sample, metrics, thresholds, and statistical treatment are research dependencies outside software release acceptance
+- CLARA provider/tool grounding, PWA/offline caching, map editor/version rollback, reports/analytics, AR Guidance, GPS/BLE/UWB, and other optional expansion remain deferred or outside Phase 3
+- the final-system thesis/demo Definition of Done remains incomplete where `28-definition-of-done.md` marks items `UNSATISFIED` or `DEFERRED`; closing Phase 3 does not convert those items into implementation or acceptance
+
+Phase 3 is therefore **COMPLETE — `ACCEPTED_WITH_ADVISORY`**. This closes the defined accepted-baseline release and manual-QA scope without claiming WCAG conformance, broad device/browser/GPU/performance certification, installed QR signage, complete institutional data, adviser approval, or completion of deferred features.
+
+### Exact next canonical workstream — Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate
+
+**Readiness:** `READY` for decision coordination; downstream implementation is `NOT_READY` / `BLOCKED` until its applicable decisions and authorized inputs exist.
+
+The gate may start because unresolved questions, evidence boundaries, and decision owners are identified. It must obtain or explicitly defer: adviser-approved title/evaluation methodology; authorized map/facility/hours/services/schedule/personnel fields and check-in authority; emergency data ownership, coverage, verification dates, and safety sign-off; final defense scope for PWA/offline, map editor/versioning, reports/analytics, grounded CLARA, and AR Guidance; and a thesis-demo rehearsal plan using verified or clearly demo-labeled data. No feature implementation is authorized merely by opening this gate.
+
 ## Later canonical work candidates
 
-Do not assign or start these as numbered phases until Phase 2 is approved and completed:
+Do not assign or start these as numbered implementation phases until the post-Phase-3 decision gate authorizes them:
 - verified facility services, operating hours, and service-to-facility mappings
 - PWA service worker and versioned offline emergency cache
 - map administration, calibration, versioning, and coherent rollback
@@ -384,7 +404,7 @@ Do not assign or start these as numbered phases until Phase 2 is approved and co
 
 **Status:** `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
 
-The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 remains **IN PROGRESS**; MQA-6 is `ACCEPTED_WITH_ADVISORY`, and Phase 3-MQA-7 — Final Phase 3 Acceptance and Evidence Reconciliation is the exact next canonical work.
+The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 is **COMPLETE — `ACCEPTED_WITH_ADVISORY`**; the Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate is the exact next canonical workstream.
 
 ## Blocked by institutional data or decision
 
