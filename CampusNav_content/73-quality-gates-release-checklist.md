@@ -142,3 +142,27 @@
 - `NOT_CLAIMED` — WCAG conformance, physical-device certification, QR-camera acceptance, representative WebGL-device acceptance, and exact browser/OS certification
 - `CURRENT UNFINISHED SUBPHASE` — MQA-4 remains open; historical tooling failure is not successful acceptance
 - `NEXT` — complete real screen-reader manual acceptance and real authenticated Admin manual acceptance in a functioning environment
+
+## Phase 3-MQA-4 resumed successful evidence — owner completed 19 September 2026
+
+- `ACCEPTED_WITH_ADVISORY` — this later owner-reported run controls current MQA-4 status while the historical `PARTIAL / BLOCKED_BY_TOOLING` attempt above remains preserved
+- `OWNER_REPORTED_SCREEN_READER_PASS` — Windows Narrator in a functioning graphical browser environment; Home, Dashboard, Facilities, Navigate, Login, and CLARA were reported acceptable
+- `OWNER_REPORTED_SCREEN_READER_PASS` — navigation elements, buttons and links, heading structure, form labels, and status/error presentation were reported acceptable
+- `SUPER_ADMIN_MANUAL_ADMIN_PASS` — the actual authenticated browser role tested was `SUPER_ADMIN`
+- `SUPER_ADMIN_MANUAL_ADMIN_PASS` — Admin Overview, Announcements, Events, Facility Advisories, Notifications, Audit, Personnel, Courses, Sections, Class Schedules, Schedule Exceptions, Assignments, Consultation Hours, Check-ins, and Availability Overrides were reported acceptable
+- `SUPER_ADMIN_MANUAL_ADMIN_PASS` — authenticated navigation, page/layout readability, tables/cards, form usability, labels, dialogs, validation presentation, no observed clipping/overflow blocker, session behavior, and logout behavior were reported acceptable
+- `PASS` — owner reported no application blocker during the screen-reader or authenticated Admin smoke subsets
+- `ACCESSDENIED_MANUAL_QA_NOT_TESTED` — no explicit AccessDenied exercise was supplied; it is not inferred from successful `SUPER_ADMIN` use
+- `DEPARTMENT_ADMIN_BROWSER_NOT_TESTED` — no separate Department Admin browser session was supplied; SQL/RLS/backend evidence is not converted into manual browser evidence
+- `NOT_CLAIMED` — WCAG conformance, full accessibility certification, screen-reader certification, physical-device certification, physical QR/camera acceptance, representative WebGL-device acceptance, and broad browser support
+- `DOCUMENTATION ONLY` — no credential value, fixture, institutional-data mutation, environment-file change, application change, test execution, commit, push, or deployment
+
+## Phase 3-MQA-5 physical QR/camera and manual-fallback readiness — 19 September 2026
+
+- `READY` — goal, thesis-core status, contracts, canonical checkpoint relationships, privacy/security boundaries, error/fallback states, and acceptance cases satisfy `72-definition-of-ready.md`
+- `READY_WITH_BOUNDARY` — checkpoint installation/label placement remains pending verification; this future smoke subset must not become an institutional installation certification
+- `READY` — selected regression route is `QR-3F-LIBRARY → Registrar’s Office`; recognized QR resolution, invalid QR safety, denied/unavailable-camera manual fallback, state coherence, and existing A* routing are the required acceptance cases
+- `PENDING_EXECUTION` — a camera-capable physical device, graphical browser in a secure context, and scannable canonical test label/payload are required
+- `NOT_STARTED` — no QR/camera test or representative WebGL/device test is started by this documentation update
+- `NEXT` — Phase 3-MQA-5 Physical QR/Camera and Manual-Fallback Acceptance
+- `LATER GAPS` — representative WebGL-device acceptance and broader physical-device evidence

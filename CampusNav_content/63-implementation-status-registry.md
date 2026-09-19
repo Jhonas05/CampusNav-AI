@@ -17,7 +17,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 | Emergency | `DEFERRED_CONDITIONAL` | AR may only present an already-approved emergency route after separate canonical and safety approval; no normal-route fallback |
 | Implementation evidence | `NOT_IMPLEMENTED` | No AR source, route-step adapter, camera-guidance shell, overlay, schema, dependency, test, or deployment is claimed by this documentation task |
 | Definition of Ready | `NOT_READY` | Route-step semantics, device matrix, camera/QR lifecycle, privacy/security verification, performance thresholds, accessibility plan, and emergency-stage authority remain unresolved |
-| Active sequencing | `DEFERRED` | Current Phase 3 remains `IN PROGRESS`; Phase 3-MQA-4 remains the exact next canonical work |
+| Active sequencing | `DEFERRED` | Current Phase 3 remains `IN PROGRESS`; MQA-4 is `ACCEPTED_WITH_ADVISORY`, and Phase 3-MQA-5 Physical QR/Camera and Manual-Fallback Acceptance is the exact next canonical work |
 
 `74-ar-assisted-navigation-contract.md` is a future adoption contract, not implementation proof. Do not start AR-0 or any later AR stage until a future roadmap authorization exists and the Definition of Ready passes.
 
@@ -42,6 +42,48 @@ The original attempt date was not supplied. This section restores previous-lapto
 | Conformance/device claims | `NOT_CLAIMED` | No WCAG conformance, physical-device certification, QR-camera acceptance, representative WebGL-device acceptance, or exact browser/OS certification is claimed |
 
 This historical result does not close or supersede MQA-4. Phase 3 remains **IN PROGRESS**, and Phase 3-MQA-4 remains the current unfinished subphase. The exact next canonical work is real screen-reader manual acceptance plus real authenticated Admin manual acceptance in a functioning environment.
+
+## Phase 3-MQA-4 screen-reader and authenticated Admin manual acceptance — owner completed 19 September 2026
+
+**Subset classification:** `ACCEPTED_WITH_ADVISORY`
+
+This resumed owner-reported evidence controls the current MQA-4 status without deleting, rewriting, or replacing the historical tooling-blocker record above.
+
+| Area | Classification | Owner-provided evidence / boundary |
+|---|---|---|
+| Execution environment | `ACCEPTED_WITH_ADVISORY` | Windows, Windows Narrator, and a functioning graphical browser environment were used; browser name/version and formal assistive-technology configuration were not supplied |
+| Screen-reader smoke | `OWNER_REPORTED_SCREEN_READER_PASS` | Home, Dashboard, Facilities, Navigate, Login, and CLARA were manually checked and reported acceptable with no blocker |
+| Screen-reader semantics | `OWNER_REPORTED_SCREEN_READER_PASS` | Navigation elements, buttons and links, heading structure, form labels, and status/error presentation were manually checked and reported acceptable |
+| Authenticated role | `SUPER_ADMIN_MANUAL_ADMIN_PASS` | The actual authenticated browser role tested was `SUPER_ADMIN` |
+| Admin screen scope | `SUPER_ADMIN_MANUAL_ADMIN_PASS` | Admin Overview, Announcements, Events, Facility Advisories, Notifications, Audit, Personnel, Courses, Sections, Class Schedules, Schedule Exceptions, Assignments, Consultation Hours, Check-ins, and Availability Overrides passed the owner-reported manual check |
+| Admin interaction/presentation | `SUPER_ADMIN_MANUAL_ADMIN_PASS` | Authenticated navigation, page/layout readability, tables/cards, form usability, labels, dialogs, validation presentation, and no observed clipping/overflow blocker were reported acceptable |
+| Session and logout | `SUPER_ADMIN_MANUAL_ADMIN_PASS` | Session behavior and logout behavior passed in the tested browser session |
+| AccessDenied | `ACCESSDENIED_MANUAL_QA_NOT_TESTED` | No explicit owner evidence states that an AccessDenied path was exercised; successful `SUPER_ADMIN` use is not treated as an AccessDenied pass |
+| Department Admin | `DEPARTMENT_ADMIN_BROWSER_NOT_TESTED` | No separate `DEPARTMENT_ADMIN` browser session was reported; SQL/RLS/backend evidence is not converted into manual browser evidence |
+| Defect outcome | `NO_APPLICATION_BLOCKER_OBSERVED` | The owner reported no blocker during either manual subset; no application fix is justified by this evidence |
+| Safety/scope | `DOCUMENTATION_ONLY` | No credentials are recorded or exposed, and no fixture, institutional-data mutation, environment-file change, application change, or deployment is part of this documentation task |
+| Conformance/device claims | `NOT_CLAIMED` | No WCAG conformance, full accessibility certification, screen-reader certification, physical-device certification, QR-camera acceptance, representative WebGL-device acceptance, or broad browser-support claim is added |
+
+MQA-4 is complete at the supplied owner-reported smoke-evidence level. Its advisory boundaries remain explicit. Phase 3 remains **IN PROGRESS**.
+
+## Phase 3-MQA-5 physical QR/camera and manual-fallback acceptance — next authorized subphase
+
+**Readiness:** `READY`
+
+**Execution:** `NOT_STARTED`
+
+| Definition-of-Ready area | Result | Basis / boundary |
+|---|---|---|
+| Goal and scope | `READY` | Obtain real camera-device evidence for thesis-core QR positioning and manual fallback without changing the build; AR Guidance is excluded |
+| Contracts and data | `READY` | QR payload/checkpoint registry, checkpoint-to-node relationships, one A* engine, safe errors, state preservation, local camera processing, and manual fallback are defined in the canonical navigation/map/UI contracts |
+| Provenance | `READY_WITH_BOUNDARY` | Canonical checkpoint records and relationships are known, but physical installation/label placement remains pending verification; MQA-5 must not certify institutional installation accuracy |
+| Security/privacy | `READY` | No authenticated role or write is required; permission is explicit, camera frames remain local and are not recorded/stored/uploaded, and no fixture or institutional-data mutation is required |
+| Error/fallback cases | `READY` | Permission denied, camera unavailable, invalid/unknown/inactive/unlinked QR, unchanged location on failure, and manual current-location fallback are defined |
+| Acceptance cases | `READY` | Recognized canonical QR resolves the intended node; invalid QR fails safely; denied/unavailable camera preserves manual fallback; state remains coherent; routing uses the existing A* engine |
+| Map relationships and regression route | `READY` | Affected QR/node/graph relationships are identified; `QR-3F-LIBRARY → Registrar’s Office` is the selected regression route |
+| Execution dependencies | `PENDING_EXECUTION` | A camera-capable physical device, graphical browser in a secure context, and scannable canonical test label/payload are required when the subphase is started |
+
+MQA-5 is the single exact next Phase 3 subphase. Representative WebGL-device acceptance and broader physical-device evidence remain later gaps; neither is started by this readiness decision.
 
 ## Phase 3-MQA-3 keyboard-only and accessibility manual acceptance — owner completed 17 September 2026
 

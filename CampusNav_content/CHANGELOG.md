@@ -1,5 +1,30 @@
 # CampusNav Content Pack — Changelog
 
+## v3.15 — 19 September 2026
+
+Recorded the successful resumed Phase 3-MQA-4 screen-reader and authenticated Admin owner-reported manual evidence while preserving the earlier tooling-blocked attempt as history.
+
+### Evidence recorded
+- recorded `OWNER_REPORTED_SCREEN_READER_PASS` on Windows with Windows Narrator in a functioning graphical browser environment for Home, Dashboard, Facilities, Navigate, Login, CLARA, navigation elements, buttons and links, heading structure, form labels, and status/error presentation
+- recorded `SUPER_ADMIN_MANUAL_ADMIN_PASS` for the 15 named Admin surfaces plus authenticated navigation, layout readability, tables/cards, forms, labels, dialogs, validation presentation, no observed clipping/overflow blocker, session behavior, and logout behavior
+- recorded that the owner observed no application blocker in either manual smoke subset
+
+### Evidence boundaries
+- retained the recovered historical MQA-4 attempt as `PARTIAL` / `BLOCKED_BY_TOOLING`; the later successful evidence controls current status without deleting, rewriting, or replacing that record
+- retained `ACCESSDENIED_MANUAL_QA_NOT_TESTED` because no explicit AccessDenied exercise was supplied
+- retained `DEPARTMENT_ADMIN_BROWSER_NOT_TESTED` because no separate Department Admin browser session was supplied; backend/RLS evidence was not converted into browser evidence
+- made no WCAG, full accessibility, screen-reader, physical-device, QR-camera, representative WebGL-device, or broad browser-support certification claim
+
+### Status and next subphase
+- advanced Phase 3-MQA-4 to `ACCEPTED_WITH_ADVISORY`; Phase 3 remains in progress
+- selected Phase 3-MQA-5 — Physical QR/Camera and Manual-Fallback Acceptance as the single exact next canonical subphase
+- classified MQA-5 as `READY` under the Definition of Ready and `NOT_STARTED`; documented its camera-device, secure-browser, and scannable-label execution dependencies plus the `QR-3F-LIBRARY → Registrar’s Office` regression route
+- retained representative WebGL-device and broader physical-device evidence as later Phase 3 gaps
+- retained AR Guidance as `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
+
+### Scope
+- canonical tracking documentation only; no application source, package, test, fixture, credential, environment file, institutional/production data, schema, QR implementation, Emergency, AR, CLARA, PWA, commit, push, or deployment change
+
 ## v3.14 — 19 September 2026
 
 Adopted AR-Assisted Camera Navigation / AR Guidance Mode for canonical planning only.
