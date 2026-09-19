@@ -1,5 +1,31 @@
 # CampusNav Content Pack — Changelog
 
+## v3.17 — 19 September 2026
+
+Recorded successful owner-reported Phase 3-MQA-6 representative WebGL-capable and reproducible WebGL-fallback acceptance evidence.
+
+### Evidence recorded
+- recorded `OWNER_REPORTED_REPRESENTATIVE_WEBGL_CAPABLE_PASS` for production HTTPS loading, successful 3D geometry/marker rendering, implemented 3D controls and camera interactions, understandable multi-floor transitions, state-preserving 2D↔3D switching, and absence of an observed clipping, control, crash, blank-scene, infinite-loading, or unrecoverable-state blocker
+- recorded retention of the canonical `Library 3F → Registrar’s Office 5F` route across `3F → 4F → 5F` through the existing A* engine and shared spatial/navigation state
+- recorded `OWNER_REPORTED_WEBGL_FALLBACK_PASS` for the prepared isolated Edge profile with WebGL-disabling launch flags, including no fake 3D success, safe return/retention in 2D, preserved current/destination/route/state, available textual instructions, usable route-floor navigation, and no user trap
+
+### Evidence boundaries
+- recorded physical device model/type, Windows edition/version/build, GPU, exact successful-execution browser version, and exact capable/fallback native WebGL probe values as `NOT_DOCUMENTED`; preparation metadata was not promoted into execution evidence
+- recorded `EXACT_FALLBACK_WORDING_NOT_DOCUMENTED`
+- retained the canonical-versus-implementation fallback wording difference as `ADVISORY_UI_COPY_MISMATCH`; safe behavioral fallback passed, exact-copy conformance is not claimed, and no application wording was changed
+- retained the approximately 878 kB lazy 3D chunk advisory and made no performance, universal-smoothness, GPU, broad-device, broad-browser, or universal-WebGL certification claim
+- retained 3D as a presentation layer over canonical spatial data and the existing A* route; made no A*-as-AI, Three.js/WebGL route-intelligence, second-route-engine, or independent-3D-truth claim
+
+### Status and next subphase
+- advanced MQA-6 to `ACCEPTED_WITH_ADVISORY`; Phase 3 remains in progress
+- selected Phase 3-MQA-7 — Final Phase 3 Acceptance and Evidence Reconciliation as the single exact next canonical subphase
+- classified MQA-7 as `READY` under the Definition of Ready and `NOT_STARTED`; its existing inputs and reconciliation checks are documented
+- retained broader physical-device evidence, installed QR-label placement, missing execution metadata/probes, fallback-copy conformance, Department Admin/AccessDenied browser coverage, and other claims boundaries for explicit final reconciliation
+- retained AR Guidance as `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
+
+### Scope
+- canonical tracking documentation only; no application source, public asset, package, test, fixture, credential, environment file, institutional/production data, schema, route/spatial implementation, QR, Emergency, AR, CLARA, PWA, commit, push, or deployment change
+
 ## v3.16 — 19 September 2026
 
 Recorded successful owner-reported Phase 3-MQA-5 physical QR/camera and manual-fallback acceptance evidence.

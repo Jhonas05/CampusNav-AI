@@ -190,3 +190,29 @@
 - `NOT_STARTED` — no WebGL/device QA is started by this documentation update
 - `NEXT` — Phase 3-MQA-6 Representative WebGL-Capable and WebGL-Fallback Device Acceptance
 - `LATER GAPS` — broader physical-device evidence and installed QR-label placement verification
+
+## Phase 3-MQA-6 successful representative WebGL-capable and fallback evidence — owner completed 19 September 2026
+
+- `ACCEPTED_WITH_ADVISORY` — both prepared owner-reported behavioral subsets passed with no observed blocker
+- `OWNER_REPORTED_REPRESENTATIVE_WEBGL_CAPABLE_PASS` — production HTTPS Navigate loaded in a WebGL-capable browser environment; 3D loaded and rendered campus/floor geometry plus current/destination markers
+- `PASS` — Exploded, Stacked, 3F/4F/5F selection, Isolate Floor, Focus Floor, Entire Building, Reset View, orbit, zoom, pan, and applicable facility selection/focus worked; multi-floor transitions remained understandable
+- `PASS` — the existing A* route remained `Library 3F → Registrar’s Office 5F` across `3F → 4F → 5F`; 3D remained a presentation of canonical spatial/route state
+- `PASS` — 2D → 3D → 2D and return-to-3D switching preserved navigation state; no major clipping, unusable-control blocker, crash, blank scene, infinite loading state, or unrecoverable state was observed
+- `OWNER_REPORTED_WEBGL_FALLBACK_PASS` — the prepared isolated Edge profile with WebGL-disabling launch flags provided a reproducible WebGL-disabled/failure environment and showed no fake 3D success
+- `PASS` — the disabled session remained in or returned to 2D while retaining current location, Registrar’s Office, the active `3F → 4F → 5F` route, selected-floor/applicable state, textual instructions, and usable 2D route-floor navigation; the user was not trapped
+- `NOT_DOCUMENTED` — physical device model/type, Windows edition/version/build, GPU, exact successful-execution browser version, and exact capable/fallback native WebGL probe values
+- `EXACT_FALLBACK_WORDING_NOT_DOCUMENTED` — the exact message visually observed during the successful disabled-session run was not supplied
+- `ADVISORY_UI_COPY_MISMATCH` — canonical copy is `3D view unavailable; switched to 2D.` while implementation/precheck copy is `3D view is unavailable on this device. CampusNav has switched to 2D.`; safe fallback behavior passed, but exact-copy conformance is not claimed and the mismatch remains for final reconciliation
+- `ADVISORY` — the approximately 878 kB lazy 3D chunk remains; successful loading is not performance, universal-smoothness, GPU, broad-device, broad-browser, or universal-WebGL certification
+- `NOT_CLAIMED` — A*-as-AI, Three.js/WebGL route intelligence, separate 3D routing, independent 3D spatial truth, broad compatibility, or performance certification
+- `DOCUMENTATION ONLY` — no application/source/package/test/route/spatial-data/environment/deployment/production-data/AR/CLARA/PWA change
+
+## Phase 3-MQA-7 final Phase 3 acceptance and evidence reconciliation readiness — 19 September 2026
+
+- `READY` — goal, evidence sources, claims boundaries, gap handling, and reconciliation acceptance checks satisfy `72-definition-of-ready.md`
+- `READY` — existing production/deployment, deterministic, and owner-reported MQA-1 through MQA-6 evidence supplies the required inputs; undocumented details remain undocumented
+- `READY` — no credential, authenticated role, institutional-data write, new sensor collection, application change, deployment, or external environment is required to start reconciliation
+- `NOT_STARTED` — this update records MQA-6 evidence and readiness only; it does not perform final Phase 3 reconciliation
+- `NEXT` — Phase 3-MQA-7 Final Phase 3 Acceptance and Evidence Reconciliation
+- `RECONCILIATION INPUTS` — fallback-copy mismatch, approximately 878 kB lazy chunk, broader physical-device evidence, installed QR-label placement, Department Admin/AccessDenied browser gaps, missing device/browser/GPU/probe details, and all other retained claims boundaries
+- `DEFERRED` — AR Guidance remains `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`

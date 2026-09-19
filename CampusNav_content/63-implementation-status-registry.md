@@ -17,7 +17,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 | Emergency | `DEFERRED_CONDITIONAL` | AR may only present an already-approved emergency route after separate canonical and safety approval; no normal-route fallback |
 | Implementation evidence | `NOT_IMPLEMENTED` | No AR source, route-step adapter, camera-guidance shell, overlay, schema, dependency, test, or deployment is claimed by this documentation task |
 | Definition of Ready | `NOT_READY` | Route-step semantics, device matrix, camera/QR lifecycle, privacy/security verification, performance thresholds, accessibility plan, and emergency-stage authority remain unresolved |
-| Active sequencing | `DEFERRED` | Current Phase 3 remains `IN PROGRESS`; MQA-5 is `ACCEPTED_WITH_ADVISORY`, and Phase 3-MQA-6 Representative WebGL-Capable and WebGL-Fallback Device Acceptance is the exact next canonical work |
+| Active sequencing | `DEFERRED` | Current Phase 3 remains `IN PROGRESS`; MQA-6 is `ACCEPTED_WITH_ADVISORY`, and Phase 3-MQA-7 Final Phase 3 Acceptance and Evidence Reconciliation is the exact next canonical work |
 
 `74-ar-assisted-navigation-contract.md` is a future adoption contract, not implementation proof. Do not start AR-0 or any later AR stage until a future roadmap authorization exists and the Definition of Ready passes.
 
@@ -124,6 +124,45 @@ MQA-5 is complete at the supplied owner-reported physical-evidence level. Its de
 | Execution dependencies | `PENDING_EXECUTION` | Documented device/OS/browser evidence is required for a representative WebGL-capable device and a real reproducible WebGL-disabled/unsupported/failure environment |
 
 MQA-6 is the single exact next Phase 3 subphase and is not started. Broader physical-device evidence and installed QR-label placement verification remain later gaps.
+
+## Phase 3-MQA-6 representative WebGL-capable and WebGL-fallback device acceptance — owner completed 19 September 2026
+
+**Subset classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Area | Classification | Owner-provided evidence / boundary |
+|---|---|---|
+| WebGL-capable execution | `OWNER_REPORTED_REPRESENTATIVE_WEBGL_CAPABLE_PASS` | Production Navigate loaded over HTTPS in a WebGL-capable browser environment; 3D loaded and rendered campus/floor geometry plus current/destination markers |
+| 3D controls/interactions | `ACCEPTED` | Exploded, Stacked, 3F/4F/5F selection, Isolate Floor, Focus Floor, Entire Building, Reset View, orbit, zoom, pan, and applicable facility selection/focus passed; no major clipping or unusable-control blocker was observed |
+| Route and state | `ACCEPTED` | `Library 3F → Registrar’s Office 5F` retained the canonical `3F → 4F → 5F` A* route; multi-floor transitions remained understandable and 2D↔3D plus return-to-3D switching preserved navigation state |
+| Capable-session failure outcome | `NO_APPLICATION_BLOCKER_OBSERVED` | No crash, blank scene, infinite loading state, or unrecoverable state occurred; the user could return to 2D and continue navigation |
+| WebGL-disabled execution | `OWNER_REPORTED_WEBGL_FALLBACK_PASS` | The prepared isolated Edge profile with WebGL-disabling launch flags produced a reproducible failure environment and did not present fake 3D success |
+| Fallback continuity | `ACCEPTED` | The app remained in or returned to 2D without crashing, going permanently blank, or loading indefinitely; current location, Registrar’s Office, active `3F → 4F → 5F` route, selected-floor/applicable state, textual instructions, and 2D route-floor navigation remained usable |
+| Routing/spatial architecture | `PRESERVED` | 3D remained a presentation layer over the canonical spatial data and existing A* route sequence; no second route engine, independent spatial truth, or AI-routing claim is introduced |
+| Execution metadata | `NOT_DOCUMENTED` | Physical device model/type, Windows edition/version/build, GPU, and exact browser version from the successful execution were not supplied; preparation-time browser metadata is not promoted into execution evidence |
+| Native WebGL probes | `NOT_DOCUMENTED` | Exact capable-session and fallback-session native WebGL probe values were not supplied; no values are inferred |
+| Exact fallback wording | `EXACT_FALLBACK_WORDING_NOT_DOCUMENTED` | The exact message visually observed during the successful disabled-session run was not supplied |
+| Copy conformance | `ADVISORY_UI_COPY_MISMATCH` | Canonical copy is `3D view unavailable; switched to 2D.`; implementation/precheck copy is `3D view is unavailable on this device. CampusNav has switched to 2D.` The equivalent safe behavior passed, so this is retained for final reconciliation rather than classified as a behavioral blocker or silently changed |
+| Performance/device claims | `NOT_CLAIMED` | The approximately 878 kB lazy 3D chunk advisory remains; no performance, universal-smoothness, GPU, broad-device, broad-browser, or universal-WebGL certification is added |
+| Change scope | `DOCUMENTATION_ONLY` | No application, source, package, test, route, spatial data, environment, deployment, production-data, AR, CLARA, or PWA change is part of this evidence record |
+
+MQA-6 is complete at the supplied owner-reported representative-evidence level. Its execution-detail, native-probe, exact-copy, performance, and certification boundaries remain explicit advisories. Phase 3 remains **IN PROGRESS**.
+
+## Phase 3-MQA-7 final Phase 3 acceptance and evidence reconciliation — next authorized subphase
+
+**Readiness:** `READY`
+
+**Execution:** `NOT_STARTED`
+
+| Definition-of-Ready area | Result | Basis / boundary |
+|---|---|---|
+| Goal and scope | `READY` | Reconcile the accepted production baseline and MQA-1 through MQA-6 evidence, distinguish blockers from advisories, and determine the evidence-aware final Phase 3 status without starting a feature |
+| Sources/evidence | `READY` | Current roadmap, Definition of Done, limitations, compatibility/acceptance contracts, status registry, evaluation gaps, quality gates, deployment evidence, deterministic results, and owner-reported MQA records are identified |
+| Security/privacy/data | `READY` | Reconciliation requires no credentials, authenticated role, institutional-data write, new sensor collection, fixture, schema change, or private-data handling |
+| Error/gap handling | `READY` | Missing details remain `NOT_DOCUMENTED`; unresolved items must be classified as blockers, advisories, deferred work, or decision/data dependencies without inventing evidence |
+| Acceptance cases | `READY` | Cross-document consistency; explicit treatment of the fallback-copy mismatch, lazy-chunk advisory, broader physical-device evidence, installed QR-label placement, Department Admin/AccessDenied browser gaps, and all claims boundaries; one final Phase 3 status and next-step decision |
+| Execution dependencies | `READY` | Required reconciliation inputs already exist in the canonical evidence record; no external environment is needed to start the review |
+
+MQA-7 is the single exact next Phase 3 subphase and is not started by this update. Broader physical-device evidence and installed QR-label placement verification remain unresolved inputs/gaps; AR Guidance remains `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`.
 
 ## Phase 3-MQA-3 keyboard-only and accessibility manual acceptance — owner completed 17 September 2026
 
