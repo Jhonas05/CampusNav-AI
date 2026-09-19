@@ -57,3 +57,13 @@ Tablet/mobile physical-device details, screenshots, browser/OS information, per-
 The owner subsequently completed the keyboard-only/accessibility manual subset on the current approved production baseline and reported the tested behavior acceptable with no blocker requiring an application change. `OWNER_REPORTED_KEYBOARD_ACCESSIBILITY_PASS` covers, where applicable, keyboard-only navigation, Tab/Shift+Tab, Enter, Space, Escape/dialog behavior, focus visibility, forms/navigation usability, no observed keyboard blocker/trap, readable contrast, reduced motion, approximately 200% zoom, and labels/headings/status/error presentation.
 
 Detailed per-control and per-screen results, screenshots, exact browser/OS, assistive-technology configuration, and formal accessibility measurements are `NOT SPECIFICALLY_DOCUMENTED`. `SCREEN_READER_QA_PENDING` remains because no explicit screen-reader evidence was supplied. No WCAG, physical tablet/mobile, QR-camera, representative WebGL-device, or exact browser/OS certification is claimed. Authenticated Admin state and detailed protected-form behavior also remain undocumented. These boundaries do not change the separate adviser-dependent research-methodology gap.
+
+### Phase 3-MQA-4 historical evidence recovery — 19 September 2026
+
+A previous-laptop MQA-4 attempt, whose original attempt date was not supplied and whose documentation changes were not pushed, is restored as `PARTIAL` / `BLOCKED_BY_TOOLING`. Definition of Ready remained `READY`, but the browser failed before production launch with `failed to write kernel assets` (OS error 3). The failure was classified as environmental/browser-tooling failure, and no application defect was found.
+
+No successful screen-reader environment or authenticated browser Admin session was launched. `SCREEN_READER_QA_PENDING` remains, requested Admin graphical/manual checks remain `IMPLEMENTED_UNVERIFIED`, and no `SUPER_ADMIN_MANUAL_ADMIN_PASS` or `DEPARTMENT_ADMIN_MANUAL_BROWSER_PASS` is claimed. AccessDenied, session, and logout behavior were not manually tested during the attempt.
+
+No test fixtures were created, no institutional records were mutated, no temporary credentials were requested or used, and `.env.phase8a.session` was absent, untracked, and ignored. No code fix or production deployment occurred. No WCAG conformance, physical-device, QR-camera, representative WebGL-device, or exact browser/OS certification is added.
+
+MQA-4 remains the current unfinished subphase. The remaining evidence gap is real screen-reader manual acceptance and real authenticated Admin manual acceptance in a functioning environment. This recovery does not change the separate adviser-dependent research-methodology gap.

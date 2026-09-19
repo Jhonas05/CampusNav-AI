@@ -125,3 +125,20 @@
 - `NOT_CLAIMED` — WCAG conformance, physical tablet/mobile certification, physical QR/camera PASS, representative WebGL-device PASS, and exact browser/OS certification
 - `NO CODE CHANGE / NO REDEPLOY` — evidence recording only; existing production equivalence remains unchanged
 - `NEXT` — Phase 3-MQA-4 Screen-Reader and Authenticated Admin Manual Acceptance; `READY` under the Definition of Ready, with screen-reader/browser and possible temporary credential execution dependencies
+
+## Phase 3-MQA-4 historical attempt evidence — recovered 19 September 2026
+
+- `READY` — Definition of Ready passed before execution; the MQA-4 goal, contracts, security/privacy boundaries, and evidence requirements were defined
+- `PARTIAL / BLOCKED_BY_TOOLING` — historical execution did not complete
+- `BLOCKED_BY_TOOLING` — browser failed before production launch with `failed to write kernel assets` (OS error 3)
+- `SCREEN_READER_QA_PENDING` — no successful screen-reader environment was launched
+- `IMPLEMENTED_UNVERIFIED` — no authenticated browser Admin session was completed; requested graphical/manual Admin checks remain unverified
+- `NOT_CLAIMED` — no `SUPER_ADMIN_MANUAL_ADMIN_PASS` or `DEPARTMENT_ADMIN_MANUAL_BROWSER_PASS`
+- `NOT TESTED MANUALLY` — AccessDenied, session, and logout behavior were not exercised during the attempt
+- `NO FIXTURES / NO DATA MUTATION` — no test fixtures were created and no institutional records were mutated
+- `NO CREDENTIAL USE` — no temporary credentials were requested or used; `.env.phase8a.session` was absent, untracked, and ignored
+- `NO APPLICATION DEFECT FOUND` — failure was environmental/browser tooling; no code fix was made
+- `NO DEPLOYMENT` — no production deployment occurred
+- `NOT_CLAIMED` — WCAG conformance, physical-device certification, QR-camera acceptance, representative WebGL-device acceptance, and exact browser/OS certification
+- `CURRENT UNFINISHED SUBPHASE` — MQA-4 remains open; historical tooling failure is not successful acceptance
+- `NEXT` — complete real screen-reader manual acceptance and real authenticated Admin manual acceptance in a functioning environment

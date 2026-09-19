@@ -16,6 +16,7 @@
 ## Optional/enhancement
 - outdoor GPS location continuity
 - BLE indoor approximate positioning
+- AR-Assisted Camera Navigation / AR Guidance Mode as a future presentation layer over the existing A* route; planning only, not implemented or ready
 - web push
 - SMS gateway
 - advanced visual floor-plan editor/rollback if not completed in the core build

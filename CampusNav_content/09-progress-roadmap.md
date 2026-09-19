@@ -90,7 +90,7 @@ This checkpoint is presentation-only and does not authorize Phase 3 or any new c
 
 ## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
-**Status:** IN PROGRESS — exact-revision production deployment plus Phase 3-MQA-1, MQA-2, and MQA-3 manual acceptance evidence recorded; screen-reader, authenticated Admin detail, and physical-device QA remain pending
+**Status:** IN PROGRESS — exact-revision production deployment plus Phase 3-MQA-1, MQA-2, and MQA-3 manual acceptance evidence recorded; the recovered historical Phase 3-MQA-4 attempt was `PARTIAL` / `BLOCKED_BY_TOOLING`; screen-reader, authenticated Admin detail, and physical-device QA remain pending
 
 ### Release-candidate Checkpoint A — prepared 16 September 2026
 
@@ -216,7 +216,35 @@ Evidence boundaries:
 - no WCAG conformance, physical tablet/mobile certification, physical QR/camera PASS, representative WebGL-device PASS, or exact browser/OS certification is claimed
 - authenticated Admin was within earlier general owner-reported screen scope, but authentication state and detailed protected-form behavior remain `NOT SPECIFICALLY_DOCUMENTED`
 
-Phase 3 remains **IN PROGRESS** and may advance to **Phase 3-MQA-4 — Screen-Reader and Authenticated Admin Manual Acceptance**. Under `72-definition-of-ready.md`, that subset is `READY`: its goal, contracts, boundaries, security context, and acceptance evidence are defined. Execution still requires a functioning screen-reader/browser environment and temporary ignored-session credentials only if authenticated Admin verification needs them. Physical QR/camera and representative WebGL-device acceptance remain later Phase 3 manual-QA work.
+Phase 3 remains **IN PROGRESS**, and **Phase 3-MQA-4 — Screen-Reader and Authenticated Admin Manual Acceptance** is the current unfinished subphase. Under `72-definition-of-ready.md`, that subset is `READY`: its goal, contracts, boundaries, security context, and acceptance evidence are defined. Completion still requires a functioning screen-reader/browser environment and temporary ignored-session credentials only if authenticated Admin verification needs them. Physical QR/camera and representative WebGL-device acceptance remain later Phase 3 manual-QA work.
+
+### Phase 3-MQA-4 — Screen-Reader and Authenticated Admin Manual Acceptance — historical attempt recovered 19 September 2026
+
+**Classification:** `PARTIAL` / `BLOCKED_BY_TOOLING`
+
+This documentation-only recovery records a previous-laptop execution attempt whose original documentation changes were not pushed. The original attempt date was not supplied. It is historical evidence, not a new execution attempt.
+
+Readiness and execution result:
+- Definition of Ready: `READY`
+- execution result: `BLOCKED_BY_TOOLING`
+- the browser failed before production launch with `failed to write kernel assets` (OS error 3)
+- the failure was environmental/browser-tooling failure; no application defect was found
+
+Evidence boundaries:
+- `SCREEN_READER_QA_PENDING`; no successful screen-reader environment was launched
+- no authenticated browser Admin session was completed
+- no `SUPER_ADMIN_MANUAL_ADMIN_PASS` or `DEPARTMENT_ADMIN_MANUAL_BROWSER_PASS` is claimed
+- requested Admin graphical/manual checks remain `IMPLEMENTED_UNVERIFIED`
+- AccessDenied, session, and logout behavior were not manually tested during that attempt
+- no WCAG conformance, physical-device, QR-camera, representative WebGL-device, or exact browser/OS certification is claimed
+
+Execution safety boundary:
+- no test fixtures were created and no institutional records were mutated
+- no temporary credentials were requested or used
+- `.env.phase8a.session` was absent, untracked, and ignored
+- no code fix or production deployment occurred
+
+Phase 3 remains **IN PROGRESS**. Phase 3-MQA-4 remains the current unfinished subphase and the exact next canonical work: complete real screen-reader manual acceptance and real authenticated Admin manual acceptance in a functioning environment. This recovered tooling failure does not authorize later QR/camera, WebGL/device, CLARA, PWA, reports, map-editor, GPS/BLE, or dependency-upgrade work.
 
 ## Later canonical work candidates
 
@@ -226,6 +254,13 @@ Do not assign or start these as numbered phases until Phase 2 is approved and co
 - map administration, calibration, versioning, and coherent rollback
 - privacy-conscious user reporting and analytics
 - grounded server-side CLARA tool integration after its internal services and authorization are accepted
+- AR-Assisted Camera Navigation / AR Guidance Mode under `74-ar-assisted-navigation-contract.md`
+
+### AR-Assisted Camera Navigation planning adoption — 19 September 2026
+
+**Status:** `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
+
+The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 remains **IN PROGRESS**, Phase 3-MQA-4 remains the current unfinished subphase, and its real screen-reader plus authenticated Admin manual acceptance remains the exact next canonical work.
 
 ## Blocked by institutional data or decision
 

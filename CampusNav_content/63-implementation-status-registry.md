@@ -3,6 +3,46 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## AR-Assisted Camera Navigation / AR Guidance Mode — canonical planning adoption 19 September 2026
+
+**Classification:** `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
+
+| Area | Classification | Evidence / boundary |
+|---|---|---|
+| Owner authorization | `PLANNING_ONLY` | `DEC-AR-001` authorizes canonical concept documentation, not implementation |
+| Routing architecture | `REQUIRED_FUTURE_CONTRACT` | AR Guidance must consume the existing A* route sequence and canonical spatial data; no second routing engine or coordinate truth is permitted |
+| Positioning | `REQUIRED_FUTURE_CONTRACT` | QR checkpoint is primary and manual confirmation is fallback; no continuous indoor tracking or autonomous camera localization claim |
+| Camera/privacy | `REQUIRED_FUTURE_CONTRACT` | Explicit permission, local use, no recording/upload/persistence by default, and no facial/person recognition |
+| Accessibility/fallback | `REQUIRED_FUTURE_CONTRACT` | 2D/3D/text alternatives and QR/manual verification remain available; unsupported camera behavior must fail safely |
+| Emergency | `DEFERRED_CONDITIONAL` | AR may only present an already-approved emergency route after separate canonical and safety approval; no normal-route fallback |
+| Implementation evidence | `NOT_IMPLEMENTED` | No AR source, route-step adapter, camera-guidance shell, overlay, schema, dependency, test, or deployment is claimed by this documentation task |
+| Definition of Ready | `NOT_READY` | Route-step semantics, device matrix, camera/QR lifecycle, privacy/security verification, performance thresholds, accessibility plan, and emergency-stage authority remain unresolved |
+| Active sequencing | `DEFERRED` | Current Phase 3 remains `IN PROGRESS`; Phase 3-MQA-4 remains the exact next canonical work |
+
+`74-ar-assisted-navigation-contract.md` is a future adoption contract, not implementation proof. Do not start AR-0 or any later AR stage until a future roadmap authorization exists and the Definition of Ready passes.
+
+## Phase 3-MQA-4 screen-reader and authenticated Admin manual acceptance — historical attempt recovered 19 September 2026
+
+**Subset classification:** `PARTIAL` / `BLOCKED_BY_TOOLING`
+
+The original attempt date was not supplied. This section restores previous-laptop evidence whose documentation changes were not pushed; it does not describe a new execution attempt.
+
+| Area | Classification | Historical evidence / boundary |
+|---|---|---|
+| Definition of Ready | `READY` | Goal, contracts, accessibility boundary, Auth/Admin security context, and required acceptance evidence were defined before execution |
+| Execution | `BLOCKED_BY_TOOLING` | The browser failed before production launch with `failed to write kernel assets` (OS error 3) |
+| Screen reader | `SCREEN_READER_QA_PENDING` | No successful screen-reader environment was launched; no screen-reader manual acceptance evidence exists |
+| Authenticated Admin | `IMPLEMENTED_UNVERIFIED` | No authenticated browser Admin session was completed; requested graphical/manual Admin checks remain unverified |
+| Role-specific Admin claims | `NOT_CLAIMED` | No `SUPER_ADMIN_MANUAL_ADMIN_PASS` or `DEPARTMENT_ADMIN_MANUAL_BROWSER_PASS` is claimed |
+| Auth/session checks | `NOT_TESTED_MANUALLY` | AccessDenied, session, and logout behavior were not manually tested during this attempt |
+| Fixtures and institutional data | `UNCHANGED` | No test fixtures were created and no institutional records were mutated |
+| Credentials and session file | `NOT_USED` | No temporary credentials were requested or used; `.env.phase8a.session` was absent, untracked, and ignored |
+| Defect outcome | `NO_APPLICATION_DEFECT_FOUND` | Failure was classified as environmental/browser-tooling failure; no code fix was justified or made |
+| Deployment | `NOT_PERFORMED` | No production deployment occurred |
+| Conformance/device claims | `NOT_CLAIMED` | No WCAG conformance, physical-device certification, QR-camera acceptance, representative WebGL-device acceptance, or exact browser/OS certification is claimed |
+
+This historical result does not close or supersede MQA-4. Phase 3 remains **IN PROGRESS**, and Phase 3-MQA-4 remains the current unfinished subphase. The exact next canonical work is real screen-reader manual acceptance plus real authenticated Admin manual acceptance in a functioning environment.
+
 ## Phase 3-MQA-3 keyboard-only and accessibility manual acceptance — owner completed 17 September 2026
 
 **Subset classification:** `ACCEPTED_WITH_ADVISORY`

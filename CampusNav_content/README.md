@@ -23,8 +23,8 @@ A ready-to-paste bridge is provided in `AGENTS-INTEGRATION.md`.
 ### Engineering/operations governance
 `31–62` — environment, search, demo data, IDs, sources, traceability, agent behavior, module boundaries, coding/state/API/validation/auth/storage, approval/map versioning, notifications/audit/privacy, observability, backup, release/Git/dependencies, compatibility/timezone, fixtures, acceptance/security, scope/NFR/deployment
 
-### Status, thesis, and governance
-`63–73` — implementation truth, unresolved decisions, glossary, use cases, flows, ownership, risks, research-evaluation gap, documentation governance, Definition of Ready, release quality gates
+### Status, thesis, governance, and future adoption contracts
+`63–74` — implementation truth, unresolved decisions, glossary, use cases, flows, ownership, risks, research-evaluation gap, documentation governance, Definition of Ready, release quality gates, and the planning-only AR-assisted navigation contract
 
 ## Core invariant
 **One campus dataset + one routing engine.** 2D, 3D, QR, Dashboard-linked navigation, schedules/personnel routing, emergency mode, Admin, and future CLARA must reference the same canonical records and route logic.

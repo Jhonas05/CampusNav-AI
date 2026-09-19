@@ -105,6 +105,21 @@ Rules:
 - the JPG remains historical/legacy evidence outside runtime `public/`
 - any future visual-content change requires a new owner/institutional asset decision
 
+## DEC-AR-001 — AR-Assisted Camera Navigation is approved for canonical planning only
+**Status:** OWNER APPROVED FOR PLANNING / IMPLEMENTATION NOT AUTHORIZED — 19 Sep 2026
+
+CampusNav may plan an optional AR-Assisted Camera Navigation / AR Guidance Mode under `74-ar-assisted-navigation-contract.md`.
+
+Decision boundaries:
+- AR Guidance is a presentation layer over the existing canonical A* route; it is not a routing engine
+- QR checkpoints and manual confirmation remain the location-verification truth
+- no exact continuous indoor tracking, autonomous localization, or invented orientation is claimed
+- emergency presentation may consume only an already-approved emergency route and remains separately gated
+- camera use is explicit, local-first, non-recorded/non-uploaded by default, with no facial/person recognition
+- 2D, 3D, and textual guidance remain available fallbacks
+- the feature is `NOT_IMPLEMENTED`, `DEFERRED`, and `NOT_READY`
+- current Phase 3 and unfinished MQA-4 remain controlling; no AR implementation stage is authorized
+
 ## How to add a decision
 Use:
 - ID

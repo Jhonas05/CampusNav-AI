@@ -21,6 +21,15 @@ Only unresolved decisions belong here. Resolved decisions move to `29-decision-l
 - Which optional delivery channels (web push/SMS) are in final scope?
 - Which concrete browser/device matrix must pass before the responsive implementation may be claimed as production-verified?
 
+### AR-Assisted Camera Navigation planning
+- After current Phase 3 acceptance, when—if ever—may AR-0 be authorized on the roadmap?
+- What final maneuver-derivation and approximate-distance semantics are approved for the route-step adapter?
+- Which representative mobile browsers, devices, cameras, and permission states must pass?
+- How must Camera Guidance and QR scanning share, stop, or reacquire the camera stream?
+- What verification proves that frames are not recorded, uploaded, persisted, or analyzed beyond approved local guidance?
+- What performance/resource-release thresholds and accessibility test plan must pass?
+- Is AR-7 emergency presentation permitted, and which safety authority must approve it?
+
 ## Policy
 - retention periods for audit/check-in/CLARA/report data
 - final backup/recovery expectations under the selected provider plan

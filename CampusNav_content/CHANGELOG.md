@@ -1,5 +1,52 @@
 # CampusNav Content Pack — Changelog
 
+## v3.14 — 19 September 2026
+
+Adopted AR-Assisted Camera Navigation / AR Guidance Mode for canonical planning only.
+
+### Added
+- added `74-ar-assisted-navigation-contract.md` as the planning-only architecture, positioning, QR, emergency, camera/privacy, accessibility, performance, staged-delivery, flow, acceptance, and thesis-claims contract
+- recorded `DEC-AR-001`, approving the concept for documentation while explicitly withholding implementation authorization
+- registered the proposed flow, optional-scope classification, implementation status, Definition-of-Ready gaps, open decisions, and risk mitigations
+
+### Status and boundaries
+- classified AR Guidance as `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
+- retained the existing A* engine and canonical spatial data as the only route/source truth
+- retained QR/manual verification and prohibited continuous indoor tracking, invented position/orientation, and AI/pathfinding claims
+- retained strict emergency-approved routing and made AR emergency presentation a separately gated conditional stage
+- defined explicit, local-first, non-recorded/non-uploaded camera use by default with no facial/person recognition
+- retained 2D/3D/text navigation and accessibility fallbacks
+- kept ARCore, ARKit, BLE, Wi-Fi fingerprinting, UWB, VPS, SLAM, computer vision, object/person recognition, new routing, and hardware presence systems out of initial scope
+
+### Scope
+- documentation only; no application source, A*, QR, Emergency, Supabase, dependency, schema, test, build, production data, commit, push, or deployment change
+- no AR stage was started
+- current Phase 3 remains in progress, MQA-4 remains unfinished, and real screen-reader plus authenticated Admin manual acceptance remains the exact next canonical work
+
+## v3.13 — 19 September 2026
+
+Recovered the missing historical Phase 3-MQA-4 screen-reader and authenticated Admin manual-acceptance attempt from the previous laptop. The original attempt date was not supplied. This is documentation recovery, not a new execution attempt.
+
+### Historical result recorded
+- retained Definition of Ready as `READY`
+- recorded MQA-4 as `PARTIAL` / `BLOCKED_BY_TOOLING`
+- recorded browser failure before production launch: `failed to write kernel assets` (OS error 3)
+- classified the failure as environmental/browser tooling and recorded that no application defect was found
+
+### Evidence boundaries retained
+- retained `SCREEN_READER_QA_PENDING`; no successful screen-reader environment was launched
+- retained authenticated Admin graphical/manual checks as `IMPLEMENTED_UNVERIFIED`; no authenticated browser Admin session completed
+- made no `SUPER_ADMIN_MANUAL_ADMIN_PASS` or `DEPARTMENT_ADMIN_MANUAL_BROWSER_PASS` claim
+- recorded that AccessDenied, session, and logout behavior were not manually tested during the attempt
+- made no WCAG, physical-device, QR-camera, representative WebGL-device, or exact browser/OS certification claim
+
+### Safety and scope
+- recorded that no fixtures were created, no institutional records were mutated, and no temporary credentials were requested or used
+- recorded that `.env.phase8a.session` was absent, untracked, and ignored
+- no application code, dependency, schema, test, production data, code fix, commit, push, or deployment action was performed
+- Phase 3 remains in progress; MQA-4 remains the current unfinished subphase
+- exact next canonical work remains real screen-reader manual acceptance plus real authenticated Admin manual acceptance in a functioning environment
+
 ## v3.12 — 17 September 2026
 
 Recorded owner-provided Phase 3-MQA-3 keyboard-only and accessibility manual acceptance evidence.

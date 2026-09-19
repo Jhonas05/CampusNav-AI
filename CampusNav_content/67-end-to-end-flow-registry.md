@@ -39,3 +39,19 @@
 3. Audit/version record is created as required.
 4. Regression/validation checks run for affected domain.
 5. Public system reads the updated canonical data.
+
+## Proposed Flow G — AR-assisted camera guidance
+
+**Status:** `PROPOSED / NOT_IMPLEMENTED / NOT_READY`
+
+1. User selects a destination through the existing facility/search/navigation flow.
+2. User scans a valid QR checkpoint or confirms a current location manually.
+3. Existing A* computes the canonical route.
+4. User optionally selects AR Guidance instead of, or alongside, 2D/3D presentation.
+5. User explicitly grants camera permission; denied/unsupported states return safely to 2D/text guidance.
+6. AR Guidance presents derived maneuver, approximate distance, floor, destination, and route-progress context without claiming continuous position.
+7. When confidence is insufficient or after a floor transition, the user re-verifies by QR or manual confirmation.
+8. Existing A* recalculates from the newly verified canonical node and updates all presentation modes.
+9. Arrival is shown from the canonical route result.
+
+See `74-ar-assisted-navigation-contract.md`. This proposed flow does not authorize implementation.
