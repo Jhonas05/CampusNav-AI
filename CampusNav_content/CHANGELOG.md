@@ -1,5 +1,21 @@
 # CampusNav Content Pack — Changelog
 
+## v3.25 — 20 September 2026
+
+Implemented and verified **Phase 4-FS-1B1 — Provider-Neutral Facility-Profile Read Path** without starting the remaining FS-1B work.
+
+### Implementation
+- added a browser-safe, read-only `getFacilityById` service that validates canonical local identity before consulting an operational provider
+- added common local/null and Supabase provider surfaces; the Supabase implementation reads only `public_facility_operational_profiles` through the existing public client boundary
+- added an explicit operational-profile and provenance whitelist so provider fields cannot override canonical identity, floor, spatial, map, navigation, QR, routing, or emergency truth
+- added normalized configured, unavailable, not-found, and sanitized provider-unavailable outcomes without raw provider-error disclosure
+
+### Verification and scope
+- added deterministic FS-1B1 coverage for provider parity, missing/configured profiles, invalid-ID short-circuiting, pending/demo provenance, malicious overlay rejection, safe failures, public-view-only access, no writes, and canonical/spatial immutability
+- passed the complete requested Node 22 regression matrix, route rendering, ESLint, typecheck, and production build; the existing approximately 878 kB lazy 3D chunk advisory remains
+- changed no schema, database record, fixture, official institutional data, UI, navigation behavior, dependency, service/alias/mapping read path, later Phase 4 slice, commit, push, or deployment
+- classified FS-1B1 as `IMPLEMENTED_VERIFIED`; full FS-1B remains `IN_PROGRESS`, and its next slice requires separate authorization
+
 ## v3.24 — 20 September 2026
 
 Completed linked acceptance for **Phase 4-FS-1A — Schema, RLS, Provenance, and Audit Foundation** as `ACCEPTED_WITH_ADVISORY` without starting FS-1B.
