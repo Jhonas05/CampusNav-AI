@@ -3,6 +3,26 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Owner-approved proposed final defense scope — 19 September 2026
+
+**Decision classification:** `OWNER APPROVED / ADVISER CONFIRMATION REQUIRED`
+
+`DEC-DEFENSE-001` classifies the accepted responsive web, shared GF–5F/A*/2D/3D/multi-floor navigation, QR/manual positioning, Facilities, Dashboard, Auth/RBAC, Admin CMS, academic/personnel engine, accepted Supabase foundation, and strict Emergency/safe-no-route behavior as the owner-proposed `CORE_FOR_DEFENSE`. This classification neither upgrades implementation evidence nor supplies institutional data or approval.
+
+| Area | Defense-scope classification | Implementation/evidence boundary |
+|---|---|---|
+| Owner-proposed core | `CORE_FOR_DEFENSE` | Existing accepted evidence and advisories continue to control; no new implementation claim |
+| Grounded CLARA/Groq | `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION` | Current conservative/local matcher remains `PARTIAL`; it is not grounded production AI, production-ready LLM integration, or a completed AI assistant |
+| PWA/offline emergency cache | `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION` | Current status remains manifest-only/`MISSING` for actual offline caching |
+| AR Guidance | `PROPOSED / OPTIONAL / DEFERRED / NOT_IMPLEMENTED / NOT_READY` | Planning-only; AR-0 through AR-7 remain unauthorized |
+| Reports, advanced map editor/version rollback, expanded positioning/delivery/hardware/photorealism | `OPTIONAL / DEFERRED` | No implementation authorization; retain current registry statuses |
+| Defense data | `OWNER APPROVED / ADVISER CONFIRMATION REQUIRED` | Verified claims require authority/provenance; demo/sample records require visible labels; unavailable/pending states remain valid; emergency and personnel truth cannot be fabricated |
+| Title and research/evaluation | `ADVISER_APPROVAL_REQUIRED` | No adviser decision or academic methodology is supplied by the owner decision |
+
+**Exact next actionable work:** Prepare Adviser Confirmation Package.
+
+**Definition of Ready:** `READY` for documentation/request-package preparation. Required questions and canonical evidence are identified. Feature/data implementation remains `NOT_READY` / `BLOCKED` until the relevant adviser or institutional decisions exist and a separate implementation task passes Definition of Ready.
+
 ## Phase 3-MQA-7 final acceptance and evidence reconciliation — completed 19 September 2026
 
 **Phase 3 classification:** `COMPLETE — ACCEPTED_WITH_ADVISORY`
@@ -39,7 +59,7 @@ The final-system Definition of Done remains incomplete for its explicitly `UNSAT
 | Emergency | `DEFERRED_CONDITIONAL` | AR may only present an already-approved emergency route after separate canonical and safety approval; no normal-route fallback |
 | Implementation evidence | `NOT_IMPLEMENTED` | No AR source, route-step adapter, camera-guidance shell, overlay, schema, dependency, test, or deployment is claimed by this documentation task |
 | Definition of Ready | `NOT_READY` | Route-step semantics, device matrix, camera/QR lifecycle, privacy/security verification, performance thresholds, accessibility plan, and emergency-stage authority remain unresolved |
-| Active sequencing | `DEFERRED` | Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`; the Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate is next, and no AR implementation is authorized |
+| Active sequencing | `DEFERRED` | Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`; `DEC-DEFENSE-001` excludes AR from the proposed defense core, Prepare Adviser Confirmation Package is next, and no AR implementation is authorized |
 
 `74-ar-assisted-navigation-contract.md` is a future adoption contract, not implementation proof. Do not start AR-0 or any later AR stage until a future roadmap authorization exists and the Definition of Ready passes.
 

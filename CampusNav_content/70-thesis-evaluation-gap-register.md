@@ -111,3 +111,11 @@ Remaining items are separated as follows:
 - **deferred/outside Phase 3:** grounded CLARA integration, PWA/offline emergency caching, map editor/version rollback, reports/analytics, AR Guidance, GPS/BLE/UWB, and other optional expansion
 
 These distinctions close Phase 3 without closing the final-system thesis/demo Definition of Done and without treating the unresolved research-methodology gap as a software defect. The exact next workstream is the **Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate**. It is `READY` for decision coordination, while downstream implementation is `NOT_READY` / `BLOCKED` until applicable adviser approvals, authorized institutional inputs/sign-offs, final defense-scope decisions, and a verified/demo-labeled rehearsal plan exist or are explicitly deferred.
+
+## Owner-approved proposed defense baseline — 19 September 2026
+
+`DEC-DEFENSE-001` records the owner's proposed `CORE_FOR_DEFENSE` baseline, conditional deferral of grounded CLARA and PWA/offline pending adviser direction, deferral of AR and other optional expansions, and proposed verified/demo/unavailable data policy. This owner decision does not resolve or substitute for academic research approval.
+
+The formal title treatment, final defense-scope confirmation, grounded CLARA requirement, PWA/offline requirement, acceptance of the proposed data policy, and every evaluation-methodology item listed above remain `ADVISER_APPROVAL_REQUIRED`. Software QA evidence remains supporting technical evidence only.
+
+**Exact next actionable work:** Prepare Adviser Confirmation Package. The package is `READY` for documentation/request preparation and must present the unresolved decisions without implying adviser approval. Any resulting software or data work remains `NOT_READY` until the applicable decision, authority, data source, privacy/security boundary, and acceptance cases satisfy `72-definition-of-ready.md`.

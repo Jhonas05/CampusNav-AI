@@ -1,5 +1,30 @@
 # CampusNav Content Pack — Changelog
 
+## v3.19 — 19 September 2026
+
+Recorded the owner-approved proposed final defense scope baseline and advanced the decision gate to adviser-confirmation-package preparation.
+
+### Owner decision
+- added `DEC-DEFENSE-001` with status `OWNER APPROVED / ADVISER CONFIRMATION REQUIRED`
+- proposed the accepted responsive web, GF–5F shared spatial/A*/2D/3D/multi-floor navigation, QR/manual positioning, Facilities, Dashboard, Auth/RBAC, Admin CMS, academic/personnel engine, accepted Supabase foundation, and strict Emergency/safe-no-route behavior as `CORE_FOR_DEFENSE` at their existing evidence levels
+- preserved A* as pathfinding rather than AI and made no new implementation claim
+
+### Conditional and deferred scope
+- classified grounded server-side CLARA/Groq and PWA/offline emergency caching as `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION`
+- retained the current CLARA surface as a conservative/local matcher, not grounded production AI, production-ready LLM integration, or a completed AI assistant
+- retained AR Guidance as `PROPOSED / OPTIONAL / DEFERRED / NOT_IMPLEMENTED / NOT_READY` and kept AR-0 through AR-7 unauthorized
+- retained reports/analytics, advanced map editor/version rollback, expanded positioning, hardware presence, native AR/SLAM/VPS, push/SMS, photorealistic 3D, and unrelated dependency upgrades as optional/deferred unless adviser-confirmed scope requires them
+
+### Data and claims policy
+- recorded the proposed verified/demo/unavailable defense-data policy: institutional claims require provenance/authority; demo/sample data requires visible labeling; unknown data may remain unavailable/pending
+- preserved strict emergency truth/coverage/sign-off boundaries and schedule/personnel `SCHEDULED != CHECKED_IN` plus canonical status precedence
+- retained formal title treatment, final adviser scope confirmation, grounded CLARA/PWA requirements, defense-data-policy acceptance, and research/evaluation methodology as `ADVISER_APPROVAL_REQUIRED`
+
+### Next action and scope
+- selected **Prepare Adviser Confirmation Package** as the single exact next actionable work and classified it `READY` for documentation/request-package preparation
+- no adviser or institutional approval is claimed; no feature/data implementation is authorized
+- canonical documentation only; no application source, public asset, package, test, fixture, credential, environment, schema, institutional/production data, routing, spatial data, QR, Emergency logic, CLARA, PWA, AR, commit, push, or deployment change
+
 ## v3.18 — 19 September 2026
 
 Completed Phase 3-MQA-7 final acceptance and evidence reconciliation.

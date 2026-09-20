@@ -5,6 +5,8 @@ Only unresolved decisions belong here. Resolved decisions move to `29-decision-l
 ## Thesis/research
 - Does the adviser approve retaining the formal “tablet-based” title while the implementation is responsive web-based, or should the formal title be revised?
 - What evaluation instrument, respondents, sample, metrics, acceptance thresholds, and statistical treatment will be approved for the final thesis evaluation?
+- Does the adviser confirm the owner-proposed final defense scope and verified/demo/unavailable data policy in `DEC-DEFENSE-001`?
+- Does the adviser require grounded server-side CLARA/Groq for the thesis AI claim, or approve its conditional deferral?
 
 ## Institutional data
 - Which office is the final authorized owner of map/facility verification?
@@ -15,16 +17,15 @@ Only unresolved decisions belong here. Resolved decisions move to `29-decision-l
 - Is the current source-aligned emergency coverage sufficient for the thesis demonstration, or is a new formal safety-authority sign-off required?
 
 ## Product/implementation
-- Is PWA offline emergency access required for the final defense build or allowed as a scoped roadmap item?
-- Is a full visual map editor/version rollback required before final defense?
-- Which optional delivery channels (web push/SMS) are in final scope?
-- Which concrete browser/device matrix must pass before the responsive implementation may be claimed as production-verified?
+- Does the adviser require PWA offline emergency access for the final defense, or confirm its conditional deferral under `DEC-DEFENSE-001`?
+- Does the adviser require any owner-deferred feature—reports/analytics, map editor/version rollback, expanded positioning, AR, push/SMS, hardware presence, or photorealistic 3D—for the final defense?
+- Does the adviser require additional browser/device evidence beyond the accepted Phase 3 baseline for a specific final-defense claim?
 
 The former strict-grayscale question is resolved by `DEC-UI-002` in `29-decision-log.md` and no longer belongs in this unresolved backlog.
 
 ## Post-Phase-3 sequencing
 
-Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. The single exact next workstream is the **Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate**. Decision coordination is `READY`; no downstream implementation phase is `READY` until its applicable adviser decisions, authorized institutional datasets/sign-offs, defense-scope choices, and demo-rehearsal plan are supplied or explicitly deferred.
+Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` records the owner-approved proposed final defense baseline. The single exact next actionable work is **Prepare Adviser Confirmation Package**, classified `READY` for documentation/request-package preparation. No downstream implementation phase is `READY` until applicable adviser decisions, authorized institutional datasets/sign-offs, and a demo-rehearsal plan are supplied or explicitly deferred.
 
 ### AR-Assisted Camera Navigation planning
 - After current Phase 3 acceptance, when—if ever—may AR-0 be authorized on the roadmap?

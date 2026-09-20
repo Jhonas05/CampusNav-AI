@@ -5,6 +5,8 @@ CampusNav is thesis-demo ready when all required core items below are either imp
 
 **Phase 3 reconciliation — 19 September 2026:** Phase 3 release/manual-QA work is complete and `ACCEPTED_WITH_ADVISORY`, but this final-system checklist is not fully satisfied. `SATISFIED_WITH_ADVISORY` items support Phase 3 closure without creating broad certification claims. `UNSATISFIED` and `DEFERRED` items remain for the post-Phase-3 thesis/defense decision workstream and do not become implemented by documentation.
 
+**Owner defense-scope decision — 19 September 2026:** `DEC-DEFENSE-001` proposes the accepted baseline as `CORE_FOR_DEFENSE`, conditionally defers grounded CLARA and PWA/offline pending adviser direction, and keeps AR/other expansions optional/deferred. This owner decision does not complete `UNSATISFIED` items, provide institutional data/sign-off, or replace adviser confirmation and research-methodology approval.
+
 ### Spatial/navigation
 - [x] GF–5F digitized map foundation — `SATISFIED_WITH_ADVISORY`; source-aligned geometry exists, while final institutional verification and exact dimensions remain pending
 - [x] same-floor and multi-floor normal navigation — `SATISFIED`
@@ -44,8 +46,8 @@ CampusNav is thesis-demo ready when all required core items below are either imp
 ### Admin/governance
 - [x] content admin foundation — `SATISFIED`
 - [x] complete required schedule/personnel admin workflows — `SATISFIED_WITH_ADVISORY`; implemented workflows passed deterministic/live and `SUPER_ADMIN` manual evidence, with role-specific browser boundaries retained
-- [x] verify map editor/versioning requirement or explicitly scope as future — `DEFERRED`; advanced editor/version rollback remains optional/future pending final defense scope
-- [x] verify user-reporting workflow or explicitly scope as future — `DEFERRED`; reports/analytics remains future work pending privacy and scope decisions
+- [x] verify map editor/versioning requirement or explicitly scope as future — `DEFERRED`; owner proposal scopes advanced editor/version rollback as optional/future pending adviser confirmation
+- [x] verify user-reporting workflow or explicitly scope as future — `DEFERRED`; owner proposal scopes reports/analytics as optional/future pending adviser confirmation and any required privacy decisions
 
 ### CLARA
 - [ ] connect only after internal APIs are stable — `DEFERRED`
@@ -55,7 +57,7 @@ CampusNav is thesis-demo ready when all required core items below are either imp
 - [ ] role-aware data access — `DEFERRED`
 
 ### PWA/offline
-- [ ] verify/implement offline emergency cache requirement — `DEFERRED`; manifest-only status is not offline support and final defense scope requires an owner/adviser decision
+- [ ] verify/implement offline emergency cache requirement — `DEFERRED`; manifest-only status is not offline support, and `DEC-DEFENSE-001` conditionally defers it pending adviser direction
 
 ### QA/deployment
 - [x] Cloudflare production deployment foundation — `SATISFIED_WITH_ADVISORY`; exact accepted runtime equivalence was verified and later MQA changes were documentation-only

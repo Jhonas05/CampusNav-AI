@@ -390,9 +390,23 @@ Phase 3 is therefore **COMPLETE — `ACCEPTED_WITH_ADVISORY`**. This closes the 
 
 The gate may start because unresolved questions, evidence boundaries, and decision owners are identified. It must obtain or explicitly defer: adviser-approved title/evaluation methodology; authorized map/facility/hours/services/schedule/personnel fields and check-in authority; emergency data ownership, coverage, verification dates, and safety sign-off; final defense scope for PWA/offline, map editor/versioning, reports/analytics, grounded CLARA, and AR Guidance; and a thesis-demo rehearsal plan using verified or clearly demo-labeled data. No feature implementation is authorized merely by opening this gate.
 
+### Owner-approved proposed final defense scope baseline — 19 September 2026
+
+**Decision:** `OWNER APPROVED / ADVISER CONFIRMATION REQUIRED` under `DEC-DEFENSE-001`
+
+The owner proposes the currently accepted responsive web, GF–5F shared spatial/A* navigation, 2D/3D/multi-floor, QR/manual positioning, Facilities, Dashboard, Auth/RBAC, Admin CMS, academic/personnel engine, accepted Supabase foundation, and strict Emergency/safe-no-route behavior as `CORE_FOR_DEFENSE` at their documented evidence levels. A* remains pathfinding and is not described as AI.
+
+Grounded server-side CLARA/Groq and PWA/offline emergency caching are `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION`. The current local CLARA matcher may be demonstrated only as its documented conservative matcher. AR Guidance and the other optional expansions listed below remain deferred and are not required by the owner-approved proposal.
+
+The owner also approves the proposed verified/demo/unavailable defense-data policy: verified claims require provenance and authority evidence; demo/sample data must be visibly labeled; unavailable/pending data may remain unavailable; and no demo value becomes institutional, personnel-presence, or emergency truth. Emergency and schedule/personnel claims remain within their canonical safety, provenance, wording, and institutional-approval boundaries.
+
+**Exact next actionable work:** Prepare Adviser Confirmation Package.
+
+**Readiness:** `READY` for documentation/request-package preparation. The package must request adviser decisions on final defense scope, formal tablet-based versus responsive-web title treatment, grounded CLARA, PWA/offline, the proposed data policy, and research/evaluation methodology. Adviser approval has not been obtained, and no downstream feature implementation is authorized.
+
 ## Later canonical work candidates
 
-Do not assign or start these as numbered implementation phases until the post-Phase-3 decision gate authorizes them:
+Do not assign or start these as numbered implementation phases unless adviser-confirmed scope requires them and a separate Definition-of-Ready review authorizes them:
 - verified facility services, operating hours, and service-to-facility mappings
 - PWA service worker and versioned offline emergency cache
 - map administration, calibration, versioning, and coherent rollback
@@ -404,7 +418,7 @@ Do not assign or start these as numbered implementation phases until the post-Ph
 
 **Status:** `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
 
-The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 is **COMPLETE — `ACCEPTED_WITH_ADVISORY`**; the Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate is the exact next canonical workstream.
+The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 is **COMPLETE — `ACCEPTED_WITH_ADVISORY`**; `DEC-DEFENSE-001` excludes AR from the owner-proposed defense core, and Prepare Adviser Confirmation Package is the exact next actionable work.
 
 ## Blocked by institutional data or decision
 

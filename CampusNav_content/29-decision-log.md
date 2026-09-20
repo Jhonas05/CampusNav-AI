@@ -118,7 +118,38 @@ Decision boundaries:
 - camera use is explicit, local-first, non-recorded/non-uploaded by default, with no facial/person recognition
 - 2D, 3D, and textual guidance remain available fallbacks
 - the feature is `NOT_IMPLEMENTED`, `DEFERRED`, and `NOT_READY`
-- current Phase 3 and unfinished MQA-4 remain controlling; no AR implementation stage is authorized
+- at the time of adoption, Phase 3 and unfinished MQA-4 controlled sequencing; Phase 3 is now complete, and no AR implementation stage is authorized by either decision
+
+## DEC-DEFENSE-001 — Proposed final defense scope baseline
+**Status:** OWNER APPROVED / ADVISER CONFIRMATION REQUIRED — 19 Sep 2026
+
+The owner approves the following proposed final defense baseline. This is an owner scope decision only; it is not adviser approval, institutional approval, or implementation authorization.
+
+Proposed `CORE_FOR_DEFENSE` capabilities at their currently accepted evidence levels:
+- responsive web-based CampusNav experience
+- GF–5F source-aligned spatial foundation, one canonical spatial dataset, A* routing, 2D/3D, and multi-floor navigation
+- QR checkpoint positioning and manual-location fallback
+- Facilities directory/navigation and Dashboard
+- Auth/RBAC, Admin CMS, and accepted Supabase/Auth/RLS/Realtime foundation
+- academic schedule/personnel engine and personnel-availability logic with `SCHEDULED != CHECKED_IN`
+- strict Emergency Mode using only verified/emergency-approved data, including rejected non-approved edges and safe no-route/error behavior
+
+Scope boundaries:
+- A* is navigation/pathfinding logic and is not AI
+- grounded server-side CLARA/Groq and PWA/offline emergency caching are `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION`
+- the current conservative/local CLARA matcher may be shown only at its documented evidence level and is not grounded production AI, a production-ready LLM integration, or a completed AI assistant
+- AR Guidance remains `PROPOSED / OPTIONAL / DEFERRED / NOT_IMPLEMENTED / NOT_READY` and is not required for the proposed defense baseline
+- reports/analytics, advanced map editor/version rollback, GPS/BLE/Wi-Fi/UWB positioning, hardware presence, native AR/SLAM/VPS, push/SMS, photorealistic 3D, and unrelated dependency upgrades remain optional/deferred unless the adviser explicitly requires them
+
+Defense-data policy:
+- only data supported by canonical provenance and authority evidence may be called verified institutional data
+- clearly labeled `DEMO`, `SAMPLE`, or equivalent data may demonstrate supported workflows
+- unknown data may remain unavailable or pending verification and must not be invented
+- demo data is not official/live/current institutional truth, verified personnel presence, or verified emergency truth
+- emergency demonstration is limited to strict routing behavior and currently verified/source-aligned data; complete institutional coverage, safety-authority approval, and complete official evacuation coverage are not claimed
+- schedule/personnel demonstrations preserve canonical status precedence and require clear demo labeling where records are not institutional truth
+
+The formal tablet-based versus responsive-web title, final adviser scope confirmation, grounded CLARA/PWA requirement, defense-data-policy acceptance, and research/evaluation methodology remain `ADVISER_APPROVAL_REQUIRED`.
 
 ## How to add a decision
 Use:
