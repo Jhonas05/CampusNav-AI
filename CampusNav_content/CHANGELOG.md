@@ -1,5 +1,24 @@
 # CampusNav Content Pack — Changelog
 
+## v3.20 — 20 September 2026
+
+Prepared the canonical adviser confirmation package for the owner-approved proposed final defense baseline.
+
+### Added
+- added `75-adviser-confirmation-package.md` with status `PREPARED / AWAITING_ADVISER_CONFIRMATION`
+- included adviser decision sections for the proposed defense core, tablet-based versus responsive-web title treatment, grounded CLARA, PWA/offline, verified/demo/unavailable data policy, research/evaluation methodology, and optional/deferred features
+- included current evidence summaries, emergency and schedule/personnel claim boundaries, an institutional-approval notice, blank conditions/instruction fields, and a final-page adviser decision summary
+- left every adviser choice unselected and every unsupported academic methodology field blank
+
+### Canonical discovery and sequencing
+- registered document `75` in the agent thesis/defense map, master context index, and content-pack README
+- advanced roadmap, implementation status, open-decision sequencing, evaluation-gap status, and AR sequencing from package preparation to `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`
+- retained downstream feature/data implementation and final thesis/defense readiness as `NOT_READY` / `BLOCKED` pending completed adviser evidence and subsequent Definition-of-Ready review
+
+### Scope
+- canonical documentation only; no adviser, institutional, safety-authority, or research-methodology approval is claimed
+- no application source, public asset, package, test, fixture, credential, environment, schema, institutional/production data, routing, spatial data, QR, Emergency logic, CLARA, PWA, AR, dependency, commit, push, or deployment change
+
 ## v3.19 — 19 September 2026
 
 Recorded the owner-approved proposed final defense scope baseline and advanced the decision gate to adviser-confirmation-package preparation.

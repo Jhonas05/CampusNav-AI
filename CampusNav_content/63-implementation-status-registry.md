@@ -19,9 +19,11 @@ Separate **required/design** documentation from what is actually implemented. Up
 | Defense data | `OWNER APPROVED / ADVISER CONFIRMATION REQUIRED` | Verified claims require authority/provenance; demo/sample records require visible labels; unavailable/pending states remain valid; emergency and personnel truth cannot be fabricated |
 | Title and research/evaluation | `ADVISER_APPROVAL_REQUIRED` | No adviser decision or academic methodology is supplied by the owner decision |
 
-**Exact next actionable work:** Prepare Adviser Confirmation Package.
+**Adviser package:** `PREPARED / AWAITING_ADVISER_CONFIRMATION` in `75-adviser-confirmation-package.md`. The form contains no preselected adviser decisions and supplies no approval evidence.
 
-**Definition of Ready:** `READY` for documentation/request-package preparation. Required questions and canonical evidence are identified. Feature/data implementation remains `NOT_READY` / `BLOCKED` until the relevant adviser or institutional decisions exist and a separate implementation task passes Definition of Ready.
+**Exact next action:** `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`.
+
+**Readiness after preparation:** documentation/request-package preparation is complete. Feature/data implementation and final thesis/defense readiness remain `NOT_READY` / `BLOCKED` until completed adviser evidence is canonically recorded and any resulting task separately passes Definition of Ready.
 
 ## Phase 3-MQA-7 final acceptance and evidence reconciliation — completed 19 September 2026
 
@@ -59,7 +61,7 @@ The final-system Definition of Done remains incomplete for its explicitly `UNSAT
 | Emergency | `DEFERRED_CONDITIONAL` | AR may only present an already-approved emergency route after separate canonical and safety approval; no normal-route fallback |
 | Implementation evidence | `NOT_IMPLEMENTED` | No AR source, route-step adapter, camera-guidance shell, overlay, schema, dependency, test, or deployment is claimed by this documentation task |
 | Definition of Ready | `NOT_READY` | Route-step semantics, device matrix, camera/QR lifecycle, privacy/security verification, performance thresholds, accessibility plan, and emergency-stage authority remain unresolved |
-| Active sequencing | `DEFERRED` | Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`; `DEC-DEFENSE-001` excludes AR from the proposed defense core, Prepare Adviser Confirmation Package is next, and no AR implementation is authorized |
+| Active sequencing | `DEFERRED` | Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`; `DEC-DEFENSE-001` excludes AR from the proposed defense core, the adviser package is prepared, obtaining adviser confirmation is next, and no AR implementation is authorized |
 
 `74-ar-assisted-navigation-contract.md` is a future adoption contract, not implementation proof. Do not start AR-0 or any later AR stage until a future roadmap authorization exists and the Definition of Ready passes.
 

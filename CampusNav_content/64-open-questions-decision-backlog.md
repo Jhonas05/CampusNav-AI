@@ -25,7 +25,7 @@ The former strict-grayscale question is resolved by `DEC-UI-002` in `29-decision
 
 ## Post-Phase-3 sequencing
 
-Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` records the owner-approved proposed final defense baseline. The single exact next actionable work is **Prepare Adviser Confirmation Package**, classified `READY` for documentation/request-package preparation. No downstream implementation phase is `READY` until applicable adviser decisions, authorized institutional datasets/sign-offs, and a demo-rehearsal plan are supplied or explicitly deferred.
+Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` records the owner-approved proposed final defense baseline. `75-adviser-confirmation-package.md` is `PREPARED / AWAITING_ADVISER_CONFIRMATION`. The single exact next action is **HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION**. No downstream implementation phase is `READY` until applicable adviser decisions, authorized institutional datasets/sign-offs, and a demo-rehearsal plan are supplied or explicitly deferred.
 
 ### AR-Assisted Camera Navigation planning
 - After current Phase 3 acceptance, when—if ever—may AR-0 be authorized on the roadmap?

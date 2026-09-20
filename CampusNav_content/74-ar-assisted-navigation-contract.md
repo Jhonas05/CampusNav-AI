@@ -9,7 +9,7 @@
 - **Owner authorization:** approved for canonical planning only on 19 September 2026
 - **Proposed defense scope:** not required under owner-approved `DEC-DEFENSE-001`; adviser confirmation remains pending
 
-This document adopts the AR-assisted guidance concept into canonical planning. It does not authorize implementation or provide implementation evidence. Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`; `DEC-DEFENSE-001` retains AR as optional/deferred outside the owner-proposed defense core, and Prepare Adviser Confirmation Package is the exact next actionable work. No AR stage is authorized.
+This document adopts the AR-assisted guidance concept into canonical planning. It does not authorize implementation or provide implementation evidence. Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`; `DEC-DEFENSE-001` retains AR as optional/deferred outside the owner-proposed defense core, `75-adviser-confirmation-package.md` is prepared, and obtaining adviser confirmation is the exact next action. No AR stage is authorized.
 
 ## Purpose
 

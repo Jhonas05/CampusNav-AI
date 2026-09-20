@@ -404,6 +404,16 @@ The owner also approves the proposed verified/demo/unavailable defense-data poli
 
 **Readiness:** `READY` for documentation/request-package preparation. The package must request adviser decisions on final defense scope, formal tablet-based versus responsive-web title treatment, grounded CLARA, PWA/offline, the proposed data policy, and research/evaluation methodology. Adviser approval has not been obtained, and no downstream feature implementation is authorized.
 
+### Adviser confirmation package — prepared 20 September 2026
+
+**Status:** `PREPARED / AWAITING_ADVISER_CONFIRMATION`
+
+`75-adviser-confirmation-package.md` now provides the adviser-facing decision form for final defense scope, title treatment, grounded CLARA, PWA/offline, verified/demo/unavailable data policy, research/evaluation methodology, optional/deferred features, institutional-approval boundaries, and a final-page decision summary. No choice is preselected, and package preparation supplies no adviser or institutional approval.
+
+**Exact next action:** `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`.
+
+Documentation preparation is complete. Downstream implementation and final thesis/defense readiness remain `NOT_READY` / `BLOCKED` until completed adviser evidence is returned, canonically recorded, and any resulting task separately passes Definition of Ready.
+
 ## Later canonical work candidates
 
 Do not assign or start these as numbered implementation phases unless adviser-confirmed scope requires them and a separate Definition-of-Ready review authorizes them:
@@ -418,7 +428,7 @@ Do not assign or start these as numbered implementation phases unless adviser-co
 
 **Status:** `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
 
-The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 is **COMPLETE — `ACCEPTED_WITH_ADVISORY`**; `DEC-DEFENSE-001` excludes AR from the owner-proposed defense core, and Prepare Adviser Confirmation Package is the exact next actionable work.
+The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 is **COMPLETE — `ACCEPTED_WITH_ADVISORY`**; `DEC-DEFENSE-001` excludes AR from the owner-proposed defense core, the adviser package is prepared, and obtaining adviser confirmation is the exact next action.
 
 ## Blocked by institutional data or decision
 

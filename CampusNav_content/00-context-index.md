@@ -51,8 +51,8 @@ Navigation, spatial truth, emergency, facilities/services, schedules/personnel, 
 ### Engineering/operations: `31–62`
 Environment/config, search, demo data, IDs, sources, thesis traceability, agent contract, module ownership, coding/state/API/validation/auth/storage, admin approval, map versioning, notification lifecycle, audit/privacy/observability/backup/release/Git/dependencies, device/timezone, fixtures/acceptance/security, scope/NFR/deployment.
 
-### Status/thesis/governance and future adoption contracts: `63–74`
-Implementation status, open questions, glossary, user stories, E2E flows, data ownership, risks, evaluation gaps, documentation governance, Definition of Ready, quality gates, and the planning-only AR-assisted navigation contract.
+### Status/thesis/governance and future adoption contracts: `63–75`
+Implementation status, open questions, glossary, user stories, E2E flows, data ownership, risks, evaluation gaps, documentation governance, Definition of Ready, quality gates, the planning-only AR-assisted navigation contract, and the adviser confirmation package.
 
 ## Agent integration
 See `AGENTS-INTEGRATION.md` for a minimal `AGENTS.md` bridge.

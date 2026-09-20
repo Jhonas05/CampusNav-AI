@@ -118,4 +118,6 @@ These distinctions close Phase 3 without closing the final-system thesis/demo De
 
 The formal title treatment, final defense-scope confirmation, grounded CLARA requirement, PWA/offline requirement, acceptance of the proposed data policy, and every evaluation-methodology item listed above remain `ADVISER_APPROVAL_REQUIRED`. Software QA evidence remains supporting technical evidence only.
 
-**Exact next actionable work:** Prepare Adviser Confirmation Package. The package is `READY` for documentation/request preparation and must present the unresolved decisions without implying adviser approval. Any resulting software or data work remains `NOT_READY` until the applicable decision, authority, data source, privacy/security boundary, and acceptance cases satisfy `72-definition-of-ready.md`.
+**Adviser package status:** `75-adviser-confirmation-package.md` is `PREPARED / AWAITING_ADVISER_CONFIRMATION`. It presents the unresolved decisions without implying approval.
+
+**Exact next action:** `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`. Any resulting software or data work remains `NOT_READY` until completed adviser evidence is canonically recorded and the applicable decision, authority, data source, privacy/security boundary, and acceptance cases satisfy `72-definition-of-ready.md`.

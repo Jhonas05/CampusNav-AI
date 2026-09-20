@@ -27,7 +27,7 @@ Then read the task-specific files from the map below.
 | UI/frontend | `06`, `07`, `21`, `26`, `40`, `55` |
 | AR/camera guidance planning | `03`, `10`, `11`, `12`, `20`, `21`, `25`, `26`, `49`, `55`, `58`, `60`, `63`, `69`, `72`, `73`, `74` |
 | Deployment/release | `08`, `25`, `31`, `51`, `52`, `62`, `73` |
-| Thesis/defense | `27`, `28`, `30`, `36`, `60`, `69`, `70` |
+| Thesis/defense | `27`, `28`, `30`, `36`, `60`, `69`, `70`, `75` |
 
 Numbers refer to the numbered Markdown documents in this folder.
 
