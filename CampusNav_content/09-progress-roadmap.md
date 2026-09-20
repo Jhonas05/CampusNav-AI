@@ -416,7 +416,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `ADOPTED / NOT_STARTED`
+**Status:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -452,7 +452,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 
 ### Implementation sequence
 
-1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `READY_WITH_BOUNDARIES / NOT_STARTED`
+1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `NOT_STARTED`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `NOT_STARTED`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
@@ -466,9 +466,29 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 
 FS-1 is limited to a version-controlled Supabase schema/migration; operational facility profiles; services and approved aliases; facility-service mappings; provenance/lifecycle fields; RLS foundations; trusted-audit foundations; and provider-neutral `FacilityService` contracts. It must not seed official institutional records, alter spatial/navigation truth, implement later Phase 4 UI/status/media/Dashboard subphases, or start an excluded feature.
 
-Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. Before FS-1 implementation/testing, use supported Node 22; this laptop's Node 24 environment is a local advisory and dependency/package changes are not authorized by Phase 4 adoption.
+Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Exact next implementation task after authorization:** Phase 4-FS-1 — Facility Operational Data and Service Foundation.
+**Exact next implementation task after separate authorization:** Phase 4-FS-1B within the existing Facility Operational Data and Service Foundation boundary. FS-1B is `NOT_STARTED` by this acceptance update.
+
+### Phase 4-FS-1A implementation snapshot — 20 September 2026
+
+**Status:** `IMPLEMENTED_UNVERIFIED`
+
+The version-controlled FS-1A migration now defines facility operational profiles, services, approved aliases, configured facility-service mappings, lifecycle/provenance constraints, public security-invoker projections, `SUPER_ADMIN`-only write policies, and trusted audit triggers. It contains no official records and no hours, status engine, Admin/public UI, media, Dashboard/Realtime, spatial, routing, QR, emergency, or personnel expansion.
+
+The deterministic schema/scope test passes against all 95 canonical local facility IDs. A 20 September 2026 acceptance attempt also passed the full requested Node 22 regression set, ESLint, typecheck, route rendering, and production build after confirmed untracked dependency residue was relocated outside the repository.
+
+At that earlier acceptance attempt, real database evidence remained incomplete: the actual CampusNav SQL target was not yet safely linked, no migration or fixture mutation was performed, and no pgTAP assertion was claimed. FS-1A therefore remained `IMPLEMENTED_UNVERIFIED` at that checkpoint.
+
+### Phase 4-FS-1A linked acceptance — 20 September 2026
+
+**Status:** `ACCEPTED_WITH_ADVISORY`
+
+The pinned Supabase CLI is now safely linked to actual CampusNav project `yiuwvyznteizxxmjqcfn`. Migration history matches locally and remotely through `20260920122741`. Read-only catalog verification confirms all four tables, RLS on every table, all four `security_invoker`/`security_barrier` public views, the complete policy set, trusted audit/update triggers, private audit functions with empty search paths and no `anon`/`authenticated` execute privilege, and no spatial/navigation columns in the overlay.
+
+The owner-reported SQL Editor run directly demonstrated full-script execution through `ok 58` and rollback but did not visually establish assertions 1–57. A fresh linked rollback-only capture then returned `ok 1` through `ok 58`; a separate duplicate-mapping assertion and four anonymous/ordinary-authenticated update/delete assertions also passed. Post-run checks report zero FS-1A fixtures in all four tables and zero associated test auth users, role assignments, or audit rows. Node 22 deterministic FS-1A, ESLint, typecheck, and production build pass.
+
+The advisory preserves the evidence-method distinction: the SQL Editor screenshot directly showed only assertion 58, while full 58/58 evidence came from an equivalent temporary-result collector because the pinned CLI normally returns only the final result set. The collector and all fixtures were transaction-local and rolled back. FS-1A is accepted; FS-1 remains in progress, and FS-1B was not started by this verification task.
 
 ## Later canonical work candidates
 

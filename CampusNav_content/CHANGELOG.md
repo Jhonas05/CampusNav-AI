@@ -1,5 +1,55 @@
 # CampusNav Content Pack — Changelog
 
+## v3.24 — 20 September 2026
+
+Completed linked acceptance for **Phase 4-FS-1A — Schema, RLS, Provenance, and Audit Foundation** as `ACCEPTED_WITH_ADVISORY` without starting FS-1B.
+
+### Linked database evidence
+- confirmed pinned CLI project ref `yiuwvyznteizxxmjqcfn` and exact local/remote migration history through `20260920122741`
+- confirmed all four FS-1A tables, RLS on every table, all four security-invoker/security-barrier public views, 20 expected policies, trusted audit/update triggers, hardened private functions, and no spatial/navigation columns
+- independently captured `ok 1` through `ok 58` from the rollback-only pgTAP suite; retained the boundary that the owner SQL Editor evidence directly showed only assertion 58
+- passed one supplemental duplicate-mapping assertion and four supplemental anonymous/ordinary-authenticated update/delete assertions in rollback-only transactions
+- confirmed zero FS-1A fixture records in all four tables and zero associated test auth users, role assignments, or audit rows afterward
+
+### Local verification and scope
+- passed the Node 22 deterministic FS-1A test, ESLint, typecheck, and production build; the existing approximately 878 kB lazy 3D chunk advisory remains
+- changed canonical Phase 4 tracking only; no application source, migration, test contract, production record, commit, push, application deployment, or later Phase 4 slice was changed or started
+- classified the evidence-display distinction as nonblocking: the SQL Editor screenshot exposed only assertion 58, while the equivalent linked collector supplied complete 58/58 evidence
+
+## v3.23 — 20 September 2026
+
+Attempted acceptance of the already-implemented **Phase 4-FS-1A — Schema, RLS, Provenance, and Audit Foundation** without starting FS-1B.
+
+### Verification
+- re-reviewed the migration as bounded FS-1A work: no table/schema/column drop, official seed, spatial/navigation, QR, Emergency, schedule/personnel, hours, media, Realtime, or application expansion
+- confirmed the actual CampusNav public Supabase endpoint is reachable and that FS-1A is not deployed there; the available SQL-capable connector exposes a different development project and was not used
+- retained `IMPLEMENTED_UNVERIFIED` because no safe SQL-capable CampusNav connection was available, the migration was not applied, and the 58 transactional pgTAP assertions were not executed
+- created no fixture, changed no production data, weakened no TLS/RLS control, and made no commit, push, or deployment
+- passed the deterministic FS-1A schema/scope test for all 95 canonical facility IDs and all requested Node 22 baseline regressions, route rendering, ESLint, typecheck, and production build
+
+### Repository hygiene and scope
+- confirmed `node_modules.stale-20260920-0412` was untracked generated dependency residue and relocated it intact outside the repository so full-project lint could run
+- aligned the documented FS-1A deterministic command with `npm run test:phase4-fs1a`
+- updated canonical tracking and verification-command wiring only; no application/runtime logic or later Phase 4 slice was started
+
+## v3.22 — 20 September 2026
+
+Implemented the first bounded slice of Phase 4-FS-1: **FS-1A — Schema, RLS, Provenance, and Audit Foundation**.
+
+### Implementation
+- added one forward Supabase migration for facility operational profiles, services, approved aliases, and configured facility-service mappings
+- retained existing local facility IDs as the only cross-system facility identity and added no spatial, floor, geometry, node, edge, QR, emergency, or routing truth
+- added lifecycle/publication windows, verification/data status, source provenance, freshness, and demo-consistency constraints
+- added published/effective RLS reads, security-invoker public projections, and a `SUPER_ADMIN`-only initial write boundary
+- extended the existing immutable audit stream through trusted triggers with safe metadata only
+- kept seed data empty and excluded hours/status, Admin/public UI, media, Dashboard/Realtime, service implementation, and every unrelated feature
+
+### Verification
+- added a deterministic FS-1A schema/scope test; it passes against all 95 canonical local facility IDs
+- added a transactional pgTAP suite covering RLS, public/draft isolation, unauthorized and permitted writes, provenance, trusted audit creation, and exact fixture cleanup
+- retained status `IMPLEMENTED_UNVERIFIED` because Docker is unavailable and the pinned Supabase CLI download failed local certificate verification, so the pgTAP suite could not run against PostgreSQL in this environment
+- Phase 4-FS-1 remains in progress; no later slice is authorized or claimed complete by this update
+
 ## v3.21 — 20 September 2026
 
 Adopted **Phase 4 — Core Facility & Service Workflow Completion** as the next canonical implementation phase.

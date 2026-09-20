@@ -40,6 +40,7 @@ npm run test:phase8b
 npm run test:phase8c
 npm run test:phase8c2
 npm run test:phase8c2:cloud
+npm run test:phase4-fs1a
 npm run test:rls
 npm run test:render
 ```
@@ -203,6 +204,20 @@ npx --yes supabase@2.79.0 db query -f supabase/tests/phase_8a_realtime_cleanup.s
 ```
 
 The subscriber uses the same four-channel Dashboard service, expects an announcement insert/update and event insert, verifies every channel is removed, and exits. The fixture SQL uses only `DEMO / DEVELOPMENT / NOT OFFICIAL` records and fixed identifiers so cleanup is narrow and repeatable.
+
+## Facility operational foundation (Phase 4-FS-1A)
+
+The FS-1A forward migration adds the Supabase operational overlay for facility profiles, services, approved aliases, and configured facility-service mappings. Every facility reference uses the stable IDs from `src/data/facilities.js`; the migration adds no competing facility, floor, geometry, node, edge, QR, emergency, or routing truth and seeds no institutional records.
+
+All four tables preserve lifecycle, publication windows, verification status, data status, source provenance, freshness, and actor timestamps. Public access is limited to published/effective records through RLS-backed security-invoker views. `SUPER_ADMIN` is the only initial write boundary, and trusted triggers append safe metadata to the existing immutable audit stream. Hours/status, Admin UI, public Facilities/search UI, media, Dashboard/Realtime, and provider-neutral `FacilityService` implementation remain outside FS-1A.
+
+Run the deterministic schema/scope check with:
+
+```bash
+npm run test:phase4-fs1a
+```
+
+With the local Docker-based Supabase stack available, `npm run test:rls` also runs `supabase/tests/phase_4_fs1a_facility_operational_test.sql`. That transactional pgTAP suite verifies empty-by-default schema creation, RLS/public-draft isolation, unauthorized-write rejection, permitted `SUPER_ADMIN` writes, provenance preservation, trusted audit creation, and exact fixture cleanup using only `DEVELOPMENT / DEMO / NOT OFFICIAL` records.
 
 ## Admin CMS foundation (Phase 8B.1)
 

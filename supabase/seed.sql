@@ -1,2 +1,3 @@
--- CampusNav Phase 8A intentionally seeds no departments, users, or official content.
--- The fixed application roles are created by the versioned migration.
+-- CampusNav intentionally seeds no departments, users, facility operational
+-- profiles, services, mappings, schedules, personnel, or official content.
+-- The fixed application roles are created by the versioned Phase 8A migration.

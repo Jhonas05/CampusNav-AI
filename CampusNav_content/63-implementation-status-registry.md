@@ -5,11 +5,11 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `ADOPTED / NOT_STARTED`
+**Phase classification:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
-Phase 4 is the active software-development workstream. Adoption supplies no implementation evidence and does not change the recorded `PARTIAL`/`MISSING` status of facility operational capabilities.
+Phase 4 is the active software-development workstream. The owner decision itself supplies no implementation evidence; the later FS-1A linked acceptance evidence recorded below controls the current foundation status.
 
 | Area | Current status | Phase 4 boundary |
 |---|---|---|
@@ -17,8 +17,8 @@ Phase 4 is the active software-development workstream. Adoption supplies no impl
 | Phase 2 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
 | Phase 3 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
 | Facility directory/detail/navigation foundation | `PARTIAL / IMPLEMENTED_BASELINE` | Existing local stable IDs, spatial truth, navigation links, and pending states remain authoritative |
-| Facility operational profiles | `NOT_IMPLEMENTED` | Future Supabase operational overlay keyed by canonical facility IDs |
-| Services, aliases, and facility-service mappings | `NOT_IMPLEMENTED` | Configured mappings only; no guessed recommendation |
+| Facility operational profiles | `ACCEPTED_WITH_ADVISORY — FS-1A` | Linked migration, schema, RLS, public projection, trusted audit, role behavior, provenance, and cleanup passed |
+| Services, aliases, and facility-service mappings | `ACCEPTED_WITH_ADVISORY — FS-1A DATA FOUNDATION` | Linked schema/RLS/provenance/audit and configured-only mapping behavior passed; provider-neutral service implementation remains outstanding |
 | Hours, exceptions, and facility-status engine | `NOT_IMPLEMENTED` | `Asia/Manila`; status contract in `13`; operational closed is not routing blocked |
 | Facility Admin workflows beyond advisories | `NOT_IMPLEMENTED` | Generic authorized workflow first; institutional owner names remain pending |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
@@ -28,9 +28,63 @@ Phase 4 is the active software-development workstream. Adoption supplies no impl
 
 **FS-1 readiness:** `READY_WITH_BOUNDARIES`. The schema/RLS/audit/service foundation is sufficiently defined, uses pending/demo-safe behavior, and requires no official seed data. It may not alter spatial/routing truth or implement FS-2 through FS-7.
 
-**Toolchain advisory:** this laptop currently uses Node 24 while project support targets Node 20/22. Use Node 22 before FS-1 implementation/testing; no package/dependency change is authorized by this adoption.
+**Toolchain result:** FS-1A acceptance used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Exact next implementation task:** Phase 4-FS-1 — Facility Operational Data and Service Foundation.
+**Exact next implementation task after separate authorization:** Phase 4-FS-1B within the existing Facility Operational Data and Service Foundation boundary. It is not started by FS-1A acceptance.
+
+### Phase 4-FS-1A implementation snapshot — 20 September 2026
+
+**Classification:** `IMPLEMENTED_UNVERIFIED`
+
+Evidence added:
+- one forward migration for `facility_operational_profiles`, `services`, `service_aliases`, and `facility_service_mappings`
+- stable local `facility_id` references with no spatial/floor/geometry/node/edge/QR/routing duplication
+- lifecycle, public-visibility, effective-window, verification/data-status, source, and freshness constraints
+- RLS-backed security-invoker public projections and `SUPER_ADMIN`-only writes
+- trusted triggers that append safe metadata to the existing immutable `audit_logs` stream
+- no official seed records, hours, status engine, Admin/public UI, media, Dashboard/Realtime, or unrelated domain expansion
+- deterministic schema/scope/canonical-ID test passing for all 95 local facility IDs
+- transactional pgTAP coverage for RLS, draft isolation, permitted/denied writes, provenance, audit, and cleanup
+
+The pgTAP suite was not executed in this environment because Docker is unavailable and the pinned Supabase CLI download failed on local certificate verification. SQL/RLS behavior therefore remains unverified against a running database. Phase 4-FS-1 remains in progress because its provider-neutral `FacilityService` foundation and full database verification are not part of this first implementation slice.
+
+### Phase 4-FS-1A acceptance attempt — 20 September 2026
+
+**Classification:** `IMPLEMENTED_UNVERIFIED` retained
+
+| Evidence area | Result | Boundary |
+|---|---|---|
+| Migration safety | `STATIC REVIEW PASS` | Forward-only FS-1A overlay creation; the existing audit entity-type check is replaced in the same migration; no table/schema/column drop, data mutation, official seed, spatial/navigation, QR, Emergency, schedule/personnel, hours, media, or Realtime change |
+| CampusNav remote identity | `CONFIRMED` | The ignored frontend environment points to the CampusNav project; its public Data API is reachable and returns `PGRST205` for the undeployed FS-1A `public_services` view |
+| SQL-capable target | `BLOCKED_SAFELY` | The available Supabase connector exposes an unrelated development project, so no CampusNav SQL or migration was executed there; Docker/local PostgreSQL and an authenticated CampusNav CLI link are unavailable |
+| Migration / pgTAP | `NOT_EXECUTED` | No migration was remotely applied and none of the 58 transactional pgTAP assertions is promoted to PASS |
+| Fixtures / production data | `UNCHANGED` | No FS-1A fixture was created, so cleanup is vacuously zero; no legitimate or production record was modified |
+| Deterministic FS-1A test | `PASS` | Schema, RLS/policy/audit structure, scope exclusions, seed absence, and compatibility with all 95 canonical local facility IDs passed under Node 22 |
+| Baseline regressions | `PASS` | Data, navigation, multi-floor, QR, Emergency, Dashboard, Phase 8A/8B/8C/8C.2, route rendering, ESLint, typecheck, and production build passed |
+| Acceptance decision | `IMPLEMENTED_UNVERIFIED` | Required live migration, RLS, role, public-policy, audit, constraint, and cleanup evidence is still absent; FS-1B is not authorized |
+
+### Phase 4-FS-1A linked acceptance — 20 September 2026
+
+**Classification:** `ACCEPTED_WITH_ADVISORY`
+
+This section supersedes the earlier `IMPLEMENTED_UNVERIFIED` acceptance attempt without rewriting its historical evidence boundary.
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| Actual linked target | `PASS` | Pinned CLI link is `yiuwvyznteizxxmjqcfn`, matching the CampusNav frontend project ref |
+| Migration history | `PASS` | Local and remote history match through `20260920122741` |
+| Tables and views | `PASS` | Four FS-1A tables exist; four public views have `security_invoker=true` and `security_barrier=true` |
+| RLS and policies | `PASS` | RLS is enabled on all four tables; 20 expected published-read, `SUPER_ADMIN` read, insert, update, and delete policies exist |
+| Audit structure | `PASS` | Four audit and four updated-at triggers exist; private audit/touch functions use an empty search path; `anon` and `authenticated` cannot execute them directly |
+| Transactional pgTAP | `PASS — 58/58` | Fresh linked rollback-only capture returned `ok 1` through `ok 58`; owner SQL Editor evidence independently reached `ok 58` without runtime error |
+| Role/public/audit behavior | `PASS` | Anonymous and ordinary-authenticated insert rejection, `SUPER_ADMIN` create/publish/delete, published public reads, trusted audit creation, audit-forgery rejection, safe metadata, actor-column privacy, and provenance preservation passed |
+| Supplemental role matrix | `PASS — 4/4` | Anonymous update/delete were rejected and ordinary-authenticated update/delete changed no row |
+| Duplicate mapping | `PASS — 1/1` | A second mapping for the same facility/service pair raised the expected unique-constraint error inside a rollback-only transaction |
+| Spatial/source boundary | `PASS` | Remote overlay scan found no floor, geometry, map-node, map-edge, QR, or route columns; deterministic test still matches all 95 canonical local facility IDs |
+| Fixture cleanup | `PASS` | Zero FS-1A fixture rows across all four tables; zero associated test auth users, role assignments, and audit rows after rollback |
+| Local quality gates | `PASS_WITH_EXISTING_BUILD_ADVISORY` | Node 22 FS-1A deterministic test, ESLint, typecheck, and production build pass; the existing approximately 878 kB lazy 3D chunk warning remains unrelated |
+| Evidence advisory | `NONBLOCKING` | The owner screenshot directly showed only assertion 58; full 58/58 evidence was obtained independently with an equivalent transaction-local collector because standard CLI output returns only the final result set |
+| Acceptance decision | `ACCEPTED_WITH_ADVISORY` | FS-1A is complete at its defined schema/RLS/provenance/audit boundary; FS-1B remains unstarted and requires its own authorization/readiness boundary |
 
 ## Owner-approved proposed final defense scope — 19 September 2026
 

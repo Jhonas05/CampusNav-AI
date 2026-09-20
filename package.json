@@ -26,6 +26,8 @@
     "test:phase8c:cloud": "node --experimental-websocket scripts/test-phase8c-cloud.mjs",
     "test:phase8c2": "node scripts/test-phase8c2.mjs",
     "test:phase8c2:cloud": "node --experimental-websocket scripts/test-phase8c-cloud.mjs",
+    "test:phase4-fs1a": "node scripts/test-phase4-fs1a.mjs",
+    "test:phase4:fs1a": "npm run test:phase4-fs1a",
     "test:rls": "npx --yes supabase@2.79.0 test db",
     "test:render": "node scripts/test-route-render.mjs",
     "preview": "vite preview"
