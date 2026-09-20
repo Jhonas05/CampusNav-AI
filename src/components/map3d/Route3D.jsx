@@ -76,8 +76,10 @@ export default function Route3D({
       {visibleSegments.map((segment, index) => {
         const state = segmentProgress(index, segments.length, activeStep, instructionCount, navigationStatus)
         const vertical = segment.edgeType === "FLOOR_TRANSITION" || segment.from.floorId !== segment.to.floorId
+        // Emergency segments are already drawn dashed; progress reads through
+        // value alone, matching the monochrome 2D route treatment.
         const palette = emergencyMode
-          ? { current: MAP_COLORS.emergencyRoute, complete: "#7F1D1D", upcoming: "#FCA5A5" }
+          ? { current: MAP_COLORS.emergencyRoute, complete: "#000000", upcoming: "#8E8E93" }
           : { current: MAP_COLORS.route, complete: MAP_COLORS.routeComplete, upcoming: MAP_COLORS.routeUpcoming }
         return (
           <Line

@@ -1,7 +1,6 @@
 import assert from "node:assert/strict"
 import React from "react"
 import { renderToString } from "react-dom/server"
-import { MemoryRouter } from "react-router-dom"
 import { createServer } from "vite"
 import { fileURLToPath, URL } from "node:url"
 
@@ -17,12 +16,21 @@ const vite = await createServer({
   esbuild: { jsx: "automatic" },
   logLevel: "error",
   optimizeDeps: { noDiscovery: true },
+  // react-router resolves to CJS under the SSR module runner; prefer its
+  // ESM builds so named exports (useSearchParams, Link, ...) are available.
+  ssr: {
+    noExternal: ["react-router-dom", "react-router"],
+    resolve: { conditions: ["module", "import", "default"], externalConditions: ["module", "import", "default"] },
+  },
   resolve: { alias: { "@": fileURLToPath(new URL("../src", import.meta.url)) } },
   root: projectRoot,
   server: { middlewareMode: true },
 })
 
 try {
+  // MemoryRouter must come from the same module instance the pages use,
+  // otherwise the router context does not match across the two graphs.
+  const { MemoryRouter } = await vite.ssrLoadModule("react-router-dom")
   const { default: Navigate } = await vite.ssrLoadModule("/src/pages/Map.jsx")
   const { default: Login } = await vite.ssrLoadModule("/src/pages/Login.jsx")
   const { default: QRCheckpoints } = await vite.ssrLoadModule("/src/pages/admin/QRCheckpoints.jsx")
@@ -73,7 +81,8 @@ try {
   assert.match(html, /GF–5F/)
   assert.match(html, /Registrar&#x27;s Office/)
   assert.match(html, /Accessibility information pending verification/)
-  assert.match(html, /Map view/)
+  // The 2D/3D switch now lives in the Navigate toolbar, not a separate card.
+  assert.match(html, /aria-label="Map dimension"/)
   assert.match(html, />2D</)
   assert.match(html, />3D</)
   assert.match(html, /2D remains the default precision view/)
@@ -198,11 +207,37 @@ try {
     React.createElement(MemoryRouter, { initialEntries: [path] }, component)
   )
   const overviewHtml = renderAdminPage("/admin", React.createElement(AdminOverview))
-  assert.match(overviewHtml, /CampusNav Admin/)
+  assert.match(overviewHtml, /CampusNav Administration/)
   assert.match(overviewHtml, /Published Announcements/)
   assert.match(overviewHtml, /Active Facility Advisories/)
-  assert.match(overviewHtml, /Audit Activity/)
-  assert.match(overviewHtml, /Coming later/)
+
+  // Admin navigation moved into the application sidebar. It is permission
+  // aware, so the tree must stay empty for guests and unauthorized roles and
+  // must never advertise a module the route would refuse.
+  const { getAuthorizedAdminGroups } = await vite.ssrLoadModule("/src/components/layout/navigationConfig.js")
+  const fakeAuth = (roles) => ({
+    isAuthenticated: roles.length > 0,
+    roles,
+    hasAnyRole: (required = []) => required.some((role) => roles.includes(role)),
+  })
+  const labelsFor = (auth) => getAuthorizedAdminGroups(auth).flatMap((group) => group.items.map((item) => item.label))
+
+  assert.deepEqual(labelsFor(fakeAuth([])), [])
+  assert.deepEqual(labelsFor(fakeAuth(["STUDENT"])), [])
+  assert.deepEqual(labelsFor(fakeAuth(["FACULTY"])), [])
+
+  const departmentAdminLabels = labelsFor(fakeAuth(["DEPARTMENT_ADMIN"]))
+  assert.ok(departmentAdminLabels.includes("Personnel"))
+  assert.ok(departmentAdminLabels.includes("Class Schedules"))
+  assert.equal(departmentAdminLabels.includes("Admin Dashboard"), false)
+  assert.equal(departmentAdminLabels.includes("Announcements"), false)
+  assert.equal(departmentAdminLabels.includes("Audit Logs"), false)
+
+  const superAdminLabels = labelsFor(fakeAuth(["SUPER_ADMIN"]))
+  assert.ok(superAdminLabels.includes("Admin Dashboard"))
+  assert.ok(superAdminLabels.includes("Announcements"))
+  assert.ok(superAdminLabels.includes("Audit Logs"))
+  assert.ok(superAdminLabels.includes("Personnel"))
 
   const announcementAdminHtml = renderAdminPage("/admin/announcements", React.createElement(AdminContentPage, { resource: "announcements" }))
   assert.match(announcementAdminHtml, /Announcements/)

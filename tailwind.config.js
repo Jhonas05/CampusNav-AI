@@ -1,3 +1,58 @@
+/**
+ * CampusNav monochrome design tokens.
+ *
+ * CampusNav's interface language is strictly grayscale: white, off-white,
+ * light/medium/dark gray, and black. Meaning is carried by icon, border
+ * weight, fill, opacity, typography, pattern, and badge shape — never by hue
+ * alone. To enforce that globally without rewriting every component, the
+ * chromatic Tailwind scales are remapped onto neutral ramps here. Existing
+ * semantic class names (`bg-red-50`, `text-green-700`, ...) keep their
+ * relative lightness and therefore their visual hierarchy.
+ */
+
+/** Shared neutral ramp. Light values stay as surfaces, dark values as ink. */
+const neutral = {
+  50: '#FAFAFA',
+  100: '#F0F0F2',
+  200: '#E3E3E6',
+  300: '#D2D2D7',
+  400: '#AEAEB2',
+  500: '#8E8E93',
+  600: '#6E6E73',
+  700: '#48484A',
+  800: '#2C2C2E',
+  900: '#1D1D1F',
+  950: '#000000',
+}
+
+/** Higher-contrast ramp for states that must read as the strongest signal. */
+const emphasis = {
+  50: '#F5F5F7',
+  100: '#EBEBED',
+  200: '#D2D2D7',
+  300: '#AEAEB2',
+  400: '#6E6E73',
+  500: '#48484A',
+  600: '#2C2C2E',
+  700: '#1D1D1F',
+  800: '#000000',
+  900: '#000000',
+  950: '#000000',
+}
+
+/** Scales that previously carried hue and are now neutralized. */
+const neutralizedScales = [
+  'green', 'blue', 'amber', 'yellow', 'orange', 'purple', 'violet', 'indigo',
+  'teal', 'cyan', 'sky', 'emerald', 'lime', 'fuchsia', 'pink', 'rose',
+  'gray', 'slate', 'zinc', 'stone', 'neutral',
+]
+
+const monochromeScales = {
+  // `red` and `destructive` states remain the strongest, so they use `emphasis`.
+  red: { ...emphasis },
+  ...Object.fromEntries(neutralizedScales.map((name) => [name, { ...neutral }])),
+}
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: ["class"],
@@ -11,17 +66,19 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+			...monochromeScales,
+			// CampusNav primary. `brand-700` is the primary action ink.
 			brand: {
-				'50': '#EEF7F1',
-				'100': '#D7ECDE',
-				'200': '#AFD9BD',
-				'300': '#7CBD93',
-				'400': '#47A36B',
-				'500': '#27894F',
-				'600': '#1C7B44',
-				'700': '#15703C',
-				'800': '#0F5A2F',
-				'900': '#0B4224'
+				'50': '#F5F5F7',
+				'100': '#EBEBED',
+				'200': '#D2D2D7',
+				'300': '#AEAEB2',
+				'400': '#8E8E93',
+				'500': '#6E6E73',
+				'600': '#48484A',
+				'700': '#1D1D1F',
+				'800': '#000000',
+				'900': '#000000'
 			},
 			gold: {
 				'50': '#F5F5F8',
@@ -106,11 +163,31 @@ module.exports = {
   				to: {
   					height: '0'
   				}
+  			},
+  			'overlay-in': {
+  				from: { opacity: '0' },
+  				to: { opacity: '1' }
+  			},
+  			'panel-in': {
+  				from: { opacity: '0', transform: 'translateY(10px) scale(0.985)' },
+  				to: { opacity: '1', transform: 'translateY(0) scale(1)' }
+  			},
+  			'sheet-up': {
+  				from: { transform: 'translateY(100%)' },
+  				to: { transform: 'translateY(0)' }
+  			},
+  			'drawer-in': {
+  				from: { transform: 'translateX(-100%)' },
+  				to: { transform: 'translateX(0)' }
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'overlay-in': 'overlay-in 0.18s ease-out',
+  			'panel-in': 'panel-in 0.22s cubic-bezier(0.22, 1, 0.36, 1)',
+  			'sheet-up': 'sheet-up 0.26s cubic-bezier(0.22, 1, 0.36, 1)',
+  			'drawer-in': 'drawer-in 0.24s cubic-bezier(0.22, 1, 0.36, 1)'
   		}
   	}
   },

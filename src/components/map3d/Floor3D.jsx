@@ -89,7 +89,7 @@ function Floor3D({
       })}
 
       <Html position={[-width / 2 - 0.8, MAP3D_CONFIG.wallHeight, -depth / 2]} center distanceFactor={13} style={{ pointerEvents: "none" }}>
-        <div className={`rounded-lg border px-3 py-2 text-center shadow-sm ${selectedFloor ? "border-[#213A92] bg-[#213A92] text-white" : "border-[#B8B8BD] bg-white/90 text-[#1D1D1F]"}`}>
+        <div className={`rounded-lg border px-3 py-2 text-center shadow-sm ${selectedFloor ? "border-[#1D1D1F] bg-[#1D1D1F] text-white" : "border-[#B8B8BD] bg-white/90 text-[#1D1D1F]"}`}>
           <p className="text-sm font-bold">{floor.shortName}</p>
           {debugOptions?.show3DFloorElevations && <p className="mt-0.5 whitespace-nowrap text-[8px] opacity-70">Y {elevation.toFixed(2)} · ESTIMATED</p>}
         </div>

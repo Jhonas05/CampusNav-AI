@@ -236,7 +236,7 @@ export default function IndoorMap2D({
           <g key={`transition-${node.id}`}>
             <circle cx={node.x} cy={node.y} r="11" fill="#FFFFFF" stroke={emergencyMode ? MAP_COLORS.emergencyRoute : MAP_COLORS.route} strokeWidth="3" />
             <path d={`M${node.x} ${node.y + 5}V${node.y - 5}M${node.x - 4} ${node.y - 1}L${node.x} ${node.y - 5}L${node.x + 4} ${node.y - 1}`} fill="none" stroke={emergencyMode ? MAP_COLORS.emergencyRoute : MAP_COLORS.route} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            <text x={node.x} y={node.y - 18} textAnchor="middle" fontSize="8" fontWeight="800" fill={emergencyMode ? "#991B1B" : "#14532D"} paintOrder="stroke" stroke="#FFFFFF" strokeWidth="3">FLOOR TRANSITION</text>
+            <text x={node.x} y={node.y - 18} textAnchor="middle" fontSize="8" fontWeight="800" fill={emergencyMode ? MAP_COLORS.emergencyRoute : MAP_COLORS.route} paintOrder="stroke" stroke="#FFFFFF" strokeWidth="3">FLOOR TRANSITION</text>
           </g>
         ))}
 
@@ -260,7 +260,7 @@ export default function IndoorMap2D({
                   textAnchor="middle"
                   fontSize="9"
                   fontWeight="800"
-                  fill={isStart ? "#1D4ED8" : navigationStatus === "arrived" ? "#14532D" : "#B91C1C"}
+                  fill={isStart ? MAP_COLORS.current : navigationStatus === "arrived" ? MAP_COLORS.arrivedFill : MAP_COLORS.destination}
                   paintOrder="stroke"
                   stroke="#FFFFFF"
                   strokeWidth="3"

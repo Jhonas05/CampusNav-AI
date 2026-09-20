@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight, Circle, CircleAlert, LocateFixed, MapPin, Navigation, QrCode, Search, ShieldAlert } from "lucide-react"
-import { lazy, Suspense, useCallback, useMemo, useState } from "react"
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { button, focusRing, InkKicker } from "@/components/campus/ui"
 import IndoorMap2D from "@/components/map/IndoorMap2D"
@@ -348,24 +348,66 @@ export default function Navigate() {
     setScannerOpen(true)
   }
 
+  // `/map?scan=1` opens the real QR checkpoint scanner (Dashboard quick action).
+  const scanRequested = searchParams.get("scan") === "1"
+  const scanRequestHandled = useRef(false)
+  useEffect(() => {
+    if (!scanRequested || scanRequestHandled.current) return
+    scanRequestHandled.current = true
+    setScanError("")
+    setScannerOpen(true)
+  }, [scanRequested])
+
   return (
-    <div className="app-page bg-[#F5F5F7]">
-      <div className="app-container">
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-          <div>
-            <InkKicker className={emergencyMode ? "text-[#B3261E]" : undefined}>{emergencyMode ? "Source-approved emergency reference" : "Indoor navigation"}</InkKicker>
-            <h1 className="mt-1.5 font-display text-4xl font-extrabold uppercase leading-[0.94] tracking-[0.01em] sm:text-5xl">{emergencyMode ? "Emergency Mode" : "Navigate"}</h1>
-            <p className="mt-1.5 max-w-2xl text-sm text-[#6E6E73]">{emergencyMode ? "View source-supported emergency equipment and calculate only administrator/source-approved evacuation paths." : "Choose a verified floor assignment, calculate a walkable route, and follow each navigation step."}</p>
-          </div>
-          <nav aria-label="Map mode" className="flex shrink-0 rounded border border-[#D4D4D7] bg-white p-1 font-heading text-xs font-bold uppercase tracking-[0.06em]">
-            <Link to={developerMode ? "/map?verify=1" : "/map"} aria-current={!emergencyMode ? "page" : undefined} className={cn("rounded px-4 py-2 transition-colors duration-200", !emergencyMode ? "bg-brand-700 text-white" : "text-[#5D5D60] hover:text-[#1D1F20]", focusRing)}>Navigate</Link>
-            <Link to={`/map?mode=emergency${developerMode ? "&verify=1" : ""}`} aria-current={emergencyMode ? "page" : undefined} className={cn("rounded px-4 py-2 transition-colors duration-200", emergencyMode ? "bg-[#B3261E] text-white" : "text-[#5D5D60] hover:text-[#1D1F20]", focusRing)}>Emergency Mode</Link>
-          </nav>
+    /*
+     * Workspace layout: a compact toolbar, a fixed-width control column, and
+     * the map filling every remaining pixel. The map is the product, so the
+     * chrome around it stays as thin as the controls allow.
+     */
+    <div className="app-workspace bg-[#F5F5F7]">
+      <div
+        className={cn(
+          "flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-b bg-white px-[var(--app-page-gutter)] py-3",
+          emergencyMode ? "border-b-2 border-[#1D1D1F]" : "border-[#E3E3E6]"
+        )}
+      >
+        <div className="min-w-0">
+          <InkKicker>{emergencyMode ? "Source-approved emergency reference" : "Indoor navigation"}</InkKicker>
+          <p className="mt-1 max-w-3xl text-[13px] leading-snug text-[#6E6E73]">
+            {emergencyMode
+              ? "View source-supported emergency equipment and calculate only administrator/source-approved evacuation paths."
+              : "Choose a verified floor assignment, calculate a walkable route, and follow each navigation step."}
+          </p>
         </div>
 
-        <div className="mt-4 grid items-start gap-4 lg:grid-cols-[var(--app-map-control-width)_minmax(0,1fr)]">
-        <aside className="space-y-3 lg:sticky lg:top-[calc(var(--app-header-height)+0.75rem)] lg:max-h-[calc(100dvh-var(--app-header-height)-1.5rem)] lg:overflow-y-auto lg:pr-1">
-        <section aria-label="Route planning controls" className={cn("ink-blueprint grid gap-3 p-4", emergencyMode && "border-2 border-[#B3261E]")}>
+        <div className="flex flex-wrap items-center gap-2">
+          <nav aria-label="Map mode" className="flex shrink-0 rounded-full border border-[#D2D2D7] bg-[#F5F5F7] p-1 font-heading text-[11px] font-bold uppercase tracking-[0.06em]">
+            <Link to={developerMode ? "/map?verify=1" : "/map"} aria-current={!emergencyMode ? "page" : undefined} className={cn("rounded-full px-4 py-2 transition-colors duration-200", !emergencyMode ? "bg-[#1D1D1F] text-white" : "text-[#6E6E73] hover:text-[#1D1D1F]", focusRing)}>Navigate</Link>
+            <Link to={`/map?mode=emergency${developerMode ? "&verify=1" : ""}`} aria-current={emergencyMode ? "page" : undefined} className={cn("flex items-center gap-1.5 rounded-full px-4 py-2 transition-colors duration-200", emergencyMode ? "bg-[#1D1D1F] text-white" : "border border-[#1D1D1F] text-[#1D1D1F] hover:bg-[#F0F0F2]", focusRing)}>
+              <ShieldAlert className="h-3.5 w-3.5" aria-hidden="true" /> Emergency Mode
+            </Link>
+          </nav>
+
+          <div aria-label="Map dimension" className="flex shrink-0 rounded-full border border-[#D2D2D7] bg-[#F5F5F7] p-1 text-[11px] font-bold uppercase tracking-[0.06em]">
+            <button type="button" aria-pressed={mapView === "2D"} onClick={() => setMapView("2D")} className={cn("rounded-full px-4 py-2 transition-colors duration-200", mapView === "2D" ? "bg-[#1D1D1F] text-white" : "text-[#6E6E73] hover:text-[#1D1D1F]", focusRing)}>2D</button>
+            <button type="button" aria-pressed={mapView === "3D"} onClick={enable3DView} className={cn("rounded-full px-4 py-2 transition-colors duration-200", mapView === "3D" ? "bg-[#1D1D1F] text-white" : "text-[#6E6E73] hover:text-[#1D1D1F]", focusRing)}>3D</button>
+          </div>
+        </div>
+      </div>
+
+      {/*
+       * On large screens the workspace row is exactly one viewport tall: the
+       * control column scrolls inside itself and the map takes the rest, so
+       * the map never pushes the page into a vertical scroll. Smaller screens
+       * stack and scroll normally.
+       */}
+      <div className="flex min-h-0 flex-1 flex-col lg:h-[calc(100dvh-var(--app-header-height))] lg:flex-none lg:flex-row">
+        <aside
+          aria-label="Route planning and route details"
+          className="border-b border-[#E3E3E6] bg-white lg:w-[var(--app-map-control-width)] lg:shrink-0 lg:overflow-y-auto lg:overscroll-contain lg:border-b-0 lg:border-r"
+        >
+          <div className="space-y-3 p-3 sm:p-4">
+        <section aria-label="Route planning controls" className={cn("grid gap-3 rounded-2xl border bg-white p-4", emergencyMode ? "border-2 border-[#1D1D1F]" : "border-[#D2D2D7]")}>
           <label className="block">
             <span className={fieldLabelClass}><LocateFixed className="h-4 w-4" aria-hidden="true" /> Current location</span>
             <select id="current-location-selector" value={currentSelectorValue} onChange={(event) => updateCurrentLocation(event.target.value)} className={fieldClass}>
@@ -435,7 +477,7 @@ export default function Navigate() {
         </section>
 
         {activeRoute?.routeFloorIds.length > 1 && (
-          <section aria-label="Route floors" className="mt-5 rounded-[1.5rem] border border-[#E5E5E7] bg-white p-4 sm:p-5">
+          <section aria-label="Route floors" className="rounded-2xl border border-[#D2D2D7] bg-white p-4">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868B]">Route floors</p>
@@ -452,17 +494,11 @@ export default function Navigate() {
           </section>
         )}
 
-        <section aria-label="Map view" className="mt-5 flex flex-col justify-between gap-3 rounded-[1.5rem] border border-[#E5E5E7] bg-white p-3.5 sm:flex-row sm:items-center sm:px-5">
-          <div>
-            <p className="text-xs font-semibold text-[#1D1D1F]">Map view</p>
-            <p className="mt-1 max-w-2xl text-[10px] leading-relaxed text-[#86868B]">{mapView === "3D" ? MAP3D_GEOMETRY_NOTICE : "2D remains the default precision view and uses the same navigation state and route graph."}</p>
-          </div>
-          <div aria-label="Map dimension" className="flex shrink-0 rounded-full border border-[#E5E5E7] bg-[#F5F5F7] p-1 text-xs font-semibold">
-            <button type="button" aria-pressed={mapView === "2D"} onClick={() => setMapView("2D")} className={cn("rounded-full px-5 py-2 transition-colors duration-200", mapView === "2D" ? "bg-brand-700 text-white" : "text-[#6E6E73] hover:text-[#1D1D1F]", focusRing)}>2D</button>
-            <button type="button" aria-pressed={mapView === "3D"} onClick={enable3DView} className={cn("rounded-full px-5 py-2 transition-colors duration-200", mapView === "3D" ? "bg-brand-700 text-white" : "text-[#6E6E73] hover:text-[#1D1D1F]", focusRing)}>3D</button>
-          </div>
-        </section>
-        {map3DMessage && <p role="status" className="mt-3 rounded-2xl border-[1.5px] border-[#1D1D1F] bg-white px-4 py-3 text-sm font-medium text-[#1D1D1F]">{map3DMessage}</p>}
+        {/* The 2D/3D switch lives in the toolbar; this keeps its data notice. */}
+        <p className="rounded-xl border border-dashed border-[#C7C7CC] bg-white p-3 text-[10px] leading-relaxed text-[#6E6E73]">
+          {mapView === "3D" ? MAP3D_GEOMETRY_NOTICE : "2D remains the default precision view and uses the same navigation state and route graph."}
+        </p>
+        {map3DMessage && <p role="status" className="rounded-2xl border-2 border-[#1D1D1F] bg-white px-4 py-3 text-sm font-medium text-[#1D1D1F]">{map3DMessage}</p>}
 
         {emergencyMode ? (
           <Suspense fallback={<section className="rounded-[1.75rem] border border-[#E5E5E7] bg-white p-4 text-sm text-[#6E6E73]">Loading emergency reference...</section>}>
@@ -513,10 +549,16 @@ export default function Navigate() {
 
         {!emergencyMode && <p className="rounded-xl border border-dashed border-[#C7C7CC] bg-white p-3 text-[11px] leading-relaxed text-[#6E6E73]">{FACILITY_DATA_NOTICE}</p>}
         <p className="rounded-xl border border-dashed border-[#C7C7CC] bg-white p-3 text-[11px] leading-relaxed text-[#6E6E73]">Accessibility information pending verification.</p>
+          </div>
         </aside>
 
-        <div className="min-w-0">
-          <section aria-label="Campus map" className="ink-blueprint map-viewport relative overflow-hidden">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          {/*
+           * The map claims all remaining space. Height comes from the flex
+           * column rather than a fixed value, so the 2D SVG and the R3F canvas
+           * both resize whenever the sidebar collapses or the viewport changes.
+           */}
+          <section aria-label="Campus map" className="relative min-h-[26rem] flex-1 overflow-hidden bg-white lg:min-h-0">
             {mapView === "3D" ? (
               <Map3DErrorBoundary resetKey={mapView} onFailure={handle3DFailure} onReturnTo2D={() => setMapView("2D")}>
                 <Suspense fallback={<div className="flex h-full min-h-[inherit] items-center justify-center bg-[#F5F5F7] text-sm font-medium text-[#6E6E73]">Loading 3D building...</div>}>
@@ -578,7 +620,12 @@ export default function Navigate() {
               </div>
             )}
             {mapView === "3D" && selectedFacility && (
-              <div className="absolute bottom-12 right-3 z-20 w-[min(300px,calc(100%-24px))] rounded-2xl border border-[#E5E5E7] bg-white p-4 shadow-[0_20px_50px_rgba(0,0,0,0.16)] sm:right-16">
+              /*
+               * Anchored bottom-left, above the 3D legend: the top belt holds
+               * the 3D view controls and the bottom-right belt is reserved for
+               * the floating CLARA button.
+               */
+              <div className="absolute bottom-[5.25rem] left-3 z-20 w-[min(300px,calc(100%-24px))] rounded-2xl border border-[#D2D2D7] bg-white p-4 shadow-[0_20px_50px_rgba(0,0,0,0.16)]">
                 <button type="button" aria-label="Close facility details" onClick={() => setSelectedFacilityId(null)} className={cn("absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full border border-[#D2D2D7] text-xs transition-colors hover:border-[#86868B]", focusRing)}>×</button>
                 <p className="pr-8 text-[10px] font-semibold uppercase tracking-wide text-[#86868B]">{selectedFacility.kind} · {selectedFacility.floorId}</p>
                 <h2 className="mt-1 pr-8 text-lg font-semibold tracking-tight">{selectedFacility.name}</h2>
@@ -591,13 +638,18 @@ export default function Navigate() {
             )}
           </section>
           {mapView === "2D" && floor?.map && (
-            <MapLegend floorFacilities={viewedFloorFacilities} emergencyMode={emergencyMode} className="mt-3" />
+            <MapLegend
+              floorFacilities={viewedFloorFacilities}
+              emergencyMode={emergencyMode}
+              className="shrink-0 rounded-none border-x-0 border-b-0 border-t border-[#E3E3E6]"
+            />
           )}
         </div>
-        </div>
+      </div>
 
-        {developerMode && floor?.map && verificationReport && (
-          <Suspense fallback={<section className="mt-5 rounded-[1.75rem] border border-[#1D1D1F] bg-white p-6 text-sm text-[#6E6E73]">Loading developer verification tools...</section>}>
+      {developerMode && floor?.map && verificationReport && (
+        <div className="border-t border-[#E3E3E6] bg-[#F5F5F7] px-[var(--app-page-gutter)] py-4">
+          <Suspense fallback={<section className="rounded-2xl border border-[#1D1D1F] bg-white p-6 text-sm text-[#6E6E73]">Loading developer verification tools...</section>}>
             <MapVerificationPanel
               floor={floor}
               report={verificationReport}
@@ -611,8 +663,8 @@ export default function Navigate() {
               emergencyReport={emergencyVerificationReport}
             />
           </Suspense>
-        )}
-      </div>
+        </div>
+      )}
 
       {locationConfirmation && (
         <LocationConfirmationDialog

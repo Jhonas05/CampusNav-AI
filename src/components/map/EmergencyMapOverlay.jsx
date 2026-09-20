@@ -73,7 +73,7 @@ export default function EmergencyMapOverlay({
         <g transform={`translate(${currentNode.x} ${currentNode.y})`}>
           <circle r="13" fill="#FFFFFF" stroke={MAP_COLORS.current} strokeWidth="4" />
           <circle r="4.5" fill={MAP_COLORS.current} />
-          <text x="0" y="-20" textAnchor="middle" fontSize="8" fontWeight="900" fill="#1D4ED8" paintOrder="stroke" stroke="#FFFFFF" strokeWidth="4">YOU ARE HERE</text>
+          <text x="0" y="-20" textAnchor="middle" fontSize="8" fontWeight="900" fill="#1D1D1F" paintOrder="stroke" stroke="#FFFFFF" strokeWidth="4">YOU ARE HERE</text>
         </g>
       )}
     </g>

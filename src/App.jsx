@@ -1,13 +1,13 @@
 import { Toaster } from "@/components/ui/toaster"
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import AppLayout from '@/components/layout/AppLayout';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { ClaraProvider } from '@/contexts/ClaraContext';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { APP_ROLES } from '@/lib/authorization';
 
-const Home = lazy(() => import('@/pages/Home'));
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const Facilities = lazy(() => import('@/pages/Facilities'));
 const FacilityDetail = lazy(() => import('@/pages/FacilityDetail'));
@@ -27,7 +27,7 @@ const PageNotFound = lazy(() => import('./lib/PageNotFound'));
 const academicAdminRoles = [APP_ROLES.DEPARTMENT_ADMIN, APP_ROLES.SUPER_ADMIN]
 
 const RouteFallback = () => (
-  <main aria-label="Loading CampusNav" className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-4 py-10 sm:px-6">
+  <div aria-label="Loading CampusNav" className="min-h-[calc(100dvh-var(--app-header-height))] bg-[#F5F5F7] px-4 py-10 sm:px-6">
     <div className="mx-auto max-w-7xl">
       <div className="h-4 w-40 animate-pulse rounded-full bg-[#E8E8ED] motion-reduce:animate-none" />
       <div className="mt-5 h-11 w-[min(420px,80%)] animate-pulse rounded-2xl bg-[#E8E8ED] motion-reduce:animate-none" />
@@ -38,18 +38,20 @@ const RouteFallback = () => (
       </div>
       <p className="mt-8 text-sm font-medium text-[#6E6E73]">Loading CampusNav...</p>
     </div>
-  </main>
+  </div>
 )
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <ClaraProvider>
         <ScrollToTop />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route element={<AppLayout />}>
-              <Route path="/" element={<Home />} />
+              {/* Dashboard is the CampusNav home surface. */}
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/facilities" element={<Facilities />} />
               <Route path="/facilities/:id" element={<FacilityDetail />} />
@@ -80,6 +82,7 @@ function App() {
           </Routes>
         </Suspense>
         <Toaster />
+        </ClaraProvider>
       </Router>
     </AuthProvider>
   )

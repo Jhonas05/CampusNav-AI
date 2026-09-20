@@ -38,12 +38,18 @@ function Room3D({ room, facility, points, opacity, selected, destination, curren
     points.reduce((sum, point) => sum + point.z, 0) / points.length,
   ]
   const category = getFacilityCategory(facility)
+  /*
+   * Monochrome room fills. Destination and current location are separated by
+   * fill *value* rather than hue — destination is the brightest surface in the
+   * scene, current location the darkest — and both additionally carry a heavy
+   * outline and a strong label below.
+   */
   const fill = restricted
     ? "#9A9AA0"
     : destination
-      ? "#FCA5A5"
+      ? "#FFFFFF"
       : current
-        ? "#93C5FD"
+        ? "#5A5A5F"
         : selected || hovered
           ? category.map.stroke
           : category.map.fill

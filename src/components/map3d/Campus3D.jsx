@@ -107,11 +107,11 @@ export default function Campus3D({
         <DebugOverlay3D nodes={nodes} edges={edges} floors={floors} viewMode={viewMode} selectedFloorId={selectedFloorId} isolateFloor={isolateFloor} options={debugOptions} />
         <CameraController request={cameraRequest} floors={floors} facilities={facilities} viewMode={viewMode} selectedFloorId={selectedFloorId} reducedMotion={reducedMotion} />
       </Canvas>
-      <div aria-label="3D map legend" className="pointer-events-none absolute bottom-3 left-3 right-14 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-2xl border border-[#E5E5E7] bg-white/95 px-3.5 py-2.5 text-[8px] font-semibold uppercase tracking-wide text-[#48484A] shadow-[0_8px_24px_rgba(0,0,0,0.08)] backdrop-blur sm:right-auto sm:max-w-[calc(100%-88px)]">
-        <span className="inline-flex items-center"><b aria-hidden="true" className="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue-600" />You are here</span>
-        <span className="inline-flex items-center"><b aria-hidden="true" className="mr-1.5 inline-block h-2 w-2 rounded-full border-2 border-red-600 bg-white" />Destination</span>
-        <span className="inline-flex items-center"><b aria-hidden="true" className="mr-1.5 inline-block h-0.5 w-4 bg-[#1E7A45] align-middle" />Route</span>
-        <span>▰ Stairs</span><span className="text-green-700">▣ Exit</span><span>◇ QR checkpoint</span><span>▨ Blocked / construction</span>
+      <div aria-label="3D map legend" className="pointer-events-none absolute bottom-3 left-3 right-[5.5rem] flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-2xl border border-[#E5E5E7] bg-white/95 px-3.5 py-2.5 text-[8px] font-semibold uppercase tracking-wide text-[#48484A] shadow-[0_8px_24px_rgba(0,0,0,0.08)] backdrop-blur sm:right-auto sm:max-w-[calc(100%-88px)]">
+        <span className="inline-flex items-center"><b aria-hidden="true" className="mr-1.5 inline-block h-2 w-2 rounded-full bg-[#1D1D1F]" />You are here</span>
+        <span className="inline-flex items-center"><b aria-hidden="true" className="mr-1.5 inline-block h-2 w-2 rounded-full border-2 border-black bg-white" />Destination</span>
+        <span className="inline-flex items-center"><b aria-hidden="true" className="mr-1.5 inline-block h-0.5 w-4 bg-[#1D1D1F] align-middle" />Route</span>
+        <span>▰ Stairs</span><span className="font-black text-[#1D1D1F]">▣ Exit</span><span>◇ QR checkpoint</span><span>▨ Blocked / construction</span>
         <span className="basis-full text-[#86868B]">Vertical dimensions: {MAP3D_CONFIG.verticalDimensionStatus}</span>
       </div>
     </div>

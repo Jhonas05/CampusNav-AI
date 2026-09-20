@@ -5,8 +5,12 @@ import { cn } from "@/lib/utils"
 
 /**
  * True mobile navigation surface (§ mobile navigation UI): a fixed bottom
- * sheet above the tab bar with the destination, the next instruction,
- * route progress, and expandable full steps. Desktop keeps the side panel.
+ * sheet with the destination, the next instruction, route progress, and
+ * expandable full steps. Desktop keeps the side panel.
+ *
+ * The sheet now sits flush to the viewport bottom (the old mobile tab bar was
+ * replaced by the sidebar drawer). Its collapse control is inset from the
+ * right so the floating CLARA button never covers it.
  */
 export default function MobileRouteSheet({
   route,
@@ -30,7 +34,7 @@ export default function MobileRouteSheet({
   return (
     <section
       aria-label="Route summary"
-      className="fixed inset-x-0 bottom-[calc(64px+env(safe-area-inset-bottom))] z-40 rounded-t-[1.5rem] border-t border-[#E5E5E7] bg-white shadow-[0_-18px_50px_rgba(0,0,0,0.14)] lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 rounded-t-[1.5rem] border-t border-[#E5E5E7] bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-18px_50px_rgba(0,0,0,0.14)] lg:hidden"
     >
       <button
         type="button"
@@ -39,7 +43,8 @@ export default function MobileRouteSheet({
         className="flex w-full flex-col items-center rounded-t-[1.5rem] px-5 pt-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#1D1D1F]"
       >
         <span aria-hidden="true" className="h-1 w-10 rounded-full bg-[#D2D2D7]" />
-        <span className="mt-3 flex w-full items-start justify-between gap-3 pb-3 text-left">
+        {/* Right inset keeps the floating CLARA button clear of this row. */}
+        <span className="mt-3 flex w-full items-start justify-between gap-3 pb-3 pr-[4.25rem] text-left">
           <span className="min-w-0">
             <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-[#86868B]">
               {arrived ? "Arrived" : `To ${destination?.name || "destination"}`} · {viewingFloorId}
@@ -85,7 +90,7 @@ export default function MobileRouteSheet({
       )}
 
       {!expanded && navigationStatus === "active" && (
-        <div className="border-t border-[#F0F0F2] px-5 py-3">
+        <div className="border-t border-[#F0F0F2] py-3 pl-5 pr-[5rem]">
           <button
             type="button"
             onClick={onAdvance}

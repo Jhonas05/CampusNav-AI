@@ -1,12 +1,13 @@
 # CampusNav AI — UI/UX Guidelines
 
 ## Visual direction
-CampusNav uses the owner-approved **CampusNav Ink / architectural-blueprint** presentation baseline defined by `DEC-UI-002`.
+CampusNav uses the owner-approved **CampusNav Ink / architectural-blueprint** presentation baseline defined by `DEC-UI-002`, with the strictly monochrome palette and left-sidebar application shell established by `DEC-UI-003`.
 
 - neutral-dominant off-white, charcoal, and grayscale application surfaces
-- CampusNav green for primary actions, active navigation, and verified positive states
-- emergency red reserved for emergency, destructive, and urgent meanings
-- controlled semantic map colors for wayfinding, with non-color reinforcement
+- near-black ink for primary actions, active navigation, and verified positive states
+- black fill or heavy black border reserved for emergency, destructive, and urgent meanings
+- grayscale map marks separated by form — fill, ring weight, dash pattern, icon, and text label
+- left sidebar is navigation chrome and must never visually overpower the map or main workspace
 - sharp geometry and compact radii rather than soft consumer-app cards
 - thin technical borders and restrained shadows
 - compact uppercase kickers and section labels with deliberate tracking
@@ -17,30 +18,34 @@ CampusNav uses the owner-approved **CampusNav Ink / architectural-blueprint** pr
 - avoid generic LMS/admin-template appearance
 
 ## Branding
-- use St. Clare College logo tastefully in navbar/login/home/admin shell where appropriate
+- use St. Clare College logo tastefully in sidebar branding, login, and admin shell where appropriate
 - use the owner-approved transparent high-resolution `public/branding/scc-logo.png` as the current institutional logo asset
 - support office/lab/classroom/facility photos and galleries
 - use polished placeholders when an image is unavailable
 
 ## Color decision
-The earlier strict grayscale / Apple-only direction and map-only color exception are superseded where they conflict with `DEC-UI-002`. Restraint remains mandatory: neutral surfaces dominate while green, red, and map/status colors communicate specific meaning.
+`DEC-UI-003` restores **strict monochrome** for normal CampusNav UI: white, off-white, light/medium/dark gray, and black only. No blue, green, red, yellow, purple, orange, or colored gradients. This supersedes the `DEC-UI-002` allowance for CampusNav green, emergency red, and semantic map/status color.
 
-Even when colors are used:
-- never rely on color alone
+Enforcement is centralized rather than per-component: `tailwind.config.js` remaps the `brand` scale and every chromatic Tailwind scale onto neutral ramps, and `src/index.css` holds the `--ink-*` tokens. Existing semantic class names keep their relative lightness, so visual hierarchy survives the remap.
+
+Because hue is gone, non-color signalling is load-bearing:
+- never rely on shade alone
+- distinguish meaning with icon, border weight, fill, opacity, typography, pattern, or badge shape
 - restricted/construction/emergency states need icon/pattern/text treatment
 - contrast and accessibility must remain strong
 
 ## Canonical presentation tokens
 Centralize tokens in the application theme layer and consume them through reusable components or semantic utility classes.
 
-- page background: approximately `#f2f2f3`
-- raised/sunken surface: approximately `#e9e9ea`
-- primary text/ink: approximately `#1d1f20`
+- page background: approximately `#f5f5f7`
+- raised/sunken surface: approximately `#ebebed`
+- primary text/ink: approximately `#1d1d1f`; secondary text `#6e6e73`; borders `#d2d2d7`
 - neutral ramp: approximately `#f5f5f8`, `#e7e7ea`, `#d4d4d7`, `#b7b7ba`, `#98989b`, `#7a7a7d`, `#5d5d60`, `#424244`, and `#2b2b2d`
-- primary CampusNav green: `#15703c`
-- primary hover/pressed green: `#0f5a2f`
-- emergency red: `#b3261e`
-- small/medium/large radii: approximately `2px`, `4px`, and `7px`
+- primary action ink: `#1d1d1f`
+- primary hover/pressed ink: `#000000`
+- emergency/urgent ink: `#000000` (always paired with an icon and text)
+- sidebar width: `17rem` expanded, `4.5rem` collapsed, exposed as `--app-sidebar-current-width`
+- small/medium/large radii: approximately `6px`, `10px`, and `14px`
 - borders are the main structural device; shadows provide subtle elevation only
 
 ## Typography

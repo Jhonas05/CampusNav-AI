@@ -1,7 +1,6 @@
 import assert from "node:assert/strict"
 import React from "react"
 import { renderToString } from "react-dom/server"
-import { MemoryRouter } from "react-router-dom"
 import { createServer } from "vite"
 import { fileURLToPath, URL } from "node:url"
 import { NOTIFICATION_LIFECYCLES, NOTIFICATION_PRIORITIES, SAMPLE_DATA_NOTICE } from "../src/data/dashboardContracts.js"
@@ -76,18 +75,28 @@ const vite = await createServer({
   esbuild: { jsx: "automatic" },
   logLevel: "error",
   optimizeDeps: { noDiscovery: true },
+  // react-router resolves to CJS under the SSR module runner; prefer its
+  // ESM builds so named exports (useSearchParams, Link, ...) are available.
+  ssr: {
+    noExternal: ["react-router-dom", "react-router"],
+    resolve: { conditions: ["module", "import", "default"], externalConditions: ["module", "import", "default"] },
+  },
   resolve: { alias: { "@": fileURLToPath(new URL("../src", import.meta.url)) } },
   root: projectRoot,
   server: { middlewareMode: true },
 })
 
 try {
+  // MemoryRouter must come from the same module instance the pages use,
+  // otherwise the router context does not match across the two graphs.
+  const { MemoryRouter } = await vite.ssrLoadModule("react-router-dom")
   const { default: Dashboard } = await vite.ssrLoadModule("/src/pages/Dashboard.jsx")
-  const { default: Navbar } = await vite.ssrLoadModule("/src/components/layout/Navbar.jsx")
+  const { default: Sidebar } = await vite.ssrLoadModule("/src/components/layout/Sidebar.jsx")
   const renderDashboard = (entry) => renderToString(React.createElement(MemoryRouter, { initialEntries: [entry] }, React.createElement(Dashboard)))
 
   const normalHtml = renderDashboard("/dashboard")
-  assert.match(normalHtml, /CampusNav Dashboard/)
+  assert.match(normalHtml, /Welcome to CampusNav/)
+  assert.match(normalHtml, /Good (morning|afternoon|evening)/)
   assert.match(normalHtml, /Local Prototype Mode/)
   assert.match(normalHtml, /No priority alerts are available/)
   assert.match(normalHtml, /Schedule information unavailable/)
@@ -102,9 +111,15 @@ try {
   assert.doesNotMatch(normalHtml, /Sample Event/)
   assert.doesNotMatch(normalHtml, />Demo data</)
 
-  const navbarHtml = renderToString(React.createElement(MemoryRouter, { initialEntries: ["/dashboard"] }, React.createElement(Navbar)))
-  assert.match(navbarHtml, /href="\/dashboard"/)
-  assert.match(navbarHtml, />Dashboard</)
+  // Sidebar is the primary navigation; an unauthenticated render must expose
+  // the public destinations and no ADMINISTRATION section.
+  const sidebarHtml = renderToString(React.createElement(MemoryRouter, { initialEntries: ["/dashboard"] }, React.createElement(Sidebar)))
+  assert.match(sidebarHtml, /href="\/dashboard"/)
+  assert.match(sidebarHtml, />Dashboard</)
+  assert.match(sidebarHtml, /href="\/map"/)
+  assert.match(sidebarHtml, /href="\/emergency"/)
+  assert.doesNotMatch(sidebarHtml, /Administration/)
+  assert.doesNotMatch(sidebarHtml, /href="\/admin/)
 
   const demoHtml = renderDashboard("/dashboard?demo=1")
   assert.match(demoHtml, /Demo data/)

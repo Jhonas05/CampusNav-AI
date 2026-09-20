@@ -1,5 +1,36 @@
 # CampusNav Content Pack — Changelog
 
+## v3.21 — 20 September 2026
+
+Redesigned the CampusNav interface from a top-navigation website layout into a left-sidebar application shell, restored a strictly monochrome palette, and converted CLARA into a floating assistant. Presentation and navigation chrome only.
+
+### Owner decision
+- added `DEC-UI-003` with status `OWNER APPROVED — 20 Sep 2026`
+- superseded the `DEC-UI-002` color assignment (CampusNav green primary, emergency red urgent, semantic map/status color) with strict monochrome for normal CampusNav UI
+- superseded the `DEC-UI-002` shell/navigation layout; `DEC-UI-002` typography, geometry, border, shadow, and motion tokens remain in force
+- reaffirmed that meaning is never carried by color or shade alone
+
+### Application shell
+- replaced the full-width `Navbar` and the bottom `MobileTabBar` with a fixed, collapsible left sidebar (`Sidebar`, `SidebarItem`, `SidebarSection`, `UserProfileCard`) and a focus-trapped `MobileNavigationDrawer` below `lg`
+- added a compact `MainHeader` carrying only the mobile navigation trigger, page title, global search, and notifications
+- added `navigationConfig.js` as the single source of truth for primary and administration navigation, filtered by the same roles the routes enforce
+- moved admin navigation out of `AdminShell` into the sidebar's collapsible ADMINISTRATION section; `AdminShell` is now a content wrapper only
+
+### Routes and surfaces
+- `/` now redirects to `/dashboard`; the separate Home page was removed rather than duplicated
+- Dashboard became the centralized home surface with welcome/campus context, global search, quick actions, and quick facility access above the existing sections
+- Navigate became an edge-to-edge workspace whose row is exactly one viewport tall on `lg`, so the control column scrolls internally and the map fills the remainder
+- added `/map?scan=1` so the Dashboard "Scan QR" quick action opens the existing checkpoint scanner
+
+### CLARA
+- extracted the existing matcher and reply logic unchanged into `src/lib/claraEngine.js`
+- added `ClaraProvider` so the transcript survives route changes and panel close
+- added `ClaraFloatingButton` and `ClaraChatPanel`; `/clara`, `/clara?q=`, and `/clara?about=` remain as deep links that open the assistant over the Dashboard
+
+### Scope
+- no change to the campus dataset, the A* routing engine, 2D/3D coordinate truth, QR checkpoint behavior, manual positioning, emergency-approved routing, personnel privacy or schedule-vs-presence rules, authorization, or Supabase service boundaries
+- no new runtime dependency
+
 ## v3.20 — 20 September 2026
 
 Prepared the canonical adviser confirmation package for the owner-approved proposed final defense baseline.

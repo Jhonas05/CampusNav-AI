@@ -69,9 +69,10 @@ const consultation = validateAcademicRecord(ACADEMIC_ADMIN_RESOURCES.CONSULTATIO
 assert.equal(consultation.facility_id, null)
 assert.ok(resolveRecurringPersonnelInterval({ id: 1, ...consultation }, "2026-09-14", PERSONNEL_STATUSES.CONSULTATION), "facility-optional consultation remains part of the status engine")
 
-const [app, shell, page, editor, migration] = await Promise.all([
+const [app, adminNav, page, editor, migration] = await Promise.all([
   readFile(new URL("../src/App.jsx", import.meta.url), "utf8"),
-  readFile(new URL("../src/components/admin/AdminShell.jsx", import.meta.url), "utf8"),
+  // Admin navigation moved from AdminShell into the shared sidebar config.
+  readFile(new URL("../src/components/layout/navigationConfig.js", import.meta.url), "utf8"),
   readFile(new URL("../src/pages/admin/AcademicAdminPage.jsx", import.meta.url), "utf8"),
   readFile(new URL("../src/components/admin/AcademicAdminEditor.jsx", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260915052147_phase_8c2_personnel_academic_admin_ui.sql", import.meta.url), "utf8"),
@@ -80,7 +81,7 @@ const [app, shell, page, editor, migration] = await Promise.all([
 for (const path of ["personnel", "courses", "sections", "class-schedules", "schedule-exceptions", "personnel-assignments", "consultation-hours", "check-ins", "personnel-availability"]) {
   assert.match(app, new RegExp(`/admin/${path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`))
 }
-for (const label of ["Personnel", "Courses", "Sections", "Class Schedules", "Schedule Exceptions", "Personnel Assignments", "Consultation Hours", "Check-ins", "Availability Overrides"]) assert.match(shell, new RegExp(label))
+for (const label of ["Personnel", "Courses", "Sections", "Class Schedules", "Schedule Exceptions", "Personnel Assignments", "Consultation Hours", "Check-ins", "Availability Overrides"]) assert.match(adminNav, new RegExp(label))
 
 assert.match(page, /subscribeToAcademicChanges/)
 assert.match(page, /This action will mark this personnel record as currently checked in/)

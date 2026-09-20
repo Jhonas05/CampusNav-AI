@@ -81,6 +81,51 @@ This decision supersedes DEC-UI-001 only where the earlier decision limited colo
 
 `CampusNav-Ink-all-pages.html` is a visual and interaction-composition reference only. It is not production source, runtime logic, institutional truth, routing data, backend policy, or authorization evidence. Its inline styles, bundled scripts, embedded fonts, and static controls are not canonical implementation assets.
 
+## DEC-UI-003 — Left sidebar application shell, monochrome palette, floating CLARA
+**Status:** OWNER APPROVED — 20 Sep 2026
+
+The owner directed a UI redesign of the existing application. No architecture,
+routing engine, spatial dataset, service boundary, or authorization rule
+changes; this decision covers presentation and navigation chrome only.
+
+Rules:
+- **Shell.** Primary navigation is a fixed left sidebar (`17rem`, collapsible to
+  an icon rail) on `lg` and above, and a focus-trapped slide-over drawer below
+  `lg`. The full-width top navigation (`Navbar`) and the bottom mobile tab bar
+  (`MobileTabBar`) are retired. The main workspace keeps only a compact
+  contextual header (page title, global search, notifications) that must not
+  repeat sidebar destinations.
+- **Palette.** Normal CampusNav UI is **strictly monochrome** — white,
+  off-white, light/medium/dark gray, black. This restores the strict-grayscale
+  intent of the 14 Sep master source and supersedes the DEC-UI-002 rules that
+  assigned CampusNav green to primary actions and emergency red to urgent
+  meaning. Enforcement is centralized in `tailwind.config.js`, which remaps the
+  `brand` scale and every chromatic Tailwind scale onto neutral ramps, and in
+  the `--ink-*` tokens in `src/index.css`.
+- **Non-color meaning is unchanged and now load-bearing.** Status, priority,
+  emergency, and facility category must be carried by icon, border weight,
+  fill value, opacity, typography, pattern, or badge shape. The rule from
+  DEC-UI-001 that color is never the only carrier of meaning remains in force.
+- **CLARA.** CLARA is a floating assistant reachable from every shell route via
+  a bottom-right circular button, not a full page. `/clara`, `/clara?q=`, and
+  `/clara?about=` remain as deep links that open the assistant over the
+  Dashboard. The conversation lives in `ClaraProvider` so it survives route
+  changes and panel close. CLARA remains a conversational layer over verified
+  CampusNav data; routing stays with the campus route engine (DEC-ARCH-001,
+  DEC-NAV-001).
+- **Home.** `/` redirects to `/dashboard`. Dashboard is the centralized campus
+  information surface; the separate marketing-style Home page is removed rather
+  than duplicated.
+- **Navigate.** The map must dominate the Navigate workspace. On `lg` the
+  workspace row is exactly one viewport tall so the control column scrolls
+  inside itself and the map (2D SVG or R3F canvas) fills the remainder and
+  resizes from real layout width.
+
+This decision supersedes DEC-UI-002 on color assignment and on shell/navigation
+layout. DEC-UI-002 otherwise remains in force for typography, geometry, border,
+shadow, and motion tokens, and for the rule that the bundled
+`CampusNav-Ink-all-pages.html` artifact is reference only.
+
 ## DEC-TITLE-001 — Formal proposal title vs current responsive implementation
 **Status:** REQUIRES THESIS/ADVISER ALIGNMENT, NOT A CODE BLOCKER
 

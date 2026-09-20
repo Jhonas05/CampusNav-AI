@@ -14,7 +14,17 @@ const plannedItems = [
   { label: "Accessibility Preferences", icon: Accessibility },
 ]
 
-export default function ProfileMenu({ open, onClose }) {
+/**
+ * Anchoring for the two places the account menu is opened from.
+ * `header` keeps the original top-right dropdown; `sidebar` flips it above the
+ * profile card that sits at the bottom of the application sidebar.
+ */
+const PLACEMENT_CLASSES = {
+  header: "fixed inset-x-3 top-[72px] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-[320px]",
+  sidebar: "fixed inset-x-3 bottom-[88px] sm:absolute sm:inset-x-auto sm:bottom-[calc(100%+10px)] sm:left-0 sm:top-auto sm:w-[300px]",
+}
+
+export default function ProfileMenu({ open, onClose, placement = "header" }) {
   const auth = useAuth()
   const menuRef = useRef(null)
   const [savedIds, setSavedIds] = useState(() => getSavedLocationIds())
@@ -47,7 +57,7 @@ export default function ProfileMenu({ open, onClose }) {
       ref={menuRef}
       role="region"
       aria-label="Account menu"
-      className="ink-blueprint fixed inset-x-3 top-[72px] z-[60] overflow-hidden shadow-[0_18px_42px_rgba(29,31,32,0.14)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-[320px]"
+      className={`ink-blueprint z-[60] overflow-hidden shadow-[0_18px_42px_rgba(29,31,32,0.14)] ${PLACEMENT_CLASSES[placement] || PLACEMENT_CLASSES.header}`}
     >
       <header className="border-b border-[#E5E5E7] px-5 py-4">
         <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868B]">CampusNav Account</p>
