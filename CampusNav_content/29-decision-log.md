@@ -151,6 +151,23 @@ Defense-data policy:
 
 The formal tablet-based versus responsive-web title, final adviser scope confirmation, grounded CLARA/PWA requirement, defense-data-policy acceptance, and research/evaluation methodology remain `ADVISER_APPROVAL_REQUIRED`.
 
+## DEC-ROADMAP-002 — Phase 4 product-completion reprioritization
+**Status:** OWNER APPROVED — 20 Sep 2026
+
+The owner reprioritizes active software development toward building a more complete functional CampusNav system. The next canonical implementation phase is **Phase 4 — Core Facility & Service Workflow Completion**.
+
+Decision boundaries:
+- software/product completion is the active development priority; waiting for adviser confirmation is no longer the active software-development workstream
+- `75-adviser-confirmation-package.md` remains `PREPARED / AWAITING_ADVISER_CONFIRMATION` as preserved external-decision material and is not adviser-approved
+- adviser waiting does not block safe owner-controlled engineering that preserves pending/unavailable states and clearly labeled `DEMO` / `DEVELOPMENT` fixtures
+- official facility hours, services, mappings, contacts, photographs, department ownership, personnel facts, and emergency facts must not be fabricated
+- Phase 1 remains `COMPLETE`; Phase 2 and Phase 3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`; their historical evidence is not reopened or rewritten
+- Phase 4 Supabase facility data is an **operational overlay** keyed by existing canonical local facility IDs; it is not a second facility identity system, spatial dataset, navigation truth, or routing system
+- existing geometry, nodes/edges, A*, QR/manual positioning, emergency-approved-only routing, and schedule/personnel truth rules remain controlling
+- grounded CLARA, PWA/offline, AR Guidance, reports/analytics, advanced map editing, GPS/BLE/UWB, push/SMS, the Claude redesign, and dependency upgrades remain outside Phase 4
+
+Only **Phase 4-FS-1 — Facility Operational Data and Service Foundation** is the exact next implementation subphase. This decision adopts and sequences the phase; it does not implement FS-1 or claim adviser, institutional, safety-authority, or academic approval.
+
 ## How to add a decision
 Use:
 - ID

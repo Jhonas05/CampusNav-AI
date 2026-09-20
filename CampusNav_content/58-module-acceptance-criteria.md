@@ -24,6 +24,12 @@
 ## Facilities/search
 - verified facility/service results are findable
 - unverified hours/status are not guessed
+- operational records reference existing canonical facility IDs and do not duplicate spatial/routing truth
+- only configured service mappings produce recommendations
+- weekly, overnight, dated-exception, temporary-closure, service-interruption, closing-soon, scheduled-to-open, closed, and unknown cases follow `13-facility-service-model.md`
+- operational `CLOSED` does not become a routing restriction unless canonical navigation data separately blocks the route
+- public results preserve provenance and visibly label `DEMO` data
+- missing media has an accessible placeholder; unpublished or unauthorized media is not publicly exposed
 
 ## Schedules/personnel
 - exceptions and status precedence work
@@ -37,6 +43,7 @@
 ## Admin/RBAC
 - unauthorized writes fail even if UI gating is bypassed
 - important changes create expected audit activity
+- permitted facility/service writes remain scope-limited and lifecycle/provenance validated
 
 ## CLARA
 - tools/services provide the facts

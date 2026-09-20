@@ -3,6 +3,35 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
+
+**Phase classification:** `ADOPTED / NOT_STARTED`
+
+**Owner decision:** `DEC-ROADMAP-002`
+
+Phase 4 is the active software-development workstream. Adoption supplies no implementation evidence and does not change the recorded `PARTIAL`/`MISSING` status of facility operational capabilities.
+
+| Area | Current status | Phase 4 boundary |
+|---|---|---|
+| Phase 1 | `COMPLETE` | Historical evidence preserved; not reopened |
+| Phase 2 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
+| Phase 3 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
+| Facility directory/detail/navigation foundation | `PARTIAL / IMPLEMENTED_BASELINE` | Existing local stable IDs, spatial truth, navigation links, and pending states remain authoritative |
+| Facility operational profiles | `NOT_IMPLEMENTED` | Future Supabase operational overlay keyed by canonical facility IDs |
+| Services, aliases, and facility-service mappings | `NOT_IMPLEMENTED` | Configured mappings only; no guessed recommendation |
+| Hours, exceptions, and facility-status engine | `NOT_IMPLEMENTED` | `Asia/Manila`; status contract in `13`; operational closed is not routing blocked |
+| Facility Admin workflows beyond advisories | `NOT_IMPLEMENTED` | Generic authorized workflow first; institutional owner names remain pending |
+| Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
+| Public search/recommendation enrichment | `NOT_IMPLEMENTED` | Existing name/kind/floor search is only the baseline |
+| Dashboard operational availability | `PARTIAL` | Pending/unknown local states and advisories exist; connected computed office availability is not implemented |
+| Adviser package | `PREPARED / AWAITING_ADVISER_CONFIRMATION` | Preserved external-decision material; no adviser approval claimed |
+
+**FS-1 readiness:** `READY_WITH_BOUNDARIES`. The schema/RLS/audit/service foundation is sufficiently defined, uses pending/demo-safe behavior, and requires no official seed data. It may not alter spatial/routing truth or implement FS-2 through FS-7.
+
+**Toolchain advisory:** this laptop currently uses Node 24 while project support targets Node 20/22. Use Node 22 before FS-1 implementation/testing; no package/dependency change is authorized by this adoption.
+
+**Exact next implementation task:** Phase 4-FS-1 — Facility Operational Data and Service Foundation.
+
 ## Owner-approved proposed final defense scope — 19 September 2026
 
 **Decision classification:** `OWNER APPROVED / ADVISER CONFIRMATION REQUIRED`
@@ -21,9 +50,9 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 **Adviser package:** `PREPARED / AWAITING_ADVISER_CONFIRMATION` in `75-adviser-confirmation-package.md`. The form contains no preselected adviser decisions and supplies no approval evidence.
 
-**Exact next action:** `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`.
+**External adviser action:** `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`.
 
-**Readiness after preparation:** documentation/request-package preparation is complete. Feature/data implementation and final thesis/defense readiness remain `NOT_READY` / `BLOCKED` until completed adviser evidence is canonically recorded and any resulting task separately passes Definition of Ready.
+**Readiness after preparation:** documentation/request-package preparation is complete. Final thesis/defense approval claims remain `NOT_READY` / `BLOCKED` pending completed adviser evidence. Under `DEC-ROADMAP-002`, that external wait does not block Phase 4's safe owner-controlled engineering sequence.
 
 ## Phase 3-MQA-7 final acceptance and evidence reconciliation — completed 19 September 2026
 
@@ -43,9 +72,9 @@ The exact-revision production baseline and MQA-1 through MQA-6 are accepted at t
 
 The final-system Definition of Done remains incomplete for its explicitly `UNSATISFIED` and `DEFERRED` items. Phase 3 closure is limited to accepted-baseline release and manual QA and is not a thesis-completion, institutional-data, WCAG, device/browser/GPU/performance, or optional-feature certification.
 
-**Exact next workstream:** Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate.
+**Historical next workstream at Phase 3 closure:** Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate. `DEC-ROADMAP-002` later supersedes this as active software sequencing while preserving the unresolved external decisions.
 
-**Definition of Ready:** `READY` for decision coordination because the questions, evidence boundaries, and required authorities are identified. Any downstream implementation phase remains `NOT_READY` / `BLOCKED` until the applicable adviser decisions, authorized institutional datasets/sign-offs, final defense-scope choices, and demo-rehearsal plan are supplied or explicitly deferred.
+**Historical Definition of Ready at Phase 3 closure:** `READY` for decision coordination because the questions, evidence boundaries, and required authorities were identified. Downstream implementation was then `NOT_READY` / `BLOCKED`; `DEC-ROADMAP-002` later authorizes the bounded Phase 4 software sequence without supplying any missing external approval or official data.
 
 ## AR-Assisted Camera Navigation / AR Guidance Mode — canonical planning adoption 19 September 2026
 
@@ -61,7 +90,7 @@ The final-system Definition of Done remains incomplete for its explicitly `UNSAT
 | Emergency | `DEFERRED_CONDITIONAL` | AR may only present an already-approved emergency route after separate canonical and safety approval; no normal-route fallback |
 | Implementation evidence | `NOT_IMPLEMENTED` | No AR source, route-step adapter, camera-guidance shell, overlay, schema, dependency, test, or deployment is claimed by this documentation task |
 | Definition of Ready | `NOT_READY` | Route-step semantics, device matrix, camera/QR lifecycle, privacy/security verification, performance thresholds, accessibility plan, and emergency-stage authority remain unresolved |
-| Active sequencing | `DEFERRED` | Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`; `DEC-DEFENSE-001` excludes AR from the proposed defense core, the adviser package is prepared, obtaining adviser confirmation is next, and no AR implementation is authorized |
+| Active sequencing | `DEFERRED` | Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`; `DEC-DEFENSE-001` excludes AR from the proposed defense core; `DEC-ROADMAP-002` selects Phase 4-FS-1 next; no AR implementation is authorized |
 
 `74-ar-assisted-navigation-contract.md` is a future adoption contract, not implementation proof. Do not start AR-0 or any later AR stage until a future roadmap authorization exists and the Definition of Ready passes.
 

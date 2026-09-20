@@ -110,7 +110,7 @@ Remaining items are separated as follows:
 - **adviser/research dependencies:** formal title treatment and the approved evaluation design, instrument, respondents/sample, metrics, thresholds, and statistical treatment
 - **deferred/outside Phase 3:** grounded CLARA integration, PWA/offline emergency caching, map editor/version rollback, reports/analytics, AR Guidance, GPS/BLE/UWB, and other optional expansion
 
-These distinctions close Phase 3 without closing the final-system thesis/demo Definition of Done and without treating the unresolved research-methodology gap as a software defect. The exact next workstream is the **Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate**. It is `READY` for decision coordination, while downstream implementation is `NOT_READY` / `BLOCKED` until applicable adviser approvals, authorized institutional inputs/sign-offs, final defense-scope decisions, and a verified/demo-labeled rehearsal plan exist or are explicitly deferred.
+These distinctions close Phase 3 without closing the final-system thesis/demo Definition of Done and without treating the unresolved research-methodology gap as a software defect. At Phase 3 closure, the exact next workstream was the **Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate**. `DEC-ROADMAP-002` later supersedes that as active software sequencing while preserving every adviser/research dependency in this register.
 
 ## Owner-approved proposed defense baseline — 19 September 2026
 
@@ -120,4 +120,4 @@ The formal title treatment, final defense-scope confirmation, grounded CLARA req
 
 **Adviser package status:** `75-adviser-confirmation-package.md` is `PREPARED / AWAITING_ADVISER_CONFIRMATION`. It presents the unresolved decisions without implying approval.
 
-**Exact next action:** `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`. Any resulting software or data work remains `NOT_READY` until completed adviser evidence is canonically recorded and the applicable decision, authority, data source, privacy/security boundary, and acceptance cases satisfy `72-definition-of-ready.md`.
+**External adviser action:** `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`. Final academic claims remain unresolved until completed adviser evidence is canonically recorded. This external wait does not authorize fabricated data and, under `DEC-ROADMAP-002`, does not block the separately bounded Phase 4 owner-controlled software sequence.

@@ -1,5 +1,30 @@
 # CampusNav Content Pack — Changelog
 
+## v3.21 — 20 September 2026
+
+Adopted **Phase 4 — Core Facility & Service Workflow Completion** as the next canonical implementation phase.
+
+### Owner reprioritization
+- added `DEC-ROADMAP-002`, making complete functional-system development the active owner-controlled software priority
+- preserved Phase 1 as `COMPLETE` and Phase 2/Phase 3 as `COMPLETE — ACCEPTED_WITH_ADVISORY` without rewriting their historical evidence
+- preserved `75-adviser-confirmation-package.md` as `PREPARED / AWAITING_ADVISER_CONFIRMATION`; adviser waiting no longer controls software sequencing and no adviser/academic approval is claimed
+- retained clean `main` as the authoritative baseline and excluded the backup/reference Claude redesign branch
+
+### Phase 4 contract
+- defined the Supabase facility domain as an operational overlay keyed by existing canonical local facility IDs, never a second spatial/navigation/routing truth
+- recorded Phase 4 objectives for operational profiles, services/aliases/mappings, hours/exceptions/status, shared search/recommendation, Admin, media, public Facilities, Dashboard, RLS, audit, Realtime, provenance, and regressions
+- formalized `Asia/Manila` weekly/overnight/exception evaluation, facility-wide temporary-closure precedence, service-interruption scope, a 30-minute `CLOSING_SOON` threshold, scheduled-to-open/closed/unknown handling, and the separation of operational closure from routing restrictions
+- retained unknown institutional data as unavailable/pending and allowed only isolated synthetic `DEVELOPMENT` or visibly labeled `DEMO` fixtures for implementation/testing
+
+### Sequencing and readiness
+- adopted Phase 4-FS-1 through Phase 4-FS-7 in implementation order without marking any subphase complete
+- classified Phase 4-FS-1 — Facility Operational Data and Service Foundation as `READY_WITH_BOUNDARIES / NOT_STARTED` and the single exact next implementation task
+- limited FS-1 to version-controlled schema/migration, operational profiles, services/aliases/mappings, provenance/lifecycle, RLS, trusted audit, and provider-neutral FacilityService contracts; no official record seed or later-subphase implementation is authorized
+- recorded Node 24 as a local advisory and required supported Node 22 before FS-1 implementation/testing; no package/dependency change was made
+
+### Scope
+- canonical documentation only; no application source, package, migration, schema, test, fixture, credential, institutional/production data, routing, spatial data, QR, Emergency, personnel/schedule, CLARA, PWA, AR, report, map-editor, positioning, delivery, redesign, dependency, commit, push, or deployment change
+
 ## v3.20 — 20 September 2026
 
 Prepared the canonical adviser confirmation package for the owner-approved proposed final defense baseline.

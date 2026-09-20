@@ -7,7 +7,7 @@ CampusNav contains administrative, schedule, role, map, and emergency data whose
 - role/permission changes
 - official announcement publication/update
 - suspension status changes
-- facility/hours/advisory changes
+- facility profile, service/alias, facility-service mapping, hours/exception, advisory, and media changes
 - personnel assignment/availability changes
 - class/schedule changes where admin-managed
 - map/node/edge/QR changes

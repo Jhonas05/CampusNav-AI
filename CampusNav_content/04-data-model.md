@@ -53,12 +53,23 @@ Roles:
 - `personnel_availability_overrides`
 - private `personnel_auth_links`
 
-## 5. Future/expanded facility operations domain
-Source architecture also expects or allows:
-- facility services / service mappings
+## 5. Phase 4 facility operational overlay
+Phase 4 adds a Supabase-backed **operational overlay** keyed by the stable facility IDs in the local/version-controlled spatial source. The overlay may contain:
+- facility operational profiles for descriptions, authorized department/public-contact metadata, lifecycle, and provenance
+- services and approved service aliases
+- facility-service mappings
 - facility operating hours
-- facility schedule exceptions
-- temporary closures/advisories
+- facility schedule/hour exceptions
+- facility media metadata
+- existing facility advisories for temporary closures, maintenance, restricted access, and service interruption
+
+The overlay must not store competing facility geometry, floor truth, map nodes/edges, QR relationships, or routing data. It must not create a second facility identity namespace. A facility operational record without authorized content may be absent or remain pending; unknown values are not filled merely to create a complete-looking row.
+
+FS-1 establishes operational profiles, services, mappings, lifecycle/provenance, RLS, audit, and provider-neutral service contracts. Hours/exceptions, Admin UI, public UI, media storage, and Dashboard/Realtime integration follow in later Phase 4 subphases.
+
+No Phase 4 migration may seed official institutional facility records. Synthetic `DEVELOPMENT` or visibly labeled `DEMO` fixtures are permitted only for isolated implementation/testing and must be removable.
+
+Source architecture also expects or allows outside the initial overlay:
 - notification preferences
 - saved locations / navigation preferences
 - emergency contacts

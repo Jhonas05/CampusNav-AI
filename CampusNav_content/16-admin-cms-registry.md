@@ -33,6 +33,13 @@ Current content folder indicates:
 
 Phase 8C.2 should add academic/personnel admin surfaces.
 
+## Phase 4 facility/service administration
+Phase 4 adds maintainable workflows for operational facility profiles, services, approved aliases, facility-service mappings, weekly hours, dated exceptions, operational advisories/status, and media metadata/lifecycle.
+
+Admin records must reference the existing canonical facility IDs and must not edit or duplicate spatial geometry, map nodes/edges, QR relationships, emergency approval, or route logic. `SUPER_ADMIN` is the safe initial administrative boundary. Department/facility-manager access may be enabled only when its generic scope and RLS relationship are explicit; no institutional office assignment is inferred.
+
+FS-1 supplies schema, RLS, trusted-audit, provenance/lifecycle, and service foundations only. It does not add the Phase 4 Admin UI or seed official records. Phase 4-FS-3 owns the Admin workflows after the foundation is accepted.
+
 ## Suggested data owners
 From the approved architecture:
 - **Facilities/map:** designated campus/facility administrator
@@ -70,7 +77,10 @@ Master source expects a future-capable map editor with floor-plan reference/cali
 Important examples:
 - announcement published
 - facility updated
+- facility service or alias changed
+- facility-service mapping changed
 - hours changed
+- facility media published, archived, or removed
 - personnel assignment changed
 - schedule/exception changed
 - suspension status changed

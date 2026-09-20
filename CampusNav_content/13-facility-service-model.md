@@ -3,6 +3,11 @@
 ## Purpose
 Defines how CampusNav represents rooms/offices/facilities and lets users find a destination by **service need**, not only by room name.
 
+## Phase 4 operational-overlay boundary
+Phase 4 — Core Facility & Service Workflow Completion builds operational software workflows without replacing the proven local spatial source. Supabase operational profiles, services, aliases, mappings, hours, exceptions, advisories, and media metadata must reference the existing canonical facility IDs.
+
+The overlay must not redefine facility identity, floor assignment, geometry, nodes/edges, QR checkpoints, emergency approval, or route logic. Existing A*, QR/manual positioning, strict emergency routing, and schedule/personnel truth rules remain unchanged.
+
 ## Facility information
 A facility record/card may include verified values for:
 - name
@@ -39,6 +44,19 @@ Supported vocabulary:
 - TEMPORARILY_UNAVAILABLE
 - SCHEDULED_TO_OPEN
 - PENDING_VERIFICATION / UNKNOWN
+
+### Phase 4 status-evaluation rules
+- All evaluation uses `Asia/Manila`; stored timestamps retain an unambiguous timezone/offset.
+- Weekly schedules use local weekday/start/end values. An interval whose end time is less than or equal to its start time is an overnight interval continuing into the following campus date.
+- A dated exception replaces the weekly schedule for its stated campus date. It may close the facility for the day or provide replacement intervals. An overnight interval remains governed by the schedule/exception for its start date until its end time.
+- An active, authorized facility-wide `TEMPORARY_CLOSURE` advisory has highest operational precedence and produces `TEMPORARILY_UNAVAILABLE` for its effective window.
+- A `SERVICE_INTERRUPTION` advisory affects only its configured service mapping unless it is explicitly authorized as facility-wide; it must not silently close an otherwise open facility.
+- If no applicable verified hours exist, return `PENDING_VERIFICATION` or `UNKNOWN`; do not infer status from personnel assignments, check-ins, typical office hours, or UI defaults.
+- After exceptions and closures, an active interval returns `CLOSING_SOON` when its verified closing time is within **30 minutes**, otherwise `OPEN_NOW`.
+- A later verified interval on the same campus date returns `SCHEDULED_TO_OPEN`; otherwise verified out-of-window time returns `CLOSED`.
+- A computed result inherits its source provenance. A result derived from `DEMO` hours must remain visibly demo-labeled and must not be called official, live, or verified institutional status.
+
+Operational `CLOSED`, `CLOSING_SOON`, `SCHEDULED_TO_OPEN`, or `TEMPORARILY_UNAVAILABLE` states do **not** automatically mean `ROUTING_BLOCKED`. Operational availability and navigation-edge restrictions are separate truths. Only the canonical navigation/restriction data may block a route.
 
 Do not call status “real-time” unless it actually comes from current system data.
 
@@ -82,6 +100,8 @@ Filters may include:
 
 ## Facility photos
 Images are optional supportive content. Missing imagery must not block navigation.
+
+Phase 4 media records require provenance, lifecycle, safe metadata, useful alternative text, and authorized publication. Placeholder imagery remains valid when no approved photograph exists.
 
 ## Personnel wording inside facility detail
 A facility may show:

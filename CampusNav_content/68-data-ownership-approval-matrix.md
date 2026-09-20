@@ -6,6 +6,8 @@ The exact institutional office assignments must be confirmed by St. Clare Colleg
 |---|---|---|
 | campus map/facilities | designated campus/facility administrator | publish verified geometry/info only |
 | facility hours/advisories | facility/department-authorized admin | current status depends on verified schedule/override |
+| facility services/mappings/public contacts | facility/department-authorized admin pending final institutional assignment | publish only approved mappings and public fields |
+| facility media | authorized facility/content owner pending final institutional assignment | publish only approved assets with provenance and usage rights |
 | class schedules | Academic Affairs / authorized academic scheduling office | schedule wording only |
 | personnel public availability | department head / authorized HR or academic office depending school policy | minimum necessary public data |
 | announcements/events | authorized school/admin content owner | official records only |

@@ -54,13 +54,22 @@ Master architecture expects equivalent entities such as:
 
 Do not move these merely for architectural neatness if it risks destabilizing working navigation. Any migration needs compatibility tests and stable IDs.
 
-## E. Facility operations / future expansion
-Expected concepts:
-- facility_hours
-- facility_schedule_exceptions
-- facility/services mappings
+## E. Phase 4 facility operational overlay
+Phase 4 may introduce version-controlled concepts such as:
+- facility operational profiles keyed by existing canonical local facility IDs
 - services
-- facility advisories
+- service aliases
+- facility-service mappings
+- facility hours
+- facility schedule/hour exceptions
+- facility media metadata
+- the existing facility advisories domain
+
+These records are operational overlays only. They must not contain competing floor/geometry/node/edge/QR/routing truth or establish a second facility identity namespace.
+
+FS-1 scope is limited to operational profiles, services, aliases where approved, mappings, provenance/lifecycle fields, RLS, trusted audit, and the provider-neutral service foundation. Hours/exceptions, Admin UI, public UI, media storage, and Dashboard/Realtime behavior are later Phase 4 subphases.
+
+No migration may seed official institutional facility/service records. Isolated synthetic `DEVELOPMENT` and visibly labeled `DEMO` fixtures must use recognizable identifiers and be removable.
 
 ## F. Emergency
 Expected/approved concepts:
@@ -91,6 +100,8 @@ Possible source-defined concepts:
 
 ## Realtime
 Enable only for domains that benefit from live updates. Avoid broad unnecessary subscriptions.
+
+Phase 4 should prefer one domain-level refresh signal/provider subscription for meaningful published facility operational changes. Static service catalogs and cards do not each require their own public subscription. Realtime never bypasses RLS and never converts stale or pending data into a live claim.
 
 ## Migration discipline
 - migrations are version-controlled

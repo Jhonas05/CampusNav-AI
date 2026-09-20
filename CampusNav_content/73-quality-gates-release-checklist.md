@@ -25,6 +25,17 @@
 - role-scoped action succeeds for permitted user
 - audit behavior checked for important actions
 
+## Phase 4 facility/service gate
+- operational records use existing canonical facility IDs and introduce no competing spatial or routing truth
+- migrations, RLS, grants, trusted audit, and fixture cleanup pass locally/linked as applicable
+- no migration or test fixture is presented as official institutional data
+- service recommendations come only from configured mappings; no-result behavior does not guess a destination
+- facility-status tests cover weekly/overnight hours, dated exceptions, temporary closures, service interruptions, the 30-minute closing-soon threshold, scheduled-to-open, closed, and pending/unknown states in `Asia/Manila`
+- operational status never blocks navigation unless canonical navigation/restriction data separately requires it
+- media publication remains authorized, provenance-aware, type/size validated, and safely unavailable when missing
+- public/Admin/Dashboard consumers reuse the provider-neutral FacilityService and centralized Realtime/provider pattern
+- navigation, QR/manual, Emergency, Dashboard, Admin, and schedule/personnel regressions pass before Phase 4 acceptance
+
 ## Schedule/personnel gate
 - precedence/exceptions tested
 - UI language does not claim presence from schedule

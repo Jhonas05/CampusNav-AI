@@ -10,6 +10,9 @@ Only unresolved decisions belong here. Resolved decisions move to `29-decision-l
 
 ## Institutional data
 - Which office is the final authorized owner of map/facility verification?
+- Which office approves facility operational profiles, service taxonomy/aliases, service mappings, hours/exceptions, public contacts, and media publication?
+- Which roles may manage facility records beyond the safe initial `SUPER_ADMIN` boundary, and what department/facility scope applies?
+- What institutional asset-usage, publication, and removal rules apply to facility photographs?
 - Which office supplies the approved class schedule and personnel public-availability data?
 - Which office formally approves emergency digital data and verification dates?
 - What exact staff/personnel fields are approved for public display?
@@ -25,7 +28,11 @@ The former strict-grayscale question is resolved by `DEC-UI-002` in `29-decision
 
 ## Post-Phase-3 sequencing
 
-Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` records the owner-approved proposed final defense baseline. `75-adviser-confirmation-package.md` is `PREPARED / AWAITING_ADVISER_CONFIRMATION`. The single exact next action is **HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION**. No downstream implementation phase is `READY` until applicable adviser decisions, authorized institutional datasets/sign-offs, and a demo-rehearsal plan are supplied or explicitly deferred.
+Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` and `75-adviser-confirmation-package.md` remain preserved; the package is `PREPARED / AWAITING_ADVISER_CONFIRMATION` and no adviser approval is claimed.
+
+`DEC-ROADMAP-002` makes **Phase 4 — Core Facility & Service Workflow Completion** the active owner-controlled software-development phase. Missing official data does not block generic workflows that preserve unavailable/pending states or use isolated visibly labeled fixtures. The single exact next implementation task is **Phase 4-FS-1 — Facility Operational Data and Service Foundation**, classified `READY_WITH_BOUNDARIES` and `NOT_STARTED`.
+
+Adviser confirmation remains a separate external action and still controls adviser/academic claims. Institutional questions above still control whether values may be presented as official; they do not authorize agents to invent those values.
 
 ### AR-Assisted Camera Navigation planning
 - After current Phase 3 acceptance, when—if ever—may AR-0 be authorized on the roadmap?

@@ -386,7 +386,7 @@ Phase 3 is therefore **COMPLETE — `ACCEPTED_WITH_ADVISORY`**. This closes the 
 
 ### Exact next canonical workstream — Post-Phase-3 Thesis/Defense Scope, Institutional Data, and Evaluation Decision Gate
 
-**Readiness:** `READY` for decision coordination; downstream implementation is `NOT_READY` / `BLOCKED` until its applicable decisions and authorized inputs exist.
+**Historical readiness at Phase 3 closure:** `READY` for decision coordination; downstream implementation was `NOT_READY` / `BLOCKED` until its applicable decisions and authorized inputs existed. `DEC-ROADMAP-002` later supersedes this as active software sequencing without resolving the external decisions.
 
 The gate may start because unresolved questions, evidence boundaries, and decision owners are identified. It must obtain or explicitly defer: adviser-approved title/evaluation methodology; authorized map/facility/hours/services/schedule/personnel fields and check-in authority; emergency data ownership, coverage, verification dates, and safety sign-off; final defense scope for PWA/offline, map editor/versioning, reports/analytics, grounded CLARA, and AR Guidance; and a thesis-demo rehearsal plan using verified or clearly demo-labeled data. No feature implementation is authorized merely by opening this gate.
 
@@ -400,7 +400,7 @@ Grounded server-side CLARA/Groq and PWA/offline emergency caching are `CONDITION
 
 The owner also approves the proposed verified/demo/unavailable defense-data policy: verified claims require provenance and authority evidence; demo/sample data must be visibly labeled; unavailable/pending data may remain unavailable; and no demo value becomes institutional, personnel-presence, or emergency truth. Emergency and schedule/personnel claims remain within their canonical safety, provenance, wording, and institutional-approval boundaries.
 
-**Exact next actionable work:** Prepare Adviser Confirmation Package.
+**Historical exact next actionable work at this decision gate:** Prepare Adviser Confirmation Package.
 
 **Readiness:** `READY` for documentation/request-package preparation. The package must request adviser decisions on final defense scope, formal tablet-based versus responsive-web title treatment, grounded CLARA, PWA/offline, the proposed data policy, and research/evaluation methodology. Adviser approval has not been obtained, and no downstream feature implementation is authorized.
 
@@ -410,14 +410,69 @@ The owner also approves the proposed verified/demo/unavailable defense-data poli
 
 `75-adviser-confirmation-package.md` now provides the adviser-facing decision form for final defense scope, title treatment, grounded CLARA, PWA/offline, verified/demo/unavailable data policy, research/evaluation methodology, optional/deferred features, institutional-approval boundaries, and a final-page decision summary. No choice is preselected, and package preparation supplies no adviser or institutional approval.
 
-**Exact next action:** `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`.
+**External decision action:** `HUMAN ACTION REQUIRED — OBTAIN ADVISER CONFIRMATION`.
 
-Documentation preparation is complete. Downstream implementation and final thesis/defense readiness remain `NOT_READY` / `BLOCKED` until completed adviser evidence is returned, canonically recorded, and any resulting task separately passes Definition of Ready.
+The prepared package remains pending external evidence and is not adviser-approved. Under `DEC-ROADMAP-002`, waiting for that evidence no longer controls safe owner-directed software-development sequencing. Final thesis/defense claims and any adviser-dependent feature requirement remain unresolved.
+
+## Phase 4 — Core Facility & Service Workflow Completion
+
+**Status:** `ADOPTED / NOT_STARTED`
+
+**Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
+
+### Goal
+
+Build the complete software workflows for facility operational information, services, hours, status, search/recommendation, Admin management, media, Dashboard integration, provenance, security, audit, and Realtime. Official institutional completeness is not claimed. Unknown values remain unavailable/pending; implementation and testing may use isolated synthetic `DEVELOPMENT` or visibly labeled `DEMO` fixtures.
+
+### Preserved baseline and operational-overlay boundary
+
+Phase 1 remains `COMPLETE`; Phase 2 and Phase 3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4 uses clean `main` as the authoritative implementation baseline and does not use the backup/reference `wip/claude-sidebar-redesign` branch.
+
+Supabase facility operational records are an **operational overlay** keyed by existing canonical facility IDs. They must not create a second facility identity system, spatial dataset, navigation truth, or routing system. Existing geometry, nodes/edges, A*, QR/manual positioning, emergency-approved-only routing, and schedule/personnel truth rules remain controlling.
+
+### Objectives
+
+1. facility operational profiles
+2. administrator-managed service catalog
+3. approved service aliases
+4. facility-service mappings
+5. weekly operating hours
+6. dated schedule/hour exceptions
+7. `Asia/Manila` facility-status engine
+8. operational advisory/status precedence
+9. shared facility search/discovery
+10. configured service-based facility recommendations
+11. facility Admin management workflows
+12. safe media/image lifecycle
+13. public Facilities/detail enrichment
+14. Dashboard office-availability integration
+15. RLS, trusted audit, Realtime, and validation
+16. provenance plus `DEMO` / `PENDING_VERIFICATION` / `VERIFIED` handling
+17. regression protection for navigation, QR, Emergency, and personnel/schedules
+
+### Implementation sequence
+
+1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `READY_WITH_BOUNDARIES / NOT_STARTED`
+2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `NOT_STARTED`
+3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `NOT_STARTED`
+4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
+5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
+6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
+7. **Phase 4-FS-7 — Final Acceptance and Evidence Reconciliation** — `NOT_STARTED`
+
+### Phase 4-FS-1 Definition of Ready
+
+**Result:** `READY_WITH_BOUNDARIES`
+
+FS-1 is limited to a version-controlled Supabase schema/migration; operational facility profiles; services and approved aliases; facility-service mappings; provenance/lifecycle fields; RLS foundations; trusted-audit foundations; and provider-neutral `FacilityService` contracts. It must not seed official institutional records, alter spatial/navigation truth, implement later Phase 4 UI/status/media/Dashboard subphases, or start an excluded feature.
+
+Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. Before FS-1 implementation/testing, use supported Node 22; this laptop's Node 24 environment is a local advisory and dependency/package changes are not authorized by Phase 4 adoption.
+
+**Exact next implementation task after authorization:** Phase 4-FS-1 — Facility Operational Data and Service Foundation.
 
 ## Later canonical work candidates
 
-Do not assign or start these as numbered implementation phases unless adviser-confirmed scope requires them and a separate Definition-of-Ready review authorizes them:
-- verified facility services, operating hours, and service-to-facility mappings
+The following remain outside Phase 4 and require separate owner authorization plus their own Definition-of-Ready review:
 - PWA service worker and versioned offline emergency cache
 - map administration, calibration, versioning, and coherent rollback
 - privacy-conscious user reporting and analytics
@@ -428,9 +483,11 @@ Do not assign or start these as numbered implementation phases unless adviser-co
 
 **Status:** `PROPOSED / DEFERRED / NOT_IMPLEMENTED / NOT_READY`
 
-The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 is **COMPLETE — `ACCEPTED_WITH_ADVISORY`**; `DEC-DEFENSE-001` excludes AR from the owner-proposed defense core, the adviser package is prepared, and obtaining adviser confirmation is the exact next action.
+The owner approved AR Guidance for canonical planning only. It is an optional presentation layer over the existing A* route and canonical spatial data, using QR/manual location verification without claiming continuous indoor tracking. No AR stage is authorized to start. Phase 3 is **COMPLETE — `ACCEPTED_WITH_ADVISORY`**; `DEC-DEFENSE-001` excludes AR from the owner-proposed defense core, the adviser package remains pending, and `DEC-ROADMAP-002` makes Phase 4-FS-1 the exact next implementation subphase.
 
 ## Blocked by institutional data or decision
+
+These items block official population or claims, not the generic Phase 4 software workflows that safely support unavailable/pending/demo states:
 
 - final map/facility verification owner
 - approved operating hours and facility service mappings

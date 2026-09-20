@@ -20,13 +20,25 @@ Responsibilities:
 - search facilities/rooms
 - facility detail
 - facility status/hours
-- service mapping
+- service catalog, approved aliases, and facility mappings
+- provenance/lifecycle normalization
+- local pending-state fallback when the operational provider is absent
 
 Expected operations:
 - `searchFacilities(query, filters?)`
 - `getFacilityById(facilityId)`
 - `getFacilityStatus(facilityId, dateTime)`
 - `getFacilitiesByService(serviceIdOrQuery)`
+- `getServices(filters?)`
+- `getFacilityHours(facilityId, dateRange?)`
+
+Phase 4 rules:
+- every result is keyed by an existing canonical local facility ID
+- the service combines local spatial identity with the Supabase operational overlay; it does not let the overlay redefine geometry or routing
+- structured results preserve verification/data status, lifecycle, effective dates, and demo state so consumers can use accurate wording
+- unknown operational data returns explicit unavailable/pending results rather than guessed defaults
+- public Facilities, search, Dashboard, Admin adapters, and future CLARA tools reuse this boundary instead of implementing separate matching/status logic
+- only configured facility-service mappings may produce a recommendation
 
 ## DashboardService
 Responsibilities:
