@@ -5,7 +5,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1 IMPLEMENTED_VERIFIED`
+**Phase classification:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1/FS-1B2 IMPLEMENTED_VERIFIED`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -18,7 +18,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Phase 3 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
 | Facility directory/detail/navigation foundation | `PARTIAL / IMPLEMENTED_BASELINE` | Existing local stable IDs, spatial truth, navigation links, and pending states remain authoritative |
 | Facility operational profiles | `IMPLEMENTED_VERIFIED — FS-1B1 READ PATH` | FS-1A linked schema/RLS/audit acceptance is preserved; provider-neutral canonical-local plus optional public-view overlay read behavior passes deterministic verification |
-| Services, aliases, and facility-service mappings | `ACCEPTED_WITH_ADVISORY — FS-1A DATA FOUNDATION` | Linked schema/RLS/provenance/audit and configured-only mapping behavior passed; provider-neutral service implementation remains outstanding |
+| Services, aliases, and facility-service mappings | `PARTIAL — FS-1B2 IMPLEMENTED_VERIFIED` | Linked FS-1A data foundation is accepted; provider-neutral catalog/code/alias reads pass, while facility-service mapping and reverse lookup reads remain unstarted |
 | Hours, exceptions, and facility-status engine | `NOT_IMPLEMENTED` | `Asia/Manila`; status contract in `13`; operational closed is not routing blocked |
 | Facility Admin workflows beyond advisories | `NOT_IMPLEMENTED` | Generic authorized workflow first; institutional owner names remain pending |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
@@ -30,7 +30,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current FS-1B boundary:** FS-1B is `IN_PROGRESS`; only FS-1B1 is implemented and verified. Remaining service, alias, and facility-service mapping read paths are not started and require separate authorization.
+**Current FS-1B boundary:** FS-1B is `IN_PROGRESS`; FS-1B1 and FS-1B2 are implemented and verified. Facility-service mapping and reverse facility-by-service read paths remain unstarted and require separate authorization.
 
 ### Phase 4-FS-1B1 provider-neutral facility-profile read path — 20 September 2026
 
@@ -48,6 +48,23 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Full regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | All requested data/navigation/multi-floor/QR/Emergency/3D/Dashboard/Phase 8/FS-1A/FS-1B1/render checks, ESLint, typecheck, and build pass; the existing approximately 878 kB lazy 3D chunk warning remains unrelated |
 | Data and product scope | `UNCHANGED` | No schema, database row, fixture, official record, UI, navigation logic, dependency, service catalog, alias, mapping, hours/status, media, Dashboard, or Realtime implementation changed |
 | Slice decision | `IMPLEMENTED_VERIFIED` | FS-1B1 is complete at its defined read-path boundary; full FS-1B remains in progress and its next slice requires separate authorization |
+
+### Phase 4-FS-1B2 service catalog, service-code, and alias read contracts — 20 September 2026
+
+**Classification:** `IMPLEMENTED_VERIFIED`
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| Provider contract | `PASS` | Local/null and Supabase providers expose asynchronous `getServices`, `getServiceByCode`, and `getServiceAliases` methods alongside the unchanged FS-1B1 surface |
+| Stable identity and validation | `PASS` | Service code is the only application service identity; invalid codes short-circuit without provider access and numeric database IDs are not selected or returned |
+| Catalog reads | `PASS` | `getServices` supports only deterministic exact-code filtering and code ordering; no category/type filter is invented because FS-1A defines neither public field |
+| Code and alias reads | `PASS` | Exact service lookup uses `public_services`; aliases use `public_service_aliases`, are filtered by stable service code, ordered by alias, and may validly be empty for an existing service |
+| Normalization/provenance | `PASS` | Explicit mapping preserves public name, description, department association, lifecycle, effective/expiry state, verification/data status, source metadata, freshness, and independently derived demo state |
+| Missing/error behavior | `PASS` | Local mode is safely unavailable, unknown service codes are non-retryable not-found results, and provider failures use the existing sanitized retryable dependency error without raw details |
+| Security and scope | `PASS` | Browser reads use only the two public security-invoker views; no base-table access, actor/private field, write, RPC, privileged credential, search/ranking, recommendation, mapping, UI, or Realtime path was added |
+| Deterministic FS-1B test | `PASS` | FS-1B1 and FS-1B2 provider, contract, normalization, provenance, sanitization, boundary, and canonical-data immutability assertions pass under Node 22 |
+| Full regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | All requested data/navigation/multi-floor/QR/Emergency/3D/Dashboard/Phase 8/FS-1A/FS-1B/render checks, ESLint, typecheck, and build pass; the existing approximately 878 kB lazy 3D chunk warning remains unrelated |
+| Slice decision | `IMPLEMENTED_VERIFIED` | FS-1B2 is complete at its catalog/code/alias boundary; FS-1B remains in progress and FS-1B3 requires separate authorization |
 
 ### Phase 4-FS-1A implementation snapshot — 20 September 2026
 

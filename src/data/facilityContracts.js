@@ -6,12 +6,24 @@ export const FACILITY_AVAILABILITY = Object.freeze({
 
 export const FACILITY_ERROR_CODES = Object.freeze({
   NOT_FOUND: "FACILITY_NOT_FOUND",
+  SERVICE_NOT_FOUND: "SERVICE_NOT_FOUND",
   PROVIDER_UNAVAILABLE: "FACILITY_PROVIDER_UNAVAILABLE",
 })
 
 export const FACILITY_PROVIDER_METHODS = Object.freeze([
   "getFacilityOperationalProfile",
+  "getServices",
+  "getServiceByCode",
+  "getServiceAliases",
 ])
+
+const SERVICE_CODE_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+
+export const normalizeServiceCode = (serviceCode) => {
+  if (typeof serviceCode !== "string") return null
+  const normalizedCode = serviceCode.trim()
+  return SERVICE_CODE_PATTERN.test(normalizedCode) ? normalizedCode : null
+}
 
 const valueFrom = (record, camelCaseKey, snakeCaseKey) => (
   record?.[camelCaseKey] ?? record?.[snakeCaseKey] ?? null
@@ -54,6 +66,28 @@ export const normalizeFacilityOperationalProfile = (record) => {
       email: valueFrom(publicContact, "email", "email") ?? valueFrom(record, "publicContactEmail", "public_contact_email"),
       phone: valueFrom(publicContact, "phone", "phone") ?? valueFrom(record, "publicContactPhone", "public_contact_phone"),
     },
+    provenance: normalizeFacilityProvenance(record),
+  }
+}
+
+export const normalizeService = (record) => {
+  if (!record || typeof record !== "object") return null
+
+  return {
+    code: record.code ?? null,
+    name: record.name ?? null,
+    description: record.description ?? null,
+    departmentId: valueFrom(record, "departmentId", "department_id"),
+    provenance: normalizeFacilityProvenance(record),
+  }
+}
+
+export const normalizeServiceAlias = (record) => {
+  if (!record || typeof record !== "object") return null
+
+  return {
+    serviceCode: valueFrom(record, "serviceCode", "service_code"),
+    alias: record.alias ?? null,
     provenance: normalizeFacilityProvenance(record),
   }
 }

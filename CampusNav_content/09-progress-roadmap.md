@@ -416,7 +416,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1 IMPLEMENTED_VERIFIED`
+**Status:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1/FS-1B2 IMPLEMENTED_VERIFIED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -452,7 +452,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 
 ### Implementation sequence
 
-1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1 IMPLEMENTED_VERIFIED`
+1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1/FS-1B2 IMPLEMENTED_VERIFIED`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `NOT_STARTED`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `NOT_STARTED`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
@@ -468,7 +468,7 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current FS-1B boundary:** FS-1B is `IN_PROGRESS`; only FS-1B1, the provider-neutral facility-profile read path, is implemented and verified. Remaining service, alias, and facility-service mapping read paths are not started and require separate authorization.
+**Current FS-1B boundary:** FS-1B is `IN_PROGRESS`; FS-1B1 and FS-1B2 are implemented and verified. Facility-service mapping and reverse facility-by-service read paths remain unstarted and require separate authorization.
 
 ### Phase 4-FS-1A implementation snapshot — 20 September 2026
 
@@ -499,6 +499,18 @@ The browser-safe, read-only `getFacilityById(facilityId)` path now resolves iden
 Deterministic tests cover the common provider surface, configured/unavailable/provider-unavailable outcomes, invalid-ID short-circuiting, provenance and demo derivation, sanitized retryable failures, public-view-only access, unexpected-field rejection, and immutability of all 95 canonical facilities plus navigation structures. The complete requested Node 22 regression matrix, ESLint, typecheck, route rendering, and production build pass; the existing approximately 878 kB lazy 3D chunk advisory remains unrelated.
 
 No schema, database row, fixture, official institutional data, UI, navigation behavior, dependency, or later Phase 4 slice changed. FS-1B remains in progress: service catalog, alias, and facility-service mapping read paths are not started and may begin only after separate authorization.
+
+### Phase 4-FS-1B2 implementation — 20 September 2026
+
+**Status:** `IMPLEMENTED_VERIFIED`
+
+The provider-neutral `FacilityService` now exposes read-only `getServices(filters?)`, `getServiceByCode(serviceCode)`, and `getServiceAliases(serviceCode)` contracts. The local/null provider returns safe unavailable empty results without inventing catalog or alias records. The Supabase provider reads only `public_services` and `public_service_aliases`, uses the stable service code as application identity, supports only exact code filtering, and orders catalogs by code and aliases by alias. Database numeric IDs, private fields, mapping rank, fuzzy matching, search, and recommendation logic are not exposed.
+
+Service and alias records use explicit snake-case-to-camel-case mapping and preserve lifecycle, publication windows, verification/data status, source metadata, freshness, and independently derived demo state. Invalid codes are rejected before provider access, unknown codes return a safe non-retryable result, empty aliases remain a valid configured result for an existing service, and provider failures return the existing sanitized retryable dependency error.
+
+Deterministic tests cover both providers, all three FS-1B2 methods, exact filtering, public-view-only access, stable code identity, numeric-ID exclusion, configured/pending/demo/unavailable/not-found/provider-unavailable behavior, provenance independence, alias ordering, empty aliases, absence of writes/search/ranking, and the complete unchanged FS-1B1 behavior. The complete requested Node 22 regression matrix, ESLint, typecheck, route rendering, and production build pass; the existing approximately 878 kB lazy 3D chunk advisory remains unrelated.
+
+No schema, database row, fixture, official institutional data, UI, navigation behavior, dependency, facility-service mapping read, or reverse lookup changed. FS-1B remains in progress; FS-1B3 may begin only after separate authorization.
 
 ## Later canonical work candidates
 

@@ -1,5 +1,22 @@
 # CampusNav Content Pack — Changelog
 
+## v3.26 — 20 September 2026
+
+Implemented and verified **Phase 4-FS-1B2 — Service Catalog, Service-Code, and Alias Read Contracts** without starting facility-service mapping reads.
+
+### Implementation
+- extended the provider-neutral FacilityService and both providers with `getServices`, `getServiceByCode`, and `getServiceAliases`
+- limited browser reads to `public_services` and `public_service_aliases`, with explicit columns, exact service-code filtering, deterministic code/alias ordering, and no base-table, RPC, write, or privileged-key path
+- retained service code as application identity and excluded numeric database IDs, private fields, mapping rank, fuzzy search, ranking, and recommendations
+- reused the FS-1B provenance mapping for explicitly normalized service and alias records, including independent pending/demo state
+- added safe local-unavailable, non-retryable not-found, valid empty-alias, and sanitized retryable provider-failure outcomes
+
+### Verification and scope
+- extended the deterministic FS-1B suite across both providers and all FS-1B2 success, empty, invalid, unknown, malicious/unexpected, provenance, ordering, security, and failure cases while retaining the full FS-1B1 regression coverage
+- passed the complete requested Node 22 regression matrix, route rendering, ESLint, typecheck, and production build; the existing approximately 878 kB lazy 3D chunk advisory remains
+- changed no schema, database record, fixture, official institutional data, UI, navigation behavior, dependency, facility-service mapping read, reverse facility lookup, later Phase 4 slice, commit, push, or deployment
+- classified FS-1B2 as `IMPLEMENTED_VERIFIED`; full FS-1B remains `IN_PROGRESS`, and FS-1B3 requires separate authorization
+
 ## v3.25 — 20 September 2026
 
 Implemented and verified **Phase 4-FS-1B1 — Provider-Neutral Facility-Profile Read Path** without starting the remaining FS-1B work.
