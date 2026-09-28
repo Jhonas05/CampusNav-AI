@@ -6,4 +6,6 @@ export const createLocalFacilityProvider = () => ({
   getServices: async () => [],
   getServiceByCode: async () => null,
   getServiceAliases: async () => [],
+  getServicesForFacility: async () => [],
+  getFacilitiesByService: async () => [],
 })

@@ -12,10 +12,12 @@ import { createLocalFacilityProvider } from "../src/providers/facility/localFaci
 import { createSupabaseFacilityProvider } from "../src/providers/facility/supabaseFacilityProvider.js"
 import {
   createFacilityService,
+  getFacilitiesByService as getDefaultFacilitiesByService,
   getFacilityById as getDefaultFacilityById,
   getServiceAliases as getDefaultServiceAliases,
   getServiceByCode as getDefaultServiceByCode,
   getServices as getDefaultServices,
+  getServicesForFacility as getDefaultServicesForFacility,
 } from "../src/services/facilityService.js"
 
 const projectRoot = new URL("..", import.meta.url)
@@ -212,11 +214,161 @@ const aliasRows = [
     updated_at: "2026-09-20T02:20:00.000Z",
   },
 ]
+const mappingRows = [
+  {
+    id: 803,
+    facility_id: "library",
+    service_id: 503,
+    service_code: "service-without-aliases",
+    service_name: "Service Without Aliases",
+    recommendation_rank: 20,
+    public_notes: null,
+    lifecycle: "PUBLISHED",
+    published_at: "2026-09-20T05:00:00.000Z",
+    effective_at: "2026-09-20T05:00:00.000Z",
+    expires_at: null,
+    verification_status: "PENDING_VERIFICATION",
+    data_status: "PENDING_VERIFICATION",
+    source_type: "DEVELOPMENT_TEST",
+    source_id: "FS-1B3-LIBRARY-NO-ALIASES",
+    source_label: "Pending development mapping",
+    last_verified_at: null,
+    updated_at: "2026-09-20T05:20:00.000Z",
+  },
+  {
+    id: 801,
+    facility_id: "library",
+    service_id: 501,
+    service_code: "records-request",
+    service_name: "Records Request",
+    recommendation_rank: 20,
+    public_notes: "DEVELOPMENT / DEMO / NOT OFFICIAL mapping",
+    lifecycle: "PUBLISHED",
+    published_at: "2026-09-20T05:00:00.000Z",
+    effective_at: "2026-09-20T05:00:00.000Z",
+    expires_at: null,
+    verification_status: "DEMO_ONLY",
+    data_status: "DEMO",
+    source_type: "DEVELOPMENT_TEST",
+    source_id: "FS-1B3-LIBRARY-RECORDS",
+    source_label: "Demo development mapping",
+    last_verified_at: null,
+    updated_at: "2026-09-20T05:20:00.000Z",
+    floor: "5F",
+    coordinates: { x: 999, y: 999 },
+    nodes: ["malicious-node"],
+    edges: ["malicious-edge"],
+    routingData: { replace: true },
+  },
+  {
+    id: 802,
+    facility_id: "library",
+    service_id: 502,
+    service_code: "student-guidance",
+    service_name: "Student Guidance",
+    recommendation_rank: 10,
+    public_notes: "Pending verification mapping",
+    lifecycle: "PUBLISHED",
+    published_at: "2026-09-20T05:00:00.000Z",
+    effective_at: "2026-09-20T05:00:00.000Z",
+    expires_at: null,
+    verification_status: "PENDING_VERIFICATION",
+    data_status: "PENDING_VERIFICATION",
+    source_type: "DEVELOPMENT_TEST",
+    source_id: "FS-1B3-LIBRARY-GUIDANCE",
+    source_label: "Pending development mapping",
+    last_verified_at: null,
+    updated_at: "2026-09-20T05:20:00.000Z",
+  },
+  {
+    id: 804,
+    facility_id: "registrar-office",
+    service_id: 501,
+    service_code: "records-request",
+    service_name: "Records Request",
+    recommendation_rank: 10,
+    public_notes: "DEVELOPMENT / DEMO / NOT OFFICIAL mapping",
+    lifecycle: "PUBLISHED",
+    published_at: "2026-09-20T05:00:00.000Z",
+    effective_at: "2026-09-20T05:00:00.000Z",
+    expires_at: null,
+    verification_status: "DEMO_ONLY",
+    data_status: "DEMO",
+    source_type: "DEVELOPMENT_TEST",
+    source_id: "FS-1B3-REGISTRAR-RECORDS",
+    source_label: "Demo development mapping",
+    last_verified_at: null,
+    updated_at: "2026-09-20T05:20:00.000Z",
+    floor: "GF",
+    mapRoomId: "malicious-room",
+  },
+  {
+    id: 805,
+    facility_id: "guidance-office",
+    service_id: 501,
+    service_code: "records-request",
+    service_name: "Records Request",
+    recommendation_rank: 10,
+    public_notes: "Pending verification mapping",
+    lifecycle: "PUBLISHED",
+    published_at: "2026-09-20T05:00:00.000Z",
+    effective_at: "2026-09-20T05:00:00.000Z",
+    expires_at: null,
+    verification_status: "PENDING_VERIFICATION",
+    data_status: "PENDING_VERIFICATION",
+    source_type: "DEVELOPMENT_TEST",
+    source_id: "FS-1B3-GUIDANCE-RECORDS",
+    source_label: "Pending development mapping",
+    last_verified_at: null,
+    updated_at: "2026-09-20T05:20:00.000Z",
+  },
+  {
+    id: 806,
+    facility_id: "provider-invented-facility",
+    service_id: 501,
+    service_code: "records-request",
+    service_name: "Records Request",
+    recommendation_rank: 1,
+    public_notes: "Must be omitted",
+    lifecycle: "PUBLISHED",
+    published_at: "2026-09-20T05:00:00.000Z",
+    effective_at: "2026-09-20T05:00:00.000Z",
+    expires_at: null,
+    verification_status: "DEMO_ONLY",
+    data_status: "DEMO",
+    source_type: "DEVELOPMENT_TEST",
+    source_id: "FS-1B3-NONCANONICAL",
+    source_label: "Rejected development mapping",
+    last_verified_at: null,
+    updated_at: "2026-09-20T05:20:00.000Z",
+    floor: "5F",
+    emergencyRoute: ["malicious-route"],
+  },
+]
 const serviceProviderCalls = []
 const serviceClient = {
   from(view) {
     serviceProviderCalls.push({ method: "from", view })
     const filters = []
+    const orders = []
+    const getRows = () => {
+      const rows = view === "public_services"
+        ? serviceRows
+        : view === "public_service_aliases"
+          ? aliasRows
+          : view === "public_facility_service_mappings" ? mappingRows : []
+      const matches = rows.filter((row) => filters.every(([filterColumn, value]) => row[filterColumn] === value))
+      return matches.toSorted((left, right) => {
+        for (const [column, options] of orders) {
+          const direction = options?.ascending === false ? -1 : 1
+          const comparison = typeof left[column] === "number"
+            ? left[column] - right[column]
+            : String(left[column]).localeCompare(String(right[column]))
+          if (comparison) return comparison * direction
+        }
+        return 0
+      })
+    }
     const query = {
       select(columns) { serviceProviderCalls.push({ method: "select", view, columns }); return query },
       eq(column, value) { filters.push([column, value]); serviceProviderCalls.push({ method: "eq", view, column, value }); return query },
@@ -226,15 +378,13 @@ const serviceClient = {
         const matches = rows.filter((row) => filters.every(([column, value]) => row[column] === value))
         return { data: matches[0] || null, error: null }
       },
-      async order(column, options) {
+      order(column, options) {
         serviceProviderCalls.push({ method: "order", view, column, options })
-        const rows = view === "public_services"
-          ? serviceRows
-          : view === "public_service_aliases" ? aliasRows : []
-        const matches = rows
-          .filter((row) => filters.every(([filterColumn, value]) => row[filterColumn] === value))
-          .toSorted((left, right) => String(left[column]).localeCompare(String(right[column])))
-        return { data: matches, error: null }
+        orders.push([column, options])
+        return query
+      },
+      then(resolve, reject) {
+        return Promise.resolve({ data: getRows(), error: null }).then(resolve, reject)
       },
     }
     return query
@@ -373,6 +523,117 @@ assert.ok(serviceProviderCalls.some(({ method, view, column }) => (
   method === "order" && view === "public_service_aliases" && column === "alias"
 )))
 
+assert.deepEqual(await localProvider.getServicesForFacility("library"), [])
+assert.deepEqual(await localProvider.getFacilitiesByService("records-request"), [])
+for (const result of [
+  await localCatalogService.getServicesForFacility("library"),
+  await getDefaultServicesForFacility("library"),
+  await localCatalogService.getFacilitiesByService("records-request"),
+  await getDefaultFacilitiesByService("records-request"),
+]) {
+  assert.equal(result.ok, true)
+  assert.equal(result.availability, FACILITY_AVAILABILITY.UNAVAILABLE)
+  assert.deepEqual(result.data, [])
+  assert.equal(result.error, null)
+}
+
+const invalidMappingFacilityCallCount = serviceProviderCalls.length
+const invalidMappingFacilityResult = await catalogService.getServicesForFacility("not-a-canonical-facility")
+assert.equal(invalidMappingFacilityResult.ok, false)
+assert.equal(invalidMappingFacilityResult.availability, FACILITY_AVAILABILITY.UNAVAILABLE)
+assert.equal(invalidMappingFacilityResult.error.code, FACILITY_ERROR_CODES.NOT_FOUND)
+assert.equal(serviceProviderCalls.length, invalidMappingFacilityCallCount)
+
+const facilityMappingsResult = await catalogService.getServicesForFacility("library")
+assert.equal(facilityMappingsResult.ok, true)
+assert.equal(facilityMappingsResult.availability, FACILITY_AVAILABILITY.CONFIGURED)
+assert.deepEqual(facilityMappingsResult.data.map(({ service }) => service.code), [
+  "student-guidance",
+  "records-request",
+  "service-without-aliases",
+])
+assert.deepEqual(facilityMappingsResult.data.map(({ mapping }) => mapping.recommendationRank), [10, 20, 20])
+assert.equal(facilityMappingsResult.data[0].mapping.provenance.verificationStatus, "PENDING_VERIFICATION")
+assert.equal(facilityMappingsResult.data[0].mapping.provenance.demo, false)
+assert.equal(facilityMappingsResult.data[1].mapping.provenance.verificationStatus, "DEMO_ONLY")
+assert.equal(facilityMappingsResult.data[1].mapping.provenance.dataStatus, "DEMO")
+assert.equal(facilityMappingsResult.data[1].mapping.provenance.demo, true)
+assert.equal(facilityMappingsResult.data[1].mapping.publicNotes, "DEVELOPMENT / DEMO / NOT OFFICIAL mapping")
+for (const forbiddenField of ["id", "serviceId", "facilityId", "floor", "coordinates", "nodes", "edges", "routingData"]) {
+  assert.equal(Object.hasOwn(facilityMappingsResult.data[1].mapping, forbiddenField), false)
+}
+
+const emptyFacilityMappingsResult = await catalogService.getServicesForFacility("theater")
+assert.equal(emptyFacilityMappingsResult.ok, true)
+assert.equal(emptyFacilityMappingsResult.availability, FACILITY_AVAILABILITY.UNAVAILABLE)
+assert.deepEqual(emptyFacilityMappingsResult.data, [])
+assert.equal(emptyFacilityMappingsResult.error, null)
+
+const invalidReverseCallCount = serviceProviderCalls.length
+const invalidReverseResult = await catalogService.getFacilitiesByService("Records Request")
+assert.equal(invalidReverseResult.ok, false)
+assert.equal(invalidReverseResult.availability, FACILITY_AVAILABILITY.UNAVAILABLE)
+assert.equal(invalidReverseResult.error.code, FACILITY_ERROR_CODES.SERVICE_NOT_FOUND)
+assert.equal(serviceProviderCalls.length, invalidReverseCallCount)
+
+const mappingViewCallsBeforeUnknown = serviceProviderCalls.filter(({ view }) => (
+  view === "public_facility_service_mappings"
+)).length
+const unknownReverseResult = await catalogService.getFacilitiesByService("unknown-service")
+assert.equal(unknownReverseResult.ok, false)
+assert.equal(unknownReverseResult.error.code, FACILITY_ERROR_CODES.SERVICE_NOT_FOUND)
+assert.deepEqual(unknownReverseResult.data, [])
+assert.equal(
+  serviceProviderCalls.filter(({ view }) => view === "public_facility_service_mappings").length,
+  mappingViewCallsBeforeUnknown,
+  "Unknown services do not query facility-service mappings",
+)
+
+const reverseMappingsResult = await catalogService.getFacilitiesByService("records-request")
+assert.equal(reverseMappingsResult.ok, true)
+assert.equal(reverseMappingsResult.availability, FACILITY_AVAILABILITY.CONFIGURED)
+assert.deepEqual(reverseMappingsResult.data.map(({ facility }) => facility.id), [
+  "guidance-office",
+  "registrar-office",
+  "library",
+])
+assert.deepEqual(reverseMappingsResult.data.map(({ mapping }) => mapping.recommendationRank), [10, 10, 20])
+assert.equal(reverseMappingsResult.data.some(({ facility }) => facility.id === "provider-invented-facility"), false)
+assert.deepEqual(reverseMappingsResult.data.map(({ facility }) => facility.floorId), ["GF", "5F", "3F"])
+assert.equal(reverseMappingsResult.data[1].facility.mapRoomId, "room-5f-registrar-office")
+assert.equal(reverseMappingsResult.data[1].mapping.provenance.demo, true)
+assert.equal(reverseMappingsResult.data[0].mapping.provenance.demo, false)
+assert.notEqual(reverseMappingsResult.data[0].facility.verification, facilities.find(({ id }) => id === "guidance-office").verification)
+assert.notEqual(reverseMappingsResult.data[0].mapping.provenance, reverseMappingsResult.data[1].mapping.provenance)
+for (const forbiddenField of ["floor", "coordinates", "nodes", "edges", "routingData", "emergencyRoute"]) {
+  assert.equal(Object.hasOwn(reverseMappingsResult.data[1].mapping, forbiddenField), false)
+}
+
+assert.ok(serviceProviderCalls.some(({ method, view }) => (
+  method === "from" && view === "public_facility_service_mappings"
+)))
+assert.ok(serviceProviderCalls.some(({ method, view, column, value }) => (
+  method === "eq"
+  && view === "public_facility_service_mappings"
+  && column === "facility_id"
+  && value === "library"
+)))
+assert.ok(serviceProviderCalls.some(({ method, view, column, value }) => (
+  method === "eq"
+  && view === "public_facility_service_mappings"
+  && column === "service_code"
+  && value === "records-request"
+)))
+assert.ok(serviceProviderCalls.some(({ method, view, column }) => (
+  method === "order" && view === "public_facility_service_mappings" && column === "recommendation_rank"
+)))
+assert.ok(serviceProviderCalls.some(({ method, view, column }) => (
+  method === "order" && view === "public_facility_service_mappings" && column === "service_code"
+)))
+assert.ok(serviceProviderCalls.some(({ method, view, column }) => (
+  method === "order" && view === "public_facility_service_mappings" && column === "facility_id"
+)))
+
 const secretProviderError = new Error("PostgREST SQL secret=do-not-expose https://example.test?apikey=secret")
 const failingCatalogService = createFacilityService({
   provider: {
@@ -383,12 +644,16 @@ const failingCatalogService = createFacilityService({
       throw secretProviderError
     },
     async getServiceAliases() { throw secretProviderError },
+    async getServicesForFacility() { throw secretProviderError },
+    async getFacilitiesByService() { throw secretProviderError },
   },
 })
 for (const result of [
   await failingCatalogService.getServices(),
   await failingCatalogService.getServiceByCode("records-request"),
   await failingCatalogService.getServiceAliases("aliases-fail"),
+  await failingCatalogService.getServicesForFacility("library"),
+  await failingCatalogService.getFacilitiesByService("aliases-fail"),
 ]) {
   assert.equal(result.ok, false)
   assert.equal(result.availability, FACILITY_AVAILABILITY.PROVIDER_UNAVAILABLE)
@@ -486,11 +751,13 @@ for (const source of [localProviderSource, supabaseProviderSource]) {
 assert.match(supabaseProviderSource, /public_facility_operational_profiles/)
 assert.match(supabaseProviderSource, /public_services/)
 assert.match(supabaseProviderSource, /public_service_aliases/)
+assert.match(supabaseProviderSource, /public_facility_service_mappings/)
 assert.doesNotMatch(supabaseProviderSource, /\.from\(["']facility_operational_profiles["']\)/)
 assert.doesNotMatch(supabaseProviderSource, /\.from\(["']services["']\)/)
 assert.doesNotMatch(supabaseProviderSource, /\.from\(["']service_aliases["']\)/)
+assert.doesNotMatch(supabaseProviderSource, /\.from\(["']facility_service_mappings["']\)/)
 assert.doesNotMatch(supabaseProviderSource, /\.(ilike|textSearch|or)\s*\(/)
-assert.doesNotMatch(facilityServiceSource, /searchFacilities|getFacilitiesByService|getServicesForFacility/)
+assert.doesNotMatch(facilityServiceSource, /searchFacilities|fuzzy|textSearch|rankingAlgorithm/i)
 
 configuredResult.data.facility.floorId = "5F"
 configuredResult.data.facility.verification.floor = "DEMO_ONLY"
@@ -498,4 +765,4 @@ assert.deepEqual(facilities, originalFacilities, "Canonical facility data remain
 assert.deepEqual(mapNodes, originalNodes, "Navigation nodes remain unchanged")
 assert.deepEqual(mapEdges, originalEdges, "Navigation edges remain unchanged")
 
-console.log(`Phase 4-FS-1B1/2 provider-neutral facility/profile/service/alias read contracts and ${facilities.length} canonical facility identities: PASS`)
+console.log(`Phase 4-FS-1B1/2/3 provider-neutral facility/service/mapping reads and ${facilities.length} canonical facility identities: PASS`)

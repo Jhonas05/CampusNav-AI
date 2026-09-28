@@ -15,6 +15,8 @@ export const FACILITY_PROVIDER_METHODS = Object.freeze([
   "getServices",
   "getServiceByCode",
   "getServiceAliases",
+  "getServicesForFacility",
+  "getFacilitiesByService",
 ])
 
 const SERVICE_CODE_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
@@ -88,6 +90,19 @@ export const normalizeServiceAlias = (record) => {
   return {
     serviceCode: valueFrom(record, "serviceCode", "service_code"),
     alias: record.alias ?? null,
+    provenance: normalizeFacilityProvenance(record),
+  }
+}
+
+export const normalizeFacilityServiceMapping = (record) => {
+  if (!record || typeof record !== "object") return null
+
+  return {
+    facilityId: valueFrom(record, "facilityId", "facility_id"),
+    serviceCode: valueFrom(record, "serviceCode", "service_code"),
+    serviceName: valueFrom(record, "serviceName", "service_name"),
+    recommendationRank: valueFrom(record, "recommendationRank", "recommendation_rank"),
+    publicNotes: valueFrom(record, "publicNotes", "public_notes"),
     provenance: normalizeFacilityProvenance(record),
   }
 }

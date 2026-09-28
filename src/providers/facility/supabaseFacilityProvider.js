@@ -1,5 +1,6 @@
 import {
   normalizeFacilityOperationalProfile,
+  normalizeFacilityServiceMapping,
   normalizeService,
   normalizeServiceAlias,
   normalizeServiceCode,
@@ -9,6 +10,7 @@ import { BACKEND_MODES } from "../../lib/supabaseClient.js"
 const PUBLIC_FACILITY_PROFILE_VIEW = "public_facility_operational_profiles"
 const PUBLIC_SERVICES_VIEW = "public_services"
 const PUBLIC_SERVICE_ALIASES_VIEW = "public_service_aliases"
+const PUBLIC_FACILITY_SERVICE_MAPPINGS_VIEW = "public_facility_service_mappings"
 const PUBLIC_FACILITY_PROFILE_COLUMNS = [
   "id",
   "facility_id",
@@ -51,6 +53,25 @@ const PUBLIC_SERVICE_COLUMNS = [
 const PUBLIC_SERVICE_ALIAS_COLUMNS = [
   "service_code",
   "alias",
+  "lifecycle",
+  "published_at",
+  "effective_at",
+  "expires_at",
+  "verification_status",
+  "data_status",
+  "source_type",
+  "source_id",
+  "source_label",
+  "last_verified_at",
+  "updated_at",
+].join(", ")
+
+const PUBLIC_FACILITY_SERVICE_MAPPING_COLUMNS = [
+  "facility_id",
+  "service_code",
+  "service_name",
+  "recommendation_rank",
+  "public_notes",
   "lifecycle",
   "published_at",
   "effective_at",
@@ -114,5 +135,30 @@ export const createSupabaseFacilityProvider = (client) => ({
 
     if (error) throw error
     return (data || []).map(normalizeServiceAlias)
+  },
+  async getServicesForFacility(facilityId) {
+    const { data, error } = await client
+      .from(PUBLIC_FACILITY_SERVICE_MAPPINGS_VIEW)
+      .select(PUBLIC_FACILITY_SERVICE_MAPPING_COLUMNS)
+      .eq("facility_id", facilityId)
+      .order("recommendation_rank", { ascending: true })
+      .order("service_code", { ascending: true })
+
+    if (error) throw error
+    return (data || []).map(normalizeFacilityServiceMapping)
+  },
+  async getFacilitiesByService(serviceCode) {
+    const code = normalizeServiceCode(serviceCode)
+    if (!code) return []
+
+    const { data, error } = await client
+      .from(PUBLIC_FACILITY_SERVICE_MAPPINGS_VIEW)
+      .select(PUBLIC_FACILITY_SERVICE_MAPPING_COLUMNS)
+      .eq("service_code", code)
+      .order("recommendation_rank", { ascending: true })
+      .order("facility_id", { ascending: true })
+
+    if (error) throw error
+    return (data || []).map(normalizeFacilityServiceMapping)
   },
 })

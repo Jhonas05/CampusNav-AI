@@ -5,7 +5,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1/FS-1B2 IMPLEMENTED_VERIFIED`
+**Phase classification:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1/FS-1B2/FS-1B3 IMPLEMENTED_VERIFIED`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -18,7 +18,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Phase 3 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
 | Facility directory/detail/navigation foundation | `PARTIAL / IMPLEMENTED_BASELINE` | Existing local stable IDs, spatial truth, navigation links, and pending states remain authoritative |
 | Facility operational profiles | `IMPLEMENTED_VERIFIED — FS-1B1 READ PATH` | FS-1A linked schema/RLS/audit acceptance is preserved; provider-neutral canonical-local plus optional public-view overlay read behavior passes deterministic verification |
-| Services, aliases, and facility-service mappings | `PARTIAL — FS-1B2 IMPLEMENTED_VERIFIED` | Linked FS-1A data foundation is accepted; provider-neutral catalog/code/alias reads pass, while facility-service mapping and reverse lookup reads remain unstarted |
+| Services, aliases, and facility-service mappings | `IMPLEMENTED_VERIFIED — FS-1B2/FS-1B3 READ PATHS` | Linked FS-1A data foundation is accepted; provider-neutral catalog/code/alias, facility-mapping, and reverse canonical-facility reads pass; FS-1B final reconciliation remains |
 | Hours, exceptions, and facility-status engine | `NOT_IMPLEMENTED` | `Asia/Manila`; status contract in `13`; operational closed is not routing blocked |
 | Facility Admin workflows beyond advisories | `NOT_IMPLEMENTED` | Generic authorized workflow first; institutional owner names remain pending |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
@@ -30,7 +30,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current FS-1B boundary:** FS-1B is `IN_PROGRESS`; FS-1B1 and FS-1B2 are implemented and verified. Facility-service mapping and reverse facility-by-service read paths remain unstarted and require separate authorization.
+**Current FS-1B boundary:** FS-1B is `IN_PROGRESS`; FS-1B1, FS-1B2, and FS-1B3 are implemented and verified. FS-1B final reconciliation remains unstarted and requires separate authorization.
 
 ### Phase 4-FS-1B1 provider-neutral facility-profile read path — 20 September 2026
 
@@ -65,6 +65,23 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Deterministic FS-1B test | `PASS` | FS-1B1 and FS-1B2 provider, contract, normalization, provenance, sanitization, boundary, and canonical-data immutability assertions pass under Node 22 |
 | Full regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | All requested data/navigation/multi-floor/QR/Emergency/3D/Dashboard/Phase 8/FS-1A/FS-1B/render checks, ESLint, typecheck, and build pass; the existing approximately 878 kB lazy 3D chunk warning remains unrelated |
 | Slice decision | `IMPLEMENTED_VERIFIED` | FS-1B2 is complete at its catalog/code/alias boundary; FS-1B remains in progress and FS-1B3 requires separate authorization |
+
+### Phase 4-FS-1B3 facility-service mapping and reverse lookup reads — 28 September 2026
+
+**Classification:** `IMPLEMENTED_VERIFIED`
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| Provider contract | `PASS` | Local/null and Supabase providers expose asynchronous `getServicesForFacility` and `getFacilitiesByService` methods alongside the unchanged FS-1B1/FS-1B2 surface |
+| Public mapping read | `PASS` | Supabase reads only `public_facility_service_mappings` with exact `facility_id` or `service_code` filters; reverse lookup uses the accepted public service-code read only to confirm service existence |
+| Canonical facility protection | `PASS` | Input facility IDs validate locally before provider access; every reverse result resolves from the 95-facility canonical registry, and noncanonical provider IDs are omitted |
+| Configured ordering | `PASS` | Results order by administrator-configured `recommendation_rank` followed by stable service-code or facility-ID ties; no heuristic, fuzzy search, or recommendation algorithm exists |
+| Mapping normalization/provenance | `PASS` | Explicit mapping preserves rank, public notes, lifecycle, effective/expiry state, verification/data status, source metadata, freshness, and independent demo state without exposing numeric/actor/private fields |
+| Spatial/navigation isolation | `PASS` | Provider floor, coordinate, map, node, edge, route, QR, and emergency fields are not selected or normalized and cannot replace canonical local truth |
+| Missing/error behavior | `PASS` | Invalid facility/code inputs short-circuit safely, unknown services remain not found, empty mappings remain unavailable without invention, and provider failures use the existing sanitized retryable error |
+| Deterministic FS-1B test | `PASS` | FS-1B1/FS-1B2/FS-1B3 provider, contract, normalization, ordering, provenance, sanitization, security, and canonical-data immutability assertions pass under Node 22 |
+| Full regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | All requested data/navigation/multi-floor/QR/Emergency/3D/Dashboard/Phase 8/FS-1A/FS-1B/render checks, ESLint, typecheck, and build pass; the existing approximately 878 kB lazy 3D chunk warning remains unrelated |
+| Slice decision | `IMPLEMENTED_VERIFIED` | FS-1B3 is complete at its mapping-read boundary; FS-1B remains in progress and final reconciliation requires separate authorization |
 
 ### Phase 4-FS-1A implementation snapshot — 20 September 2026
 

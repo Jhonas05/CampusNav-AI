@@ -3,6 +3,7 @@ import {
   FACILITY_AVAILABILITY,
   FACILITY_ERROR_CODES,
   normalizeFacilityOperationalProfile,
+  normalizeFacilityServiceMapping,
   normalizeService,
   normalizeServiceAlias,
   normalizeServiceCode,
@@ -70,6 +71,25 @@ const configuredResult = (data) => createFacilityResult({
   availability: FACILITY_AVAILABILITY.CONFIGURED,
   data,
 })
+
+const mappingMetadata = (mapping) => ({
+  recommendationRank: mapping.recommendationRank,
+  publicNotes: mapping.publicNotes,
+  provenance: mapping.provenance,
+})
+
+const isValidMapping = (mapping) => (
+  mapping
+  && normalizeServiceCode(mapping.serviceCode) === mapping.serviceCode
+  && Number.isInteger(mapping.recommendationRank)
+  && mapping.recommendationRank >= 1
+  && mapping.recommendationRank <= 1000
+)
+
+const compareMappings = (left, right, tieBreakKey) => (
+  left.recommendationRank - right.recommendationRank
+  || String(left[tieBreakKey]).localeCompare(String(right[tieBreakKey]))
+)
 
 const normalizeServiceFilters = (filters) => {
   if (filters === undefined || filters === null) return {}
@@ -206,6 +226,79 @@ export const createFacilityService = ({
       return providerUnavailableResult([])
     }
   },
+  async getServicesForFacility(facilityId) {
+    const normalizedId = typeof facilityId === "string" ? facilityId.trim() : ""
+    const facility = normalizedId ? getCanonicalFacilityById(normalizedId) : null
+    if (!facility) return notFoundResult()
+
+    try {
+      const activeProvider = provider || await providerLoader()
+      const records = await activeProvider.getServicesForFacility(facility.id)
+      if (!Array.isArray(records)) return providerUnavailableResult([])
+
+      const mappings = records.map(normalizeFacilityServiceMapping)
+      const valid = mappings.every((mapping) => (
+        isValidMapping(mapping)
+        && mapping.facilityId === facility.id
+        && typeof mapping.serviceName === "string"
+        && mapping.serviceName.trim().length > 0
+      ))
+      if (!valid) return providerUnavailableResult([])
+
+      const results = mappings
+        .toSorted((left, right) => compareMappings(left, right, "serviceCode"))
+        .map((mapping) => ({
+          service: {
+            code: mapping.serviceCode,
+            name: mapping.serviceName,
+          },
+          mapping: mappingMetadata(mapping),
+        }))
+
+      return results.length ? configuredResult(results) : unavailableResult([])
+    } catch {
+      return providerUnavailableResult([])
+    }
+  },
+  async getFacilitiesByService(serviceCode) {
+    const code = normalizeServiceCode(serviceCode)
+    if (!code) return serviceNotFoundResult([])
+
+    try {
+      const activeProvider = provider || await providerLoader()
+      const service = normalizeService(await activeProvider.getServiceByCode(code))
+      if (!service) {
+        return activeProvider.mode === BACKEND_MODES.LOCAL
+          ? unavailableResult([])
+          : serviceNotFoundResult([])
+      }
+      if (
+        normalizeServiceCode(service.code) !== code
+        || typeof service.name !== "string"
+        || !service.name.trim()
+      ) return providerUnavailableResult([])
+
+      const records = await activeProvider.getFacilitiesByService(code)
+      if (!Array.isArray(records)) return providerUnavailableResult([])
+
+      const mappings = records.map(normalizeFacilityServiceMapping)
+      if (!mappings.every((mapping) => isValidMapping(mapping) && mapping.serviceCode === code)) {
+        return providerUnavailableResult([])
+      }
+
+      const results = mappings
+        .filter((mapping) => getCanonicalFacilityById(mapping.facilityId))
+        .toSorted((left, right) => compareMappings(left, right, "facilityId"))
+        .map((mapping) => ({
+          facility: cloneCanonicalFacility(getCanonicalFacilityById(mapping.facilityId)),
+          mapping: mappingMetadata(mapping),
+        }))
+
+      return results.length ? configuredResult(results) : unavailableResult([])
+    } catch {
+      return providerUnavailableResult([])
+    }
+  },
 })
 
 const defaultFacilityService = createFacilityService()
@@ -214,3 +307,5 @@ export const getFacilityById = (facilityId) => defaultFacilityService.getFacilit
 export const getServices = (filters) => defaultFacilityService.getServices(filters)
 export const getServiceByCode = (serviceCode) => defaultFacilityService.getServiceByCode(serviceCode)
 export const getServiceAliases = (serviceCode) => defaultFacilityService.getServiceAliases(serviceCode)
+export const getServicesForFacility = (facilityId) => defaultFacilityService.getServicesForFacility(facilityId)
+export const getFacilitiesByService = (serviceCode) => defaultFacilityService.getFacilitiesByService(serviceCode)

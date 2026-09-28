@@ -1,5 +1,22 @@
 # CampusNav Content Pack — Changelog
 
+## v3.27 — 28 September 2026
+
+Implemented and verified **Phase 4-FS-1B3 — Facility-Service Mapping Reads and Reverse Facility-by-Service Lookup** without starting FS-1B final reconciliation.
+
+### Implementation
+- extended the provider-neutral FacilityService and both providers with `getServicesForFacility` and `getFacilitiesByService`
+- limited browser mapping reads to `public_facility_service_mappings`, using exact filters and configured `recommendation_rank` plus stable-key ordering
+- returned forward service summaries and reverse canonical local facility identities with separately scoped mapping metadata and provenance
+- omitted noncanonical provider facility IDs and prevented provider floor/map/navigation/emergency fields from replacing canonical local truth
+- treated configured rank strictly as stored mapping data; no fuzzy search, ranking heuristic, or recommendation algorithm was introduced
+
+### Verification and scope
+- extended the deterministic FS-1B suite for provider parity, exact mapping reads, invalid/unknown/empty outcomes, rank/tie ordering, provenance, demo/pending state, noncanonical rejection, spatial isolation, sanitized failures, and unchanged FS-1B1/FS-1B2 behavior
+- passed the complete requested Node 22 regression matrix, route rendering, ESLint, typecheck, and production build; the existing approximately 878 kB lazy 3D chunk advisory remains
+- changed no schema, migration, database record, fixture, official institutional data, UI, navigation behavior, dependency, Admin, Dashboard, Realtime, later Phase 4 slice, commit, push, or deployment
+- classified FS-1B3 as `IMPLEMENTED_VERIFIED`; FS-1B remains `IN_PROGRESS`, and final reconciliation requires separate authorization
+
 ## v3.26 — 20 September 2026
 
 Implemented and verified **Phase 4-FS-1B2 — Service Catalog, Service-Code, and Alias Read Contracts** without starting facility-service mapping reads.
