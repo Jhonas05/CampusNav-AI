@@ -5,7 +5,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1/FS-1B2/FS-1B3 IMPLEMENTED_VERIFIED`
+**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -17,8 +17,8 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Phase 2 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
 | Phase 3 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
 | Facility directory/detail/navigation foundation | `PARTIAL / IMPLEMENTED_BASELINE` | Existing local stable IDs, spatial truth, navigation links, and pending states remain authoritative |
-| Facility operational profiles | `IMPLEMENTED_VERIFIED — FS-1B1 READ PATH` | FS-1A linked schema/RLS/audit acceptance is preserved; provider-neutral canonical-local plus optional public-view overlay read behavior passes deterministic verification |
-| Services, aliases, and facility-service mappings | `IMPLEMENTED_VERIFIED — FS-1B2/FS-1B3 READ PATHS` | Linked FS-1A data foundation is accepted; provider-neutral catalog/code/alias, facility-mapping, and reverse canonical-facility reads pass; FS-1B final reconciliation remains |
+| Facility operational profiles | `ACCEPTED_WITH_ADVISORY — FS-1B1 READ PATH` | FS-1A linked schema/RLS/audit acceptance is preserved; provider-neutral canonical-local plus optional public-view overlay read behavior passed final FS-1B reconciliation |
+| Services, aliases, and facility-service mappings | `ACCEPTED_WITH_ADVISORY — FS-1B2/FS-1B3 READ PATHS` | Provider-neutral catalog/code/alias, facility-mapping, and reverse canonical-facility reads passed final FS-1B reconciliation; no live FS-1B Data API read is claimed |
 | Hours, exceptions, and facility-status engine | `NOT_IMPLEMENTED` | `Asia/Manila`; status contract in `13`; operational closed is not routing blocked |
 | Facility Admin workflows beyond advisories | `NOT_IMPLEMENTED` | Generic authorized workflow first; institutional owner names remain pending |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
@@ -28,9 +28,27 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **FS-1 readiness:** `READY_WITH_BOUNDARIES`. The schema/RLS/audit/service foundation is sufficiently defined, uses pending/demo-safe behavior, and requires no official seed data. It may not alter spatial/routing truth or implement FS-2 through FS-7.
 
-**Toolchain result:** FS-1A acceptance used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
+**Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current FS-1B boundary:** FS-1B is `IN_PROGRESS`; FS-1B1, FS-1B2, and FS-1B3 are implemented and verified. FS-1B final reconciliation remains unstarted and requires separate authorization.
+**Current FS-1 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2 remains `NOT_STARTED` and requires a separate readiness review and authorization.
+
+### Phase 4-FS-1B final reconciliation and acceptance — 28 September 2026
+
+**Classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| Final public surface | `PASS` | One normalized provider-neutral service exposes the six FS-1B async reads; `searchFacilities` remains outside FS-1B and was not misleadingly added |
+| Provider compatibility | `PASS` | Local/null and Supabase providers expose compatible async surfaces; local mode invents no overlay, and dependency failures are sanitized and retryable |
+| Browser security | `PASS` | The browser provider uses the existing safe public client and reads only the four accepted public security-invoker views; no base-table read, write, RPC, service-role, or secret-key path exists |
+| Canonical identity and spatial truth | `PASS` | Invalid facility IDs short-circuit before provider access; reverse results are rebuilt from the 95-facility local registry; provider spatial/navigation/QR/emergency fields cannot become truth |
+| Service identity and mappings | `PASS` | Stable service code is identity; aliases remain metadata; noncanonical facility IDs are omitted; configured rank is ordering metadata only, with stable service-code/facility-ID ties |
+| Provenance | `PASS` | Profile, service, alias, and mapping provenance remain independent; `CONFIGURED` does not imply verified; demo derives only from `DEMO` or `DEMO_ONLY` |
+| Error/result model | `PASS` | Every method uses the same `{ ok, availability, data, error }` envelope and the established availability/error codes; malformed identifiers use safe domain-specific not-found results, so no second FS-1B model is introduced |
+| Deterministic FS-1B test | `PASS` | FS-1B1/FS-1B2/FS-1B3 contract, provider, normalization, security, ordering, provenance, error, and canonical-data assertions pass under Node 22 |
+| Full regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | All required data/navigation/multi-floor/QR/Emergency/3D/Dashboard/Phase 8/FS-1A/FS-1B/render checks, ESLint, typecheck, and build pass; the approximately 878 kB lazy 3D warning is pre-existing and unrelated |
+| Live Data API boundary | `ACCEPTED_WITH_ADVISORY` | No frontend environment was present, so this reconciliation supplies deterministic provider/read-path evidence only and makes no live FS-1B Data API claim; accepted FS-1A linked evidence is not reopened |
+| Acceptance decision | `ACCEPTED_WITH_ADVISORY` | No FS-1B blocker was found. The named advisory is the absence of a fresh live FS-1B Data API read; FS-1A plus FS-1B completes FS-1 at the same classification |
 
 ### Phase 4-FS-1B1 provider-neutral facility-profile read path — 20 September 2026
 

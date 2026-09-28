@@ -1,5 +1,22 @@
 # CampusNav Content Pack — Changelog
 
+## v3.28 — 28 September 2026
+
+Completed final reconciliation and acceptance for **Phase 4-FS-1B — Provider-Neutral FacilityService and API Contracts** as `ACCEPTED_WITH_ADVISORY` without starting FS-2.
+
+### Acceptance evidence
+- confirmed the six-method provider-neutral async read surface and the absence of an FS-1B `searchFacilities` implementation
+- confirmed canonical local facility identity/spatial/navigation truth, stable service-code identity, alias non-identity, noncanonical facility rejection, independent provenance, demo derivation, and configured-rank-only ordering
+- confirmed browser reads use only the four accepted public security-invoker views through the existing browser-safe client, with no base-table read, write, RPC, privileged-key, or unsanitized provider-error path
+- confirmed the single normalized result envelope and established availability/domain error codes; malformed identifiers use safe facility/service not-found results rather than introducing a second error model
+- passed the deterministic FS-1B suite and the complete required Node 22 regression matrix, route rendering, ESLint, typecheck, and production build
+
+### Status and boundary
+- classified FS-1B as `ACCEPTED_WITH_ADVISORY`; no frontend environment was present, so the advisory records deterministic read-path evidence only and makes no live FS-1B Data API claim
+- preserved accepted FS-1A linked schema/RLS/audit evidence and classified Phase 4-FS-1 as `COMPLETE — ACCEPTED_WITH_ADVISORY`
+- retained Phase 4 as `IN_PROGRESS`, Phase 4-FS-2 as `NOT_STARTED`, and the existing approximately 878 kB lazy 3D chunk warning as pre-existing and unrelated
+- changed canonical tracking documentation only; no source, schema, database row, fixture, official institutional data, dependency, commit, push, deployment, or later Phase 4 work changed
+
 ## v3.27 — 28 September 2026
 
 Implemented and verified **Phase 4-FS-1B3 — Facility-Service Mapping Reads and Reverse Facility-by-Service Lookup** without starting FS-1B final reconciliation.

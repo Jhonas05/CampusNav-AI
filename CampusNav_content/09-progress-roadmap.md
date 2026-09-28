@@ -416,7 +416,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1/FS-1B2/FS-1B3 IMPLEMENTED_VERIFIED`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -452,7 +452,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 
 ### Implementation sequence
 
-1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `IN_PROGRESS — FS-1A ACCEPTED_WITH_ADVISORY; FS-1B1/FS-1B2/FS-1B3 IMPLEMENTED_VERIFIED`
+1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `NOT_STARTED`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `NOT_STARTED`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
@@ -468,7 +468,7 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current FS-1B boundary:** FS-1B is `IN_PROGRESS`; FS-1B1, FS-1B2, and FS-1B3 are implemented and verified. FS-1B final reconciliation remains unstarted and requires separate authorization.
+**Current FS-1 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4-FS-2 remains `NOT_STARTED` and requires its own readiness review and authorization.
 
 ### Phase 4-FS-1A implementation snapshot — 20 September 2026
 
@@ -523,6 +523,18 @@ Mapping normalization excludes database IDs, actor/private fields, and provider-
 Deterministic FS-1B tests cover both mapping methods and providers, public-view-only access, invalid-ID/code short-circuiting, empty mappings, unknown services, configured-rank and tie ordering, independent provenance, demo/pending behavior, noncanonical-ID rejection, spatial override resistance, sanitized failures, and unchanged FS-1B1/FS-1B2 behavior. The complete requested Node 22 regression matrix, ESLint, typecheck, route rendering, and production build pass; the existing approximately 878 kB lazy 3D chunk advisory remains unrelated.
 
 No schema, database row, fixture, official institutional data, UI, navigation behavior, dependency, Admin, Realtime, or later Phase 4 work changed. FS-1B remains in progress; final reconciliation may begin only after separate authorization.
+
+### Phase 4-FS-1B final reconciliation and acceptance — 28 September 2026
+
+**Status:** `ACCEPTED_WITH_ADVISORY`
+
+Final reconciliation confirms one provider-neutral, asynchronous read surface across `getFacilityById`, `getServices`, `getServiceByCode`, `getServiceAliases`, `getServicesForFacility`, and `getFacilitiesByService`. The local/null provider invents no operational data. The Supabase provider uses the existing browser-safe client and only the four accepted public security-invoker views, with no base-table read, write, RPC, privileged key, search, fuzzy-match, or ranking-algorithm path.
+
+Canonical local facility identity, floor, geometry, map placement, nodes, edges, routing, QR, and emergency relationships remain authoritative. Service code remains the public service identity; aliases do not become identities; malformed inputs short-circuit with the domain-specific not-found results; and noncanonical provider facility IDs are omitted. `CONFIGURED` means an overlay record exists, not that it is verified. Facility profile, service, alias, and mapping provenance remain independent, and demo state derives only from `DEMO` or `DEMO_ONLY` evidence. Configured `recommendation_rank` remains ordering metadata with stable service-code/facility-ID ties.
+
+The deterministic FS-1B suite and the complete required Node 22 regression matrix, route rendering, ESLint, typecheck, and production build pass. The existing approximately 878 kB lazy 3D chunk warning is pre-existing and unrelated. No frontend environment was available for this reconciliation, so no live FS-1B Data API read is claimed; accepted FS-1A linked schema/RLS/audit evidence remains intact. This evidence boundary is the nonblocking acceptance advisory.
+
+With FS-1A and FS-1B both accepted with their recorded advisories, Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4 remains in progress, and FS-2 remains `NOT_STARTED` pending a separately authorized readiness review.
 
 ## Later canonical work candidates
 
