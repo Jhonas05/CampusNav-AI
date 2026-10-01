@@ -1,5 +1,22 @@
 # CampusNav Content Pack — Changelog
 
+## v3.31 — 1 October 2026
+
+Implemented and verified **Phase 4-FS-2B1 — Complete Provider-Neutral Facility Hours Aggregate Read** without starting status computation.
+
+### Implementation
+- added `getFacilityHours(facilityId, dateRange?)` to the established FacilityService and both provider surfaces using the existing `{ ok, availability, data, error }` contract
+- added strict inclusive Manila campus-date range validation plus half-open Manila advisory-overlap boundaries without expanding recurrence or computing status
+- added explicit weekly-hour, dated-exception, and temporary-closure normalization with deterministic ordering and independent lifecycle/provenance/demo metadata
+- limited the browser provider to `public_facility_hours`, `public_facility_hour_exceptions`, and `public_facility_status_advisories`; the local/null provider returns empty sources and invents no operational data
+- added deterministic FS-2B1 coverage for both providers, all range/error cases, interval preservation, advisory scope, field whitelisting, sanitized failures, public-view-only access, source immutability, and all 95 canonical facility IDs
+
+### Verification and boundary
+- passed the complete required Node 22 deterministic regression matrix, route rendering, ESLint, typecheck, and production build; the pre-existing approximately 878 kB lazy 3D chunk warning remains unrelated
+- changed no schema, migration, pgTAP, database row, fixture, official hours, UI, Admin, Dashboard/Realtime, spatial/navigation/routing/QR/Emergency behavior, dependency, remote database, commit, push, deployment, or status-engine code
+- classified FS-2B1 as `IMPLEMENTED_VERIFIED`; FS-2B final reconciliation and FS-2C remain unstarted and separately gated
+- reconciled the stale FS-2A status in document 64 to the accepted canonical state
+
 ## v3.30 — 1 October 2026
 
 Accepted **Phase 4-FS-2A — Facility Hours/Exceptions Schema, RLS, Provenance, and Audit Foundation** without starting provider reads or status-engine work.

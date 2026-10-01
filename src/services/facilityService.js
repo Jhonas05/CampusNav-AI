@@ -2,13 +2,22 @@ import {
   createFacilityResult,
   FACILITY_AVAILABILITY,
   FACILITY_ERROR_CODES,
+  normalizeFacilityHourException,
   normalizeFacilityOperationalProfile,
   normalizeFacilityServiceMapping,
+  normalizeFacilityStatusAdvisory,
+  normalizeFacilityWeeklyHour,
   normalizeService,
   normalizeServiceAlias,
   normalizeServiceCode,
 } from "../data/facilityContracts.js"
 import { getFacilityById as getCanonicalFacilityById } from "../data/facilities.js"
+import {
+  getCampusDateRangeBounds,
+  isValidCampusDateKey,
+  normalizeCampusDateRange,
+  timeToMinutes,
+} from "../lib/campusTime.js"
 import {
   BACKEND_MODES,
   getBackendAvailability,
@@ -25,6 +34,18 @@ const cloneCanonicalFacility = (facility) => ({
 const facilityData = (facility, operationalProfile = null) => ({
   facility: cloneCanonicalFacility(facility),
   operationalProfile,
+})
+
+const facilityHoursData = (facility, dateRange, {
+  weeklyHours = [],
+  exceptions = [],
+  statusAdvisories = [],
+} = {}) => ({
+  facility: cloneCanonicalFacility(facility),
+  dateRange,
+  weeklyHours,
+  exceptions,
+  statusAdvisories,
 })
 
 const notFoundResult = () => createFacilityResult({
@@ -46,6 +67,17 @@ const providerUnavailableResult = (data) => createFacilityResult({
     code: FACILITY_ERROR_CODES.PROVIDER_UNAVAILABLE,
     message: "Facility information is temporarily unavailable.",
     retryable: true,
+  },
+})
+
+const invalidDateRangeResult = () => createFacilityResult({
+  ok: false,
+  availability: FACILITY_AVAILABILITY.UNAVAILABLE,
+  data: null,
+  error: {
+    code: FACILITY_ERROR_CODES.INVALID_DATE_RANGE,
+    message: "Date range is invalid.",
+    retryable: false,
   },
 })
 
@@ -90,6 +122,120 @@ const compareMappings = (left, right, tieBreakKey) => (
   left.recommendationRank - right.recommendationRank
   || String(left[tieBreakKey]).localeCompare(String(right[tieBreakKey]))
 )
+
+const isNullableString = (value) => value === null || typeof value === "string"
+const isValidTimestamp = (value) => typeof value === "string" && Number.isFinite(Date.parse(value))
+const isValidOptionalTimestamp = (value) => value === null || isValidTimestamp(value)
+
+const isValidProvenance = (provenance) => (
+  provenance
+  && typeof provenance.lifecycle === "string"
+  && isValidTimestamp(provenance.publishedAt)
+  && isValidOptionalTimestamp(provenance.effectiveAt)
+  && isValidOptionalTimestamp(provenance.expiresAt)
+  && typeof provenance.verificationStatus === "string"
+  && typeof provenance.dataStatus === "string"
+  && typeof provenance.sourceType === "string"
+  && provenance.sourceType.length > 0
+  && isNullableString(provenance.sourceId)
+  && isNullableString(provenance.sourceLabel)
+  && isValidOptionalTimestamp(provenance.lastVerifiedAt)
+  && isValidTimestamp(provenance.updatedAt)
+  && typeof provenance.demo === "boolean"
+)
+
+const isValidIntervalShape = (record) => (
+  typeof record.closedAllDay === "boolean"
+  && (
+    (record.closedAllDay && record.startTime === null && record.endTime === null)
+    || (
+      !record.closedAllDay
+      && Number.isFinite(timeToMinutes(record.startTime))
+      && Number.isFinite(timeToMinutes(record.endTime))
+    )
+  )
+)
+
+const isValidWeeklyHour = (record, facilityId) => (
+  record
+  && record.facilityId === facilityId
+  && Number.isInteger(record.dayOfWeek)
+  && record.dayOfWeek >= 0
+  && record.dayOfWeek <= 6
+  && isValidIntervalShape(record)
+  && isValidProvenance(record.provenance)
+)
+
+const isValidHourException = (record, facilityId) => (
+  record
+  && record.facilityId === facilityId
+  && isValidCampusDateKey(record.exceptionDate)
+  && isValidIntervalShape(record)
+  && isValidProvenance(record.provenance)
+)
+
+const advisoryStartAt = (advisory) => (
+  advisory.provenance.effectiveAt || advisory.provenance.publishedAt
+)
+
+const isValidStatusAdvisory = (record, facilityId) => (
+  record
+  && record.facilityId === facilityId
+  && record.advisoryType === "TEMPORARY_CLOSURE"
+  && isValidProvenance(record.provenance)
+  && isValidTimestamp(advisoryStartAt(record))
+)
+
+const compareNullableText = (left, right, nullsLast = false) => {
+  if (left === right) return 0
+  if (left === null) return nullsLast ? 1 : -1
+  if (right === null) return nullsLast ? -1 : 1
+  return String(left).localeCompare(String(right))
+}
+
+const compareSource = (left, right) => (
+  compareNullableText(left.provenance.sourceType, right.provenance.sourceType)
+  || compareNullableText(left.provenance.sourceId, right.provenance.sourceId, true)
+)
+
+const compareIntervals = (left, right) => (
+  Number(right.closedAllDay) - Number(left.closedAllDay)
+  || compareNullableText(left.startTime, right.startTime)
+  || compareNullableText(left.endTime, right.endTime)
+  || compareSource(left, right)
+)
+
+const compareWeeklyHours = (left, right) => (
+  left.dayOfWeek - right.dayOfWeek || compareIntervals(left, right)
+)
+
+const compareExceptions = (left, right) => (
+  left.exceptionDate.localeCompare(right.exceptionDate) || compareIntervals(left, right)
+)
+
+const compareStatusAdvisories = (left, right) => (
+  Date.parse(advisoryStartAt(left)) - Date.parse(advisoryStartAt(right))
+  || (
+    left.provenance.expiresAt === right.provenance.expiresAt
+      ? 0
+      : left.provenance.expiresAt === null
+        ? 1
+        : right.provenance.expiresAt === null
+          ? -1
+          : Date.parse(left.provenance.expiresAt) - Date.parse(right.provenance.expiresAt)
+  )
+  || compareSource(left, right)
+)
+
+const advisoryOverlapsDateRange = (advisory, dateRange) => {
+  if (!dateRange) return true
+  const { startAt, endAt } = getCampusDateRangeBounds(dateRange)
+  const advisoryStart = Date.parse(advisoryStartAt(advisory))
+  const advisoryEnd = advisory.provenance.expiresAt
+    ? Date.parse(advisory.provenance.expiresAt)
+    : Number.POSITIVE_INFINITY
+  return advisoryStart < Date.parse(endAt) && advisoryEnd > Date.parse(startAt)
+}
 
 const normalizeServiceFilters = (filters) => {
   if (filters === undefined || filters === null) return {}
@@ -299,6 +445,70 @@ export const createFacilityService = ({
       return providerUnavailableResult([])
     }
   },
+  async getFacilityHours(facilityId, dateRange) {
+    const normalizedId = typeof facilityId === "string" ? facilityId.trim() : ""
+    const facility = normalizedId ? getCanonicalFacilityById(normalizedId) : null
+    if (!facility) return notFoundResult()
+
+    const normalizedDateRange = normalizeCampusDateRange(dateRange)
+    if (normalizedDateRange === undefined) return invalidDateRangeResult()
+
+    const emptyData = facilityHoursData(facility, normalizedDateRange)
+
+    try {
+      const activeProvider = provider || await providerLoader()
+      const records = await activeProvider.getFacilityHours(facility.id, normalizedDateRange)
+      if (
+        !records
+        || !Array.isArray(records.weeklyHours)
+        || !Array.isArray(records.exceptions)
+        || !Array.isArray(records.statusAdvisories)
+      ) return providerUnavailableResult(emptyData)
+
+      const weeklyHours = records.weeklyHours.map(normalizeFacilityWeeklyHour)
+      const exceptions = records.exceptions.map(normalizeFacilityHourException)
+      const statusAdvisories = []
+      let advisoryPayloadValid = true
+      for (const record of records.statusAdvisories) {
+        const advisory = normalizeFacilityStatusAdvisory(record)
+        if (advisory?.advisoryType === "SERVICE_INTERRUPTION") continue
+        if (!isValidStatusAdvisory(advisory, facility.id)) {
+          advisoryPayloadValid = false
+          break
+        }
+        statusAdvisories.push(advisory)
+      }
+
+      if (
+        !weeklyHours.every((record) => isValidWeeklyHour(record, facility.id))
+        || !exceptions.every((record) => isValidHourException(record, facility.id))
+        || !advisoryPayloadValid
+      ) return providerUnavailableResult(emptyData)
+
+      const data = facilityHoursData(facility, normalizedDateRange, {
+        weeklyHours: weeklyHours.toSorted(compareWeeklyHours),
+        exceptions: exceptions
+          .filter((record) => (
+            !normalizedDateRange
+            || (
+              record.exceptionDate >= normalizedDateRange.startDate
+              && record.exceptionDate <= normalizedDateRange.endDate
+            )
+          ))
+          .toSorted(compareExceptions),
+        statusAdvisories: statusAdvisories
+          .filter((record) => advisoryOverlapsDateRange(record, normalizedDateRange))
+          .toSorted(compareStatusAdvisories),
+      })
+      const hasSourceRows = data.weeklyHours.length
+        || data.exceptions.length
+        || data.statusAdvisories.length
+
+      return hasSourceRows ? configuredResult(data) : unavailableResult(data)
+    } catch {
+      return providerUnavailableResult(emptyData)
+    }
+  },
 })
 
 const defaultFacilityService = createFacilityService()
@@ -309,3 +519,4 @@ export const getServiceByCode = (serviceCode) => defaultFacilityService.getServi
 export const getServiceAliases = (serviceCode) => defaultFacilityService.getServiceAliases(serviceCode)
 export const getServicesForFacility = (facilityId) => defaultFacilityService.getServicesForFacility(facilityId)
 export const getFacilitiesByService = (serviceCode) => defaultFacilityService.getFacilitiesByService(serviceCode)
+export const getFacilityHours = (facilityId, dateRange) => defaultFacilityService.getFacilityHours(facilityId, dateRange)

@@ -1,5 +1,7 @@
 export const CAMPUS_TIME_ZONE = "Asia/Manila"
 
+const CAMPUS_DATE_KEY_PATTERN = /^(?!0000)(\d{4})-(\d{2})-(\d{2})$/
+
 const campusDateFormatter = new Intl.DateTimeFormat("en-CA", {
   timeZone: CAMPUS_TIME_ZONE,
   year: "numeric",
@@ -28,6 +30,32 @@ export const getCampusDateKey = (value = new Date()) => {
   const date = value instanceof Date ? value : new Date(value)
   const parts = campusDateFormatter.formatToParts(date)
   return `${getPart(parts, "year")}-${getPart(parts, "month")}-${getPart(parts, "day")}`
+}
+
+export const isValidCampusDateKey = (value) => {
+  if (typeof value !== "string" || !CAMPUS_DATE_KEY_PATTERN.test(value)) return false
+  const date = new Date(`${value}T00:00:00Z`)
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value
+}
+
+export const normalizeCampusDateRange = (dateRange) => {
+  if (dateRange === undefined || dateRange === null) return null
+  if (typeof dateRange !== "object" || Array.isArray(dateRange)) return undefined
+
+  const keys = Object.keys(dateRange)
+  if (
+    keys.length !== 2
+    || !Object.hasOwn(dateRange, "startDate")
+    || !Object.hasOwn(dateRange, "endDate")
+    || !isValidCampusDateKey(dateRange.startDate)
+    || !isValidCampusDateKey(dateRange.endDate)
+    || dateRange.startDate > dateRange.endDate
+  ) return undefined
+
+  return {
+    startDate: dateRange.startDate,
+    endDate: dateRange.endDate,
+  }
 }
 
 export const getCampusDayOfWeek = (value = new Date()) => weekdayNumbers[campusWeekdayFormatter.format(value instanceof Date ? value : new Date(value))]
@@ -112,6 +140,11 @@ export const addCampusDays = (dateKey, days) => {
 }
 
 export const campusDateTimeToIso = (dateKey, time) => new Date(`${dateKey}T${normalizeCampusTime(time)}+08:00`).toISOString()
+
+export const getCampusDateRangeBounds = (dateRange) => ({
+  startAt: campusDateTimeToIso(dateRange.startDate, "00:00:00"),
+  endAt: campusDateTimeToIso(addCampusDays(dateRange.endDate, 1), "00:00:00"),
+})
 
 export const isCampusDateInRange = (dateKey, startDate, endDate = null) => (
   (!startDate || dateKey >= startDate) && (!endDate || dateKey <= endDate)

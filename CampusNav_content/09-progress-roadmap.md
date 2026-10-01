@@ -416,7 +416,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B NOT_STARTED`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B1 IMPLEMENTED_VERIFIED; FS-2C NOT_STARTED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -453,7 +453,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 ### Implementation sequence
 
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `IN_PROGRESS — FS-2A ACCEPTED; FS-2B NOT_STARTED`
+2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `IN_PROGRESS — FS-2A ACCEPTED; FS-2B1 IMPLEMENTED_VERIFIED; FS-2C NOT_STARTED`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `NOT_STARTED`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
@@ -555,6 +555,16 @@ The actual linked CampusNav project is `yiuwvyznteizxxmjqcfn`, and local/remote 
 The owner-supplied corrected SQL Editor execution reached `ok 89` with no reported `not ok`, failure summary, or SQL runtime error, establishing 89/89. Independent read-only linked verification confirms both tables with RLS, all three security-invoker/security-barrier views, all ten expected policies, the intended column-scoped DML and sequence grants, protected actor/system columns, four enabled trusted audit/update triggers, and no `anon`/`authenticated` execution access to the private trigger functions. Exact post-run checks returned zero retained FS-2A hours, exceptions, operational profile, advisories, auth users, profiles, role assignments, or audit rows.
 
 The deterministic FS-2A suite and the previously completed full requested regression set pass. FS-2A is accepted at its schema, RLS, provenance, and audit-foundation boundary. No official hours were seeded, and provider reads, status evaluation, Admin/public UI, Dashboard/Realtime, and all FS-2B work remain outside this acceptance. FS-2B may begin only after separate authorization.
+
+### Phase 4-FS-2B1 implementation — 1 October 2026
+
+**Status:** `IMPLEMENTED_VERIFIED`
+
+The provider-neutral `FacilityService` now exposes the read-only `getFacilityHours(facilityId, dateRange?)` aggregate. Canonical local facility identity is validated before provider access. The local/null provider returns empty weekly-hour, exception, and status-advisory collections without inventing operational data. The Supabase provider uses the existing browser-safe client and only `public_facility_hours`, `public_facility_hour_exceptions`, and `public_facility_status_advisories`; no base-table read, write, RPC, privileged credential, Realtime, or Admin path was added.
+
+The exact optional range is `null`/omitted or `{ startDate, endDate }` with strict inclusive Gregorian `YYYY-MM-DD` values. Validation is machine-timezone independent; advisory overlap uses half-open `Asia/Manila` day boundaries. Explicit normalization preserves multiple weekly intervals, closed markers, overnight clock values, dated exceptions, temporary closures, independent provenance, freshness/effectivity, pending state, and demo state while excluding actor/internal/spatial/navigation fields. `SERVICE_INTERRUPTION` is not promoted to a facility closure. The method returns source records only and computes no operational status or precedence.
+
+The deterministic FS-2B1 suite and the complete required Node 22 regression matrix, route rendering, ESLint, typecheck, and production build pass. The existing approximately 878 kB lazy 3D chunk warning remains unrelated. No schema, migration, pgTAP, database row, official hour, fixture, UI, navigation behavior, dependency, remote database, commit, push, deployment, or FS-2C implementation changed. FS-2B1 is implemented and verified locally; any FS-2B final acceptance/reconciliation and FS-2C readiness or implementation require separate authorization.
 
 ## Later canonical work candidates
 

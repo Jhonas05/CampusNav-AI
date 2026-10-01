@@ -32,6 +32,10 @@ Expected operations:
 - `getServices(filters?)`
 - `getFacilityHours(facilityId, dateRange?)`
 
+`getFacilityHours` is an FS-2B source-record read, not the FS-2C status engine. Its optional range is `null`/omitted or exactly `{ startDate, endDate }`, with inclusive strict `YYYY-MM-DD` campus dates interpreted in `Asia/Manila`. It returns the canonical local facility plus independently provenanced `weeklyHours`, dated `exceptions`, and `TEMPORARY_CLOSURE` `statusAdvisories` through the existing `{ ok, availability, data, error }` envelope. Weekly recurrence rows are not reduced by the date range; exceptions use inclusive dates, and advisories use overlap against half-open Manila day boundaries. Invalid facilities and malformed ranges short-circuit before provider access. Empty sources remain unavailable, provider failures remain sanitized/retryable, and `CONFIGURED` does not imply verified.
+
+FS-2B must not expand weekly occurrences, interpret overnight carry, replace weekly hours with exceptions, apply closure precedence, or compute `OPEN_NOW`, `CLOSED`, `CLOSING_SOON`, `SCHEDULED_TO_OPEN`, `TEMPORARILY_UNAVAILABLE`, `PENDING_VERIFICATION`, or `UNKNOWN`.
+
 Phase 4 rules:
 - every result is keyed by an existing canonical local facility ID
 - the service combines local spatial identity with the Supabase operational overlay; it does not let the overlay redefine geometry or routing

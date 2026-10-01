@@ -8,4 +8,9 @@ export const createLocalFacilityProvider = () => ({
   getServiceAliases: async () => [],
   getServicesForFacility: async () => [],
   getFacilitiesByService: async () => [],
+  getFacilityHours: async () => ({
+    weeklyHours: [],
+    exceptions: [],
+    statusAdvisories: [],
+  }),
 })

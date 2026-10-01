@@ -7,6 +7,7 @@ export const FACILITY_AVAILABILITY = Object.freeze({
 export const FACILITY_ERROR_CODES = Object.freeze({
   NOT_FOUND: "FACILITY_NOT_FOUND",
   SERVICE_NOT_FOUND: "SERVICE_NOT_FOUND",
+  INVALID_DATE_RANGE: "FACILITY_INVALID_DATE_RANGE",
   PROVIDER_UNAVAILABLE: "FACILITY_PROVIDER_UNAVAILABLE",
 })
 
@@ -17,6 +18,7 @@ export const FACILITY_PROVIDER_METHODS = Object.freeze([
   "getServiceAliases",
   "getServicesForFacility",
   "getFacilitiesByService",
+  "getFacilityHours",
 ])
 
 const SERVICE_CODE_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
@@ -103,6 +105,42 @@ export const normalizeFacilityServiceMapping = (record) => {
     serviceName: valueFrom(record, "serviceName", "service_name"),
     recommendationRank: valueFrom(record, "recommendationRank", "recommendation_rank"),
     publicNotes: valueFrom(record, "publicNotes", "public_notes"),
+    provenance: normalizeFacilityProvenance(record),
+  }
+}
+
+export const normalizeFacilityWeeklyHour = (record) => {
+  if (!record || typeof record !== "object") return null
+
+  return {
+    facilityId: valueFrom(record, "facilityId", "facility_id"),
+    dayOfWeek: valueFrom(record, "dayOfWeek", "day_of_week"),
+    closedAllDay: valueFrom(record, "closedAllDay", "closed_all_day"),
+    startTime: valueFrom(record, "startTime", "start_time"),
+    endTime: valueFrom(record, "endTime", "end_time"),
+    provenance: normalizeFacilityProvenance(record),
+  }
+}
+
+export const normalizeFacilityHourException = (record) => {
+  if (!record || typeof record !== "object") return null
+
+  return {
+    facilityId: valueFrom(record, "facilityId", "facility_id"),
+    exceptionDate: valueFrom(record, "exceptionDate", "exception_date"),
+    closedAllDay: valueFrom(record, "closedAllDay", "closed_all_day"),
+    startTime: valueFrom(record, "startTime", "start_time"),
+    endTime: valueFrom(record, "endTime", "end_time"),
+    provenance: normalizeFacilityProvenance(record),
+  }
+}
+
+export const normalizeFacilityStatusAdvisory = (record) => {
+  if (!record || typeof record !== "object") return null
+
+  return {
+    facilityId: valueFrom(record, "facilityId", "facility_id"),
+    advisoryType: valueFrom(record, "advisoryType", "advisory_type"),
     provenance: normalizeFacilityProvenance(record),
   }
 }

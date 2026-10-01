@@ -1,6 +1,9 @@
 import {
   normalizeFacilityOperationalProfile,
+  normalizeFacilityHourException,
   normalizeFacilityServiceMapping,
+  normalizeFacilityStatusAdvisory,
+  normalizeFacilityWeeklyHour,
   normalizeService,
   normalizeServiceAlias,
   normalizeServiceCode,
@@ -11,6 +14,9 @@ const PUBLIC_FACILITY_PROFILE_VIEW = "public_facility_operational_profiles"
 const PUBLIC_SERVICES_VIEW = "public_services"
 const PUBLIC_SERVICE_ALIASES_VIEW = "public_service_aliases"
 const PUBLIC_FACILITY_SERVICE_MAPPINGS_VIEW = "public_facility_service_mappings"
+const PUBLIC_FACILITY_HOURS_VIEW = "public_facility_hours"
+const PUBLIC_FACILITY_HOUR_EXCEPTIONS_VIEW = "public_facility_hour_exceptions"
+const PUBLIC_FACILITY_STATUS_ADVISORIES_VIEW = "public_facility_status_advisories"
 const PUBLIC_FACILITY_PROFILE_COLUMNS = [
   "id",
   "facility_id",
@@ -82,6 +88,58 @@ const PUBLIC_FACILITY_SERVICE_MAPPING_COLUMNS = [
   "source_id",
   "source_label",
   "last_verified_at",
+  "updated_at",
+].join(", ")
+
+const PUBLIC_FACILITY_HOUR_COLUMNS = [
+  "facility_id",
+  "day_of_week",
+  "closed_all_day",
+  "start_time",
+  "end_time",
+  "lifecycle",
+  "published_at",
+  "effective_at",
+  "expires_at",
+  "verification_status",
+  "data_status",
+  "source_type",
+  "source_id",
+  "source_label",
+  "last_verified_at",
+  "updated_at",
+].join(", ")
+
+const PUBLIC_FACILITY_HOUR_EXCEPTION_COLUMNS = [
+  "facility_id",
+  "exception_date",
+  "closed_all_day",
+  "start_time",
+  "end_time",
+  "lifecycle",
+  "published_at",
+  "effective_at",
+  "expires_at",
+  "verification_status",
+  "data_status",
+  "source_type",
+  "source_id",
+  "source_label",
+  "last_verified_at",
+  "updated_at",
+].join(", ")
+
+const PUBLIC_FACILITY_STATUS_ADVISORY_COLUMNS = [
+  "facility_id",
+  "advisory_type",
+  "lifecycle",
+  "published_at",
+  "effective_at",
+  "expires_at",
+  "verification_status",
+  "data_status",
+  "source_type",
+  "source_id",
   "updated_at",
 ].join(", ")
 
@@ -160,5 +218,58 @@ export const createSupabaseFacilityProvider = (client) => ({
 
     if (error) throw error
     return (data || []).map(normalizeFacilityServiceMapping)
+  },
+  async getFacilityHours(facilityId, dateRange = null) {
+    const weeklyHoursQuery = client
+      .from(PUBLIC_FACILITY_HOURS_VIEW)
+      .select(PUBLIC_FACILITY_HOUR_COLUMNS)
+      .eq("facility_id", facilityId)
+      .order("day_of_week", { ascending: true })
+      .order("closed_all_day", { ascending: false })
+      .order("start_time", { ascending: true, nullsFirst: true })
+      .order("end_time", { ascending: true, nullsFirst: true })
+      .order("source_type", { ascending: true })
+      .order("source_id", { ascending: true, nullsFirst: false })
+
+    let exceptionsQuery = client
+      .from(PUBLIC_FACILITY_HOUR_EXCEPTIONS_VIEW)
+      .select(PUBLIC_FACILITY_HOUR_EXCEPTION_COLUMNS)
+      .eq("facility_id", facilityId)
+    if (dateRange) {
+      exceptionsQuery = exceptionsQuery
+        .gte("exception_date", dateRange.startDate)
+        .lte("exception_date", dateRange.endDate)
+    }
+    exceptionsQuery = exceptionsQuery
+      .order("exception_date", { ascending: true })
+      .order("closed_all_day", { ascending: false })
+      .order("start_time", { ascending: true, nullsFirst: true })
+      .order("end_time", { ascending: true, nullsFirst: true })
+      .order("source_type", { ascending: true })
+      .order("source_id", { ascending: true, nullsFirst: false })
+
+    const statusAdvisoriesQuery = client
+      .from(PUBLIC_FACILITY_STATUS_ADVISORIES_VIEW)
+      .select(PUBLIC_FACILITY_STATUS_ADVISORY_COLUMNS)
+      .eq("facility_id", facilityId)
+      .order("effective_at", { ascending: true, nullsFirst: true })
+      .order("published_at", { ascending: true })
+      .order("expires_at", { ascending: true, nullsFirst: false })
+      .order("source_type", { ascending: true })
+      .order("source_id", { ascending: true, nullsFirst: false })
+
+    const [weeklyHoursResult, exceptionsResult, statusAdvisoriesResult] = await Promise.all([
+      weeklyHoursQuery,
+      exceptionsQuery,
+      statusAdvisoriesQuery,
+    ])
+    const error = weeklyHoursResult.error || exceptionsResult.error || statusAdvisoriesResult.error
+    if (error) throw error
+
+    return {
+      weeklyHours: (weeklyHoursResult.data || []).map(normalizeFacilityWeeklyHour),
+      exceptions: (exceptionsResult.data || []).map(normalizeFacilityHourException),
+      statusAdvisories: (statusAdvisoriesResult.data || []).map(normalizeFacilityStatusAdvisory),
+    }
   },
 })

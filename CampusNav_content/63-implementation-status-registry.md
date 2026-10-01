@@ -5,7 +5,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B NOT_STARTED`
+**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B1 IMPLEMENTED_VERIFIED; FS-2C NOT_STARTED`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -20,6 +20,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Facility operational profiles | `ACCEPTED_WITH_ADVISORY — FS-1B1 READ PATH` | FS-1A linked schema/RLS/audit acceptance is preserved; provider-neutral canonical-local plus optional public-view overlay read behavior passed final FS-1B reconciliation |
 | Services, aliases, and facility-service mappings | `ACCEPTED_WITH_ADVISORY — FS-1B2/FS-1B3 READ PATHS` | Provider-neutral catalog/code/alias, facility-mapping, and reverse canonical-facility reads passed final FS-1B reconciliation; no live FS-1B Data API read is claimed |
 | Hours and exceptions schema/security foundation | `ACCEPTED — FS-2A` | Linked migration, 89/89 corrected canonical pgTAP, remote structure/security/audit checks, and exact zero-fixture verification pass on the actual CampusNav project |
+| Hours, exceptions, and closure source reads | `IMPLEMENTED_VERIFIED — FS-2B1` | Provider-neutral local/null plus public-view aggregate read, strict Manila date ranges, defensive normalization, ordering, provenance, errors, and full deterministic regressions pass; no live FS-2B Data API read is claimed |
 | Facility-status engine | `NOT_IMPLEMENTED` | `Asia/Manila`; status contract in `13`; operational closed is not routing blocked |
 | Facility Admin workflows beyond advisories | `NOT_IMPLEMENTED` | Generic authorized workflow first; institutional owner names remain pending |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
@@ -31,7 +32,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`; FS-2B/FS-2C and the facility-status engine remain unstarted and require separate authorization.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`; FS-2B1 is `IMPLEMENTED_VERIFIED` at its provider-neutral aggregate-read boundary. FS-2B final reconciliation and all FS-2C/status-engine work remain unstarted and require separate authorization.
 
 ### Phase 4-FS-2A final acceptance reconciliation — 1 October 2026
 
@@ -52,6 +53,24 @@ This section supersedes the earlier `IMPLEMENTED_UNVERIFIED` acceptance boundary
 | Deterministic/regression evidence | `PASS_WITH_EXISTING_BUILD_ADVISORY` | Deterministic FS-2A and the full requested regression set pass; the pre-existing lazy 3D bundle warning remains unrelated |
 | Data and scope boundary | `PASS` | No official hours or persistent fixture was added; no provider read, status engine, Admin/public UI, Dashboard/Realtime, spatial/navigation, routing, QR, Emergency, dependency, or later-slice work is claimed |
 | Acceptance decision | `ACCEPTED` | FS-2A is complete at its schema, RLS, provenance, and audit-foundation boundary; FS-2 remains in progress and FS-2B requires separate authorization |
+
+### Phase 4-FS-2B1 provider-neutral facility-hours aggregate read — 1 October 2026
+
+**Classification:** `IMPLEMENTED_VERIFIED`
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| Public service contract | `PASS` | `getFacilityHours(facilityId, dateRange?)` uses the existing normalized result envelope and returns canonical facility identity plus weekly hours, exceptions, and closure-source advisories without computing status |
+| Date-range contract | `PASS` | Only `null`/omitted or exact strict inclusive `{ startDate, endDate }` campus dates are accepted; malformed Gregorian dates, reversed/one-sided/renamed/extra-key ranges, timestamps, and `Date` objects short-circuit before provider access with `FACILITY_INVALID_DATE_RANGE` |
+| Provider compatibility | `PASS` | Local/null and Supabase providers expose the same async aggregate surface; local mode returns empty collections and invents no hours, exception, advisory, or provenance data |
+| Supabase read boundary | `PASS` | Browser reads use only the three accepted FS-2A public security-invoker views with exact facility filtering and inclusive exception-date filters; no base table, write, RPC, privileged key, or Realtime path exists |
+| Normalization and ordering | `PASS` | Explicit whitelists preserve multiple/closed/overnight intervals, dated exceptions, temporary closures, deterministic ordering, and independent provenance while omitting internal, actor, spatial, navigation, QR, emergency, and content fields |
+| Manila boundary | `PASS` | Strict date validation is local-timezone independent and advisory overlap uses half-open `Asia/Manila` day bounds; weekly occurrence expansion, overnight carry, exception replacement, closure precedence, and current-status computation remain absent |
+| Result/error behavior | `PASS` | Any valid source row is `CONFIGURED` without implying verified; all-empty is `UNAVAILABLE`; invalid facility/range short-circuit; malformed provider data and dependency failures produce the existing sanitized retryable provider-unavailable result |
+| Deterministic FS-2B1 suite | `PASS` | Both providers, all three views, date boundaries, interval preservation, closure exclusion/overlap, ordering, provenance, field whitelisting, sanitized failures, security source scans, and all 95 canonical IDs pass under Node 22.22.0 |
+| Full regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | Data/navigation/multi-floor/QR/Emergency/3D/Dashboard/Phase 8/FS-1A/FS-1B/FS-2A/FS-2B1/render checks, ESLint, typecheck, and build pass; the approximately 878 kB lazy 3D warning is unchanged |
+| Scope/data impact | `NONE` | No schema, migration, pgTAP, database row, fixture, official hours, UI, Admin, Dashboard/Realtime, spatial/navigation/routing/QR/Emergency behavior, dependency, remote database, commit, push, deployment, or FS-2C work changed |
+| Slice decision | `IMPLEMENTED_VERIFIED` | FS-2B1 is complete at its local deterministic implementation boundary; final FS-2B acceptance/reconciliation and FS-2C require separate authorization |
 
 ### Phase 4-FS-2A implementation — 28 September 2026
 

@@ -43,6 +43,7 @@ npm run test:phase8c2:cloud
 npm run test:phase4-fs1a
 npm run test:phase4-fs1b
 npm run test:phase4-fs2a
+npm run test:phase4-fs2b
 npm run test:rls
 npm run test:render
 ```
@@ -234,6 +235,18 @@ npm run test:phase4-fs2a
 ```
 
 When a local Docker-based Supabase stack is available, `npm run test:rls` also discovers `supabase/tests/phase_4_fs2a_facility_hours_exceptions_test.sql`. Its 89 transactional pgTAP assertions use only rollback-scoped `DEVELOPMENT / DEMO / NOT OFFICIAL` fixtures.
+
+## Facility hours aggregate read (Phase 4-FS-2B1)
+
+The provider-neutral `getFacilityHours(facilityId, dateRange?)` service returns the canonical local facility plus currently public/effective weekly hours, dated exceptions, and facility-wide `TEMPORARY_CLOSURE` source advisories. The optional range is `null`/omitted or exactly `{ startDate, endDate }` with inclusive strict `YYYY-MM-DD` campus dates. Exception dates are filtered inclusively, while closure overlap uses explicit half-open `Asia/Manila` day boundaries. Weekly recurrence records remain complete for the later status engine.
+
+Local mode returns empty collections and does not invent operating data. Supabase mode reads only `public_facility_hours`, `public_facility_hour_exceptions`, and `public_facility_status_advisories` through the existing browser-safe client. Every source row preserves independent lifecycle/provenance/demo metadata. FS-2B1 does not expand recurrence, interpret overnight carry, apply exception/closure precedence, or compute open/closed status.
+
+Run the deterministic contract/provider/security regression with:
+
+```bash
+npm run test:phase4-fs2b
+```
 
 ## Admin CMS foundation (Phase 8B.1)
 
