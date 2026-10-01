@@ -1,5 +1,21 @@
 # CampusNav Content Pack — Changelog
 
+## v3.32 — 1 October 2026
+
+Accepted **Phase 4-FS-2B — Provider-Neutral Hours and Exception Read Path** as `ACCEPTED_WITH_ADVISORY` without starting FS-2C.
+
+### Acceptance reconciliation
+- confirmed the single provider-neutral asynchronous `getFacilityHours(facilityId, dateRange?)` source-read surface and the absence of `getFacilityStatus` or any FS-2C status computation
+- confirmed canonical local facility-first identity, strict inclusive Manila date ranges, weekly/overnight source preservation, inclusive exceptions, temporary-closure overlap filtering, independent provenance, demo/pending handling, deterministic ordering, and the established result/error envelope
+- confirmed browser reads use only the three accepted FS-2A public security-invoker views with no base-table read, write, RPC, privileged credential, Realtime, spatial/navigation override, or second API model
+- passed the dedicated FS-2B suite and the complete required Node 22 regression matrix, route rendering, ESLint, typecheck, and production build
+
+### Status and boundary
+- classified full FS-2B as `ACCEPTED_WITH_ADVISORY`; the named nonblocking advisory is that evidence remains deterministic provider/read-path coverage and does not claim a live FS-2B Data API read
+- preserved accepted FS-2A linked migration/RLS/audit evidence and the existing approximately 878 kB lazy 3D build advisory
+- added no source functionality, schema, migration, pgTAP, database row, fixture, official hours, UI, navigation, dependency, remote database change, commit, push, deployment, or FS-2C work during reconciliation
+- retained Phase 4-FS-2 as `IN_PROGRESS`; FS-2C remains `NOT_STARTED`, and its readiness review requires separate authorization
+
 ## v3.31 — 1 October 2026
 
 Implemented and verified **Phase 4-FS-2B1 — Complete Provider-Neutral Facility Hours Aggregate Read** without starting status computation.
