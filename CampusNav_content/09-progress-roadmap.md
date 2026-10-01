@@ -416,7 +416,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B NOT_STARTED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -453,7 +453,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 ### Implementation sequence
 
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `NOT_STARTED`
+2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `IN_PROGRESS — FS-2A ACCEPTED; FS-2B NOT_STARTED`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `NOT_STARTED`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
@@ -468,7 +468,7 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current FS-1 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4-FS-2 remains `NOT_STARTED` and requires its own readiness review and authorization.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4-FS-2A has since been accepted at its database-foundation boundary. FS-2 remains in progress; FS-2B and status-engine work remain unstarted and require separate authorization.
 
 ### Phase 4-FS-1A implementation snapshot — 20 September 2026
 
@@ -534,7 +534,27 @@ Canonical local facility identity, floor, geometry, map placement, nodes, edges,
 
 The deterministic FS-1B suite and the complete required Node 22 regression matrix, route rendering, ESLint, typecheck, and production build pass. The existing approximately 878 kB lazy 3D chunk warning is pre-existing and unrelated. No frontend environment was available for this reconciliation, so no live FS-1B Data API read is claimed; accepted FS-1A linked schema/RLS/audit evidence remains intact. This evidence boundary is the nonblocking acceptance advisory.
 
-With FS-1A and FS-1B both accepted with their recorded advisories, Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4 remains in progress, and FS-2 remains `NOT_STARTED` pending a separately authorized readiness review.
+With FS-1A and FS-1B both accepted with their recorded advisories, Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4 remains in progress; FS-2A is now implemented at the unverified boundary below.
+
+### Phase 4-FS-2A implementation — 28 September 2026
+
+**Status:** `IMPLEMENTED_UNVERIFIED`
+
+One CLI-generated forward migration now defines recurring `facility_hours` and dated replacement `facility_hour_exceptions` records keyed to `facility_operational_profiles(facility_id)`. It preserves the accepted lifecycle, publication/effectivity, verification/data-status, source provenance, freshness, actor attribution, explicit-grant, RLS, and immutable-audit patterns. Weekly clock values are `time without time zone`, exception days are `date`, and instants are `timestamptz`; no browser-local timezone or status calculation is stored.
+
+Database exclusion constraints allow multiple non-overlapping and overnight intervals while rejecting active scheduled/published duplicates, interval overlaps, and closed-marker conflicts across overlapping effectivity windows. Three narrow security-invoker/security-barrier projections expose current published/effective hours, replacement exceptions, and only facility-wide `TEMPORARY_CLOSURE` data from the existing `facility_advisories` source. `SERVICE_INTERRUPTION` is deliberately absent from the closure projection. No temporary-closure table, official schedule seed, provider read path, status engine, UI, Admin, Realtime, spatial/navigation, routing, QR, Emergency, personnel, or dependency change was added.
+
+The deterministic FS-2A schema/scope suite passes for all 95 canonical facility IDs. All required Node 22 deterministic regressions, route rendering, ESLint, typecheck, and production build pass; the existing approximately 878 kB lazy 3D chunk warning remains unrelated. The 89-assertion rollback-only pgTAP suite is defined but was not executed because Docker/PostgreSQL is unavailable in this environment. FS-2A therefore remains `IMPLEMENTED_UNVERIFIED`; FS-2 is not complete, and FS-2B/provider reads or status computation may not start without separate authorization and the required database acceptance evidence.
+
+### Phase 4-FS-2A final acceptance reconciliation — 1 October 2026
+
+**Status:** `ACCEPTED`
+
+The actual linked CampusNav project is `yiuwvyznteizxxmjqcfn`, and local/remote migration history matches through `20260928144215`. The first canonical pgTAP execution passed 88 of 89 assertions; its sole failure was assertion 29, whose table-level privilege predicate contradicted the intentionally column-scoped authenticated grant pattern. The test was corrected to require `has_any_column_privilege(...)` while confirming the absence of table-wide `INSERT`. No migration or remote schema correction was required.
+
+The owner-supplied corrected SQL Editor execution reached `ok 89` with no reported `not ok`, failure summary, or SQL runtime error, establishing 89/89. Independent read-only linked verification confirms both tables with RLS, all three security-invoker/security-barrier views, all ten expected policies, the intended column-scoped DML and sequence grants, protected actor/system columns, four enabled trusted audit/update triggers, and no `anon`/`authenticated` execution access to the private trigger functions. Exact post-run checks returned zero retained FS-2A hours, exceptions, operational profile, advisories, auth users, profiles, role assignments, or audit rows.
+
+The deterministic FS-2A suite and the previously completed full requested regression set pass. FS-2A is accepted at its schema, RLS, provenance, and audit-foundation boundary. No official hours were seeded, and provider reads, status evaluation, Admin/public UI, Dashboard/Realtime, and all FS-2B work remain outside this acceptance. FS-2B may begin only after separate authorization.
 
 ## Later canonical work candidates
 

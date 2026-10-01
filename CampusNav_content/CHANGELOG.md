@@ -1,5 +1,40 @@
 # CampusNav Content Pack — Changelog
 
+## v3.30 — 1 October 2026
+
+Accepted **Phase 4-FS-2A — Facility Hours/Exceptions Schema, RLS, Provenance, and Audit Foundation** without starting provider reads or status-engine work.
+
+### Acceptance reconciliation
+- confirmed the actual linked CampusNav project `yiuwvyznteizxxmjqcfn` and matching local/remote migration history through `20260928144215`
+- reconciled the initial 88/89 pgTAP result to a single canonical test defect: assertion 29 incorrectly queried table-wide `INSERT` despite the intentional column-scoped grant model
+- retained the migration unchanged, corrected assertion 29 to test `has_any_column_privilege(...)` plus absence of table-wide `INSERT`, and recorded the corrected canonical run as 89/89 after it reached `ok 89` without a reported negative TAP diagnostic or SQL runtime error
+- independently verified both RLS-enabled tables, all three security-invoker/security-barrier views, all ten expected policies, intended column/sequence privileges, protected actor/system columns, four trusted triggers, and private function execution restrictions on the linked project
+- confirmed exact zero retained FS-2A hours, exceptions, operational profile, advisories, Auth users, public profiles, role assignments, and audit rows
+- retained the passing deterministic/full-regression evidence and the unrelated pre-existing lazy 3D bundle warning
+
+### Status and boundary
+- classified FS-2A as `ACCEPTED` at its schema, RLS, provenance, and audit-foundation boundary
+- retained Phase 4-FS-2 as `IN_PROGRESS`; FS-2B, provider-neutral hours/exception reads, and status-engine work remain unstarted and require separate authorization
+- added no official schedule data, migration, remote schema/data mutation, application source, dependency, commit, push, deployment, or later Phase 4 work during reconciliation
+
+## v3.29 — 28 September 2026
+
+Implemented **Phase 4-FS-2A — Facility Hours/Exceptions Schema, RLS, Provenance, and Audit Foundation** as `IMPLEMENTED_UNVERIFIED` without starting provider reads or the status engine.
+
+### Implementation
+- added one CLI-generated forward migration with `facility_hours` and `facility_hour_exceptions`, using canonical operational facility IDs, local wall-clock/date types, lifecycle/provenance, and no official seed data
+- added database exclusion constraints for active duplicate/overlapping intervals and closed-marker conflicts while preserving multiple non-overlapping intervals and overnight intervals
+- added narrow security-invoker/security-barrier public hours, exception, and existing-advisory projections; the status advisory projection includes only `TEMPORARY_CLOSURE` and excludes `SERVICE_INTERRUPTION`, content bodies, actor fields, and unnecessary internal IDs
+- added explicit grants, published/effective RLS reads, `SUPER_ADMIN`-only writes, trusted update attribution, and safe immutable audit metadata for hours/exceptions
+- added a deterministic FS-2A schema/scope suite and an 89-assertion rollback-only pgTAP suite using only visibly labeled development/demo fixtures
+
+### Verification and boundary
+- passed the deterministic FS-2A suite for all 95 canonical facility IDs and the complete required Node 22 regression matrix, route rendering, ESLint, typecheck, and production build
+- retained the existing approximately 878 kB lazy 3D chunk advisory as unrelated
+- did not execute pgTAP because Docker/PostgreSQL is unavailable; did not apply the migration locally or remotely and therefore retained `IMPLEMENTED_UNVERIFIED`
+- added no official schedule, persistent fixture, provider read path, status computation, Admin/public UI, Dashboard/Realtime behavior, spatial/navigation/routing/QR/Emergency change, dependency change, commit, push, or deployment
+- corrected the stale Phase 4 sequencing sentence in document 64 under documentation governance; FS-2B and FS-2C remain unstarted and separately gated
+
 ## v3.28 — 28 September 2026
 
 Completed final reconciliation and acceptance for **Phase 4-FS-1B — Provider-Neutral FacilityService and API Contracts** as `ACCEPTED_WITH_ADVISORY` without starting FS-2.

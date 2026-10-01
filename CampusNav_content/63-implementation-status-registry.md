@@ -5,7 +5,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY`
+**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B NOT_STARTED`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -19,7 +19,8 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Facility directory/detail/navigation foundation | `PARTIAL / IMPLEMENTED_BASELINE` | Existing local stable IDs, spatial truth, navigation links, and pending states remain authoritative |
 | Facility operational profiles | `ACCEPTED_WITH_ADVISORY — FS-1B1 READ PATH` | FS-1A linked schema/RLS/audit acceptance is preserved; provider-neutral canonical-local plus optional public-view overlay read behavior passed final FS-1B reconciliation |
 | Services, aliases, and facility-service mappings | `ACCEPTED_WITH_ADVISORY — FS-1B2/FS-1B3 READ PATHS` | Provider-neutral catalog/code/alias, facility-mapping, and reverse canonical-facility reads passed final FS-1B reconciliation; no live FS-1B Data API read is claimed |
-| Hours, exceptions, and facility-status engine | `NOT_IMPLEMENTED` | `Asia/Manila`; status contract in `13`; operational closed is not routing blocked |
+| Hours and exceptions schema/security foundation | `ACCEPTED — FS-2A` | Linked migration, 89/89 corrected canonical pgTAP, remote structure/security/audit checks, and exact zero-fixture verification pass on the actual CampusNav project |
+| Facility-status engine | `NOT_IMPLEMENTED` | `Asia/Manila`; status contract in `13`; operational closed is not routing blocked |
 | Facility Admin workflows beyond advisories | `NOT_IMPLEMENTED` | Generic authorized workflow first; institutional owner names remain pending |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
 | Public search/recommendation enrichment | `NOT_IMPLEMENTED` | Existing name/kind/floor search is only the baseline |
@@ -30,7 +31,45 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current FS-1 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2 remains `NOT_STARTED` and requires a separate readiness review and authorization.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`; FS-2B/FS-2C and the facility-status engine remain unstarted and require separate authorization.
+
+### Phase 4-FS-2A final acceptance reconciliation — 1 October 2026
+
+**Classification:** `ACCEPTED`
+
+This section supersedes the earlier `IMPLEMENTED_UNVERIFIED` acceptance boundary without rewriting its historical implementation evidence.
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| Actual linked target | `PASS` | Repository link is `yiuwvyznteizxxmjqcfn`, matching the actual CampusNav project |
+| Migration history | `PASS` | Local and remote history match through `20260928144215`; no corrective migration was needed or applied |
+| Corrected canonical pgTAP | `89/89 PASS` | Initial execution was 88/89 with only assertion 29 failing; that assertion was proven to use the wrong table-level privilege inquiry, corrected to the intentional column-scoped contract, and the owner-supplied rerun reached `ok 89` with no reported negative TAP diagnostic or SQL runtime error |
+| Remote relations and projections | `PASS` | `facility_hours`, `facility_hour_exceptions`, and all three public views exist; both tables have RLS and every view has `security_invoker=true` plus `security_barrier=true` |
+| Policies and grants | `PASS` | All ten expected policies exist; authenticated INSERT/UPDATE remains column-scoped, table-wide INSERT remains absent, DELETE and identity-sequence privileges are present, and SUPER_ADMIN policy predicates remain authoritative |
+| Actor/system protection | `PASS` | Authenticated clients have no direct SELECT/INSERT/UPDATE privilege over the tested actor and system-maintained columns |
+| Trusted audit/update path | `PASS` | Four expected triggers are enabled and call the private audit/update functions; both functions use an empty search path where configured and neither `anon` nor `authenticated` can execute them directly |
+| Fixture cleanup | `PASS` | Exact linked counts are zero for FS-2A hours, exceptions, operational profile, advisories, Auth users, public profiles, role assignments, and audit rows |
+| Deterministic/regression evidence | `PASS_WITH_EXISTING_BUILD_ADVISORY` | Deterministic FS-2A and the full requested regression set pass; the pre-existing lazy 3D bundle warning remains unrelated |
+| Data and scope boundary | `PASS` | No official hours or persistent fixture was added; no provider read, status engine, Admin/public UI, Dashboard/Realtime, spatial/navigation, routing, QR, Emergency, dependency, or later-slice work is claimed |
+| Acceptance decision | `ACCEPTED` | FS-2A is complete at its schema, RLS, provenance, and audit-foundation boundary; FS-2 remains in progress and FS-2B requires separate authorization |
+
+### Phase 4-FS-2A implementation — 28 September 2026
+
+**Classification:** `IMPLEMENTED_UNVERIFIED`
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| Forward migration | `STATIC PASS` | One CLI-generated migration adds only `facility_hours` and `facility_hour_exceptions`; no seed, temporary-closure duplicate, destructive cleanup, spatial/navigation, routing, QR, Emergency, Realtime, provider, UI, or dependency change |
+| Canonical identity/time types | `PASS` | Both tables reference `facility_operational_profiles(facility_id)`; all 95 local facility IDs remain compatible; weekday clocks use `time without time zone`, exception days use `date`, and instants use `timestamptz` |
+| Schedule constraints | `STATIC PASS` | Weekday range, closed/open row shape, effectivity, publication, provenance, freshness, and concurrent database exclusion constraints cover active duplicate/overlap/closed-marker conflicts while allowing non-overlapping and overnight intervals |
+| Public projections | `STATIC PASS` | Three security-invoker/security-barrier views omit actor/private fields; the advisory projection reuses `facility_advisories`, exposes only `TEMPORARY_CLOSURE`, and excludes `SERVICE_INTERRUPTION` plus advisory content/internal metadata |
+| RLS/grants | `STATIC PASS` | Both new tables enable RLS, use explicit column/table/sequence grants, published/effective reads, `SUPER_ADMIN` read/write policies, and update `USING` plus `WITH CHECK`; anon and ordinary-authenticated writes are denied by the defined boundary |
+| Provenance/audit | `STATIC PASS` | Per-record lifecycle/provenance fields match FS-1; safe audit metadata adds facility/weekday/date/transitions/status/source identifiers without interval payloads or credentials; trusted function remains private with empty search path |
+| Deterministic FS-2A suite | `PASS` | Schema, types, constraints, indexes, views, RLS/policies/grants, audit, no-seed/no-status/no-spatial scope, pgTAP plan consistency, and 95 canonical facility IDs pass under Node 22.22.0 |
+| Transactional pgTAP | `NOT_EXECUTED` | The 89-assertion rollback-only suite is present, but Docker/PostgreSQL is unavailable; no database execution or remote migration application is claimed |
+| Required regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | Data, navigation, multi-floor, QR, Emergency, 3D, Dashboard, Phase 8A/8B/8C/8C.2, FS-1A/FS-1B/FS-2A, route rendering, ESLint, typecheck, and build pass; the approximately 878 kB lazy 3D chunk warning is unchanged |
+| Data/fixture impact | `NONE` | No official hours or persistent fixture was added; the pgTAP fixtures are visibly labeled development/demo records and are transaction-local with rollback |
+| Acceptance decision | `IMPLEMENTED_UNVERIFIED` | Database constraints, RLS, grants, public reads, role writes, audit attribution, forgery rejection, and cleanup still require execution against the migrated PostgreSQL target before FS-2A acceptance |
 
 ### Phase 4-FS-1B final reconciliation and acceptance — 28 September 2026
 

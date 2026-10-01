@@ -41,6 +41,8 @@ npm run test:phase8c
 npm run test:phase8c2
 npm run test:phase8c2:cloud
 npm run test:phase4-fs1a
+npm run test:phase4-fs1b
+npm run test:phase4-fs2a
 npm run test:rls
 npm run test:render
 ```
@@ -218,6 +220,20 @@ npm run test:phase4-fs1a
 ```
 
 With the local Docker-based Supabase stack available, `npm run test:rls` also runs `supabase/tests/phase_4_fs1a_facility_operational_test.sql`. That transactional pgTAP suite verifies empty-by-default schema creation, RLS/public-draft isolation, unauthorized-write rejection, permitted `SUPER_ADMIN` writes, provenance preservation, trusted audit creation, and exact fixture cleanup using only `DEVELOPMENT / DEMO / NOT OFFICIAL` records.
+
+## Facility hours and exceptions foundation (Phase 4-FS-2A)
+
+The FS-2A forward migration adds recurring weekly facility hours and dated replacement exceptions keyed to accepted operational facility IDs. Campus wall-clock values use `time without time zone`, exception days use `date`, and lifecycle/effectivity/audit instants use `timestamptz`; later status evaluation remains fixed to `Asia/Manila` by the canonical contract.
+
+Active scheduled/published rows use database exclusion constraints to reject duplicate or overlapping intervals and closed-marker conflicts while preserving multiple non-overlapping intervals and overnight intervals whose end time is less than or equal to their start time. Public access uses narrow RLS-backed security-invoker projections. The existing `facility_advisories` table remains the temporary-closure source, and its status projection excludes `SERVICE_INTERRUPTION` from facility-wide closure data.
+
+FS-2A contains no official operating-hour records, status computation, provider read path, Admin/public UI, Realtime change, or spatial/navigation/routing data. Run the deterministic schema/scope check with:
+
+```bash
+npm run test:phase4-fs2a
+```
+
+When a local Docker-based Supabase stack is available, `npm run test:rls` also discovers `supabase/tests/phase_4_fs2a_facility_hours_exceptions_test.sql`. Its 89 transactional pgTAP assertions use only rollback-scoped `DEVELOPMENT / DEMO / NOT OFFICIAL` fixtures.
 
 ## Admin CMS foundation (Phase 8B.1)
 

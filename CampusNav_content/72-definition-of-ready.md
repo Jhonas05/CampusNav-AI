@@ -49,4 +49,22 @@ If these conditions are not met, move the missing item to `64-open-questions-dec
 
 FS-1 must not seed official institutional records, alter facility/spatial/navigation identity, implement hours/status/Admin/public/media/Dashboard UI, or start CLARA/PWA/AR/reports/map-editor/positioning/delivery/redesign/dependency work.
 
-**Exact next implementation task after authorization:** Phase 4-FS-1 — Facility Operational Data and Service Foundation.
+**Historical next task at this assessment:** Phase 4-FS-1 — Facility Operational Data and Service Foundation. FS-1 is now complete with advisory; the later FS-2 assessment below controls current readiness.
+
+## Phase 4-FS-2 readiness assessment — 28 September 2026
+
+**Task:** Phase 4-FS-2 — Operating Hours and Facility Status Engine
+
+**Result:** `READY_WITH_BOUNDARIES`
+
+| Definition-of-Ready area | Result | Basis / boundary |
+|---|---|---|
+| Goal and sequence | `READY` | FS-1 is complete with advisory; FS-2 is explicitly split into schema/security, provider reads, status computation, and acceptance slices |
+| Authoritative data | `READY_WITH_BOUNDARIES` | Hours/exceptions use accepted canonical facility IDs; no official hours are supplied or seeded; unavailable/pending and isolated demo/test states remain required |
+| Time/status contract | `READY` | `13` and `56` define `Asia/Manila`, weekly/overnight intervals, replacement exceptions, advisory precedence, 30-minute closing-soon behavior, and canonical status vocabulary |
+| Database/security | `READY` | Two-table hours/exception scope, existing advisory reuse, public projection, RLS/grants, `SUPER_ADMIN` initial writes, provenance, audit, and test requirements are explicit |
+| Spatial/navigation boundary | `READY` | Hours/status are operational overlays only; operational closure never mutates or replaces canonical routing restrictions |
+| Acceptance cases | `READY` | Schema/types, active overlap/closed-marker constraints, public/draft/effectivity isolation, role boundaries, audit, fixture cleanup, provider behavior, Manila-time status cases, and regressions are identified |
+| Institutional dependencies | `NONBLOCKING_BOUNDARY` | Institutional owners and official schedules remain unresolved; they block official population/claims, not empty-by-default generic engineering |
+
+FS-2A may implement only schema, RLS, provenance, public projections, trusted audit, and transactional tests. Provider reads, status computation, UI/Admin, Dashboard/Realtime, and official schedule population require their own authorized slices.
