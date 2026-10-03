@@ -2,6 +2,11 @@ import { NOTIFICATION_CATEGORIES, NOTIFICATION_LIFECYCLES, NOTIFICATION_PRIORITI
 import { facilities, getFacilityById } from "../data/facilities.js"
 import { getBackendAvailability, getSupabaseClient } from "../lib/supabaseClient.js"
 import { createAcademicAdminService } from "./academicAdminService.js"
+import {
+  FACILITY_ADMIN_ERROR_CODES,
+  createFacilityAdminService,
+  normalizeFacilityAdminDatabaseError,
+} from "./facilityAdminService.js"
 
 export const ADMIN_RESOURCE_KEYS = Object.freeze({
   ANNOUNCEMENTS: "announcements",
@@ -75,10 +80,16 @@ const enumValue = (value, allowed, label, fallback) => {
   return normalized
 }
 
-const createAdminError = (code, message, cause = null) => Object.assign(new Error(message), { code, cause })
+const createAdminError = (code, message, cause = null) => {
+  const error = Object.assign(new Error(message), { code })
+  if (cause) Object.defineProperty(error, "cause", { value: cause, enumerable: false })
+  return error
+}
 
 export const toAdminError = (error) => {
-  if (error?.code && ["VALIDATION_ERROR", "SCHEDULE_CONFLICT", "PERMISSION_DENIED", "SESSION_EXPIRED", "NETWORK_ERROR", "BACKEND_UNAVAILABLE", "ADMIN_ERROR"].includes(error.code)) return error
+  if (error?.code && ["SCHEDULE_CONFLICT", ...FACILITY_ADMIN_ERROR_CODES].includes(error.code)) return error
+  const facilityError = normalizeFacilityAdminDatabaseError(error)
+  if (facilityError) return facilityError
   const message = String(error?.message || "").toLowerCase()
   if (error?.code === "23P01") {
     const constraint = String(error?.constraint || error?.details || "")
@@ -301,6 +312,7 @@ export const createSupabaseAdminService = (client) => {
   }
 
   const academicAdmin = createAcademicAdminService(client, { mapError: toAdminError })
+  const facilityAdmin = createFacilityAdminService(client, { mapError: toAdminError })
 
   return {
     facilities,
@@ -328,6 +340,7 @@ export const createSupabaseAdminService = (client) => {
     updateNotification: (id, input, options) => updateResource(ADMIN_RESOURCE_KEYS.NOTIFICATIONS, id, input, options),
     deleteNotification: (id) => deleteResource(ADMIN_RESOURCE_KEYS.NOTIFICATIONS, id),
     ...academicAdmin,
+    ...facilityAdmin,
   }
 }
 

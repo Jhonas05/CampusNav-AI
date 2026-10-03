@@ -106,6 +106,12 @@ Keep CRUD outside page components. Domains may include:
 - map data
 - users/roles
 
+### Phase 4 facility administration
+
+`facilityAdminService` is the FS-3 mutation boundary composed into the existing Admin service. It writes only the accepted base tables for operational profiles, services, aliases, facility-service mappings, weekly hours, and dated exceptions. Public projection views remain read-only, existing advisory CRUD is reused, and public `FacilityService` remains a read/status contract.
+
+The module provides safe canonical-facility/department/service/profile references; allowlisted create/update operations; explicit publish/expire lifecycle actions; optimistic `updated_at` checks; guarded hard deletion; and normalized validation, conflict, permission, stale-record, backend, and network errors. Stable facility/service/mapping identities are creation-only. It accepts no actor/audit or spatial/routing fields and relies on existing RLS, constraints, foreign keys, and trusted audit triggers.
+
 ## CLARAToolService (future)
 Thin authorized wrapper that exposes only safe internal functions to CLARA.
 

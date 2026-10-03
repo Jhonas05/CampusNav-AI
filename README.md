@@ -44,6 +44,8 @@ npm run test:phase4-fs1a
 npm run test:phase4-fs1b
 npm run test:phase4-fs2a
 npm run test:phase4-fs2b
+npm run test:phase4-fs2c
+npm run test:phase4-fs3a
 npm run test:rls
 npm run test:render
 ```
@@ -265,6 +267,18 @@ npm run test:phase4-fs2c
 The public asynchronous `getFacilityStatus(facilityId, dateTime?)` method validates canonical local facility identity first. When `dateTime` is omitted it uses the service's injected clock; explicit values must be absolute RFC3339 strings with `Z` or a numeric offset. Malformed explicit values return non-retryable `FACILITY_INVALID_DATE_TIME` without provider access.
 
 Status orchestration requests only the previous/current Manila dates through the accepted `getFacilityHours` method, then passes normalized source records to the pure evaluator. Empty sources return `UNKNOWN` with `UNAVAILABLE`; configured but non-applicable sources return `UNKNOWN` with `CONFIGURED`; provider failures remain retryable `PROVIDER_UNAVAILABLE`. Providers expose no separate status method or query, and the status result cannot modify navigation or Emergency data.
+
+## Facility Admin mutation service foundation (Phase 4-FS-3A)
+
+`src/services/facilityAdminService.js` supplies the browser-safe, RLS-backed mutation boundary for facility operational profiles, services, aliases, mappings, weekly hours, and dated exceptions. It is composed into the existing Admin service but adds no route or editor. Canonical facility IDs remain local, public projection views remain read-only, service and mapping identities are immutable after creation, and actor/audit fields are never accepted from clients.
+
+The service uses strict payload allowlists, conservative draft/pending defaults, explicit publish/expire actions, provenance/effectivity validation, `updated_at` stale-write checks, dependency-aware hard-delete guards, and sanitized domain errors. Existing facility-advisory CRUD is reused unchanged. Database RLS, constraints, foreign keys, and trusted audit triggers remain authoritative; FS-3A adds no migration or official data.
+
+Run the deterministic validation, mocked-mutation, security-boundary, and regression contract suite with:
+
+```bash
+npm run test:phase4-fs3a
+```
 
 ## Admin CMS foundation (Phase 8B.1)
 

@@ -1,5 +1,21 @@
 # CampusNav Content Pack — Changelog
 
+## v3.37 — 3 October 2026
+
+Implemented and locally verified **Phase 4-FS-3A — Admin Mutation Service/API Foundation** without starting FS-3B.
+
+### Implementation
+- added a dedicated `facilityAdminService` for allowlisted facility profile, service, alias, mapping, weekly-hours, and dated-exception base-table operations and composed it into the existing Admin service
+- added canonical local-facility plus accepted department/service/profile reference reads, immutable identity enforcement, explicit publish/expire actions, strict lifecycle/provenance/effectivity validation, Manila schedule validation, optimistic `updated_at` protection, and guarded dependency-aware deletion
+- reused existing facility-advisory CRUD; added no second advisory implementation, public-view mutation, status evaluation, route restriction, audit write, privileged credential, or RPC path
+- added sanitized domain conflict/error normalization while making internal error causes non-enumerable
+
+### Verification and boundary
+- added `npm run test:phase4-fs3a` with deterministic pure-validation and mocked-Supabase coverage; no real database was mutated
+- passed required FS-1A/FS-1B/FS-2A/FS-2B/81-scenario FS-2C, Auth, Admin CMS, academic Admin, FS-3A, and route-render regressions plus ESLint, typecheck, and production build under Node 22
+- classified FS-3A as `IMPLEMENTED_VERIFIED` at its local service/API boundary; no live authenticated Data API mutation or official-data claim is made
+- added no schema, migration, RLS, database row, fixture, official data, Admin route/page/editor, public UI, media, Dashboard/Realtime, navigation, dependency, remote database change, commit, push, deployment, or FS-3B work
+
 ## v3.36 — 3 October 2026
 
 Completed final reconciliation of **Phase 4-FS-2 — Operating Hours and Facility Status Engine** as `COMPLETE — ACCEPTED_WITH_ADVISORY` without starting FS-3.

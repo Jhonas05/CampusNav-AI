@@ -416,7 +416,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 NOT_STARTED`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — FS-3A IMPLEMENTED_VERIFIED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -454,7 +454,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `NOT_STARTED`
+3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `IN_PROGRESS — FS-3A IMPLEMENTED_VERIFIED; FS-3B NOT_STARTED`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
@@ -468,7 +468,19 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-2 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4 remains in progress, and the separately authorized readiness review for Phase 4-FS-3 has not started.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-2 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A is implemented and verified at its deterministic service/API boundary below. Full FS-3 remains in progress; FS-3B is not started and requires separate authorization.
+
+### Phase 4-FS-3A implementation — 3 October 2026
+
+**Status:** `IMPLEMENTED_VERIFIED`
+
+The dedicated `facilityAdminService` is composed into the existing Admin service and provides allowlisted base-table mutation contracts for facility operational profiles, services, aliases, facility-service mappings, weekly hours, and dated exceptions. It also provides accepted local-facility and database-backed department/service/profile references. Existing facility-advisory CRUD is reused rather than duplicated, public FacilityService reads/status remain unchanged, and no Admin route, page, or editor was added.
+
+The service validates canonical facility IDs, immutable service/mapping identities, lowercase kebab service codes, ranks, weekdays, closed/open interval shapes, legal overnight intervals, strict Manila dates, lifecycle/publication state, effectivity, and provenance. It rejects spatial/routing, actor, and audit fields; applies optimistic `updated_at` protection; preflights dependent service/profile references; guards hard deletion to disposable unreferenced records; and normalizes database conflicts without exposing raw PostgreSQL/PostgREST details. Existing RLS and trusted database audit triggers remain authoritative.
+
+The dedicated FS-3A deterministic mocked-service suite and the required FS-1A, FS-1B, FS-2A, FS-2B, 81-scenario FS-2C, Auth, Admin CMS, academic Admin, and route-render regressions pass under Node 22. ESLint, typecheck, and production build pass; the existing approximately 878 kB lazy 3D chunk warning remains unrelated. No schema, migration, RLS, database row, fixture, official institutional data, route/UI/editor, public Facilities UI, media, Dashboard/Realtime, navigation, dependency, remote database, commit, push, deployment, or FS-3B work changed.
+
+FS-3A is verified locally at the service/API boundary. No fresh authenticated live Data API mutation is claimed. Full FS-3 remains in progress, and FS-3B may begin only through separate authorization.
 
 ### Phase 4-FS-1A implementation snapshot — 20 September 2026
 
