@@ -13,6 +13,8 @@ import {
 } from "../data/facilityContracts.js"
 import { getFacilityById as getCanonicalFacilityById } from "../data/facilities.js"
 import {
+  addCampusDays,
+  getCampusDateKey,
   getCampusDateRangeBounds,
   isValidCampusDateKey,
   normalizeCampusDateRange,
@@ -25,6 +27,10 @@ import {
 } from "../lib/supabaseClient.js"
 import { createLocalFacilityProvider } from "../providers/facility/localFacilityProvider.js"
 import { createSupabaseFacilityProvider } from "../providers/facility/supabaseFacilityProvider.js"
+import {
+  evaluateFacilityStatus,
+  normalizeFacilityStatusTimestamp,
+} from "./facilityStatusEvaluator.js"
 
 const cloneCanonicalFacility = (facility) => ({
   ...facility,
@@ -77,6 +83,17 @@ const invalidDateRangeResult = () => createFacilityResult({
   error: {
     code: FACILITY_ERROR_CODES.INVALID_DATE_RANGE,
     message: "Date range is invalid.",
+    retryable: false,
+  },
+})
+
+const invalidDateTimeResult = () => createFacilityResult({
+  ok: false,
+  availability: FACILITY_AVAILABILITY.UNAVAILABLE,
+  data: null,
+  error: {
+    code: FACILITY_ERROR_CODES.INVALID_DATE_TIME,
+    message: "Date and time is invalid.",
     retryable: false,
   },
 })
@@ -254,7 +271,9 @@ const defaultProviderLoader = async () => {
   return createSupabaseFacilityProvider(client)
 }
 
-export const createFacilityService = ({
+const defaultClock = () => new Date().toISOString()
+
+const createFacilityReadService = ({
   provider = null,
   providerLoader = provider ? null : defaultProviderLoader,
 } = {}) => ({
@@ -511,6 +530,54 @@ export const createFacilityService = ({
   },
 })
 
+export const createFacilityService = ({
+  provider = null,
+  providerLoader = provider ? null : defaultProviderLoader,
+  clock = defaultClock,
+  statusEvaluator = evaluateFacilityStatus,
+} = {}) => {
+  const service = createFacilityReadService({ provider, providerLoader })
+
+  service.getFacilityStatus = async (facilityId, dateTime) => {
+    const normalizedId = typeof facilityId === "string" ? facilityId.trim() : ""
+    const facility = normalizedId ? getCanonicalFacilityById(normalizedId) : null
+    if (!facility) return notFoundResult()
+
+    let dateTimeValue
+    try {
+      dateTimeValue = dateTime === undefined ? clock() : dateTime
+    } catch {
+      return invalidDateTimeResult()
+    }
+    const evaluatedAt = normalizeFacilityStatusTimestamp(dateTimeValue)
+    if (!evaluatedAt) return invalidDateTimeResult()
+
+    const campusDate = getCampusDateKey(new Date(evaluatedAt))
+    const hoursResult = await service.getFacilityHours(facility.id, {
+      startDate: addCampusDays(campusDate, -1),
+      endDate: campusDate,
+    })
+    if (!hoursResult.ok) return hoursResult
+
+    const evaluation = statusEvaluator({
+      evaluatedAt,
+      weeklyHours: hoursResult.data.weeklyHours,
+      exceptions: hoursResult.data.exceptions,
+      statusAdvisories: hoursResult.data.statusAdvisories,
+    })
+    return createFacilityResult({
+      ok: true,
+      availability: hoursResult.availability,
+      data: {
+        facility: cloneCanonicalFacility(facility),
+        ...evaluation,
+      },
+    })
+  }
+
+  return service
+}
+
 const defaultFacilityService = createFacilityService()
 
 export const getFacilityById = (facilityId) => defaultFacilityService.getFacilityById(facilityId)
@@ -520,3 +587,4 @@ export const getServiceAliases = (serviceCode) => defaultFacilityService.getServ
 export const getServicesForFacility = (facilityId) => defaultFacilityService.getServicesForFacility(facilityId)
 export const getFacilitiesByService = (serviceCode) => defaultFacilityService.getFacilitiesByService(serviceCode)
 export const getFacilityHours = (facilityId, dateRange) => defaultFacilityService.getFacilityHours(facilityId, dateRange)
+export const getFacilityStatus = async (facilityId, dateTime) => defaultFacilityService.getFacilityStatus(facilityId, dateTime)

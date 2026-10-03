@@ -252,13 +252,19 @@ npm run test:phase4-fs2b
 
 `src/services/facilityStatusEvaluator.js` deterministically evaluates already-normalized FS-2B weekly hours, dated exceptions, and temporary-closure advisories in `Asia/Manila`. Callers must supply an explicit absolute RFC3339 `evaluatedAt` string with `Z` or a numeric offset; the evaluator has no global clock, Supabase/provider access, UI dependency, or routing side effect.
 
-The result contains the canonical operational status, normalized evaluation timestamp, timezone, next applicable transition, independently provenanced safe controlling records, and demo flag. Operational `CLOSED` or `TEMPORARILY_UNAVAILABLE` never changes the canonical navigation or emergency graph. FS-2C1 does not add the public `FacilityService.getFacilityStatus` integration; that remains a separately authorized FS-2C2 slice.
+The result contains the canonical operational status, normalized evaluation timestamp, timezone, next applicable transition, independently provenanced safe controlling records, and demo flag. Operational `CLOSED` or `TEMPORARILY_UNAVAILABLE` never changes the canonical navigation or emergency graph. The pure evaluator itself has no provider or global-clock dependency.
 
 Run the deterministic evaluator regression with:
 
 ```bash
 npm run test:phase4-fs2c
 ```
+
+## Facility status service integration (Phase 4-FS-2C2)
+
+The public asynchronous `getFacilityStatus(facilityId, dateTime?)` method validates canonical local facility identity first. When `dateTime` is omitted it uses the service's injected clock; explicit values must be absolute RFC3339 strings with `Z` or a numeric offset. Malformed explicit values return non-retryable `FACILITY_INVALID_DATE_TIME` without provider access.
+
+Status orchestration requests only the previous/current Manila dates through the accepted `getFacilityHours` method, then passes normalized source records to the pure evaluator. Empty sources return `UNKNOWN` with `UNAVAILABLE`; configured but non-applicable sources return `UNKNOWN` with `CONFIGURED`; provider failures remain retryable `PROVIDER_UNAVAILABLE`. Providers expose no separate status method or query, and the status result cannot modify navigation or Emergency data.
 
 ## Admin CMS foundation (Phase 8B.1)
 

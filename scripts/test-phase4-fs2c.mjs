@@ -3,14 +3,21 @@ import { readFile } from "node:fs/promises"
 import { spawnSync } from "node:child_process"
 
 import {
+  FACILITY_AVAILABILITY,
+  FACILITY_ERROR_CODES,
   FACILITY_OPERATIONAL_STATUS,
+  FACILITY_PROVIDER_METHODS,
 } from "../src/data/facilityContracts.js"
 import { facilities } from "../src/data/facilities.js"
 import { mapEdges } from "../src/data/mapEdges.js"
 import { mapNodes } from "../src/data/mapNodes.js"
 import { emergencyApprovedEdges } from "../src/data/emergencyRoutes.js"
 import { getEligibleEmergencyEdges } from "../src/lib/emergencyNavigation.js"
-import { getFacilityHours } from "../src/services/facilityService.js"
+import {
+  createFacilityService,
+  getFacilityHours,
+  getFacilityStatus,
+} from "../src/services/facilityService.js"
 import {
   evaluateFacilityStatus,
   FACILITY_STATUS_SOURCE_KIND,
@@ -446,7 +453,7 @@ await check("FS-2B getFacilityHours remains unchanged", async () => {
   assert.deepEqual(value.data.exceptions, [])
   assert.deepEqual(value.data.statusAdvisories, [])
   const source = await readFile(new URL("../src/services/facilityService.js", import.meta.url), "utf8")
-  assert.doesNotMatch(source, /getFacilityStatus/)
+  assert.match(source, /async getFacilityHours\(facilityId, dateRange\)/)
 })
 
 await check("current-date exception does not cancel an active previous-date overnight tail", () => {
@@ -475,6 +482,323 @@ await check("evaluator remains pure and provider-neutral by construction", async
   assert.doesNotMatch(source, /\.\.\/data\/(?:facilities|mapNodes|mapEdges|emergencyRoutes)\.js/)
 })
 
+const emptyHours = () => ({ weeklyHours: [], exceptions: [], statusAdvisories: [] })
+const createHoursProvider = (records = emptyHours(), calls = []) => ({
+  async getFacilityHours(facilityId, dateRange) {
+    calls.push({ facilityId, dateRange })
+    if (records instanceof Error) throw records
+    return records
+  },
+})
+const fixedClock = () => "2026-10-05T01:00:00.000Z"
+
+await check("public getFacilityStatus exists and returns a promise", async () => {
+  assert.equal(typeof getFacilityStatus, "function")
+  const service = createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+  assert.equal(typeof service.getFacilityStatus, "function")
+  const pendingResult = service.getFacilityStatus("library")
+  assert.ok(pendingResult instanceof Promise)
+  await pendingResult
+})
+
+await check("valid facility identity resolves before the provider read", async () => {
+  const calls = []
+  const value = await createFacilityService({
+    provider: createHoursProvider(emptyHours(), calls),
+    clock: fixedClock,
+  }).getFacilityStatus(" library ")
+  assert.equal(calls[0].facilityId, "library")
+  assert.equal(value.data.facility.id, "library")
+})
+
+await check("invalid facility short-circuits before clock and provider", async () => {
+  let clockCalls = 0
+  const providerCalls = []
+  const value = await createFacilityService({
+    provider: createHoursProvider(emptyHours(), providerCalls),
+    clock: () => { clockCalls += 1; return fixedClock() },
+  }).getFacilityStatus("not-a-canonical-facility", "invalid")
+  assert.equal(value.error.code, FACILITY_ERROR_CODES.NOT_FOUND)
+  assert.equal(clockCalls, 0)
+  assert.equal(providerCalls.length, 0)
+})
+
+await check("omitted dateTime uses the injected clock", async () => {
+  let clockCalls = 0
+  const value = await createFacilityService({
+    provider: createHoursProvider(),
+    clock: () => { clockCalls += 1; return "2026-10-05T09:00:00+08:00" },
+  }).getFacilityStatus("library")
+  assert.equal(clockCalls, 1)
+  assert.equal(value.data.evaluatedAt, "2026-10-05T01:00:00.000Z")
+})
+
+await check("explicit Z timestamp is accepted without calling the clock", async () => {
+  let clockCalls = 0
+  const value = await createFacilityService({
+    provider: createHoursProvider(),
+    clock: () => { clockCalls += 1; return fixedClock() },
+  }).getFacilityStatus("library", "2026-10-05T01:00:00Z")
+  assert.equal(value.ok, true)
+  assert.equal(clockCalls, 0)
+})
+
+await check("explicit numeric-offset timestamp is accepted", async () => {
+  const value = await createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+    .getFacilityStatus("library", "2026-10-05T09:00:00+08:00")
+  assert.equal(value.ok, true)
+})
+
+await check("explicit dateTime is normalized to UTC ISO", async () => {
+  const value = await createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+    .getFacilityStatus("library", "2026-10-05T09:00:00+08:00")
+  assert.equal(value.data.evaluatedAt, "2026-10-05T01:00:00.000Z")
+})
+
+await check("explicit null dateTime is rejected before provider access", async () => {
+  const calls = []
+  const value = await createFacilityService({ provider: createHoursProvider(emptyHours(), calls), clock: fixedClock })
+    .getFacilityStatus("library", null)
+  assert.equal(value.error.code, FACILITY_ERROR_CODES.INVALID_DATE_TIME)
+  assert.equal(calls.length, 0)
+})
+
+await check("explicit Date object is rejected", async () => {
+  const value = await createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+    .getFacilityStatus("library", new Date(fixedClock()))
+  assert.equal(value.error.code, FACILITY_ERROR_CODES.INVALID_DATE_TIME)
+})
+
+await check("explicit numeric timestamp is rejected", async () => {
+  const value = await createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+    .getFacilityStatus("library", 1791162000000)
+  assert.equal(value.error.code, FACILITY_ERROR_CODES.INVALID_DATE_TIME)
+})
+
+await check("date-only status timestamp is rejected", async () => {
+  const value = await createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+    .getFacilityStatus("library", "2026-10-05")
+  assert.equal(value.error.code, FACILITY_ERROR_CODES.INVALID_DATE_TIME)
+})
+
+await check("offsetless status timestamp is rejected", async () => {
+  const value = await createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+    .getFacilityStatus("library", "2026-10-05T09:00:00")
+  assert.equal(value.error.code, FACILITY_ERROR_CODES.INVALID_DATE_TIME)
+})
+
+await check("malformed and invalid Gregorian status timestamps are rejected", async () => {
+  const service = createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+  for (const value of ["invalid", "2026-02-29T09:00:00+08:00", "2026-10-05T09:00:00+24:00"]) {
+    const response = await service.getFacilityStatus("library", value)
+    assert.equal(response.error.code, FACILITY_ERROR_CODES.INVALID_DATE_TIME)
+  }
+})
+
+await check("FACILITY_INVALID_DATE_TIME is stable and non-retryable", async () => {
+  const value = await createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+    .getFacilityStatus("library", null)
+  assert.equal(value.ok, false)
+  assert.equal(value.availability, FACILITY_AVAILABILITY.UNAVAILABLE)
+  assert.equal(value.error.code, "FACILITY_INVALID_DATE_TIME")
+  assert.equal(value.error.retryable, false)
+})
+
+await check("FS-2B is queried only for previous/current Manila dates", async () => {
+  const calls = []
+  await createFacilityService({ provider: createHoursProvider(emptyHours(), calls), clock: fixedClock })
+    .getFacilityStatus("library", "2026-10-04T16:30:00Z")
+  assert.deepEqual(calls, [{
+    facilityId: "library",
+    dateRange: { startDate: "2026-10-04", endDate: "2026-10-05" },
+  }])
+})
+
+await check("provider failure propagates the existing provider-unavailable result", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider(new Error("private PostgREST detail")),
+    clock: fixedClock,
+  }).getFacilityStatus("library")
+  assert.equal(value.ok, false)
+  assert.equal(value.availability, FACILITY_AVAILABILITY.PROVIDER_UNAVAILABLE)
+  assert.equal(value.error.code, FACILITY_ERROR_CODES.PROVIDER_UNAVAILABLE)
+  assert.equal(value.error.retryable, true)
+  assert.doesNotMatch(JSON.stringify(value), /PostgREST|private/i)
+})
+
+await check("evaluator is not called after provider failure", async () => {
+  let evaluatorCalls = 0
+  const value = await createFacilityService({
+    provider: createHoursProvider(new Error("offline")),
+    clock: fixedClock,
+    statusEvaluator: () => { evaluatorCalls += 1; throw new Error("must not run") },
+  }).getFacilityStatus("library")
+  assert.equal(value.availability, FACILITY_AVAILABILITY.PROVIDER_UNAVAILABLE)
+  assert.equal(evaluatorCalls, 0)
+})
+
+await check("OPEN_NOW integrates through FacilityService", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider({ weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00")], exceptions: [], statusAdvisories: [] }),
+    clock: fixedClock,
+  }).getFacilityStatus("library")
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.OPEN_NOW)
+  assert.equal(value.availability, FACILITY_AVAILABILITY.CONFIGURED)
+})
+
+await check("CLOSING_SOON integrates through FacilityService", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider({ weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00")], exceptions: [], statusAdvisories: [] }),
+    clock: () => atManila("2026-10-05", "16:45:00"),
+  }).getFacilityStatus("library")
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.CLOSING_SOON)
+})
+
+await check("SCHEDULED_TO_OPEN integrates through FacilityService", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider({ weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00")], exceptions: [], statusAdvisories: [] }),
+    clock: () => atManila("2026-10-05", "07:00:00"),
+  }).getFacilityStatus("library")
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.SCHEDULED_TO_OPEN)
+})
+
+await check("CLOSED integrates through FacilityService", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider({ weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00")], exceptions: [], statusAdvisories: [] }),
+    clock: () => atManila("2026-10-05", "18:00:00"),
+  }).getFacilityStatus("library")
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.CLOSED)
+})
+
+await check("TEMPORARILY_UNAVAILABLE integrates through FacilityService", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider({
+      weeklyHours: [],
+      exceptions: [],
+      statusAdvisories: [advisory("2026-10-05T00:00:00.000Z", "2026-10-05T02:00:00.000Z")],
+    }),
+    clock: fixedClock,
+  }).getFacilityStatus("library")
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.TEMPORARILY_UNAVAILABLE)
+})
+
+await check("PENDING_VERIFICATION integrates through FacilityService", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider({
+      weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00", {
+        provenance: { verificationStatus: "PENDING_VERIFICATION", dataStatus: "PENDING_VERIFICATION" },
+      })],
+      exceptions: [],
+      statusAdvisories: [],
+    }),
+    clock: fixedClock,
+  }).getFacilityStatus("library")
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.PENDING_VERIFICATION)
+})
+
+await check("empty accepted sources return UNKNOWN with UNAVAILABLE envelope", async () => {
+  const value = await createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+    .getFacilityStatus("library")
+  assert.equal(value.ok, true)
+  assert.equal(value.availability, FACILITY_AVAILABILITY.UNAVAILABLE)
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.UNKNOWN)
+})
+
+await check("configured non-applicable sources return UNKNOWN with CONFIGURED envelope", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider({ weeklyHours: [weeklyHour(2, "08:00:00", "17:00:00")], exceptions: [], statusAdvisories: [] }),
+    clock: fixedClock,
+  }).getFacilityStatus("library")
+  assert.equal(value.availability, FACILITY_AVAILABILITY.CONFIGURED)
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.UNKNOWN)
+})
+
+await check("demo-driven integration preserves demo state", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider({
+      weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00", {
+        provenance: { verificationStatus: "DEMO_ONLY", dataStatus: "DEMO" },
+      })],
+      exceptions: [],
+      statusAdvisories: [],
+    }),
+    clock: fixedClock,
+  }).getFacilityStatus("library")
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.OPEN_NOW)
+  assert.equal(value.data.demo, true)
+})
+
+await check("nextTransitionAt passes through unchanged", async () => {
+  const value = await createFacilityService({
+    provider: createHoursProvider({ weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00")], exceptions: [], statusAdvisories: [] }),
+    clock: fixedClock,
+  }).getFacilityStatus("library")
+  assert.equal(value.data.nextTransitionAt, "2026-10-05T09:00:00.000Z")
+})
+
+await check("controlling records remain normalized and safe through integration", async () => {
+  const record = weeklyHour(1, "08:00:00", "17:00:00", { sourceId: "INTEGRATION-SOURCE" })
+  record.id = 8128
+  record.createdBy = "private-actor"
+  const value = await createFacilityService({
+    provider: createHoursProvider({ weeklyHours: [record], exceptions: [], statusAdvisories: [] }),
+    clock: fixedClock,
+  }).getFacilityStatus("library")
+  const controlling = value.data.controllingRecords[0].record
+  assert.equal(controlling.provenance.sourceId, "INTEGRATION-SOURCE")
+  assert.equal(Object.hasOwn(controlling, "id"), false)
+  assert.equal(Object.hasOwn(controlling, "createdBy"), false)
+})
+
+await check("status result preserves canonical facility identity", async () => {
+  const value = await createFacilityService({ provider: createHoursProvider(), clock: fixedClock })
+    .getFacilityStatus("library")
+  const canonical = facilities.find(({ id }) => id === "library")
+  assert.deepEqual(value.data.facility, canonical)
+  assert.notEqual(value.data.facility, canonical)
+})
+
+await check("providers expose no direct status method or status query", async () => {
+  assert.equal(FACILITY_PROVIDER_METHODS.includes("getFacilityStatus"), false)
+  const [localSource, supabaseSource] = await Promise.all([
+    readFile(new URL("../src/providers/facility/localFacilityProvider.js", import.meta.url), "utf8"),
+    readFile(new URL("../src/providers/facility/supabaseFacilityProvider.js", import.meta.url), "utf8"),
+  ])
+  assert.doesNotMatch(localSource, /getFacilityStatus/)
+  assert.doesNotMatch(supabaseSource, /async getFacilityStatus/)
+  assert.doesNotMatch(supabaseSource, /["']public_facility_status["']/i)
+})
+
+await check("status integration adds no mutation, write, or RPC path", async () => {
+  const source = await readFile(new URL("../src/services/facilityService.js", import.meta.url), "utf8")
+  assert.doesNotMatch(source, /\.(?:insert|update|upsert|delete|rpc)\s*\(/)
+  assert.doesNotMatch(source, /service[_-]?role|sb_secret_/i)
+})
+
+await check("FacilityService status evaluation leaves spatial and emergency data unchanged", async () => {
+  await createFacilityService({
+    provider: createHoursProvider({ weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00")], exceptions: [], statusAdvisories: [] }),
+    clock: fixedClock,
+  }).getFacilityStatus("library")
+  assert.deepEqual(facilities, originalFacilities)
+  assert.deepEqual(mapNodes, originalNodes)
+  assert.deepEqual(mapEdges, originalEdges)
+  assert.deepEqual(emergencyApprovedEdges, originalEmergencyEdges)
+})
+
+await check("FS-2C1 evaluator remains the single status-computation implementation", async () => {
+  let evaluatorCalls = 0
+  const value = await createFacilityService({
+    provider: createHoursProvider({ weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00")], exceptions: [], statusAdvisories: [] }),
+    clock: fixedClock,
+    statusEvaluator: (input) => { evaluatorCalls += 1; return evaluateFacilityStatus(input) },
+  }).getFacilityStatus("library")
+  assert.equal(evaluatorCalls, 1)
+  assert.equal(value.data.status, FACILITY_OPERATIONAL_STATUS.OPEN_NOW)
+  const source = await readFile(new URL("../src/services/facilityService.js", import.meta.url), "utf8")
+  assert.doesNotMatch(source, /"(?:OPEN_NOW|CLOSING_SOON|SCHEDULED_TO_OPEN|CLOSED|TEMPORARILY_UNAVAILABLE|PENDING_VERIFICATION|UNKNOWN)"/)
+})
+
 assert.deepEqual(Object.values(FACILITY_OPERATIONAL_STATUS).toSorted(), [
   "CLOSED",
   "CLOSING_SOON",
@@ -485,4 +809,4 @@ assert.deepEqual(Object.values(FACILITY_OPERATIONAL_STATUS).toSorted(), [
   "UNKNOWN",
 ])
 
-console.log(`Phase 4-FS-2C1 pure Manila-time facility status evaluator (${assertionCount} scenarios): PASS`)
+console.log(`Phase 4-FS-2C1/2 facility status evaluator and FacilityService integration (${assertionCount} scenarios): PASS`)

@@ -1,5 +1,21 @@
 # CampusNav Content Pack — Changelog
 
+## v3.34 — 3 October 2026
+
+Implemented and verified **Phase 4-FS-2C2 — FacilityService Status Integration and Provider/Error Boundary** without starting final FS-2C reconciliation.
+
+### Implementation
+- added public asynchronous `getFacilityStatus(facilityId, dateTime?)` orchestration with canonical facility-first validation, injected clock support, strict absolute timestamp normalization, and stable `FACILITY_INVALID_DATE_TIME`
+- reused the accepted `getFacilityHours` source read with exactly the previous/current Manila date window and delegated all status computation to the FS-2C1 evaluator
+- preserved the existing result envelope, independent controlling-record provenance, demo state, canonical facility identity, and the distinct `UNAVAILABLE`, `CONFIGURED`, and `PROVIDER_UNAVAILABLE` availability semantics
+- added no provider status method, direct status query, schema, RLS, RPC, write, Realtime, UI, or routing/emergency behavior
+
+### Verification and boundary
+- expanded the combined FS-2C suite to 79 passing scenarios, covering all 34 required FS-2C2 integration behaviors while retaining FS-2C1 and FS-2B regression coverage
+- passed the complete requested Node 22 regression matrix, route rendering, ESLint, typecheck, production build, and `git diff --check`; the pre-existing approximately 878 kB lazy 3D chunk warning remains unrelated
+- changed no database row, fixture, official hours, dependency, remote database, commit, push, or deployment
+- classified FS-2C2 as `IMPLEMENTED_VERIFIED`; full FS-2C and FS-2 remain in progress pending separately authorized final reconciliation
+
 ## v3.33 — 3 October 2026
 
 Implemented and verified **Phase 4-FS-2C1 — Pure Manila-Time Status Evaluator** without starting FS-2C2.

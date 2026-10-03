@@ -36,6 +36,8 @@ Expected operations:
 
 FS-2B must not expand weekly occurrences, interpret overnight carry, replace weekly hours with exceptions, apply closure precedence, or compute `OPEN_NOW`, `CLOSED`, `CLOSING_SOON`, `SCHEDULED_TO_OPEN`, `TEMPORARILY_UNAVAILABLE`, `PENDING_VERIFICATION`, or `UNKNOWN`.
 
+`getFacilityStatus(facilityId, dateTime?)` is the FS-2C public orchestration surface. It validates canonical local facility identity first, accepts only an explicit absolute RFC3339 timestamp when `dateTime` is supplied, otherwise uses the service's injected clock, and requests only the previous/current Manila dates through `getFacilityHours`. The pure status evaluator remains the sole implementation of weekly/overnight/exception/closure/verification rules. Successful results use the existing envelope and return canonical facility identity, status, normalized evaluation time, `Asia/Manila`, next transition, independently provenanced controlling records, and demo state. Empty accepted sources produce `UNKNOWN` with `UNAVAILABLE`; configured but non-applicable sources produce `UNKNOWN` with `CONFIGURED`; provider failure remains retryable `PROVIDER_UNAVAILABLE` and is never converted into an operational status. Providers expose no separate status method or query.
+
 Phase 4 rules:
 - every result is keyed by an existing canonical local facility ID
 - the service combines local spatial identity with the Supabase operational overlay; it does not let the overlay redefine geometry or routing
