@@ -112,6 +112,8 @@ Keep CRUD outside page components. Domains may include:
 
 The module provides safe canonical-facility/department/service/profile references; allowlisted create/update operations; explicit publish/expire lifecycle actions; optimistic `updated_at` checks; guarded hard deletion; and normalized validation, conflict, permission, stale-record, backend, and network errors. Stable facility/service/mapping identities are creation-only. It accepts no actor/audit or spatial/routing fields and relies on existing RLS, constraints, foreign keys, and trusted audit triggers.
 
+FS-3B adds only the `SUPER_ADMIN` Admin consumers for operational profiles and the service catalog. `/admin/facilities` joins all canonical local facilities to optional overlay profiles; `/admin/services` manages service records without aliases or mappings. Both routes call this service through `AdminService`, send original `updated_at` values for mutations, keep publish/expire separate from save, and never call Supabase or write audit rows directly. The canonical-facility reference projection maps local `floorId`/`kind` to its accepted `floor`/`category` Admin contract without exposing spatial edit fields.
+
 ## CLARAToolService (future)
 Thin authorized wrapper that exposes only safe internal functions to CLARA.
 

@@ -1,5 +1,21 @@
 # CampusNav Content Pack — Changelog
 
+## v3.38 — 3 October 2026
+
+Implemented and locally verified **Phase 4-FS-3B — Facility Profile and Service Catalog Admin Workflow** without starting FS-3C.
+
+### Implementation
+- added `SUPER_ADMIN`-only `/admin/facilities` and `/admin/services` routes plus Facilities/Services links in the existing Admin shell
+- added responsive canonical-facility/profile and service-catalog lists, operational-only editors, conservative draft/non-public/pending defaults, explicit publish/expire actions, optimistic stale handling, and confirmed service-guarded deletion
+- separated content, publication, and verification/provenance UX; kept demo/test records visibly non-official and normalized all displayed errors
+- corrected the FS-3A canonical reference projection so local `floorId`/`kind` populate the accepted Admin `floor`/`category` contract
+
+### Verification and boundary
+- added `npm run test:phase4-fs3b` and extended FS-3A coverage for the canonical reference projection; all required FS-1/FS-2/Auth/Admin/render/quality checks pass under Node 22
+- prepared but did not execute the browser/device manual QA checklist; no live authenticated mutation or official institutional data is claimed
+- changed no schema, migration, RLS, remote database, public Facilities UI, aliases/mappings/hours/exceptions/advisory UI, media, Dashboard/Realtime, navigation/spatial data, dependency, commit, push, deployment, or FS-3C work
+- classified FS-3B as `IMPLEMENTED_VERIFIED`; full FS-3 remains in progress and FS-3C requires separate authorization
+
 ## v3.37 — 3 October 2026
 
 Implemented and locally verified **Phase 4-FS-3A — Admin Mutation Service/API Foundation** without starting FS-3B.

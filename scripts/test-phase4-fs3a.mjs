@@ -167,6 +167,12 @@ const createQueuedClient = (responses) => {
 const createdRow = { id: 5, ...profile, created_at: UPDATED_AT, updated_at: UPDATED_AT }
 const createMock = createQueuedClient([{ data: createdRow, error: null }])
 const createService = createFacilityAdminService(createMock.client)
+assert.deepEqual(createService.listCanonicalFacilities()[0], {
+  id: "theater",
+  name: "Theater",
+  floor: "GF",
+  category: "Facility",
+}, "canonical Admin references map local floorId/kind into the accepted floor/category contract")
 assert.deepEqual(await createService.createFacilityOperationalProfile(profileInput), createdRow)
 assert.equal(createMock.calls[0].table, "facility_operational_profiles")
 assert.equal(createMock.calls[0].operation, "insert")
@@ -252,7 +258,7 @@ const [facilityAdminSource, adminSource, facilityServiceSource, appSource, packa
 assert.doesNotMatch(facilityAdminSource, /getSupabaseClient|service[_-]?role|secret[_-]?key|VITE_|\.rpc\(/i, "facility mutations use only an injected browser-safe client")
 assert.doesNotMatch(facilityAdminSource, /\.from\(["']audit_logs["']\).*\.(?:insert|update|delete)/is, "facility Admin cannot forge audit rows")
 assert.doesNotMatch(facilityAdminSource, /facility_advisories/, "FS-3A does not duplicate advisory mutations")
-assert.doesNotMatch(appSource, /\/admin\/(?:facilities|services|service-aliases|facility-service-mappings|facility-hours|facility-hour-exceptions)/, "FS-3A adds no Admin routes")
+assert.doesNotMatch(appSource, /\/admin\/(?:service-aliases|facility-service-mappings|facility-hours|facility-hour-exceptions)/, "later aliases, mappings, hours, and exception Admin routes remain absent")
 assert.match(packageSource, /test:phase4-fs3a/)
 for (const method of ["getFacilityHours", "getFacilityStatus", "getFacilitiesByService", "getServices"]) assert.match(facilityServiceSource, new RegExp(method))
 assert.match(adminSource, /createFacilityAdminService/)

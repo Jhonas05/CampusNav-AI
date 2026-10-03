@@ -502,7 +502,7 @@ export const createFacilityAdminService = (client, { mapError = defaultMapError,
     return throwResult(result) || []
   }
 
-  const canonicalFacilities = () => facilities.map(({ id, name, floor, category }) => ({ id, name, floor, category }))
+  const canonicalFacilities = () => facilities.map(({ id, name, floorId, kind }) => ({ id, name, floor: floorId, category: kind }))
   const loadReferences = async () => {
     const [departments, services, profiles] = await Promise.all([
       listDepartments(),

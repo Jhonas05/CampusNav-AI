@@ -280,6 +280,30 @@ Run the deterministic validation, mocked-mutation, security-boundary, and regres
 npm run test:phase4-fs3a
 ```
 
+## Facility profile and service catalog Admin UI (Phase 4-FS-3B)
+
+Authenticated `SUPER_ADMIN` users can manage facility operational profiles at `/admin/facilities` and service catalog records at `/admin/services`. The facility list always starts from the canonical local facility registry and shows whether an overlay exists; no spatial identity, floor, geometry, graph, QR, routing, or emergency data is editable. Service codes are required lowercase kebab-case on creation and remain immutable afterward.
+
+Both workflows call the existing `facilityAdminService` through `AdminService`. New records default to draft, non-public, and pending verification. Save never publishes: Publish and Expire are explicit actions, every mutation uses the original `updated_at` stale-write token, hard deletion is confirmed and service-guarded, and UI messages expose only normalized errors. Existing database triggers remain the audit writer.
+
+Run the deterministic UI/service-boundary checks with:
+
+```bash
+npm run test:phase4-fs3b
+```
+
+Manual QA checklist (prepared, not executed):
+
+- sign in as an authenticated `SUPER_ADMIN`; open both routes and verify Facilities/Services navigation
+- verify a signed-in non-superadmin receives Access Denied for both routes
+- create and edit a facility profile; confirm facility identity is locked and no spatial fields exist
+- publish and expire a profile through separate actions; confirm Save alone leaves a new profile as draft/non-public
+- create and edit a service; verify lowercase kebab validation, immutable code, publish, and expire
+- provoke stale-record and duplicate-service-code responses; confirm unsaved values remain and no raw backend detail appears
+- confirm disposable-record deletion and referenced/non-disposable delete rejection; prefer Expire where directed
+- complete both workflows by keyboard only, including editor close and delete confirmation
+- verify table/card/editor usability at representative desktop, tablet, and mobile viewport sizes
+
 ## Admin CMS foundation (Phase 8B.1)
 
 The protected `/admin` area is available only to authenticated `SUPER_ADMIN` accounts. It provides live Supabase counts plus content management for announcements, events, facility advisories, and notifications. Each list supports title search, lifecycle and priority filters, sorting, explicit draft/schedule/publish actions, cancellation or expiration, and confirmed deletion. Facility links always use the stable IDs from `src/data/facilities.js`; no second facility namespace is created.

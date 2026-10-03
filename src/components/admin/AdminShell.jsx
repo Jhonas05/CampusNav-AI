@@ -15,6 +15,7 @@ import {
   QrCode,
   Settings,
   ShieldAlert,
+  Tags,
   UserRound,
   Users,
 } from "lucide-react"
@@ -33,6 +34,13 @@ const NAV_GROUPS = [
       { label: "Events", icon: CalendarDays, path: "/admin/events", superAdminOnly: true },
       { label: "Facility Advisories", icon: Building2, path: "/admin/facility-advisories", superAdminOnly: true },
       { label: "Notifications", icon: Bell, path: "/admin/notifications", superAdminOnly: true },
+    ],
+  },
+  {
+    label: "Facilities",
+    items: [
+      { label: "Facilities", icon: Building2, path: "/admin/facilities", superAdminOnly: true },
+      { label: "Services", icon: Tags, path: "/admin/services", superAdminOnly: true },
     ],
   },
   {
@@ -59,7 +67,6 @@ const NAV_GROUPS = [
   {
     label: "Coming later",
     items: [
-      { label: "Facilities", icon: Building2 },
       { label: "Map Management", icon: Map },
       { label: "Users", icon: Users },
       { label: "Roles", icon: KeySquare },
