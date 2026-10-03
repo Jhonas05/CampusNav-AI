@@ -1,5 +1,20 @@
 # CampusNav Content Pack — Changelog
 
+## v3.33 — 3 October 2026
+
+Implemented and verified **Phase 4-FS-2C1 — Pure Manila-Time Status Evaluator** without starting FS-2C2.
+
+### Implementation
+- added the seven canonical facility operational status constants and a focused pure `evaluateFacilityStatus` module over normalized FS-2B source records
+- added strict absolute RFC3339 timestamp normalization, explicit `Asia/Manila` interval construction, half-open boundaries, overnight start-date ownership, exception replacement, closure precedence, overlap/touch unioning, 30-minute closing-soon behavior, and next-transition calculation
+- preserved independent safe controlling-record provenance, pending/demo semantics, source immutability, and the separation between operational status and routing/emergency restrictions
+- added a 46-scenario deterministic FS-2C1 suite and `npm run test:phase4-fs2c`
+
+### Verification and boundary
+- passed the complete requested Node 22 regression matrix, route rendering, ESLint, typecheck, production build, and `git diff --check`; the pre-existing approximately 878 kB lazy 3D chunk warning remains unrelated
+- changed no schema, migration, RLS, provider query, public `FacilityService.getFacilityStatus`, database row, fixture, official hours, UI, spatial/navigation/routing/QR/Emergency behavior, dependency, remote database, commit, push, or deployment
+- classified FS-2C1 as `IMPLEMENTED_VERIFIED`; full FS-2C and FS-2 remain in progress, and FS-2C2 requires separate authorization
+
 ## v3.32 — 1 October 2026
 
 Accepted **Phase 4-FS-2B — Provider-Neutral Hours and Exception Read Path** as `ACCEPTED_WITH_ADVISORY` without starting FS-2C.

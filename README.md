@@ -248,6 +248,18 @@ Run the deterministic contract/provider/security regression with:
 npm run test:phase4-fs2b
 ```
 
+## Pure facility status evaluator (Phase 4-FS-2C1)
+
+`src/services/facilityStatusEvaluator.js` deterministically evaluates already-normalized FS-2B weekly hours, dated exceptions, and temporary-closure advisories in `Asia/Manila`. Callers must supply an explicit absolute RFC3339 `evaluatedAt` string with `Z` or a numeric offset; the evaluator has no global clock, Supabase/provider access, UI dependency, or routing side effect.
+
+The result contains the canonical operational status, normalized evaluation timestamp, timezone, next applicable transition, independently provenanced safe controlling records, and demo flag. Operational `CLOSED` or `TEMPORARILY_UNAVAILABLE` never changes the canonical navigation or emergency graph. FS-2C1 does not add the public `FacilityService.getFacilityStatus` integration; that remains a separately authorized FS-2C2 slice.
+
+Run the deterministic evaluator regression with:
+
+```bash
+npm run test:phase4-fs2c
+```
+
 ## Admin CMS foundation (Phase 8B.1)
 
 The protected `/admin` area is available only to authenticated `SUPER_ADMIN` accounts. It provides live Supabase counts plus content management for announcements, events, facility advisories, and notifications. Each list supports title search, lifecycle and priority filters, sorting, explicit draft/schedule/publish actions, cancellation or expiration, and confirmed deletion. Facility links always use the stable IDs from `src/data/facilities.js`; no second facility namespace is created.

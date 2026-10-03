@@ -34,6 +34,8 @@
     "test:phase4:fs2a": "npm run test:phase4-fs2a",
     "test:phase4-fs2b": "node scripts/test-phase4-fs2b.mjs",
     "test:phase4:fs2b": "npm run test:phase4-fs2b",
+    "test:phase4-fs2c": "node scripts/test-phase4-fs2c.mjs",
+    "test:phase4:fs2c": "npm run test:phase4-fs2c",
     "test:rls": "npx --yes supabase@2.79.0 test db",
     "test:render": "node scripts/test-route-render.mjs",
     "preview": "vite preview"
