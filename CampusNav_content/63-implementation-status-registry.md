@@ -5,7 +5,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B ACCEPTED_WITH_ADVISORY; FS-2C1/FS-2C2 IMPLEMENTED_VERIFIED; FS-2C FINAL RECONCILIATION NOT_STARTED`
+**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B/FS-2C ACCEPTED_WITH_ADVISORY; FS-2 FINAL RECONCILIATION NOT_STARTED`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -21,7 +21,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Services, aliases, and facility-service mappings | `ACCEPTED_WITH_ADVISORY — FS-1B2/FS-1B3 READ PATHS` | Provider-neutral catalog/code/alias, facility-mapping, and reverse canonical-facility reads passed final FS-1B reconciliation; no live FS-1B Data API read is claimed |
 | Hours and exceptions schema/security foundation | `ACCEPTED — FS-2A` | Linked migration, 89/89 corrected canonical pgTAP, remote structure/security/audit checks, and exact zero-fixture verification pass on the actual CampusNav project |
 | Hours, exceptions, and closure source reads | `ACCEPTED_WITH_ADVISORY — FS-2B` | Provider-neutral local/null plus public-view aggregate read, strict Manila date ranges, defensive normalization, ordering, provenance, errors, and full deterministic regressions pass; no live FS-2B Data API read is claimed |
-| Facility-status engine | `IN_PROGRESS — FS-2C1/FS-2C2 IMPLEMENTED_VERIFIED` | Pure Manila-time evaluator and public FacilityService orchestration pass; final FS-2C reconciliation remains unstarted |
+| Facility-status engine | `ACCEPTED_WITH_ADVISORY — FS-2C` | Pure Manila-time evaluator and public FacilityService orchestration pass final reconciliation; no live official-hours/status evidence is claimed |
 | Facility Admin workflows beyond advisories | `NOT_IMPLEMENTED` | Generic authorized workflow first; institutional owner names remain pending |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
 | Public search/recommendation enrichment | `NOT_IMPLEMENTED` | Existing name/kind/floor search is only the baseline |
@@ -32,7 +32,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, FS-2B is `ACCEPTED_WITH_ADVISORY`, and FS-2C1/FS-2C2 are `IMPLEMENTED_VERIFIED` at their pure-evaluator and public-service boundaries. Final FS-2C reconciliation remains unstarted and separately gated.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`. Full FS-2 remains in progress pending its separately authorized final reconciliation/readiness review.
 
 ### Phase 4-FS-2A final acceptance reconciliation — 1 October 2026
 
@@ -120,6 +120,22 @@ This section supersedes the earlier `IMPLEMENTED_UNVERIFIED` acceptance boundary
 | Full regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | All required data/navigation/QR/Emergency/3D/Dashboard/Phase 8/FS-1/FS-2/render suites, ESLint, typecheck, and build pass; the existing approximately 878 kB lazy 3D chunk warning is unchanged |
 | Scope/data impact | `NONE` | No schema, migration, RLS, provider query, database row, fixture, official hours, UI, spatial/navigation/routing/QR/Emergency behavior, dependency, remote database, commit, push, or deployment changed |
 | Slice decision | `IMPLEMENTED_VERIFIED` | FS-2C2 is complete at the service-integration boundary; full FS-2C acceptance requires separately authorized final reconciliation |
+
+### Phase 4-FS-2C final reconciliation and acceptance — 3 October 2026
+
+**Classification:** `ACCEPTED_WITH_ADVISORY`
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| Public/evaluator contract | `PASS` | One async provider-neutral `getFacilityStatus(facilityId, dateTime?)` surface validates canonical identity and strict time input, reuses `getFacilityHours`, and delegates all seven-status computation to the pure evaluator |
+| Time and schedule semantics | `PASS` | Deterministic Manila time, half-open boundaries, weekly/split/closed schedules, overnight ownership, replacement exceptions, closure precedence, closing-soon boundaries, and next transitions reconcile with the canonical contracts |
+| Acceptance defect correction | `PASS` | Mixed pending/trusted exception sets now conservatively return `PENDING_VERIFICATION`; pending current-date exceptions cannot cancel a trusted previous-date overnight tail |
+| Result, provenance, and safety | `PASS` | Availability remains separate from status; safe independent provenance/demo state is preserved; no private/provider fields, synthetic verification, routing mutation, or emergency mutation exists |
+| Deterministic FS-2C suite | `81/81 PASS` | FS-2C1 and FS-2C2 coverage plus two acceptance-defect regressions pass under Node 22.22.0 |
+| Full regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | The full requested matrix, route rendering, ESLint, typecheck, production build, and diff check pass; the approximately 878 kB lazy 3D warning is unchanged |
+| Provider/database boundary | `PASS` | No provider status method, direct status query, table/view, migration, RLS, RPC, Realtime, write, or remote database change was introduced |
+| Live/official-data evidence | `ADVISORY` | No fresh FS-2B live Data API read or official institutional operating-hours/status evidence is claimed; empty production data legitimately yields unknown/unavailable |
+| Acceptance decision | `ACCEPTED_WITH_ADVISORY` | No FS-2C blocker remains; full FS-2 final reconciliation/readiness requires separate authorization and FS-3 remains unstarted |
 
 ### Phase 4-FS-2A implementation — 28 September 2026
 

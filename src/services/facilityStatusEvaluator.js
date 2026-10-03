@@ -183,6 +183,7 @@ const scheduleForDate = ({ dateKey, evaluatedAtMs, weeklyHours, exceptions }) =>
   return {
     acceptedIntervals,
     acceptedRecords: uniqueControllingRecords(acceptedRecords),
+    hasExceptionSet: applicableExceptions.length > 0,
     pendingIntervals,
     pendingRecords: uniqueControllingRecords(pendingRecords),
   }
@@ -196,6 +197,19 @@ const result = ({ status, evaluatedAt, nextTransitionAt = null, controllingRecor
   controllingRecords: uniqueControllingRecords(controllingRecords),
   demo,
 })
+
+const openIntervalResult = ({ interval, evaluatedAt, evaluatedAtMs }) => {
+  const remainingMs = interval.endMs - evaluatedAtMs
+  return result({
+    status: remainingMs > 0 && remainingMs <= CLOSING_SOON_MS
+      ? FACILITY_OPERATIONAL_STATUS.CLOSING_SOON
+      : FACILITY_OPERATIONAL_STATUS.OPEN_NOW,
+    evaluatedAt,
+    nextTransitionAt: new Date(interval.endMs).toISOString(),
+    controllingRecords: interval.records,
+    demo: interval.demo,
+  })
+}
 
 const closureIntervals = (statusAdvisories) => statusAdvisories
   .filter((record) => record?.advisoryType === "TEMPORARY_CLOSURE")
@@ -273,6 +287,42 @@ export const evaluateFacilityStatus = ({
     exceptions,
   })
 
+  const previousAcceptedInterval = mergeIntervals(previousSchedule.acceptedIntervals)
+    .find((entry) => entry.startMs <= evaluatedAtMs && evaluatedAtMs < entry.endMs)
+  const previousActivePendingIntervals = previousSchedule.pendingIntervals.filter((entry) => (
+    entry.startMs <= evaluatedAtMs && evaluatedAtMs < entry.endMs
+  ))
+  if (
+    previousActivePendingIntervals.length
+    || (previousSchedule.hasExceptionSet && previousSchedule.pendingRecords.length && previousAcceptedInterval)
+  ) {
+    return result({
+      status: FACILITY_OPERATIONAL_STATUS.PENDING_VERIFICATION,
+      evaluatedAt: normalizedEvaluatedAt,
+      controllingRecords: previousSchedule.pendingRecords,
+    })
+  }
+
+  // A current-date exception cannot cancel a trusted overnight tail owned by
+  // the previous start date, even when the current replacement set is pending.
+  if (previousAcceptedInterval && currentSchedule.hasExceptionSet && currentSchedule.pendingRecords.length) {
+    return openIntervalResult({
+      interval: previousAcceptedInterval,
+      evaluatedAt: normalizedEvaluatedAt,
+      evaluatedAtMs,
+    })
+  }
+
+  // Any pending record makes the current date's replacement exception set
+  // conservative as a whole; a trusted sibling interval must not bypass it.
+  if (currentSchedule.hasExceptionSet && currentSchedule.pendingRecords.length) {
+    return result({
+      status: FACILITY_OPERATIONAL_STATUS.PENDING_VERIFICATION,
+      evaluatedAt: normalizedEvaluatedAt,
+      controllingRecords: currentSchedule.pendingRecords,
+    })
+  }
+
   const activePendingIntervals = [
     ...previousSchedule.pendingIntervals,
     ...currentSchedule.pendingIntervals,
@@ -290,15 +340,10 @@ export const evaluateFacilityStatus = ({
     ...currentSchedule.acceptedIntervals,
   ]).find((entry) => entry.startMs <= evaluatedAtMs && evaluatedAtMs < entry.endMs)
   if (activeOpenInterval) {
-    const remainingMs = activeOpenInterval.endMs - evaluatedAtMs
-    return result({
-      status: remainingMs > 0 && remainingMs <= CLOSING_SOON_MS
-        ? FACILITY_OPERATIONAL_STATUS.CLOSING_SOON
-        : FACILITY_OPERATIONAL_STATUS.OPEN_NOW,
+    return openIntervalResult({
+      interval: activeOpenInterval,
       evaluatedAt: normalizedEvaluatedAt,
-      nextTransitionAt: new Date(activeOpenInterval.endMs).toISOString(),
-      controllingRecords: activeOpenInterval.records,
-      demo: activeOpenInterval.demo,
+      evaluatedAtMs,
     })
   }
 

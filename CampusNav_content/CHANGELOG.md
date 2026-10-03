@@ -1,5 +1,21 @@
 # CampusNav Content Pack — Changelog
 
+## v3.35 — 3 October 2026
+
+Accepted **Phase 4-FS-2C — Deterministic Manila-Time Facility Status Engine** as `ACCEPTED_WITH_ADVISORY` without starting full FS-2 reconciliation or FS-3.
+
+### Acceptance reconciliation
+- reconciled the pure FS-2C1 evaluator and public FS-2C2 FacilityService integration against status, timestamp, Manila-time, weekly/overnight, exception, closure, verification/demo/pending, transition, availability, provenance, provider, routing, and emergency contracts
+- corrected an acceptance defect so any pending row conservatively controls a mixed replacement exception set while a current-date pending exception cannot cancel a trusted previous-date overnight tail
+- added two deterministic regression cases and expanded the combined FS-2C suite from 79 to 81 passing scenarios
+- passed the complete requested Node 22 regression matrix, route rendering, ESLint, typecheck, production build, and `git diff --check`; the pre-existing approximately 878 kB lazy 3D chunk warning remains unrelated
+
+### Status and boundary
+- classified full FS-2C as `ACCEPTED_WITH_ADVISORY`; no acceptance blocker remains
+- preserved the FS-2B advisory that no fresh live Data API read or official operating-hours/status evidence is claimed, so production may legitimately return unknown/unavailable
+- changed no provider query/method, schema, migration, RLS, RPC, Realtime, database row, official data, UI, spatial/navigation/routing/QR/Emergency behavior, dependency, remote database, commit, push, or deployment
+- kept full FS-2 in progress pending separately authorized final reconciliation/readiness; FS-3 remains unstarted
+
 ## v3.34 — 3 October 2026
 
 Implemented and verified **Phase 4-FS-2C2 — FacilityService Status Integration and Provider/Error Boundary** without starting final FS-2C reconciliation.

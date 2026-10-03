@@ -416,7 +416,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B ACCEPTED_WITH_ADVISORY; FS-2C1/FS-2C2 IMPLEMENTED_VERIFIED; FS-2C FINAL RECONCILIATION NOT_STARTED`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B/FS-2C ACCEPTED_WITH_ADVISORY; FS-2 FINAL RECONCILIATION NOT_STARTED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -453,7 +453,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 ### Implementation sequence
 
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `IN_PROGRESS — FS-2A ACCEPTED; FS-2B ACCEPTED_WITH_ADVISORY; FS-2C1/FS-2C2 IMPLEMENTED_VERIFIED; FS-2C FINAL RECONCILIATION NOT_STARTED`
+2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `IN_PROGRESS — FS-2A ACCEPTED; FS-2B/FS-2C ACCEPTED_WITH_ADVISORY; FS-2 FINAL RECONCILIATION NOT_STARTED`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `NOT_STARTED`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
@@ -468,7 +468,7 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4-FS-2A is `ACCEPTED`, FS-2B is `ACCEPTED_WITH_ADVISORY`, and FS-2C1/FS-2C2 are `IMPLEMENTED_VERIFIED` at the pure-evaluator and public FacilityService-integration boundaries. FS-2 remains in progress because final FS-2C reconciliation is not started and requires separate authorization.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4-FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`. FS-2 remains in progress because its final reconciliation/readiness review has not started and requires separate authorization.
 
 ### Phase 4-FS-1A implementation snapshot — 20 September 2026
 
@@ -595,6 +595,18 @@ The public asynchronous `getFacilityStatus(facilityId, dateTime?)` method now va
 Successful results reuse the existing `{ ok, availability, data, error }` envelope and expose only canonical facility identity plus status, normalized evaluation time, timezone, next transition, safe independently provenanced controlling records, and demo state. Empty accepted sources remain `UNAVAILABLE` plus `UNKNOWN`; configured non-applicable sources remain `CONFIGURED` plus `UNKNOWN`; provider failures remain sanitized retryable `PROVIDER_UNAVAILABLE` results and never invoke the evaluator. No provider status method, direct Supabase status query, RPC, schema, RLS, Realtime, UI, official schedule, or routing/emergency behavior was added.
 
 The combined deterministic FS-2C suite passes 79 scenarios, including all 34 required FS-2C2 integration behaviors while retaining all FS-2C1 and FS-2B regressions. The complete required Node 22 regression matrix, route rendering, ESLint, typecheck, and production build pass; the pre-existing approximately 878 kB lazy 3D chunk warning remains unrelated. FS-2C2 is implemented and verified, but full FS-2C and FS-2 remain in progress pending separately authorized final reconciliation.
+
+### Phase 4-FS-2C final reconciliation and acceptance — 3 October 2026
+
+**Status:** `ACCEPTED_WITH_ADVISORY`
+
+Final reconciliation confirms that the pure evaluator and the public asynchronous `getFacilityStatus(facilityId, dateTime?)` surface jointly satisfy the canonical status vocabulary, strict timestamp and injected-clock rules, `Asia/Manila` half-open interval semantics, weekly/split/closed and overnight ownership behavior, complete exception replacement, temporary-closure precedence, verification/demo/pending handling, the exact 30-minute closing-soon boundary, safe next transitions and controlling-record provenance, result-envelope availability separation, and provider/routing/emergency boundaries.
+
+The review found and corrected one acceptance defect: a trusted exception interval could bypass a pending sibling in the same replacement set. A replacement set containing any pending record now conservatively returns `PENDING_VERIFICATION` for its start date, while a current-date pending exception still cannot cancel a trusted overnight tail owned by the previous start date. Two deterministic regression cases protect both rules, expanding the combined FS-2C suite to 81 passing scenarios.
+
+The complete requested Node 22 regression matrix, route rendering, ESLint, typecheck, production build, and `git diff --check` pass. The pre-existing approximately 878 kB lazy 3D chunk warning remains unrelated. No provider method/query, schema, migration, RLS, RPC, Realtime, database row, official operating hours, UI, spatial/navigation/routing/QR/Emergency behavior, dependency, remote database, commit, push, or deployment changed.
+
+FS-2C is accepted with advisory. The advisory is the preserved FS-2B evidence boundary: no fresh live Data API read or official institutional operating-hours/status evidence is claimed, so normal production may legitimately return `UNKNOWN`/unavailable. FS-2 remains in progress; its separately authorized final reconciliation/readiness review may begin, but FS-3 has not started.
 
 ## Later canonical work candidates
 

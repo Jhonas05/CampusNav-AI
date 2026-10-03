@@ -268,6 +268,20 @@ await check("pending replacement exception controls instead of weekly hours", ()
   assert.equal(value.controllingRecords[0].sourceKind, FACILITY_STATUS_SOURCE_KIND.HOUR_EXCEPTION)
 })
 
+await check("pending exception conservatively controls a mixed replacement set", () => {
+  const value = evaluate(atManila("2026-10-05", "09:00:00"), {
+    exceptions: [
+      exception("2026-10-05", "08:00:00", "12:00:00", { sourceId: "TRUSTED-AM" }),
+      exception("2026-10-05", "13:00:00", "17:00:00", {
+        sourceId: "PENDING-PM",
+        provenance: { verificationStatus: "PENDING_VERIFICATION", dataStatus: "PENDING_VERIFICATION" },
+      }),
+    ],
+  })
+  assert.equal(value.status, FACILITY_OPERATIONAL_STATUS.PENDING_VERIFICATION)
+  assert.deepEqual(value.controllingRecords.map(({ record }) => record.provenance.sourceId), ["PENDING-PM"])
+})
+
 await check("demo weekly data may compute status and remains demo-labeled", () => {
   const value = evaluate(atManila("2026-10-05", "09:00:00"), {
     weeklyHours: [weeklyHour(1, "08:00:00", "17:00:00", {
@@ -463,6 +477,19 @@ await check("current-date exception does not cancel an active previous-date over
   })
   assert.equal(value.status, FACILITY_OPERATIONAL_STATUS.OPEN_NOW)
   assert.equal(value.controllingRecords[0].sourceKind, FACILITY_STATUS_SOURCE_KIND.WEEKLY_HOUR)
+})
+
+await check("pending current-date exception does not cancel a trusted previous-date overnight tail", () => {
+  const value = evaluate(atManila("2026-10-07", "01:00:00"), {
+    weeklyHours: [weeklyHour(2, "22:00:00", "02:00:00", { sourceId: "TRUSTED-TAIL" })],
+    exceptions: [exception("2026-10-07", "00:00:00", "03:00:00", {
+      sourceId: "PENDING-CURRENT",
+      provenance: { verificationStatus: "PENDING_VERIFICATION", dataStatus: "PENDING_VERIFICATION" },
+    })],
+  })
+  assert.equal(value.status, FACILITY_OPERATIONAL_STATUS.OPEN_NOW)
+  assert.equal(value.nextTransitionAt, "2026-10-06T18:00:00.000Z")
+  assert.deepEqual(value.controllingRecords.map(({ record }) => record.provenance.sourceId), ["TRUSTED-TAIL"])
 })
 
 await check("demo temporary closure remains demo-labeled", () => {
