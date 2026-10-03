@@ -5,7 +5,7 @@ Separate **required/design** documentation from what is actually implemented. Up
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B/FS-2C ACCEPTED_WITH_ADVISORY; FS-2 FINAL RECONCILIATION NOT_STARTED`
+**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 NOT_STARTED`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -32,7 +32,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`. Full FS-2 remains in progress pending its separately authorized final reconciliation/readiness review.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-2 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4 remains in progress; FS-3 readiness and implementation remain separately gated and unstarted.
 
 ### Phase 4-FS-2A final acceptance reconciliation — 1 October 2026
 
@@ -136,6 +136,22 @@ This section supersedes the earlier `IMPLEMENTED_UNVERIFIED` acceptance boundary
 | Provider/database boundary | `PASS` | No provider status method, direct status query, table/view, migration, RLS, RPC, Realtime, write, or remote database change was introduced |
 | Live/official-data evidence | `ADVISORY` | No fresh FS-2B live Data API read or official institutional operating-hours/status evidence is claimed; empty production data legitimately yields unknown/unavailable |
 | Acceptance decision | `ACCEPTED_WITH_ADVISORY` | No FS-2C blocker remains; full FS-2 final reconciliation/readiness requires separate authorization and FS-3 remains unstarted |
+
+### Phase 4-FS-2 final reconciliation and acceptance — 3 October 2026
+
+**Classification:** `COMPLETE — ACCEPTED_WITH_ADVISORY`
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| FS-2A foundation | `ACCEPTED` | Linked schema, RLS, explicit grants, `SUPER_ADMIN` writes, public projections, lifecycle/provenance, trusted audit, corrected 89/89 pgTAP, and zero retained fixtures remain accepted |
+| FS-2B source reads | `ACCEPTED_WITH_ADVISORY` | Provider-neutral `getFacilityHours` validates canonical identity and returns normalized weekly hours, exceptions, and temporary closures exclusively through accepted public projections |
+| FS-2C status engine | `ACCEPTED_WITH_ADVISORY` | Provider-neutral `getFacilityStatus` applies strict time input, injected clock, deterministic Manila evaluation, canonical statuses, safe provenance, and accepted error/availability semantics |
+| Security and privacy | `PASS` | Public reads remain view/RLS controlled; initial writes remain `SUPER_ADMIN` only; no privileged browser secret, actor/private audit field, raw provider data, write, RPC, or Realtime status path exists |
+| Spatial and safety boundary | `PASS` | Hours/status remain operational overlays and do not mutate canonical facility identity, nodes, edges, A*, route restrictions, QR positioning, or emergency routes |
+| Deterministic FS-2 suites | `PASS` | FS-2A and FS-2B pass; FS-2C passes 81/81 scenarios under Node 22.22.0 |
+| Full regressions | `PASS_WITH_EXISTING_BUILD_ADVISORY` | Complete requested matrix, route rendering, ESLint, typecheck, build, and diff check pass; the approximately 878 kB lazy 3D warning is unchanged |
+| Institutional/live-data boundary | `ADVISORY` | No official hours were seeded or guessed and no fresh FS-2B live Data API read is claimed; empty production data may legitimately return unknown/unavailable |
+| Final decision | `COMPLETE — ACCEPTED_WITH_ADVISORY` | No FS-2 blocker remains; Phase 4-FS-3 readiness may begin only with separate authorization and FS-3 remains `NOT_STARTED` |
 
 ### Phase 4-FS-2A implementation — 28 September 2026
 

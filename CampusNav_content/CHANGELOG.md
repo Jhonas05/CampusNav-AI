@@ -1,5 +1,21 @@
 # CampusNav Content Pack — Changelog
 
+## v3.36 — 3 October 2026
+
+Completed final reconciliation of **Phase 4-FS-2 — Operating Hours and Facility Status Engine** as `COMPLETE — ACCEPTED_WITH_ADVISORY` without starting FS-3.
+
+### Acceptance reconciliation
+- confirmed the accepted FS-2A schema/RLS/grants/audit foundation, corrected 89/89 pgTAP evidence, and exact zero-fixture evidence remain intact
+- confirmed FS-2B `getFacilityHours` and FS-2C `getFacilityStatus` form the complete provider-neutral hours/status surface with consistent validation, result/error, provenance, availability, and Manila-time behavior
+- confirmed status computation remains pure and centralized, provider reads remain limited to accepted public projections, and operational status never changes spatial/navigation/QR/emergency truth
+- passed the dedicated FS-2A, FS-2B, and 81-scenario FS-2C suites plus the complete Node 22 regression matrix, route rendering, ESLint, typecheck, production build, and `git diff --check`
+
+### Status and boundary
+- classified Phase 4-FS-2 as `COMPLETE — ACCEPTED_WITH_ADVISORY`; no FS-2 blocker remains
+- retained the nonblocking boundaries that no fresh FS-2B live Data API read or official institutional operating-hours/status evidence is claimed and that empty production data may legitimately remain unknown/unavailable
+- changed no application, provider, schema, migration, RLS, database row, fixture, official data, UI, spatial/navigation/routing/QR/Emergency behavior, dependency, remote database, commit, push, or deployment
+- identified **Phase 4-FS-3 — Facility and Service Admin Workflows** as the exact next canonical subphase; it remains `NOT_STARTED` and requires a separately authorized readiness review
+
 ## v3.35 — 3 October 2026
 
 Accepted **Phase 4-FS-2C — Deterministic Manila-Time Facility Status Engine** as `ACCEPTED_WITH_ADVISORY` without starting full FS-2 reconciliation or FS-3.

@@ -416,7 +416,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2A ACCEPTED; FS-2B/FS-2C ACCEPTED_WITH_ADVISORY; FS-2 FINAL RECONCILIATION NOT_STARTED`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 NOT_STARTED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -453,7 +453,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 ### Implementation sequence
 
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `IN_PROGRESS — FS-2A ACCEPTED; FS-2B/FS-2C ACCEPTED_WITH_ADVISORY; FS-2 FINAL RECONCILIATION NOT_STARTED`
+2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `NOT_STARTED`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
@@ -468,7 +468,7 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4-FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`. FS-2 remains in progress because its final reconciliation/readiness review has not started and requires separate authorization.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-2 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4 remains in progress, and the separately authorized readiness review for Phase 4-FS-3 has not started.
 
 ### Phase 4-FS-1A implementation snapshot — 20 September 2026
 
@@ -607,6 +607,18 @@ The review found and corrected one acceptance defect: a trusted exception interv
 The complete requested Node 22 regression matrix, route rendering, ESLint, typecheck, production build, and `git diff --check` pass. The pre-existing approximately 878 kB lazy 3D chunk warning remains unrelated. No provider method/query, schema, migration, RLS, RPC, Realtime, database row, official operating hours, UI, spatial/navigation/routing/QR/Emergency behavior, dependency, remote database, commit, push, or deployment changed.
 
 FS-2C is accepted with advisory. The advisory is the preserved FS-2B evidence boundary: no fresh live Data API read or official institutional operating-hours/status evidence is claimed, so normal production may legitimately return `UNKNOWN`/unavailable. FS-2 remains in progress; its separately authorized final reconciliation/readiness review may begin, but FS-3 has not started.
+
+### Phase 4-FS-2 final reconciliation and acceptance — 3 October 2026
+
+**Status:** `COMPLETE — ACCEPTED_WITH_ADVISORY`
+
+Final reconciliation confirms the accepted FS-2A schema/security/audit foundation, FS-2B provider-neutral source-read aggregate, and FS-2C deterministic Manila-time status engine form one complete operating-hours and facility-status capability. The public surface remains `getFacilityHours(facilityId, dateRange?)` plus `getFacilityStatus(facilityId, dateTime?)`, with canonical facility-first validation, consistent result/error envelopes, strict date/time handling, safe row-specific provenance, public-view/RLS-controlled reads, `SUPER_ADMIN`-only initial writes, and no privileged browser credential.
+
+All weekly, split, closed, overnight, replacement-exception, pending-set, temporary-closure, service-interruption, demo, unknown, closing-soon, availability, provider-error, routing-separation, and emergency-separation rules reconcile without a remaining defect. The dedicated FS-2A, FS-2B, and 81-scenario FS-2C suites pass, as does the complete requested Node 22 regression matrix, route rendering, ESLint, typecheck, production build, and `git diff --check`. The pre-existing approximately 878 kB lazy 3D chunk warning remains unrelated.
+
+No official institutional hours were seeded or guessed, and no fresh FS-2B live Data API read is claimed. Those evidence boundaries remain nonblocking advisories: approved schedules are still required for official status claims, and an empty production overlay may legitimately yield `UNKNOWN` with unavailable data. No application, provider, schema, migration, RLS, database row, fixture, UI, spatial/navigation/routing/QR/Emergency behavior, dependency, remote database, commit, push, or deployment changed during this final reconciliation.
+
+Phase 4-FS-2 is complete and accepted with advisory. Phase 4 may proceed only through a separately authorized readiness review for the next canonical subphase, **Phase 4-FS-3 — Facility and Service Admin Workflows**, which remains `NOT_STARTED`.
 
 ## Later canonical work candidates
 
