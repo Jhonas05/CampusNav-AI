@@ -48,6 +48,8 @@ npm run test:phase4-fs2a
 npm run test:phase4-fs2b
 npm run test:phase4-fs2c
 npm run test:phase4-fs3a
+npm run test:phase4-fs3b
+npm run test:phase4-fs3c
 npm run test:rls
 npm run test:render
 ```
@@ -56,7 +58,7 @@ npm run test:render
 
 - `src/` contains the React application.
 - `src/components/` contains reusable interface and map components.
-- `src/components/layout/` holds the frozen UI shell (`DEC-UI-005`): `AppShell`, the left sidebar and mobile drawer, and the phone context bar; `src/components/clara/` holds the floating CLARA assistant; `src/lib/theme.js` and `src/contexts/ThemeContext.jsx` implement the Light/Dark/System theme, whose semantic color tokens live in `src/index.css` and `tailwind.config.js` (`npm run test:theme` rejects hex color classes in components).
+- `src/components/layout/` holds the frozen UI shell (`DEC-UI-005`): `AppShell`, the left sidebar and mobile drawer, and the phone context bar (inside `/admin/*` an administrator gets the single Admin navigation from `src/components/admin/AdminNavigation.jsx` instead, never both); `src/components/clara/` holds the floating CLARA assistant; `src/lib/theme.js` and `src/contexts/ThemeContext.jsx` implement the Light/Dark/System theme, whose semantic color tokens live in `src/index.css` and `tailwind.config.js` (`npm run test:theme` rejects hex color classes in components).
 - `src/data/facilities.js` contains verified facility-to-floor assignments and pending-verification fields.
 - `src/data/floors.js` contains editable floor and room geometry.
 - `src/data/additionalFloorMaps.js` contains source-aligned GF, 2F, 4F, and 5F polygons, hallways, doors, and stair areas.
@@ -309,6 +311,20 @@ Manual QA checklist (prepared, not executed):
 - complete both workflows by keyboard only, including editor close and delete confirmation
 - verify table/card/editor usability at representative desktop, tablet, and mobile viewport sizes
 
+## Service alias and facility-service mapping Admin UI (Phase 4-FS-3C)
+
+Authenticated `SUPER_ADMIN` users can manage service aliases at `/admin/service-aliases` and configured facility-service pairs at `/admin/facility-service-mappings`. Both workflows reuse the existing Admin mutation service and reference loader. Alias service identity and mapping facility/service identities are selected at creation and remain immutable afterward. Mapping choices use canonical local facilities that already have operational profiles; `recommendation_rank` defaults to 100 and remains stored administrator data, not an algorithm.
+
+Lists support search and responsive table/card layouts. Editors preserve draft/non-public/pending defaults, explicit Publish and Expire actions, source/provenance and demo-state visibility, original `updated_at` stale protection with explicit reload, and confirmed dependency-guarded deletion. Duplicate aliases/mappings and the existing stale, permission, session, network, and backend conditions render normalized user-safe messages. Components perform no direct Supabase or audit writes.
+
+Run the deterministic UI/service-boundary and Vite-render checks with:
+
+```bash
+npm run test:phase4-fs3c
+```
+
+Live authenticated mutation and official institutional alias/mapping records are not part of local FS-3C evidence. No schema, migration, provider, public Facilities/search/recommendation, spatial/navigation, or FS-4 behavior is added.
+
 ## Admin CMS foundation (Phase 8B.1)
 
 The protected `/admin` area is available only to authenticated `SUPER_ADMIN` accounts. It provides live Supabase counts plus content management for announcements, events, facility advisories, and notifications. Each list supports title search, lifecycle and priority filters, sorting, explicit draft/schedule/publish actions, cancellation or expiration, and confirmed deletion. Facility links always use the stable IDs from `src/data/facilities.js`; no second facility namespace is created.
@@ -403,7 +419,7 @@ Checkpoint QR payloads contain only `CAMPUSNAV:CHECKPOINT:<CHECKPOINT_ID>`. The 
 
 The scanner UI is component-lazy-loaded, and `@zxing/browser` is dynamically imported only after the scanner opens. Application pages and the QR admin route are route-level code-split so admin and optional page code are not part of the initial shell bundle.
 
-During local development, `/admin/qr-checkpoints` provides the developer-only QR generator and printable label view. The route now also requires `SUPER_ADMIN`; it remains disabled in production unless `VITE_ENABLE_MAP_VERIFICATION=true` is explicitly set.
+During local development, `/admin/qr-checkpoints` provides the developer-only QR generator and printable label view. The route requires a signed-in `SUPER_ADMIN` (the page states this; it no longer says authentication is pending); it remains disabled in production unless `VITE_ENABLE_MAP_VERIFICATION=true` is explicitly set.
 
 ## Production build
 

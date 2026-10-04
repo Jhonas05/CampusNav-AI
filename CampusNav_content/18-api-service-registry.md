@@ -114,6 +114,8 @@ The module provides safe canonical-facility/department/service/profile reference
 
 FS-3B adds only the `SUPER_ADMIN` Admin consumers for operational profiles and the service catalog. `/admin/facilities` joins all canonical local facilities to optional overlay profiles; `/admin/services` manages service records without aliases or mappings. Both routes call this service through `AdminService`, send original `updated_at` values for mutations, keep publish/expire separate from save, and never call Supabase or write audit rows directly. The canonical-facility reference projection maps local `floorId`/`kind` to its accepted `floor`/`category` Admin contract without exposing spatial edit fields.
 
+FS-3C adds the `SUPER_ADMIN` `/admin/service-aliases` and `/admin/facility-service-mappings` consumers. Both use `loadFacilityAdminReferences` and the existing alias/mapping CRUD and lifecycle methods through `AdminService`. Alias service identity and mapping facility/service identities are creation-only in the UI, original `updated_at` values protect every mutation, and the UI adds no direct Supabase/audit write. Mapping facility choices are limited to canonical facilities with operational profiles; configured rank remains stored administrative data and is not a recommendation algorithm or public consumer.
+
 ## CLARAToolService (future)
 Thin authorized wrapper that exposes only safe internal functions to CLARA.
 

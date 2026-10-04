@@ -8,24 +8,18 @@ import {
   ClipboardList,
   Clock3,
   GraduationCap,
-  KeySquare,
   LayoutGrid,
   Map,
   Megaphone,
   QrCode,
-  Settings,
   ShieldAlert,
   Tags,
   UserRound,
   Users,
 } from "lucide-react"
-import { Link, useLocation } from "react-router-dom"
-import SchoolLogo from "@/components/campus/SchoolLogo"
-import { focusRing } from "@/components/campus/ui"
-import { useAuth } from "@/contexts/AuthContext"
-import { cn } from "@/lib/utils"
 
-const NAV_GROUPS = [
+/** Admin sections: the registry the Admin navigation renders. Paths are the existing Admin routes. */
+export const NAV_GROUPS = [
   { label: "Overview", items: [{ label: "Overview", icon: LayoutGrid, path: "/admin", exact: true, superAdminOnly: true }] },
   {
     label: "Content",
@@ -41,6 +35,8 @@ const NAV_GROUPS = [
     items: [
       { label: "Facilities", icon: Building2, path: "/admin/facilities", superAdminOnly: true },
       { label: "Services", icon: Tags, path: "/admin/services", superAdminOnly: true },
+      { label: "Service Aliases", icon: Tags, path: "/admin/service-aliases", superAdminOnly: true },
+      { label: "Service Mappings", icon: Building2, path: "/admin/facility-service-mappings", superAdminOnly: true },
     ],
   },
   {
@@ -64,80 +60,21 @@ const NAV_GROUPS = [
       { label: "QR Checkpoints", icon: QrCode, path: "/admin/qr-checkpoints", developerOnly: true, superAdminOnly: true },
     ],
   },
-  {
-    label: "Coming later",
-    items: [
-      { label: "Map Management", icon: Map },
-      { label: "Users", icon: Users },
-      { label: "Roles", icon: KeySquare },
-      { label: "Emergency Settings", icon: ShieldAlert },
-      { label: "Settings", icon: Settings },
-    ],
-  },
 ]
 
-export default function AdminShell({ children }) {
-  const location = useLocation()
-  const auth = useAuth()
-  const isSuperAdmin = !auth.isAuthenticated || auth.roles?.some((role) => role.code === "SUPER_ADMIN")
-  const developerModeAvailable = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_VERIFICATION === "true"
+/** Planned Admin areas that have no route yet. They are listed, not linked. */
+export const ADMIN_COMING_LATER = ["Map Management", "Users", "Roles", "Emergency Settings", "Settings"]
 
+/**
+ * Admin page frame: the work area beside the Admin sidebar. It renders no
+ * navigation; `AppShell` renders the single Admin navigation
+ * (`AdminNavigation.jsx`). The bottom padding keeps the last row clear of the
+ * floating CLARA button, as on public pages.
+ */
+export default function AdminShell({ children }) {
   return (
     <div className="min-h-[calc(100dvh-var(--app-header-height))] bg-canvas">
-      <div className="mx-auto flex max-w-[var(--app-max-width)] flex-col gap-4 px-[var(--app-page-gutter)] py-5 lg:flex-row lg:py-6">
-        <aside aria-label="Admin navigation" className="lg:w-[var(--app-admin-rail-width)] lg:shrink-0">
-          <div className="ink-blueprint p-2.5 lg:sticky lg:top-[calc(var(--app-header-height)+1rem)] lg:max-h-[calc(100dvh-var(--app-header-height)-2rem)] lg:overflow-y-auto">
-            <div className="flex items-center gap-2.5 px-3 pb-3 pt-2">
-              <SchoolLogo size="sm" />
-              <div>
-                <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.06em] text-ink-soft">St. Clare College</p>
-                <p className="font-display text-lg font-semibold tracking-[-0.02em] text-ink">CampusNav Admin</p>
-              </div>
-            </div>
-
-            <div className="mb-2 rounded-2xl bg-fill px-3 py-2.5">
-              <p className="truncate text-xs font-semibold text-ink">{auth.profile?.display_name || "CampusNav Administrator"}</p>
-              <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.14em] text-ink-soft">{auth.roles?.map((role) => role.code).filter((code) => ["SUPER_ADMIN", "DEPARTMENT_ADMIN"].includes(code)).join(" · ") || "ADMIN"}</p>
-            </div>
-
-            <nav className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible [&::-webkit-scrollbar]:hidden">
-              {NAV_GROUPS.map((group) => (
-                <div key={group.label} className="contents lg:block lg:pt-2">
-                  <p className="hidden px-3 pb-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-ink-faint lg:block">{group.label}</p>
-                  {group.items.map(({ label, icon: Icon, path, exact, developerOnly, superAdminOnly }) => {
-                    if (developerOnly && !developerModeAvailable) return null
-                    if (superAdminOnly && !isSuperAdmin) return null
-                    const active = path && (exact ? location.pathname === path : location.pathname.startsWith(path))
-                    if (path) {
-                      return (
-                        <Link
-                          key={label}
-                          to={path}
-                          aria-current={active ? "page" : undefined}
-                          className={cn(
-                            "mb-1 flex min-h-10 shrink-0 items-center gap-2.5 rounded-xl px-3 py-2 text-[12px] font-medium transition-colors duration-150",
-                            active ? "bg-brand-700 text-on-ink" : "text-ink-mid hover:bg-brand-50 hover:text-brand-800",
-                            focusRing
-                          )}
-                        >
-                          <Icon className="h-4 w-4 shrink-0" aria-hidden="true" /> {label}
-                        </Link>
-                      )
-                    }
-                    return (
-                      <span key={label} aria-disabled="true" className="hidden items-center justify-between gap-2.5 rounded-xl px-3 py-2.5 text-[13px] font-medium text-ink-ghost lg:flex">
-                        <span className="flex items-center gap-2.5"><Icon className="h-4 w-4 shrink-0" aria-hidden="true" /> {label}</span>
-                        <span className="text-[8px] font-bold uppercase tracking-wide">Later</span>
-                      </span>
-                    )
-                  })}
-                </div>
-              ))}
-            </nav>
-          </div>
-        </aside>
-        <div className="min-w-0 flex-1">{children}</div>
-      </div>
+      <div className="mx-auto max-w-[var(--app-max-width)] px-[var(--app-page-gutter)] pb-24 pt-5 lg:pt-6">{children}</div>
     </div>
   )
 }

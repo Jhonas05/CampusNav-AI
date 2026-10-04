@@ -25,6 +25,8 @@ const AdminAudit = lazy(() => import('@/pages/admin/AdminAudit'));
 const AcademicAdminPage = lazy(() => import('@/pages/admin/AcademicAdminPage'));
 const FacilityAdminPage = lazy(() => import('@/pages/admin/FacilityAdminPage'));
 const ServiceAdminPage = lazy(() => import('@/pages/admin/ServiceAdminPage'));
+const ServiceAliasAdminPage = lazy(() => import('@/pages/admin/ServiceAliasAdminPage'));
+const FacilityServiceMappingAdminPage = lazy(() => import('@/pages/admin/FacilityServiceMappingAdminPage'));
 const PageNotFound = lazy(() => import('./lib/PageNotFound'));
 
 const academicAdminRoles = [APP_ROLES.DEPARTMENT_ADMIN, APP_ROLES.SUPER_ADMIN]
@@ -72,6 +74,8 @@ function App() {
               <Route path="/admin/qr-checkpoints" element={<ProtectedRoute requiredRoles={[APP_ROLES.SUPER_ADMIN]}><QRCheckpoints /></ProtectedRoute>} />
               <Route path="/admin/facilities" element={<ProtectedRoute requiredRoles={[APP_ROLES.SUPER_ADMIN]}><FacilityAdminPage /></ProtectedRoute>} />
               <Route path="/admin/services" element={<ProtectedRoute requiredRoles={[APP_ROLES.SUPER_ADMIN]}><ServiceAdminPage /></ProtectedRoute>} />
+              <Route path="/admin/service-aliases" element={<ProtectedRoute requiredRoles={[APP_ROLES.SUPER_ADMIN]}><ServiceAliasAdminPage /></ProtectedRoute>} />
+              <Route path="/admin/facility-service-mappings" element={<ProtectedRoute requiredRoles={[APP_ROLES.SUPER_ADMIN]}><FacilityServiceMappingAdminPage /></ProtectedRoute>} />
               <Route path="/admin/personnel" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="personnel" /></ProtectedRoute>} />
               <Route path="/admin/courses" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="courses" /></ProtectedRoute>} />
               <Route path="/admin/sections" element={<ProtectedRoute requiredRoles={academicAdminRoles}><AcademicAdminPage resource="sections" /></ProtectedRoute>} />

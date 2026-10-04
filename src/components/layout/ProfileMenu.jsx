@@ -1,7 +1,8 @@
 import { Accessibility, Bell, Bookmark, LayoutGrid, LogIn, LogOut, QrCode, UserRound } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { focusRing } from "@/components/campus/ui"
+import { usesAdminShell } from "@/components/layout/sidebar/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { getFacilityById } from "@/data/facilities"
 import { getFloorById } from "@/data/floors"
@@ -16,6 +17,9 @@ const plannedItems = [
 
 export default function ProfileMenu({ open, onClose }) {
   const auth = useAuth()
+  const location = useLocation()
+  // Inside the Admin shell the Admin navigation already lists these destinations.
+  const insideAdmin = usesAdminShell(location.pathname, auth)
   const menuRef = useRef(null)
   const [savedIds, setSavedIds] = useState(() => getSavedLocationIds())
   const developerModeAvailable = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_VERIFICATION === "true"
@@ -82,7 +86,7 @@ export default function ProfileMenu({ open, onClose }) {
       </section>
 
       <section aria-label="Preferences" className="border-b border-line px-2 py-2">
-        {auth.hasAnyRole([APP_ROLES.SUPER_ADMIN, APP_ROLES.DEPARTMENT_ADMIN]) && (
+        {!insideAdmin && auth.hasAnyRole([APP_ROLES.SUPER_ADMIN, APP_ROLES.DEPARTMENT_ADMIN]) && (
           <Link to={auth.hasRole(APP_ROLES.SUPER_ADMIN) ? "/admin" : "/admin/personnel"} onClick={onClose} className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-ink transition-colors hover:bg-fill ${focusRing}`}>
             <LayoutGrid className="h-4 w-4" aria-hidden="true" /> Admin CMS
             <span className="ml-auto rounded-full bg-ink px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-on-ink">Admin</span>
@@ -94,7 +98,7 @@ export default function ProfileMenu({ open, onClose }) {
             <span className="rounded-full border border-dashed border-line-strong px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-ink-ghost">Planned</span>
           </div>
         ))}
-        {developerModeAvailable && auth.hasRole(APP_ROLES.SUPER_ADMIN) && (
+        {!insideAdmin && developerModeAvailable && auth.hasRole(APP_ROLES.SUPER_ADMIN) && (
           <Link to="/admin/qr-checkpoints" onClick={onClose} className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-ink transition-colors hover:bg-fill ${focusRing}`}>
             <QrCode className="h-4 w-4" aria-hidden="true" /> QR Checkpoints
             <span className="ml-auto rounded-full bg-fill px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-ink-soft">Admin</span>

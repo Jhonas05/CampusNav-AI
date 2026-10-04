@@ -51,6 +51,32 @@ export const getAdminNavSection = (auth, options = {}) => {
   return { id: "admin", label: "Admin", items }
 }
 
+/** True for the Admin CMS (`/admin` and everything beneath it). */
+export const isAdminPath = (pathname) => pathname === "/admin" || pathname.startsWith("/admin/")
+
+/**
+ * Whether the Admin navigation replaces the global navigation. Inside
+ * `/admin/*` a signed-in administrator gets one navigation only, the Admin
+ * one; the global sidebar, rail, and drawer are not rendered beside it.
+ * Everyone else on an Admin URL (redirected to sign-in or shown "Access
+ * denied") keeps the public shell. Presentation only: `ProtectedRoute` and
+ * database RLS remain the authorization boundary.
+ * @param {string} pathname
+ * @param {{ hasAnyRole: (roles: string[]) => boolean }} auth
+ */
+export const usesAdminShell = (pathname, auth) => isAdminPath(pathname) && auth.hasAnyRole(ADMIN_ROLES)
+
+/**
+ * Whether the global sidebar is the icon rail: a remembered choice for the
+ * current width class wins; otherwise it is expanded on wide screens and the
+ * rail below that.
+ * @param {{ wide: boolean, prefs?: Record<string, any> }} state
+ */
+export const resolveSidebarCollapsed = ({ wide, prefs = {} }) => {
+  const remembered = prefs[wide ? "wide" : "compact"]
+  return typeof remembered === "boolean" ? remembered : !wide
+}
+
 export const isNavItemActive = (pathname, item) => {
   if (item.excludePrefix && pathname.startsWith(item.excludePrefix)) return false
   if (item.exact) return pathname === item.path

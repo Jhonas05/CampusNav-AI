@@ -57,7 +57,11 @@ The application-wide visual direction is governed by `DEC-UI-003` (left sidebar,
 
 ## UI freeze verification limits (`DEC-UI-005`)
 - automated UI evidence for the frozen pass and for its integration onto the Phase 4-FS-3B baseline is headless Chromium only; Firefox, Safari/WebKit, and physical phones/tablets have not been tested
-- Admin screens, including `/admin/facilities` and `/admin/services`, were verified with a QA-only network fixture (fake signed-in `SUPER_ADMIN` / `DEPARTMENT_ADMIN` session and sample rows outside the repository), not with live Supabase data or real accounts
+- Admin screens, including `/admin/facilities`, `/admin/services`, `/admin/service-aliases`, and `/admin/facility-service-mappings`, have deterministic/Vite fixture evidence rather than live Supabase data or real-account mutation evidence; real authenticated browser, Firefox, Safari/WebKit, and physical-device QA remain pending
+- the single Admin navigation shell (Admin sidebar, Admin menu drawer, "Back to CampusNav", and the theme, notification, and account controls in it) and the editor error placement were verified in headless Chromium with a QA network fixture; the owner's live authenticated `SUPER_ADMIN` reviews predate it and should be repeated
+- the Admin navigation lists about 20 sections for `SUPER_ADMIN`, so on laptop-height screens the section list scrolls inside the sidebar; it keeps its position and the current section in view
+- inside Admin there is no universal-search button; the Ctrl/⌘ K shortcut still opens it, and "Back to CampusNav" returns to the public pages where the search control is
+- `/admin/qr-checkpoints` is a developer-only tool (hidden and disabled in production builds unless `VITE_ENABLE_MAP_VERIFICATION=true`); its route requires a signed-in `SUPER_ADMIN`. It is not a production Admin feature
 - QR camera start/stop and error states were verified with a simulated camera; scanning a printed checkpoint with a real camera has not been re-verified since Phase 3
 - CLARA's behaviour with a phone's software keyboard was simulated, not observed on a device
 - in dark mode the 2D map inverts lightness while preserving hue, so rendered map colors differ from the light-mode hex values; the legend follows the same treatment

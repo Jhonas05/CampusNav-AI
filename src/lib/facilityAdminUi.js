@@ -26,6 +26,8 @@ export const FACILITY_ADMIN_CREATE_DEFAULTS = Object.freeze({
 const SAFE_ERROR_COPY = Object.freeze({
   VALIDATION_ERROR: "Review the highlighted record details and try again.",
   DUPLICATE_SERVICE_CODE: "That service code is already in use. Choose another stable code.",
+  DUPLICATE_ALIAS: "That alias already exists for the selected service.",
+  DUPLICATE_MAPPING: "That service is already mapped to the selected facility.",
   STALE_RECORD: "This record changed elsewhere. Your values were not overwritten; reload the stored version before saving again.",
   DELETE_CONFLICT: "This record is still referenced. Expire it or remove dependent records in a later authorized workflow.",
   DELETE_NOT_ALLOWED: "This record must be expired or cancelled instead of deleted.",
@@ -88,6 +90,24 @@ export const createFacilityAdminForm = (resource, record = null, identity = null
     }
   }
 
+  if (resource === FACILITY_ADMIN_RESOURCES.ALIASES) {
+    return {
+      ...base,
+      service_id: record?.service_id || identity?.service_id || "",
+      alias: record?.alias || "",
+    }
+  }
+
+  if (resource === FACILITY_ADMIN_RESOURCES.MAPPINGS) {
+    return {
+      ...base,
+      facility_id: record?.facility_id || identity?.facility_id || "",
+      service_id: record?.service_id || identity?.service_id || "",
+      recommendation_rank: record?.recommendation_rank ?? 100,
+      public_notes: record?.public_notes || "",
+    }
+  }
+
   return {
     ...base,
     code: record?.code || "",
@@ -120,6 +140,26 @@ export const buildFacilityAdminPayload = (resource, form, { operation = "create"
       public_contact_name: nullableText(form.public_contact_name),
       public_contact_email: nullableText(form.public_contact_email),
       public_contact_phone: nullableText(form.public_contact_phone),
+      ...common,
+    }
+  }
+
+  if (resource === FACILITY_ADMIN_RESOURCES.ALIASES) {
+    return {
+      ...(operation === "create" ? { service_id: Number(form.service_id) } : {}),
+      alias: String(form.alias || "").trim(),
+      ...common,
+    }
+  }
+
+  if (resource === FACILITY_ADMIN_RESOURCES.MAPPINGS) {
+    return {
+      ...(operation === "create" ? {
+        facility_id: form.facility_id,
+        service_id: Number(form.service_id),
+      } : {}),
+      recommendation_rank: Number(form.recommendation_rank ?? 100),
+      public_notes: nullableText(form.public_notes),
       ...common,
     }
   }

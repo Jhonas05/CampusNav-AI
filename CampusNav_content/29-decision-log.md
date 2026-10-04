@@ -150,7 +150,12 @@ Approved changes after the freeze:
   - Dashboard: sections render in the dashboard contract order. The map column stretches beside Priority Alerts and Navigation Shortcuts. Office Availability is a compact list.
   - Facilities: denser cards, with compact rows on phones.
   - 3D: portrait 3D framing no longer clips the building.
-  - This is a refinement within the frozen visual system: the same tokens, typography, components, and themes. It adds no new design direction or dependency, and changes no data, route, map, auth, or admin rule.
+- **4 Oct 2026 — Admin routes use a single Admin navigation shell (owner decision).** Reason: owner finding from the live authenticated `SUPER_ADMIN` review. Two navigation panels side by side inside the Admin CMS were redundant and made the work area cramped. An interim fix on the same day kept a compact global rail beside the Admin sidebar; the owner rejected it as still redundant, and this rule supersedes it. Evidence: `test:phase4-fs3c` and the browser QA recorded in `63` and `CHANGELOG.md` v3.42.
+  - Inside `/admin/*`, a signed-in administrator sees ONE left navigation panel: the Admin sidebar from 1024px, or one Admin menu drawer below that. The global sidebar, rail, drawer, and phone context bar are not rendered beside it.
+  - The Admin navigation provides, once each: the Admin identity, "Back to CampusNav" (to the Dashboard), the Admin sections, the theme control, notifications, and the account button with Sign Out.
+  - Public pages keep the global navigation exactly as frozen. `DEC-UI-003` (left sidebar as the global navigation) is unchanged for them.
+  - Defects fixed while doing this: two sections marked current on routes sharing a prefix, empty group headings for department administrators, the editor error rendered out of view, a save error left on the list after closing the editor, record actions with identical names, a second `main` landmark on the access-denied and session-check screens, an open drawer left locking the page when the window grows past its breakpoint, and the stale "authentication pending" label on QR Checkpoints.
+  - This is a refinement within the frozen visual system. It changes no route, guard decision, role boundary, data rule, or dependency.
 
 ## DEC-TITLE-001 — Formal proposal title vs current responsive implementation
 **Status:** REQUIRES THESIS/ADVISER ALIGNMENT, NOT A CODE BLOCKER

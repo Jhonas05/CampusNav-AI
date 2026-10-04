@@ -428,7 +428,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — FS-3A/FS-3B IMPLEMENTED_VERIFIED`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — FS-3A/FS-3B/FS-3C IMPLEMENTED_VERIFIED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -466,7 +466,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `IN_PROGRESS — FS-3A/FS-3B IMPLEMENTED_VERIFIED; FS-3C NOT_STARTED`
+3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `IN_PROGRESS — FS-3A/FS-3B/FS-3C IMPLEMENTED_VERIFIED`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
@@ -480,7 +480,19 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-2 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A and FS-3B are implemented and locally verified at their deterministic service/API and Admin UI boundaries below. Full FS-3 remains in progress; FS-3C is not started and requires separate authorization.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-2 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, and FS-3C are implemented and locally verified at their deterministic service/API and Admin UI boundaries below. Full FS-3 remains in progress: weekly-hours, dated-exception, and any separately authorized later Admin workflow remain outside FS-3C, and live authenticated browser mutation QA is not claimed.
+
+### Phase 4-FS-3C aliases and facility-service mappings Admin workflow — 4 October 2026
+
+**Status:** `IMPLEMENTED_VERIFIED`
+
+The existing Admin shell now exposes authenticated `SUPER_ADMIN`-only `/admin/service-aliases` and `/admin/facility-service-mappings` routes. The alias workflow lists, searches, creates, edits, publishes, expires, and guard-deletes aliases while keeping the service identity immutable after creation. The mapping workflow performs the same lifecycle operations for canonical-facility/service pairs, restricts facility choices to existing operational profiles, keeps both identities immutable after creation, and treats `recommendation_rank` only as administrator-maintained stored data. Alias, rank, notes, duplicate, and missing-reference validation remain in the existing `facilityAdminService` boundary.
+
+Both workflows reuse `facilityAdminService` through `AdminService` and the accepted reference loader; components make no direct Supabase or audit writes. New records remain draft, non-public, and pending verification until separate explicit lifecycle action. Original `updated_at` values protect edits, lifecycle actions, and deletes; stale failures retain unsaved form state and offer explicit stored-version reload. Provenance is visibly separate, demo/test sources remain non-official, duplicate errors have safe UI copy, and deletion remains confirmed and dependency-guarded.
+
+The dedicated FS-3C suite, updated FS-3A/FS-3B boundary assertions, the complete deterministic regression matrix including the 81-scenario FS-2C suite, route rendering, ESLint, typecheck, production build, and `git diff --check` pass under Node 22. Vite-rendered development fixtures cover both resource surfaces; no live authenticated mutation, official alias/mapping record, or remote database change is claimed. No schema, migration, RLS, provider, public Facilities/search/recommendation UI, status/spatial/navigation data, dependency, commit, push, merge, deployment, or FS-4 work changed. Full FS-3 remains in progress.
+
+Single Admin navigation shell (4 October 2026, owner decision after the live authenticated `SUPER_ADMIN` review): inside `/admin/*` an administrator sees one navigation only — the Admin sidebar from 1024px, or one Admin menu drawer below that — and the global sidebar or rail is not rendered beside it. "Back to CampusNav", theme, notifications, and account controls live in the Admin navigation. Verified defects in the Admin navigation, the shared facility-operations editor, and the navigation drawer were fixed, and the stale QR Checkpoints label was corrected. It is recorded under `DEC-UI-005`; evidence is in `63-implementation-status-registry.md`. FS-3C scope and status are unchanged.
 
 ### Phase 4-FS-3B implementation — 3 October 2026
 

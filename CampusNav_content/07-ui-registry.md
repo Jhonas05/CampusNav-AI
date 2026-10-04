@@ -75,8 +75,10 @@ Known page files include:
 Path: `src/components/layout/AppShell.jsx`
 
 Responsibilities:
-- Single application shell (`DEC-UI-003`): left sidebar, page content, floating CLARA
+- Single application shell (`DEC-UI-003`): one left navigation, page content, floating CLARA
 - Sidebar collapsed/expanded state, mobile drawer state, universal search, notification and account panels
+- Chooses the navigation for the route: the global `Sidebar` / `MobileSidebarDrawer` / `MobileTopBar` on public pages, or the Admin navigation (`AdminSidebar`, the Admin menu drawer, `AdminTopBar`) for a signed-in administrator inside `/admin/*` (`usesAdminShell` in `sidebar/navigation.js`). The two are never rendered together; while the session is still being checked on an Admin URL neither is shown
+- Notification panel, account menu, universal search, and CLARA are shared by both navigations
 - Provides `ClaraProvider` to every page
 
 ### `Sidebar` / `MobileSidebarDrawer`
@@ -86,6 +88,8 @@ Responsibilities:
 - Only global navigation: Home, Dashboard, Navigate, Facilities · Events, Alerts, Emergency · role-aware Admin
 - Search trigger, notifications trigger with unread count, collapse control, account area
 - Icon-rail tooltips; left drawer below 768px
+- `MobileSidebarDrawer` is also the Admin menu drawer (it takes the Admin navigation as its content and hides from 1024px); it closes itself when the window grows past its breakpoint
+- Not rendered inside `/admin/*` for administrators (see `AdminNavigation`)
 
 CLARA must not appear in this navigation. Emergency must remain one tap away.
 
@@ -161,7 +165,7 @@ Use the official St. Clare College logo tastefully in:
 - Sidebar header and mobile context bar
 - Login
 - Home hero
-- Admin shell
+- Admin navigation header (once: the Admin sidebar, or the Admin menu drawer)
 
 Do not repeat the logo everywhere.
 
@@ -362,14 +366,16 @@ UI rules:
 ## 9. Admin UI registry
 
 Known components/pages include:
-- `src/components/admin/AdminShell.jsx`
+- `src/components/admin/AdminShell.jsx` (Admin page frame and the Admin section registry `NAV_GROUPS`)
+- `src/components/admin/AdminNavigation.jsx` (`AdminNavigation`, `AdminSidebar`, `AdminTopBar`: the single Admin navigation, rendered by `AppShell`)
 - `src/components/admin/AdminContentEditor.jsx`
 - `src/pages/admin/AdminOverview.jsx`
 - `src/pages/admin/AdminContentPage.jsx`
 - `src/pages/admin/AdminAudit.jsx`
 - `src/pages/admin/QRCheckpoints.jsx`
 - `src/pages/admin/FacilityAdminPage.jsx` and `src/pages/admin/ServiceAdminPage.jsx` (`/admin/facilities`, `/admin/services`; `SUPER_ADMIN`; Phase 4-FS-3B)
-- `src/pages/admin/FacilityOperationsAdminPage.jsx` and `src/components/admin/FacilityOperationsEditor.jsx` (shared FS-3B list/editor; table at `xl` and wider, cards below)
+- `src/pages/admin/ServiceAliasAdminPage.jsx` and `src/pages/admin/FacilityServiceMappingAdminPage.jsx` (`/admin/service-aliases`, `/admin/facility-service-mappings`; `SUPER_ADMIN`; Phase 4-FS-3C)
+- `src/pages/admin/FacilityOperationsAdminPage.jsx` and `src/components/admin/FacilityOperationsEditor.jsx` (shared FS-3B/FS-3C list/editor for profiles, services, aliases, and mappings; table at `xl` and wider, cards below)
 
 Phase 8C.2 work may also include academic/personnel admin surfaces such as:
 - Personnel
@@ -382,9 +388,20 @@ Phase 8C.2 work may also include academic/personnel admin surfaces such as:
 - Check-ins
 - Availability Overrides
 
+Admin navigation (single Admin navigation shell; owner decision of 4 Oct 2026 under `DEC-UI-005`):
+- `AdminShell` is only the page frame (work area, gutters, bottom clearance for CLARA). It renders no navigation.
+- `AdminNavigation` is the only navigation inside `/admin/*`. `AppShell` renders it in the slot the global sidebar uses on public pages, so it persists across Admin pages and keeps its scroll position.
+- From 1024px (`AdminSidebar`): sticky, full height, at the viewport's left edge. Header with the logo and "CampusNav Admin"; "Back to CampusNav" (to `/dashboard`); the grouped sections (the list scrolls on its own only when taller than the viewport and keeps the current section in view); then the appearance control, notifications, and the account button with the current user and role.
+- Below 1024px (`AdminTopBar` and the Admin menu drawer): one "Open Admin menu" button and a "Back to CampusNav" action in the context bar. The drawer holds the same navigation without repeating "Back to CampusNav". There is no global menu button on Admin routes.
+- Landmarks: one `aside` named "CampusNav Admin" and exactly one `nav` named "Admin navigation".
+- Exactly one section is marked `aria-current="page"`; matching is by path segment (shared `isNavItemActive`), so `/admin/personnel-assignments` does not also mark Personnel.
+- Groups with no section available to the signed-in role are not rendered. Planned areas without a route are listed under "Coming later" as text, not as links.
+
 Admin design rules:
 - Same CampusNav identity and semantic theme tokens as the public app (`DEC-UI-003`/`DEC-UI-004`), in Light and Dark
-- Tables on desktop, stacked cards/rows on mobile; record actions must stay visible beside the sidebar rail and Admin section rail at 1280px
+- Tables on desktop, stacked cards/rows on mobile; record actions must stay visible beside the Admin sidebar at 1280px
+- Editor validation and save errors are shown in the sticky editor footer so they are visible wherever the form is scrolled; they are not copied onto the list behind the dialog
+- Record actions carry an accessible name that identifies the exact record (for a mapping: facility and service)
 - Strong empty/loading/error states
 - Prefer deactivate/cancel/end over destructive deletion when history matters
 - Audit remains read-only
@@ -496,7 +513,7 @@ Target layouts:
 Laptop application rules:
 - Use the wide application shell for data-heavy Home, Dashboard, Facilities, Navigate, Events, Emergency, CLARA, and Admin surfaces; keep focused flows such as Login and readable prose intentionally narrower.
 - Use approximately 16–24px practical gutters, compact page headers, and content-driven grids rather than tablet-like vertical stacking where horizontal space is available.
-- Facilities use a compact filter rail plus auto-fitting results grid when space permits. Admin uses a compact navigation rail and wider tables/forms. Navigate uses a compact control rail with the 2D/3D map as the dominant surface.
+- Facilities use a compact filter rail plus auto-fitting results grid when space permits. Admin uses its single Admin sidebar and wider tables/forms. Navigate uses a compact control rail with the 2D/3D map as the dominant surface.
 - Viewport-aware panels may use deliberate internal scrolling, but must not create unexplained nested or duplicate page scrollbars.
 
 Mobile rules:

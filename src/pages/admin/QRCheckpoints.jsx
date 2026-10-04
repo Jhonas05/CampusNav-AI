@@ -116,7 +116,7 @@ export default function QRCheckpoints() {
       </Link>
       <div className="mt-5 flex flex-col justify-between gap-5 md:flex-row md:items-end">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-700">Developer-only · authentication pending</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-700">Developer-only tool · SUPER_ADMIN sign-in required</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">QR Checkpoints</h1>
           <p className="mt-3 max-w-2xl text-ink-soft">Generate, verify, print, and save checkpoint labels. Payloads identify checkpoint IDs only.</p>
         </div>

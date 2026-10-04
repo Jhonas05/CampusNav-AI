@@ -50,6 +50,7 @@ export default function FacilityOperationsEditor({
   record,
   initialIdentity = null,
   facilities,
+  services = [],
   departments,
   open,
   busy,
@@ -59,6 +60,9 @@ export default function FacilityOperationsEditor({
 }) {
   const titleId = useId()
   const isProfile = resource === FACILITY_ADMIN_RESOURCES.PROFILES
+  const isService = resource === FACILITY_ADMIN_RESOURCES.SERVICES
+  const isAlias = resource === FACILITY_ADMIN_RESOURCES.ALIASES
+  const isMapping = resource === FACILITY_ADMIN_RESOURCES.MAPPINGS
   const [form, setForm] = useState(() => createFacilityAdminForm(resource, record, initialIdentity))
   const [formError, setFormError] = useState(null)
 
@@ -74,6 +78,10 @@ export default function FacilityOperationsEditor({
     () => facilities.find((facility) => facility.id === form.facility_id),
     [facilities, form.facility_id],
   )
+  const selectedService = useMemo(
+    () => services.find((service) => Number(service.id) === Number(form.service_id)),
+    [form.service_id, services],
+  )
   const nonOfficial = isNonOfficialFacilityAdminRecord(form)
   const setField = (name, value) => setForm((current) => ({ ...current, [name]: value }))
 
@@ -81,6 +89,9 @@ export default function FacilityOperationsEditor({
     event.preventDefault()
     setFormError(null)
     try {
+      if (!record && (isAlias || isMapping) && !form.service_id) {
+        throw Object.assign(new Error(isMapping && !form.facility_id ? "Select a facility profile and a service." : "Select a service."), { code: "VALIDATION_ERROR" })
+      }
       const payload = buildFacilityAdminPayload(resource, form, { operation: record ? "update" : "create" })
       await onSave(payload)
     } catch (error) {
@@ -88,9 +99,14 @@ export default function FacilityOperationsEditor({
     }
   }
 
-  const editorTitle = record
-    ? `Edit ${isProfile ? "Facility Profile" : "Service"}`
-    : `Create ${isProfile ? "Facility Profile" : "Service"}`
+  const resourceName = isProfile
+    ? "Facility Profile"
+    : isService
+      ? "Service"
+      : isAlias
+        ? "Service Alias"
+        : "Facility-Service Mapping"
+  const editorTitle = `${record ? "Edit" : "Create"} ${resourceName}`
 
   if (!open) return null
 
@@ -114,7 +130,16 @@ export default function FacilityOperationsEditor({
               </div>
             )}
 
-            <Group title="Content" description={isProfile ? "Canonical facility identity is selected once. Floor, name, geometry, routes, QR, and emergency relationships are never editable here." : "The service code is stable identity: lowercase kebab-case on creation and locked afterward."}>
+            <Group
+              title="Content"
+              description={isProfile
+                ? "Canonical facility identity is selected once. Floor, name, geometry, routes, QR, and emergency relationships are never editable here."
+                : isService
+                  ? "The service code is stable identity: lowercase kebab-case on creation and locked afterward."
+                  : isAlias
+                    ? "Select the service once. The service reference is immutable after creation, while the approved alias text remains editable."
+                    : "Select an existing operational profile and service once. Both references are immutable after creation; rank remains administrator-maintained data only."}
+            >
               {isProfile ? (
                 <Field label="Canonical facility" wide help={record ? "Facility identity is immutable after profile creation." : "Uses the existing local CampusNav facility registry."}>
                   <Select value={form.facility_id} onChange={(value) => setField("facility_id", value)} disabled={Boolean(record)} required>
@@ -122,25 +147,54 @@ export default function FacilityOperationsEditor({
                     {facilities.map((facility) => <option key={facility.id} value={facility.id}>{facility.name} · {facility.floor} · {facility.id}</option>)}
                   </Select>
                 </Field>
-              ) : (
+              ) : isService ? (
                 <Field label="Service code" help={record ? "Stable identity is immutable after creation." : "Required lowercase kebab-case, for example student-records."}>
                   <div className="relative">
                     <Input value={form.code} onChange={(value) => setField("code", value)} disabled={Boolean(record)} pattern="[a-z0-9]+(?:-[a-z0-9]+)*" required />
                     {record && <LockKeyhole className="pointer-events-none absolute right-3 top-5 h-4 w-4 text-ink-faint" aria-hidden="true" />}
                   </div>
                 </Field>
+              ) : isAlias ? (
+                <Field label="Service" wide help={record ? "Service identity is immutable after alias creation." : "Aliases may reference only an existing configured service."}>
+                  <Select value={form.service_id} onChange={(value) => setField("service_id", value)} disabled={Boolean(record)} required>
+                    <option value="">Select a service</option>
+                    {services.map((service) => <option key={service.id} value={service.id}>{service.name} · {service.code}</option>)}
+                  </Select>
+                </Field>
+              ) : (
+                <>
+                  <Field label="Canonical facility" help={record ? "Facility identity is immutable after mapping creation." : "Only facilities with an operational profile can be mapped."}>
+                    <Select value={form.facility_id} onChange={(value) => setField("facility_id", value)} disabled={Boolean(record)} required>
+                      <option value="">Select a facility profile</option>
+                      {facilities.map((facility) => <option key={facility.id} value={facility.id}>{facility.name} · {facility.floor} · {facility.id}</option>)}
+                    </Select>
+                  </Field>
+                  <Field label="Service" help={record ? "Service identity is immutable after mapping creation." : "Select an existing configured service."}>
+                    <Select value={form.service_id} onChange={(value) => setField("service_id", value)} disabled={Boolean(record)} required>
+                      <option value="">Select a service</option>
+                      {services.map((service) => <option key={service.id} value={service.id}>{service.name} · {service.code}</option>)}
+                    </Select>
+                  </Field>
+                </>
               )}
 
-              {!isProfile && <Field label="Service name"><Input value={form.name} onChange={(value) => setField("name", value)} required maxLength={160} /></Field>}
-              <Field label="Department">
+              {isService && <Field label="Service name"><Input value={form.name} onChange={(value) => setField("name", value)} required maxLength={160} /></Field>}
+              {(isProfile || isService) && <Field label="Department">
                 <Select value={form.department_id} onChange={(value) => setField("department_id", value)}>
                   <option value="">No department assigned</option>
                   {departments.filter((item) => item.active !== false).map((item) => <option key={item.id} value={item.id}>{item.code} — {item.name}</option>)}
                 </Select>
-              </Field>
-              <Field label="Description" wide>
+              </Field>}
+              {(isProfile || isService) && <Field label="Description" wide>
                 <textarea value={form.description ?? ""} onChange={(event) => setField("description", event.target.value)} rows={5} maxLength={4000} className={cn(fieldClass, "py-3")} />
-              </Field>
+              </Field>}
+
+              {isAlias && <Field label="Alias" wide help="Required; maximum 160 characters. Duplicate aliases for the same service are rejected case-insensitively."><Input value={form.alias} onChange={(value) => setField("alias", value)} required maxLength={160} /></Field>}
+
+              {isMapping && <>
+                <Field label="Recommendation rank" help="Administrator-maintained ordering metadata only; 1 through 1000."><Input type="number" value={form.recommendation_rank} onChange={(value) => setField("recommendation_rank", value)} required min={1} max={1000} step={1} /></Field>
+                <Field label="Public notes" wide><textarea value={form.public_notes ?? ""} onChange={(event) => setField("public_notes", event.target.value)} rows={4} maxLength={2000} className={cn(fieldClass, "py-3")} /></Field>
+              </>}
 
               {isProfile && <>
                 <Field label="Public contact name"><Input value={form.public_contact_name} onChange={(value) => setField("public_contact_name", value)} maxLength={160} /></Field>
@@ -186,17 +240,30 @@ export default function FacilityOperationsEditor({
               </p>
             )}
 
+            {isAlias && selectedService && (
+              <p className="rounded-xl bg-fill px-4 py-3 text-xs leading-relaxed text-ink-mid">
+                Service reference: <strong>{selectedService.name}</strong> · {selectedService.code}. This relationship is read-only after creation.
+              </p>
+            )}
+
+            {isMapping && selectedFacility && selectedService && (
+              <p className="rounded-xl bg-fill px-4 py-3 text-xs leading-relaxed text-ink-mid">
+                Mapping reference: <strong>{selectedFacility.name}</strong> · {selectedFacility.floor} → <strong>{selectedService.name}</strong> · {selectedService.code}. Facility and service identities are read-only after creation.
+              </p>
+            )}
+          </div>
+
+          <footer className="sticky bottom-0 border-t border-line bg-surface px-5 py-4 sm:px-6">
             {formError && (
-              <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border-[1.5px] border-ink bg-surface px-4 py-3 text-sm font-medium text-ink">
+              <div role="alert" className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border-[1.5px] border-ink bg-surface px-4 py-3 text-sm font-medium text-ink">
                 <span>{formError.message}</span>
                 {formError.code === "STALE_RECORD" && <button type="button" onClick={onReload} className={button.smallSecondary}><RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Reload stored version</button>}
               </div>
             )}
-          </div>
-
-          <footer className="sticky bottom-0 flex flex-col-reverse gap-2 border-t border-line bg-surface px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
-            <button type="button" disabled={busy} onClick={() => onOpenChange(false)} className={button.smallSecondary}>Cancel</button>
-            <button type="submit" disabled={busy} className={button.smallPrimary}><Save className="h-3.5 w-3.5" aria-hidden="true" />{busy ? "Saving…" : record ? "Save changes" : "Save draft"}</button>
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+              <button type="button" disabled={busy} onClick={() => onOpenChange(false)} className={button.smallSecondary}>Cancel</button>
+              <button type="submit" disabled={busy} className={button.smallPrimary}><Save className="h-3.5 w-3.5" aria-hidden="true" />{busy ? "Saving…" : record ? "Save changes" : "Save draft"}</button>
+            </div>
           </footer>
         </form>
       </section>

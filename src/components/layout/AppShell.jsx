@@ -5,9 +5,13 @@ import MobileTopBar from "./MobileTopBar"
 import NotificationPanel, { getUnseenNotificationCount } from "./NotificationPanel"
 import ProfileMenu from "./ProfileMenu"
 import MobileSidebarDrawer from "./sidebar/MobileSidebarDrawer"
+import { isAdminPath, resolveSidebarCollapsed, usesAdminShell } from "./sidebar/navigation"
 import Sidebar from "./sidebar/Sidebar"
+import { AdminNavigation, AdminSidebar, AdminTopBar } from "@/components/admin/AdminNavigation"
 import ClaraAssistant from "@/components/clara/ClaraAssistant"
 import { ClaraProvider } from "@/components/clara/ClaraContext"
+import { useAuth } from "@/contexts/AuthContext"
+import { cn } from "@/lib/utils"
 
 const SIDEBAR_PREF_KEY = "campusnav.sidebar.v1"
 const WIDE_QUERY = "(min-width: 1280px)"
@@ -30,11 +34,10 @@ const writePrefs = (prefs) => {
 }
 
 /**
- * Sidebar width state. Default: expanded on wide screens (>= 1280px),
- * icon rail below that and inside the Admin CMS (which has its own section
- * rail). A manual choice is remembered per width class.
+ * Global sidebar width state. Default: expanded on wide screens (>= 1280px),
+ * icon rail below that; a manual choice is remembered per width class.
  */
-const useSidebarCollapsed = (pathname) => {
+const useSidebarCollapsed = () => {
   const [wide, setWide] = useState(() => (typeof window === "undefined" ? true : window.matchMedia(WIDE_QUERY).matches))
   const [prefs, setPrefs] = useState(() => (typeof window === "undefined" ? {} : readPrefs()))
 
@@ -46,8 +49,7 @@ const useSidebarCollapsed = (pathname) => {
   }, [])
 
   const widthClass = wide ? "wide" : "compact"
-  const defaultCollapsed = !wide || pathname.startsWith("/admin")
-  const collapsed = typeof prefs[widthClass] === "boolean" ? prefs[widthClass] : defaultCollapsed
+  const collapsed = resolveSidebarCollapsed({ wide, prefs })
 
   const toggle = useCallback(() => {
     setPrefs((current) => {
@@ -101,12 +103,20 @@ const usePageEnter = (pathname) => {
 }
 
 /**
- * Application shell: left sidebar (rail or mobile drawer), page content, and
- * the global floating CLARA assistant. There is no top navigation bar.
+ * Application shell: one left navigation (sidebar, or a drawer on small
+ * screens), page content, and the global floating CLARA assistant. There is
+ * no top navigation bar.
+ *
+ * Public pages use the global navigation. Inside `/admin/*` a signed-in
+ * administrator gets the Admin navigation instead, in the same slot: the
+ * global sidebar, rail, and drawer are not rendered beside it. While the
+ * session is still being checked on an Admin URL neither is shown.
  */
 export default function AppShell() {
   const location = useLocation()
-  const [collapsed, toggleCollapsed] = useSidebarCollapsed(location.pathname)
+  const auth = useAuth()
+  const shell = !isAdminPath(location.pathname) ? "app" : auth.loading ? "pending" : usesAdminShell(location.pathname, auth) ? "admin" : "app"
+  const [collapsed, toggleCollapsed] = useSidebarCollapsed()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [openPanel, setOpenPanel] = useState(null)
@@ -140,6 +150,7 @@ export default function AppShell() {
   const closePanel = useCallback(() => setOpenPanel(null), [])
   const togglePanel = (panel) => setOpenPanel((current) => (current === panel ? null : panel))
   const openSearch = () => { setOpenPanel(null); setSearchOpen(true) }
+  const openDrawer = () => { setOpenPanel(null); setDrawerOpen(true) }
 
   const navigationProps = {
     unread,
@@ -152,8 +163,14 @@ export default function AppShell() {
   return (
     <ClaraProvider>
       <div
-        className="campusnav-ink flex min-h-dvh bg-canvas text-ink md:[--sidebar-width:var(--sidebar-width-expanded)] md:data-[sidebar=collapsed]:[--sidebar-width:var(--sidebar-width-collapsed)]"
-        data-sidebar={collapsed ? "collapsed" : "expanded"}
+        className={cn(
+          "campusnav-ink flex min-h-dvh bg-canvas text-ink",
+          shell === "app" && "md:[--sidebar-width:var(--sidebar-width-expanded)] md:data-[sidebar=collapsed]:[--sidebar-width:var(--sidebar-width-collapsed)]",
+          // The Admin context bar stays until the Admin sidebar appears at lg.
+          shell === "admin" && "[--app-header-height:3.5rem] lg:[--app-header-height:0rem] lg:[--sidebar-width:var(--sidebar-width-expanded)]"
+        )}
+        data-shell={shell}
+        data-sidebar={shell === "app" ? (collapsed ? "collapsed" : "expanded") : undefined}
       >
         <a
           href="#campusnav-main"
@@ -162,18 +179,36 @@ export default function AppShell() {
           Skip to content
         </a>
 
-        <Sidebar collapsed={collapsed} onToggleCollapse={toggleCollapsed} {...navigationProps} />
-        <MobileSidebarDrawer open={drawerOpen} onOpenChange={setDrawerOpen} {...navigationProps} />
+        {shell === "app" && <Sidebar collapsed={collapsed} onToggleCollapse={toggleCollapsed} {...navigationProps} />}
+        {shell === "app" && <MobileSidebarDrawer open={drawerOpen} onOpenChange={setDrawerOpen} {...navigationProps} />}
+        {shell === "admin" && <AdminSidebar {...navigationProps} />}
+        {shell === "admin" && (
+          <MobileSidebarDrawer open={drawerOpen} onOpenChange={setDrawerOpen} title="Admin menu" hideFrom="lg">
+            {({ close }) => (
+              <AdminNavigation
+                {...navigationProps}
+                showBack={false}
+                onNavigate={close}
+                onClose={close}
+                onToggleNotifications={() => { close(); togglePanel("notifications") }}
+                onToggleProfile={() => { close(); togglePanel("profile") }}
+              />
+            )}
+          </MobileSidebarDrawer>
+        )}
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <MobileTopBar
-            menuOpen={drawerOpen}
-            onOpenMenu={() => { setOpenPanel(null); setDrawerOpen(true) }}
-            onSearch={openSearch}
-            onToggleNotifications={() => togglePanel("notifications")}
-            notificationsOpen={openPanel === "notifications"}
-            unread={unread}
-          />
+          {shell === "app" && (
+            <MobileTopBar
+              menuOpen={drawerOpen}
+              onOpenMenu={openDrawer}
+              onSearch={openSearch}
+              onToggleNotifications={() => togglePanel("notifications")}
+              notificationsOpen={openPanel === "notifications"}
+              unread={unread}
+            />
+          )}
+          {shell === "admin" && <AdminTopBar menuOpen={drawerOpen} onOpenMenu={openDrawer} />}
           <main id="campusnav-main" tabIndex={-1} className="min-w-0 flex-1 outline-none">
             <div ref={pageRef} className="page-enter">
               <Outlet />

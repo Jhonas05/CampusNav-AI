@@ -198,11 +198,17 @@ try {
     React.createElement(MemoryRouter, { initialEntries: [path] }, component)
   )
   const overviewHtml = renderAdminPage("/admin", React.createElement(AdminOverview))
-  assert.match(overviewHtml, /CampusNav Admin/)
   assert.match(overviewHtml, /Published Announcements/)
   assert.match(overviewHtml, /Active Facility Advisories/)
-  assert.match(overviewHtml, /Audit Activity/)
-  assert.match(overviewHtml, /Coming later/)
+  assert.doesNotMatch(overviewHtml, /<nav|<aside/, "Admin pages render no navigation of their own")
+
+  // The Admin navigation is rendered once by the application shell, not by each Admin page.
+  const { AdminNavigation } = await vite.ssrLoadModule("/src/components/admin/AdminNavigation.jsx")
+  const adminNavigationHtml = renderAdminPage("/admin", React.createElement(AdminNavigation))
+  assert.match(adminNavigationHtml, /CampusNav Admin/)
+  assert.match(adminNavigationHtml, /Audit Activity/)
+  assert.match(adminNavigationHtml, /Coming later/)
+  assert.match(adminNavigationHtml, /Back to CampusNav/)
 
   const announcementAdminHtml = renderAdminPage("/admin/announcements", React.createElement(AdminContentPage, { resource: "announcements" }))
   assert.match(announcementAdminHtml, /Announcements/)

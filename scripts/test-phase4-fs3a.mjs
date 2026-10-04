@@ -258,7 +258,7 @@ const [facilityAdminSource, adminSource, facilityServiceSource, appSource, packa
 assert.doesNotMatch(facilityAdminSource, /getSupabaseClient|service[_-]?role|secret[_-]?key|VITE_|\.rpc\(/i, "facility mutations use only an injected browser-safe client")
 assert.doesNotMatch(facilityAdminSource, /\.from\(["']audit_logs["']\).*\.(?:insert|update|delete)/is, "facility Admin cannot forge audit rows")
 assert.doesNotMatch(facilityAdminSource, /facility_advisories/, "FS-3A does not duplicate advisory mutations")
-assert.doesNotMatch(appSource, /\/admin\/(?:service-aliases|facility-service-mappings|facility-hours|facility-hour-exceptions)/, "later aliases, mappings, hours, and exception Admin routes remain absent")
+assert.doesNotMatch(appSource, /\/admin\/(?:facility-hours|facility-hour-exceptions)/, "later hours and exception Admin routes remain absent")
 assert.match(packageSource, /test:phase4-fs3a/)
 for (const method of ["getFacilityHours", "getFacilityStatus", "getFacilitiesByService", "getServices"]) assert.match(facilityServiceSource, new RegExp(method))
 assert.match(adminSource, /createFacilityAdminService/)

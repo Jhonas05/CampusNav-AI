@@ -29,7 +29,7 @@ export function SidebarHeader(props) {
   const { collapsed, onNavigate, onClose = null } = props
   return (
     <div className={cn("flex h-16 shrink-0 items-center", collapsed ? "justify-center px-2" : "justify-between gap-2 pl-4 pr-3")}>
-      <Link to="/" onClick={onNavigate} aria-label="CampusNav home" className={cn("flex min-w-0 items-center gap-2.5 rounded-xl", ring)}>
+      <Link to="/" onClick={onNavigate} aria-label="CampusNav home" className={cn("flex min-w-0 items-center gap-2.5 rounded-xl", collapsed && "h-11 w-11 justify-center", ring)}>
         <SchoolLogo size="sm" />
         {!collapsed && (
           <span className="sidebar-label min-w-0 leading-tight">

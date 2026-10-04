@@ -1,5 +1,55 @@
 # CampusNav Content Pack — Changelog
 
+## v3.42 — 4 October 2026
+
+Implemented and locally verified **Phase 4-FS-3C — Service Aliases and Facility-Service Mappings Admin UI** without completing full FS-3 or starting FS-4.
+
+### Implementation
+- added lazy `SUPER_ADMIN` routes and Admin navigation for `/admin/service-aliases` and `/admin/facility-service-mappings`
+- extended the shared facility-operations list/editor to support alias and mapping list/search/create/edit/publish/expire/guarded-delete workflows through the existing `AdminService` / `facilityAdminService` boundary
+- loaded accepted service, operational-profile, and canonical-facility references; mapping facilities are limited to profiles that exist, and service/facility identities become read-only after creation
+- preserved draft/non-public/pending defaults, explicit lifecycle actions, original `updated_at` stale tokens with explicit reload, confirmed deletion, separated provenance/demo controls, and normalized duplicate-alias/mapping messages
+- kept recommendation rank as stored administrator data only and added no public search, alias matching, ranking, or recommendation consumer
+
+### Verification and scope
+- added `test:phase4-fs3c` for routes/RBAC, CRUD wiring, references, validation, immutable identities, lifecycle, stale/delete handling, provenance, safe errors, security/data/spatial boundaries, accessibility/responsive structure, and Vite-rendered development fixtures
+- reconciled only the now-obsolete future-route exclusions in FS-3A/FS-3B; the full deterministic matrix, all 81 FS-2C scenarios, route rendering, ESLint, typecheck, production build, and `git diff --check` pass under Node 22
+- retained the existing approximately 880 kB lazy 3D chunk advisory; live authenticated browser mutation, cross-browser/device QA, and official institutional alias/mapping evidence are not claimed
+- changed no schema, migration, RLS, provider, database row, remote Supabase project, public Facilities UI, status/spatial/navigation behavior, dependency, commit, push, merge, deployment, or FS-4 work
+- classified FS-3C as `IMPLEMENTED_VERIFIED`; full FS-3 remains `IN_PROGRESS`
+
+### Single Admin navigation shell (owner decision after the authenticated review)
+The owner's live `SUPER_ADMIN` review found two navigation panels side by side inside the Admin CMS. An interim fix kept a compact global rail beside the Admin sidebar; the owner rejected it as still redundant. The final rule, recorded under `DEC-UI-005`: **Admin routes use a single Admin navigation shell.** It changes no route, guard decision, role boundary, schema, or dependency.
+
+- **Root cause of the original report:** the global sidebar's Admin default (icon rail) applied only when no sidebar preference had been stored, so anyone who had expanded the sidebar got the full global sidebar beside the Admin sidebar.
+- **Final structure:** for a signed-in administrator inside `/admin/*`, `AppShell` renders the Admin navigation instead of the global sidebar, rail, drawer, and phone context bar. They are never rendered together. Public pages are unchanged.
+  - From 1024px: the Admin sidebar at the viewport's left edge, then the work area.
+  - Below 1024px: an Admin context bar with one "Admin menu" button and "Back to CampusNav"; the sections open in one drawer.
+- **Admin navigation content, once each:** logo and "CampusNav Admin"; "Back to CampusNav" (to the Dashboard); all existing Admin sections; the Light/Dark/System control; notifications; the account button with the current user and role, and Sign Out in its menu.
+- **Code:** `src/components/admin/AdminNavigation.jsx` is new (`AdminNavigation`, `AdminSidebar`, `AdminTopBar`). `AdminShell.jsx` is now only the page frame plus the section registry. `MobileSidebarDrawer` is reused for the Admin menu.
+- **Work-area width** with a remembered expanded sidebar (original → final): 876 → 1112px at 1440, 802 → 1038px at 1366, 719 → 955px at 1280, 475 → 711px at 1024, and 516 → 780px at 820. The record tables no longer scroll sideways at 1280–1366px.
+- **QR Checkpoints:** the page said "Developer-only · authentication pending" although the route has required a signed-in `SUPER_ADMIN` since it was protected. It now reads "Developer-only tool · SUPER_ADMIN sign-in required". The developer-only build restriction is unchanged.
+
+Defects fixed, each reproduced before the fix:
+- two Admin sections marked current on routes sharing a prefix (`/admin/personnel-assignments` and `/admin/personnel-availability` also marked Personnel);
+- empty group headings (Overview, Content, Facilities, System) shown to department administrators;
+- below 1024px the Admin sections were a sideways-scrolling strip with a hidden scrollbar, with the current section off screen;
+- the editor's validation or save error rendered below the visible part of the dialog; it is now in the sticky footer;
+- a failed save copied onto the list behind the dialog and left there after Cancel;
+- record actions with identical accessible names when two mappings share a facility;
+- a missing service selection reported as "Service is invalid."; it now reads "Select a service.";
+- a second `main` landmark on the access-denied and session-check screens;
+- a navigation drawer left open when the window grew past its breakpoint kept the page scroll-locked and hidden from assistive technology (public and Admin drawers).
+
+Cleanup: the interim rail lock and its route-specific sidebar rule were removed; the unused `--app-admin-rail-width` token was removed; the alias row no longer repeats the service under its title; the table and card use the same relationship label; the mapping editor no longer re-filters facilities the page already filtered; the account menu no longer lists Admin shortcuts while inside Admin. No file was deleted.
+
+Verification:
+- `test:phase4-fs3c` gains guards for the single-navigation rule, one current section, registered Admin routes, footer error placement, per-record action names, and the QR Checkpoints wording. `test:render` now reads the Admin navigation from the component that owns it. npm matrix: 25/25 steps pass (22 deterministic suites including all 81 FS-2C scenarios, ESLint, typecheck, production build).
+- Headless Chromium with a QA network fixture, never the live project: Admin QA 3351/3351 (9 Admin routes × 8 widths × Light/Dark layout checks, Admin menu at 4 widths, desktop keyboard, public-shell preservation, FS-3C workflows at 4 viewports, role guards).
+- Public regression: responsive matrix 448/448, interactions 144/144, map QA 59/59, layering 4/4, Home search 18/18.
+- Bundle: entry chunk 483.5 kB / 147.6 kB gzip (about +11 kB / +2.2 kB gzip, because the Admin navigation now loads with the application shell); CSS 117.4 kB; the lazy 3D chunk (879.7 kB, existing advisory) and QR decoder (415.3 kB) are unchanged.
+- Not re-verified: the owner's live authenticated review predates this change; Firefox, Safari/WebKit, and physical devices remain untested.
+
 ## v3.41 — 4 October 2026
 
 **Owner visual refinement** of Home, Dashboard, and Facilities on `wip/ui-freeze-integration`. This is a post-freeze refinement recorded under `DEC-UI-005`. It is presentation only, stays within the frozen visual system (tokens, typography, components, Light/Dark), adds no dependency, and does not start FS-3C.

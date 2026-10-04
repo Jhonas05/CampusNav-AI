@@ -12,8 +12,14 @@ CampusNav uses the owner-requested **monochrome application shell** defined by `
 - avoid generic LMS/admin-template appearance and any imitation of third-party brand assets
 
 ## Global layout
-- **Left sidebar** is the only global navigation: brand, universal search, `Main` (Home, Dashboard, Navigate, Facilities), `Campus` (Events, Alerts, Emergency), role-aware `Admin`, then notifications, collapse control, and the account area
-- expanded (about 264px) by default at >= 1280px; icon rail (about 76px) with tooltips below that and inside the Admin CMS; the user's choice is remembered per width class
+- **Left sidebar** is the only global navigation on public pages: brand, universal search, `Main` (Home, Dashboard, Navigate, Facilities), `Campus` (Events, Alerts, Emergency), role-aware `Admin`, then notifications, collapse control, and the account area
+- expanded (about 264px) by default at >= 1280px and an icon rail (about 76px) with tooltips below that; the user's choice is remembered per width class
+- **Admin routes use a single Admin navigation shell** (owner decision, 4 Oct 2026, recorded under `DEC-UI-005`). For a signed-in administrator inside `/admin/*`, the global sidebar, rail, drawer, and phone context bar are not rendered; the Admin navigation takes their place, so there is only one left navigation panel:
+  - from 1024px: the Admin sidebar (about 264px, at the viewport's left edge, full height), then the Admin work area;
+  - below 1024px: an Admin context bar with one "Admin menu" button and a "Back to CampusNav" action; the menu is a left drawer with the same focus trap, Escape, and focus-return behaviour as the public drawer;
+  - the Admin navigation holds, once each: the logo and "CampusNav Admin", "Back to CampusNav" (to the Dashboard), the Admin sections, the Light/Dark/System control, notifications, and the account button (current user and role, with Sign Out in its menu);
+  - public pages keep the global navigation unchanged, and the remembered sidebar choice is not touched;
+  - anyone who is not an administrator on an Admin URL (sent to sign-in, or shown "Access denied") keeps the public shell
 - below 768px the sidebar is a left slide-out drawer opened from a compact context bar (menu, brand, search, notifications); the drawer traps focus, closes on Escape, overlay tap, the close button, and route selection, and returns focus to the menu button
 - no horizontal top navigation and no bottom tab bar
 - **CLARA** is a floating assistant in the lower-right corner on every page: a 56px circle (an "Ask CLARA" pill on wide screens), opening a non-modal popup above the trigger, or a near full-width bottom sheet on phones. It never navigates away from the current page
