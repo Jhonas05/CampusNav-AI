@@ -1,28 +1,35 @@
-import { BadgeCheck, BookOpen, CalendarClock, CircleDashed, CircleDot, Clock3, Inbox, MessagesSquare, MinusCircle } from "lucide-react"
+import { BadgeCheck, BookOpen, CalendarClock, CircleAlert, CircleDashed, CircleDot, Clock3, Inbox, MessagesSquare, MinusCircle, TriangleAlert } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 /**
- * CampusNav visual language.
- * CampusNav Ink uses neutral architectural surfaces, CampusNav green for
- * primary actions and selected states, and emergency red for urgent meaning.
- * Map/status colors remain controlled and are never the only signal.
+ * CampusNav visual language (DEC-UI-003).
+ * Monochrome system: white and off-white surfaces, near-black ink, and a
+ * gray ramp. Meaning is carried by fill, border weight, dashes, icons, and
+ * type weight — never by hue. Map-canvas wayfinding colors are governed
+ * separately by `MAP_COLORS`.
  */
 
-export const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-700 focus-visible:ring-offset-2"
+export const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2"
+
+const buttonBase = "inline-flex items-center justify-center font-body font-medium tracking-[-0.005em] transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-35 disabled:active:scale-100 motion-reduce:transform-none"
+const buttonLarge = "min-h-11 gap-2 rounded-xl px-5 text-sm"
+const buttonSmall = "min-h-9 gap-1.5 rounded-[10px] px-3.5 text-[13px]"
 
 export const button = {
-  primary: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded bg-brand-700 px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-white transition-colors duration-200 hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  secondary: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded border border-[#D4D4D7] bg-white px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-[#1D1F20] transition-colors duration-200 hover:border-brand-700 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  outline: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded border border-brand-700 bg-white px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-brand-700 transition-colors duration-200 hover:bg-brand-50 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  danger: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded bg-[#B3261E] px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-white transition-colors duration-200 hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  dangerOutline: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded border border-[#B3261E] bg-white px-6 font-heading text-sm font-bold uppercase tracking-[0.08em] text-[#B3261E] transition-colors duration-200 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  ghost: cn("inline-flex min-h-11 items-center justify-center gap-2 rounded px-4 font-heading text-sm font-bold uppercase tracking-[0.08em] text-[#5D5D60] transition-colors duration-200 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  smallPrimary: cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded bg-brand-700 px-4 font-heading text-xs font-bold uppercase tracking-[0.08em] text-white transition-colors duration-200 hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
-  smallSecondary: cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded border border-[#D4D4D7] bg-white px-4 font-heading text-xs font-bold uppercase tracking-[0.08em] text-[#1D1F20] transition-colors duration-200 hover:border-brand-700 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-30", focusRing),
+  primary: cn(buttonBase, buttonLarge, "bg-ink text-on-ink hover:bg-ink-strong", focusRing),
+  secondary: cn(buttonBase, buttonLarge, "border border-line-strong bg-surface text-ink hover:border-ink-faint hover:bg-subtle", focusRing),
+  outline: cn(buttonBase, buttonLarge, "border-[1.5px] border-ink bg-surface text-ink hover:bg-fill", focusRing),
+  // Urgent/destructive: same ink as primary, with a double rule so it reads as
+  // a distinct, heavier control without relying on hue.
+  danger: cn(buttonBase, buttonLarge, "bg-ink-strong font-semibold text-on-ink ring-2 ring-ink-strong ring-offset-2 ring-offset-white hover:bg-ink", focusRing),
+  dangerOutline: cn(buttonBase, buttonLarge, "border-2 border-ink-strong bg-surface font-semibold text-ink-strong hover:bg-fill", focusRing),
+  ghost: cn(buttonBase, buttonLarge, "px-4 text-ink-soft hover:bg-fill-strong hover:text-ink", focusRing),
+  smallPrimary: cn(buttonBase, buttonSmall, "bg-ink text-on-ink hover:bg-ink-strong", focusRing),
+  smallSecondary: cn(buttonBase, buttonSmall, "border border-line-strong bg-surface text-ink hover:border-ink-faint hover:bg-subtle", focusRing),
 }
 
-export const card = "rounded-[7px] border border-[#D4D4D7] bg-white"
-export const cardHover = "transition-colors duration-200 hover:border-[#98989B] hover:shadow-[0_8px_24px_rgba(29,31,32,0.06)] motion-reduce:transition-none"
+export const card = "rounded-[18px] border border-line bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+export const cardHover = "transition-[border-color,box-shadow,transform] duration-200 hover:border-line-strong hover:shadow-[0_6px_20px_rgba(0,0,0,0.06)] motion-reduce:transition-none"
 
 /** @param {Record<string, any>} props */
 export function BlueprintPanel(props) {
@@ -49,8 +56,8 @@ export function PageHeader(props) {
     <header className={cn("flex flex-col justify-between gap-4 md:flex-row md:items-end", className)}>
       <div className="max-w-3xl">
         {eyebrow && <InkKicker>{eyebrow}</InkKicker>}
-        <h1 className="mt-2 font-display text-4xl font-extrabold uppercase leading-[0.94] tracking-[0.01em] text-[#1D1F20] sm:text-5xl xl:text-[3.5rem]">{title}</h1>
-        {lead && <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-[#6E6E73] sm:text-base">{lead}</p>}
+        <h1 className="mt-1.5 font-display text-[1.75rem] font-semibold leading-tight tracking-[-0.02em] text-ink sm:text-[2.125rem]">{title}</h1>
+        {lead && <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-ink-soft sm:text-[15px]">{lead}</p>}
       </div>
       {actions && <div className="shrink-0">{actions}</div>}
     </header>
@@ -64,8 +71,8 @@ export function SectionHeader(props) {
     <div className="flex flex-col justify-between gap-2.5 sm:flex-row sm:items-end">
       <div>
         {eyebrow && <InkKicker>{eyebrow}</InkKicker>}
-        <Heading className="mt-1 font-display text-[1.75rem] font-bold uppercase leading-none tracking-[0.02em] text-[#1D1F20]">{title}</Heading>
-        {description && <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-[#6E6E73]">{description}</p>}
+        <Heading className="mt-1 font-display text-[1.375rem] font-semibold leading-tight tracking-[-0.02em] text-ink">{title}</Heading>
+        {description && <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-ink-soft">{description}</p>}
       </div>
       {action}
     </div>
@@ -78,16 +85,18 @@ const prettify = (value) => String(value || "")
   .replace(/(^|\s)\S/g, (character) => character.toUpperCase())
 
 /**
- * Status registry. `tone` picks the treatment:
- * positive — active/confirmed (green) · attention — closing/temporary (amber) ·
- * scheduled — planned states (blue) · muted — inactive (gray) · dashed — pending/unverified.
+ * Status registry. `tone` picks a monochrome treatment; every status also has
+ * its own icon and label, so state never depends on color:
+ * positive — solid ink fill (active/confirmed) · attention — heavy ink border
+ * (closing/temporary) · scheduled — soft gray fill with a hairline (planned) ·
+ * muted — flat gray, no border (inactive) · dashed — pending/unverified.
  */
 const STATUS_STYLES = {
-  positive: "border border-green-700 bg-green-700 text-white",
-  attention: "border border-amber-300 bg-amber-50 text-amber-800",
-  scheduled: "border border-blue-200 bg-blue-50 text-blue-700",
-  muted: "border border-transparent bg-[#F0F0F2] text-[#6E6E73]",
-  dashed: "border border-dashed border-[#86868B] bg-white text-[#6E6E73]",
+  positive: "border border-ink bg-ink text-on-ink",
+  attention: "border-[1.5px] border-ink bg-surface text-ink",
+  scheduled: "border border-line-strong bg-fill text-ink-mid",
+  muted: "border border-transparent bg-fill-strong text-ink-soft",
+  dashed: "border border-dashed border-ink-faint bg-surface text-ink-soft",
 }
 
 const STATUS_REGISTRY = {
@@ -119,7 +128,7 @@ export function StatusBadge(props) {
   const entry = STATUS_REGISTRY[status] || { label: prettify(status), tone: "scheduled", icon: null }
   const Icon = entry.icon
   return (
-    <span className={cn("inline-flex min-h-7 items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em]", STATUS_STYLES[entry.tone], className)}>
+    <span className={cn("inline-flex min-h-7 items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.06em]", STATUS_STYLES[entry.tone], className)}>
       {Icon && <Icon className="h-3 w-3" aria-hidden="true" />}
       {label || entry.label}
     </span>
@@ -127,17 +136,20 @@ export function StatusBadge(props) {
 }
 
 const PRIORITY_REGISTRY = {
-  URGENT: "border border-red-700 bg-red-700 text-white",
-  IMPORTANT: "border border-amber-300 bg-amber-50 text-amber-800",
-  NORMAL: "border border-[#B8B8BD] bg-white text-[#48484A]",
-  INFORMATIONAL: "border border-dashed border-[#86868B] bg-white text-[#6E6E73]",
+  URGENT: { className: "border border-ink-strong bg-ink-strong text-on-ink", icon: TriangleAlert },
+  IMPORTANT: { className: "border-[1.5px] border-ink bg-surface text-ink", icon: CircleAlert },
+  NORMAL: { className: "border border-line-strong bg-surface text-ink-mid", icon: null },
+  INFORMATIONAL: { className: "border border-dashed border-ink-faint bg-surface text-ink-soft", icon: null },
 }
 
 /** @param {Record<string, any>} props */
 export function PriorityBadge(props) {
   const { priority, className } = props
+  const entry = PRIORITY_REGISTRY[priority] || PRIORITY_REGISTRY.NORMAL
+  const Icon = entry.icon
   return (
-    <span className={cn("inline-flex min-h-7 items-center rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em]", PRIORITY_REGISTRY[priority] || PRIORITY_REGISTRY.NORMAL, className)}>
+    <span className={cn("inline-flex min-h-7 items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.06em]", entry.className, className)}>
+      {Icon && <Icon className="h-3 w-3" aria-hidden="true" />}
       {prettify(priority)}
     </span>
   )
@@ -146,20 +158,20 @@ export function PriorityBadge(props) {
 /** @param {Record<string, any>} props */
 export function Chip(props) {
   const { children, className } = props
-  return <span className={cn("inline-flex min-h-7 items-center rounded-full border border-[#B8B8BD] bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-[#48484A]", className)}>{children}</span>
+  return <span className={cn("inline-flex min-h-7 items-center rounded-full border border-line-strong bg-surface px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-ink-mid", className)}>{children}</span>
 }
 
 /** @param {Record<string, any>} props */
 export function EmptyState(props) {
   const { icon: Icon = Inbox, title, message = null, action = null, className } = props
   return (
-    <div role="status" className={cn("flex min-h-36 flex-col items-center justify-center gap-2.5 rounded-2xl border border-dashed border-[#C7C7CC] bg-[#FAFAFA] p-5 text-center", className)}>
-      <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-brand-100 bg-brand-50">
-        <Icon className="h-5 w-5 text-brand-700" aria-hidden="true" />
+    <div role="status" className={cn("flex min-h-36 flex-col items-center justify-center gap-2.5 rounded-[18px] border border-dashed border-line-strong bg-subtle p-5 text-center", className)}>
+      <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface">
+        <Icon className="h-5 w-5 text-ink-soft" aria-hidden="true" />
       </div>
       <div>
-        <p className="text-sm font-semibold text-[#1D1D1F]">{title}</p>
-        {message && <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-[#6E6E73]">{message}</p>}
+        <p className="text-sm font-semibold text-ink">{title}</p>
+        {message && <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-ink-soft">{message}</p>}
       </div>
       {action}
     </div>
@@ -169,5 +181,5 @@ export function EmptyState(props) {
 /** @param {Record<string, any>} props */
 export function Skeleton(props) {
   const { className } = props
-  return <div aria-hidden="true" className={cn("animate-pulse rounded-2xl bg-[#E8E8ED] motion-reduce:animate-none", className)} />
+  return <div aria-hidden="true" className={cn("animate-pulse rounded-xl bg-fill-strong motion-reduce:animate-none", className)} />
 }

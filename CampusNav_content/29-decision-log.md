@@ -64,7 +64,7 @@ Rules:
 - if owner/adviser chooses strict grayscale later, update this decision and both UI documents together
 
 ## DEC-UI-002 — CampusNav Ink is the approved application-wide visual baseline
-**Status:** OWNER APPROVED — 15 Sep 2026
+**Status:** SUPERSEDED IN PART BY DEC-UI-003 (application chrome) — originally OWNER APPROVED 15 Sep 2026
 
 CampusNav adopts the CampusNav Ink / architectural-blueprint visual direction as the canonical presentation baseline for the existing application.
 
@@ -80,6 +80,77 @@ Rules:
 This decision supersedes DEC-UI-001 only where the earlier decision limited color and architectural visual language to the map canvas or implied a strict grayscale / Apple-only application shell. DEC-UI-001 remains historical evidence for the rule that color is never the only carrier of meaning.
 
 `CampusNav-Ink-all-pages.html` is a visual and interaction-composition reference only. It is not production source, runtime logic, institutional truth, routing data, backend policy, or authorization evidence. Its inline styles, bundled scripts, embedded fonts, and static controls are not canonical implementation assets.
+
+## DEC-UI-003 — Monochrome application shell, left sidebar navigation, floating CLARA
+**Status:** OWNER REQUESTED — 3 Oct 2026 (owner redesign brief "Left Sidebar + Floating CLARA Assistant"); approved as part of the frozen baseline by DEC-UI-005
+
+The owner's redesign brief replaces the CampusNav Ink application chrome and the top navigation with the following baseline.
+
+Rules:
+- global navigation is a left sidebar: expanded on wide screens (>= 1280px), an icon rail on laptop/tablet widths and inside the Admin CMS, and a left slide-out drawer below 768px; there is no horizontal top navigation bar and no bottom tab bar
+- existing routes are unchanged; `/clara` remains a valid URL that opens the floating assistant and returns to Home
+- CLARA is not a navigation entry or a page; it is one global floating assistant (lower-right trigger plus a non-modal chat popup / mobile sheet) reused by every "Ask CLARA" action
+- application chrome is strictly black / white / grayscale; state is carried by fill, border weight, dashes, icons, labels, and type weight, never by hue (including emergency and destructive controls, which use the heaviest ink treatment)
+- typography uses the system UI stack; no font files are bundled
+- surfaces use soft radii (roughly 10–14px controls, 16–24px cards/panels), hairline borders, and subtle shadows; blueprint registration marks and the grid-paper hero are retired
+- **map-canvas wayfinding colors are unchanged**: `MAP_COLORS` and the category `map` tints inside the 2D/3D viewport and its legend still follow the semantic map convention from DEC-UI-001/002 (route, destination, emergency path, exit, equipment), each reinforced by shape, pattern, or label. Converting the map canvas itself to grayscale is a separate owner decision because it affects wayfinding and emergency legibility
+- routing, pathfinding, QR positioning, emergency logic, authentication/RBAC, providers, and data are untouched; CLARA still has no model, API key, or independent routing
+
+This decision supersedes DEC-UI-002 for application chrome (color, typography, geometry, shell). DEC-UI-002 remains the record for map-canvas color semantics and the rule that color is never the only carrier of meaning.
+
+## DEC-UI-004 — Light/Dark/System theme on semantic tokens, and the CampusNav motion system
+**Status:** OWNER REQUESTED — 3 Oct 2026 (owner continuation brief "Light/Dark Mode + Premium Motion Experience"); approved as part of the frozen baseline by DEC-UI-005
+
+A continuation of DEC-UI-003. The sidebar shell, floating CLARA, and grayscale chrome are unchanged; this decision adds theming and motion on top of them.
+
+Theme rules:
+- three preferences: Light, Dark, and System (follows `prefers-color-scheme`, live); the choice is stored in `localStorage` under `campusnav-theme` and applied by an inline script before first paint, so there is no flash of the wrong theme
+- one implementation for the whole application, Admin included: the resolved theme is a `dark` class on `<html>`; every color comes from semantic CSS variables (`--canvas`, `--surface`, `--fill`, `--line`, `--ink`, `--ink-soft`, `--on-ink`, ...) exposed as Tailwind colors of the same name. Components must not hard-code hex color classes or add per-component `dark:` variants (`test:theme` enforces this)
+- dark mode is a designed palette (canvas `#0A0A0A`, raised `#111111`, surface `#181818`, primary text `#F5F5F7`, primary control light with dark text), not an inversion
+- theme changes cross-fade paint properties for about 200ms and are immediate under reduced motion
+
+Map exception (unchanged in meaning):
+- the 2D/3D viewport remains a functional visualization and keeps its semantic colors (category tints, route, emergency path, exit, equipment). In dark mode the 2D map inverts lightness while preserving hue so the same colors stay legible on a dark surface; the 3D view changes only its scene backdrop. The map legend draws its swatches from the same map colors. No pathfinding, emergency, or spatial data is affected
+
+Motion rules:
+- every animation must serve navigation feedback, spatial explanation, hierarchy, or the map/route/floor/QR/CLARA identity; no blobs, glows, gradients, confetti, or looping attention effects
+- timing: fast about 140ms, normal about 220ms, reveal about 400ms, ambient 4–12s (the orbit ring is slower); one easing, `cubic-bezier(0.22, 1, 0.36, 1)`; pointer response at most a few pixels; hover lift at most 3px
+- decorative graphics (route motif, campus graph, floor stack, QR motif, Campus Overview) are abstract (the floor stack and the conceptual Campus Overview graphic were later replaced by the real map; see the approved change under DEC-UI-005), `aria-hidden` where they carry no information, and are never presented as real routes, live activity, or history
+- interactive controls do not move on their own; the only idle motion on a control is the CLARA trigger's 2px float
+- `prefers-reduced-motion: reduce` removes reveal, parallax, ambient, count-up, page-transition, and theme-transition motion; functionality is identical
+- ambient animation runs only while its section is on screen and the tab is visible; phones and touch devices get no parallax and fewer ambient layers
+- implementation is CSS/SVG plus IntersectionObserver; no animation library is loaded for this
+
+## DEC-UI-005 — UI freeze
+**Status:** OWNER APPROVED — 3 Oct 2026 (owner "UI Freeze & Production Readiness Pass"); re-recorded on the current Phase 4 baseline at integration — 3 Oct 2026
+
+The owner approved the interface built on `wip/map-ui-redesign-v2` — left sidebar (`DEC-UI-003`), floating CLARA (`DEC-UI-003`), Light/Dark/System theme and the motion system (`DEC-UI-004`) — as the working UI baseline, and it is **FROZEN** as of this decision. The owner-approved snapshot (`CampusNav-AI-ui-frozen.zip`) was built on `577610c` (Phase 4-FS-2B) and predates FS-2C, FS-3A, and FS-3B, so it was integrated selectively onto the Phase 4-FS-3B baseline (`c7037e3`) on `wip/ui-freeze-integration` rather than copied: the frozen design governs presentation, while current functionality, services, tests, RBAC/RLS, and canonical documentation remain authoritative.
+
+After the freeze the UI may change only for:
+- verified bugs
+- accessibility problems
+- responsive problems
+- user-testing findings
+- approved new functional requirements
+
+Not permitted without a new owner decision: redesigning the visual system, adding decorative motion, changing routing, map semantics, navigation logic, or established interaction patterns, and aesthetic changes made for novelty.
+
+Changes made during the freeze pass and its integration were limited to verified defects and to applying the frozen Admin visual system to the FS-3B Admin workflows; they are listed in `63-implementation-status-registry.md` and `CHANGELOG.md` v3.39. A change proposed under one of the permitted reasons must name the reason and the evidence (failing check, device report, user-testing note) in its changelog entry.
+
+Boundaries:
+- this is a presentation baseline decision; it does not reorder or complete Phase 4, start FS-3C, or change `DEC-ROADMAP-002`
+- it is not the preserved `wip/claude-sidebar-redesign` work that `DEC-ROADMAP-002` keeps outside Phase 4; that branch was not used as a source
+- the Phase 4 operational-status engine (`getFacilityStatus`) is still not wired into public UI; frozen facility surfaces continue to show canonical local hours fields or pending/unavailable wording
+- removing packages with zero imports is not a dependency upgrade; no version was changed
+
+Approved changes after the freeze:
+- **3 Oct 2026 — real map reuse and immersive fullscreen navigation** (reason: approved new functional requirement, owner request "Real Map Reuse + Immersive Fullscreen Navigation"; evidence: `test:map-experience` and the browser QA recorded in `63` and `CHANGELOG.md` v3.40). Home and Dashboard now embed the real CampusNav map instead of the schematic floor stack and the conceptual Campus Overview graphic; the Navigate map gains 2D pan/zoom, 3D zoom/fit/reset controls, and an immersive fullscreen view. This is an implementation of `DEC-ARCH-001` and `DEC-3D-001` — one shared renderer (`CampusMapCanvas`) over the one canonical spatial dataset — and is presentation only: no geometry, graph, route, QR, emergency, or data rule changed, map semantic colors are unchanged, and the visual system is otherwise as frozen
+- **4 Oct 2026 — owner visual refinement of Home, Dashboard, and Facilities.** Reason: owner-directed final visual polish pass. The owner rejected the Home desktop composition: dead space, an isolated hero, a disconnected map preview, and a wasteful decorative route band. Evidence: the before/after screenshots and browser QA recorded in `63` and `CHANGELOG.md` v3.41.
+  - Home: the hero is top-aligned. The map is larger and stretches to the hero band. The hero gains the shared destination search (`DestinationSearch`, reused from Navigate) and a factual coverage strip (`SmartCampusStrip`). Popular destinations start in the first viewport. The decorative graph band and its scroll fade were removed.
+  - Dashboard: sections render in the dashboard contract order. The map column stretches beside Priority Alerts and Navigation Shortcuts. Office Availability is a compact list.
+  - Facilities: denser cards, with compact rows on phones.
+  - 3D: portrait 3D framing no longer clips the building.
+  - This is a refinement within the frozen visual system: the same tokens, typography, components, and themes. It adds no new design direction or dependency, and changes no data, route, map, auth, or admin rule.
 
 ## DEC-TITLE-001 — Formal proposal title vs current responsive implementation
 **Status:** REQUIRES THESIS/ADVISER ALIGNMENT, NOT A CODE BLOCKER

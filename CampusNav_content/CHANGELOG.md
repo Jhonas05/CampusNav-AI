@@ -1,5 +1,120 @@
 # CampusNav Content Pack — Changelog
 
+## v3.41 — 4 October 2026
+
+**Owner visual refinement** of Home, Dashboard, and Facilities on `wip/ui-freeze-integration`. This is a post-freeze refinement recorded under `DEC-UI-005`. It is presentation only, stays within the frozen visual system (tokens, typography, components, Light/Dark), adds no dependency, and does not start FS-3C.
+
+### Home
+- Hero is top-aligned and denser:
+  - the logo, title, subtitle, and actions sit on the left;
+  - "Campus at a glance" sits on the right, with the real map stretched to the band height.
+- The hero gains the destination search. It is the same `DestinationSearch` used on Navigate, with the same navigable-destination rule. Choosing a destination opens Navigate with `?facility=<id>`.
+- New factual coverage strip (`SmartCampusStrip`), derived from the canonical floor and facility data:
+  - the mapped floor range (GF–5F, 5 floors);
+  - the number of facilities placed on the map (94);
+  - QR + manual positioning;
+  - 2D + 3D.
+  - It never shows live, usage, or availability figures.
+- Quick Access ("Popular destinations") now starts in the first viewport at 1280–1440px.
+- Removed:
+  - the decorative origin-to-destination graph band and its scroll-fade CSS (`CampusGraphBackground` keeps only the Login field variant);
+  - the duplicate GF–5F card in Campus Status.
+
+### Dashboard and Facilities
+- Dashboard sections render in the contract order (`15`):
+  - Campus Overview sits beside Priority Alerts and Navigation Shortcuts, and its map grows to that column's height;
+  - Classes and Office Availability form the left column below, and Personnel through Navigation Notices the right.
+  - The columns end within a few pixels of each other at 1440px.
+- Office Availability is a compact list: name and status, then floor and hours, then the actions.
+- `RecordActions` accepts a `className`.
+- Facilities directory:
+  - cards auto-fill from 230px;
+  - phones get compact row cards (category tile beside the details) with the same content and states.
+
+### 3D framing
+- Portrait 3D views now fit the full bounding sphere, so the building no longer clips at the sides of narrow canvases (Home preview at 1024–1280px, phones).
+- Landscape framing is unchanged.
+
+### Page heights (headless Chromium, before → after)
+- Home 1440: 3208 → 2771 px
+- Dashboard 1440: 4330 → 2862 px; Dashboard 390: 8710 → 6816 px
+- Facilities 1440: 10315 → 8173 px; Facilities 390: 33080 → 14606 px
+- There is no horizontal overflow at any width.
+
+### Verification and boundary
+- `test:map-experience` now also guards that:
+  - Home reuses Navigate's destination search with `?facility=`;
+  - the coverage figures are derived from data, not typed in;
+  - the decorative Home graph band is gone.
+- `test:dashboard` now guards the contract section order.
+- npm matrix: 24/24 steps pass (21 suites, ESLint, typecheck, production build).
+- Bundle: Entry 471.7 kB (unchanged), CSS 117.4 kB (+0.4 kB), lazy 3D 879.7 kB and QR decoder 415.3 kB (unchanged), 2D renderer 21.8 kB (unchanged). `DestinationSearch` is now a 4.8 kB chunk shared by Home and Navigate, so the Navigate chunk shrank by about 5 kB. Home +1.1 kB, Dashboard +0.6 kB, Facilities +0.3 kB.
+- Headless Chromium:
+  - responsive matrix: 448/448 (28 routes × 8 widths × Light/Dark);
+  - interactions: 144/144;
+  - map QA: 59/59;
+  - layering: 4/4;
+  - Home destination search: 18/18.
+- No change to pathfinding, graph, spatial data, QR, emergency logic or data, RBAC/RLS, providers, schema, Supabase data, or dependencies.
+
+## v3.40 — 3 October 2026
+
+**Real map reuse and immersive fullscreen navigation** on `wip/ui-freeze-integration`. Permitted post-freeze change under `DEC-UI-005` — reason: approved new functional requirement (owner request); evidence: `npm run test:map-experience` and the browser QA below. Presentation only; FS-3C not started.
+
+### Implementation
+- `CampusMapCanvas` is now the single component that mounts the 2D renderer (`IndoorMap2D`) and the lazy 3D renderer (`Campus3D`); it imports the canonical floors, facilities, nodes/edges, QR checkpoints, and emergency records itself. Navigate, Home, and Dashboard all use it; no geometry, coordinates, floor data, or second 3D scene was added
+- Home "Campus at a glance" and Dashboard "Campus Overview" embed the real map through `CampusMapPreview` (floor selector, 2D/3D, zoom, reset, facility card, "Open full map" via the existing `?floor=` / `?facility=` parameters); Home starts in 3D on capable desktops and in 2D on phones, touch, low-memory, data-saver, or no-WebGL devices; Dashboard starts in 2D; 3D mounts near the viewport and stops rendering off screen or in a hidden tab; gestures are cooperative so the page keeps scrolling
+- retired the schematic `CampusFloorStack` and the conceptual Campus Overview orbit graphic with their dead CSS; Dashboard keeps its real count links
+- 2D: transform-based viewport (`usePanZoom2D`, `src/lib/mapViewport.js`) with drag pan and grab cursor, wheel/trackpad zoom around the pointer, one-finger pan and pinch zoom, keyboard pan/zoom, zoom limits relative to the floor, fit, reset, facility focus, and resize/orientation handling; dragging no longer risks selecting a room
+- 3D: the existing OrbitControls keep orbit/pan/zoom with lighter damping; shared zoom-in/out, aspect-aware "Fit building to view", and "Reset map view" (default isometric, exploded, not isolated) were added; `Map3DControls` hides its duplicate camera tools when the shared controls are present
+- Navigate immersive fullscreen (`useMapFullscreen`): browser Fullscreen API on the same mounted map, or a fixed `100dvh` overlay where the API is unavailable or refused; the shell chrome and the floating CLARA trigger step aside (CLARA's conversation is kept; "Ask CLARA" leaves fullscreen first); route steps (desktop panel, phone bottom sheet) and the unchanged Emergency Mode panel are available inside; visible Exit button, Escape, contained focus, `role="dialog"`/`aria-modal` while immersive, and focus return
+- `MapViewControls` replaces `MapTools2D` as the shared Zoom in / Zoom out / Fit / Reset / Center / Fullscreen group; the Facility Detail thumbnail uses the same 2D renderer as a non-interactive view
+
+### Defects found and fixed while verifying
+- 3D: releasing an orbit or pan over a room selected it and opened the facility sheet; clicks now require less than 4px of pointer travel, matching 2D
+- the phone route sheet inside the fullscreen overlay inherited `pointer-events: none` and its buttons could not be pressed
+- in desktop fullscreen the opened legend rendered beneath the left route/Emergency panel and the panels ran under the Legend button; the legend now sits above them and the panels stop above it
+- the Facility Detail map thumbnail would have collapsed to zero height under the new viewport; it now keeps the floor plan's aspect ratio and is not focusable inside its `aria-hidden` region
+
+### Verification and boundary
+- new `npm run test:map-experience` (shared renderer and canonical-data rules, retired schematic visuals, 2D viewport math, 3D framing, Navigate links, fullscreen capability, rendered Home/Dashboard/Navigate integration); all existing suites, ESLint, typecheck, and the production build pass under Node 22
+- headless Chromium map QA: 2D drag/wheel/buttons/limits/fit/reset/keyboard, synthetic touch pan and pinch, cooperative preview scrolling, 3D orbit/pan/zoom/buttons/floor focus/click-vs-drag, native fullscreen and the overlay fallback (desktop and phone) with route state, resize and orientation change, Emergency Mode, a QR-confirmed location in 2D and 3D fullscreen, and the legend in both themes; the responsive matrix covers Home, Dashboard, and Navigate at eight widths in Light and Dark
+- not verified: real touch hardware, trackpads, iPhone/iPad Safari, Firefox, physical cameras, device frame rate; 3D rotation has no keyboard equivalent
+- changed no pathfinding, graph, spatial data, route weights or restrictions, QR decoding, emergency logic or data, RBAC, provider, schema, or dependency
+
+## v3.39 — 3 October 2026
+
+Integrated the **owner-approved frozen UI baseline** (`DEC-UI-003`, `DEC-UI-004`, `DEC-UI-005`) onto the Phase 4-FS-3B baseline (`c7037e3`) on `wip/ui-freeze-integration`, without regressing FS-2C, FS-3A, or FS-3B and without starting FS-3C.
+
+### Integration method
+- the owner-approved snapshot `CampusNav-AI-ui-frozen.zip` is `577610c` (Phase 4-FS-2B) plus 108 UI-focused changes; it was applied as a semantic three-way integration, not copied
+- adopted the frozen shell (left sidebar, mobile drawer, phone context bar), floating CLARA (`src/components/clara/*`, `src/services/claraService.js` with the unchanged local matcher), Light/Dark/System theme, motion components, map workspace and controls, Admin/public page styling, `useModalDialog`, and `test:theme`; removed `AppLayout`, `Navbar`, `MobileTabBar`, and `src/pages/Clara.jsx` (`/clara` now opens the floating assistant)
+- manually merged `src/App.jsx` (frozen `AppShell`/`ThemeProvider`/`ClaraRoute` plus the current `SUPER_ADMIN` `/admin/facilities` and `/admin/services` routes) and `AdminShell.jsx` (frozen tokens plus the current Facilities/Services navigation group)
+- the frozen branch recorded its redesign, theme/motion, and freeze passes as v3.32–v3.34 on `wip/map-ui-redesign-v2`; those numbers collide with this pack's v3.32–v3.38, so their substance is recorded here, in `29` (`DEC-UI-003`/`004`/`005`), and in `63` instead of being re-inserted
+- rejected the snapshot's stale `package.json` scripts, README, and canonical tracking text; services, data, providers, Supabase files, and the navigation, emergency, QR, 3D, and authorization libraries are byte-identical to `c7037e3`
+
+### FS-3B Admin in the frozen visual system
+- converted `FacilityOperationsAdminPage` and `FacilityOperationsEditor` from hex/hue classes to semantic tokens (Light and Dark); demo, error, and destructive states now use dashed or heavy-ink treatments with text and icons instead of amber/red
+- ported the frozen fixes semantically: filter row no longer overflows (`minmax(0,1fr)`), editor fields have visible borders and full width, and both FS-3B dialogs use `useModalDialog` (focus entry, Tab containment — previously missing — Escape, focus return)
+- responsive fix: the FS-3B list switches from cards to the table at `xl` instead of `lg`, so record actions are no longer hidden behind an inner scroll at 1280px beside the sidebar and Admin rails
+
+### Verified defects fixed during integration (frozen snapshot defects not carried into current main)
+- bug: desktop Navigate route panel rendered Next Step / Confirm Arrival / End Navigation without handlers; `onAdvance`/`onReset` are wired again as in current main
+- accessibility: the mobile navigation drawer did not return focus to the menu button after closing; it now restores focus to its opener
+- map legend: "Floor change on route" and "Stairs" swatches now use the colors the map draws; the 3D legend shows the 3D exit treatment; the emergency-approved edge overlay is now listed in the legend
+
+### Dependencies
+- removed 18 packages with zero imports in the integrated tree (the frozen list, re-audited against current main): `@fontsource/archivo`, `@fontsource/barlow-condensed`, `@hello-pangea/dnd`, `@hookform/resolvers`, `@stripe/react-stripe-js`, `@stripe/stripe-js`, `canvas-confetti`, `framer-motion`, `html2canvas`, `jspdf`, `lodash`, `moment`, `react-hot-toast`, `react-leaflet`, `react-markdown`, `react-quill-new`, `zod`, `eslint-plugin-react-refresh`; the two font packages became unused when the frozen system typography replaced their `index.css` imports
+- lockfile updated by `npm uninstall`; no version changed and no forced audit fix was run; `npm audit --omit=dev` dropped from 12 to 8 advisories (remaining: `react-router` moderate requiring a major upgrade; `braces`/`micromatch`/`chokidar`/`fast-glob` through `tailwindcss`)
+- kept every current script, including `test:phase4-fs2c`, `test:phase4-fs3a`, and `test:phase4-fs3b`; added `test:theme`
+
+### Verification and boundary
+- all deterministic suites (`test:data` through `test:phase4-fs3b`, `test:theme`, `test:render`), ESLint, typecheck, and the production build pass under Node 22; no test was weakened (`test-dashboard.mjs` gained sidebar assertions)
+- headless Chromium QA (installed Chrome) with a QA-only network fixture: public and Admin routes at eight widths in Light and Dark, plus Navigate 2D/3D, CLARA, drawer, QR dialog, FS-3B dialogs, role guards, and Login `returnTo`
+- pixel comparison against a build of the frozen snapshot: all 40 public captures (10 routes, 1440/390, Light/Dark) are identical; Admin differs only where the FS-3B Facilities/Services group is inserted in the Admin rail
+- not verified: Firefox, Safari/WebKit, physical devices, a physical camera, live Supabase data and accounts, Supabase cloud tests
+- changed no route path, pathfinding, graph/spatial data, QR decoding, emergency logic, RBAC rule, RLS, provider, schema, migration, or FS-3A/FS-2C service; Phase 4 status is unchanged and FS-3C is not started
+
 ## v3.38 — 3 October 2026
 
 Implemented and locally verified **Phase 4-FS-3B — Facility Profile and Service Catalog Admin Workflow** without starting FS-3C.

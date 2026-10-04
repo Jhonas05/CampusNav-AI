@@ -10,29 +10,45 @@ module.exports = {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+		// Predictable overlay scale. Radix/shadcn overlays use z-50 (overlay);
+		// full-screen modal dialogs use z-[70]+; toasts use z-[100].
+		zIndex: {
+			sticky: '20',
+			sidebar: '30',
+			dropdown: '40',
+			'clara-button': '45',
+			'clara-panel': '46',
+			overlay: '50',
+			modal: '70',
+			toast: '100'
+		},
   		colors: {
+			// Semantic theme tokens (DEC-UI-004). Values live in src/index.css and
+			// switch with the `.dark` class; components never hard-code hex colors.
+			canvas: { DEFAULT: 'rgb(var(--canvas) / <alpha-value>)', raised: 'rgb(var(--canvas-raised) / <alpha-value>)' },
+			surface: 'rgb(var(--surface) / <alpha-value>)',
+			subtle: 'rgb(var(--subtle) / <alpha-value>)',
+			fill: { DEFAULT: 'rgb(var(--fill) / <alpha-value>)', strong: 'rgb(var(--fill-strong) / <alpha-value>)' },
+			line: { DEFAULT: 'rgb(var(--line) / <alpha-value>)', strong: 'rgb(var(--line-strong) / <alpha-value>)' },
+			ink: {
+				DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
+				strong: 'rgb(var(--ink-strong) / <alpha-value>)',
+				mid: 'rgb(var(--ink-mid) / <alpha-value>)',
+				soft: 'rgb(var(--ink-soft) / <alpha-value>)',
+				faint: 'rgb(var(--ink-faint) / <alpha-value>)',
+				ghost: 'rgb(var(--ink-ghost) / <alpha-value>)'
+			},
+			'on-ink': 'rgb(var(--on-ink) / <alpha-value>)',
+			// Legacy ramps kept so older class names stay valid; they resolve to tokens.
 			brand: {
-				'50': '#EEF7F1',
-				'100': '#D7ECDE',
-				'200': '#AFD9BD',
-				'300': '#7CBD93',
-				'400': '#47A36B',
-				'500': '#27894F',
-				'600': '#1C7B44',
-				'700': '#15703C',
-				'800': '#0F5A2F',
-				'900': '#0B4224'
+				'50': 'rgb(var(--fill) / <alpha-value>)', '100': 'rgb(var(--fill-strong) / <alpha-value>)', '200': 'rgb(var(--line-strong) / <alpha-value>)', '300': 'rgb(var(--ink-ghost) / <alpha-value>)',
+				'400': 'rgb(var(--ink-faint) / <alpha-value>)', '500': 'rgb(var(--ink-soft) / <alpha-value>)', '600': 'rgb(var(--ink-mid) / <alpha-value>)', '700': 'rgb(var(--ink) / <alpha-value>)',
+				'800': 'rgb(var(--ink-strong) / <alpha-value>)', '900': 'rgb(var(--ink-strong) / <alpha-value>)'
 			},
 			gold: {
-				'50': '#F5F5F8',
-				'100': '#E7E7EA',
-				'200': '#D4D4D7',
-				'300': '#B7B7BA',
-				'400': '#98989B',
-				'500': '#7A7A7D',
-				'600': '#5D5D60',
-				'700': '#424244'
-  			},
+				'50': 'rgb(var(--fill) / <alpha-value>)', '100': 'rgb(var(--fill-strong) / <alpha-value>)', '200': 'rgb(var(--line-strong) / <alpha-value>)', '300': 'rgb(var(--ink-ghost) / <alpha-value>)',
+				'400': 'rgb(var(--ink-faint) / <alpha-value>)', '500': 'rgb(var(--ink-soft) / <alpha-value>)', '600': 'rgb(var(--ink-soft) / <alpha-value>)', '700': 'rgb(var(--ink-mid) / <alpha-value>)'
+			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -90,6 +106,13 @@ module.exports = {
   			display: ['var(--font-display)'],
   			mono: ['var(--font-mono)']
   		},
+		boxShadow: {
+			soft: 'var(--shadow-soft)',
+			float: 'var(--shadow-float)'
+		},
+		transitionTimingFunction: {
+			campus: 'cubic-bezier(0.22, 1, 0.36, 1)'
+		},
   		keyframes: {
   			'accordion-down': {
   				from: {

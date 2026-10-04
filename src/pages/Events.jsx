@@ -26,32 +26,32 @@ function EventCard({ event }) {
         </div>
       </div>
       <h3 className="mt-3 text-lg font-semibold tracking-tight">{event.title}</h3>
-      <dl className="mt-3 space-y-1.5 text-sm text-[#6E6E73]">
+      <dl className="mt-3 space-y-1.5 text-sm text-ink-soft">
         <div className="flex items-center gap-2">
-          <Clock3 className="h-3.5 w-3.5 shrink-0 text-[#86868B]" aria-hidden="true" />
+          <Clock3 className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
           <dd>{formatCampusDateTime(event.startAt)}–{formatCampusShortTime(event.endAt)}</dd>
         </div>
         {event.location && (
           <div className="flex items-center gap-2">
-            <MapPin className="h-3.5 w-3.5 shrink-0 text-[#86868B]" aria-hidden="true" />
+            <MapPin className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
             <dd>{event.location}</dd>
           </div>
         )}
         {event.organizer && (
           <div className="flex items-center gap-2">
-            <UserRound className="h-3.5 w-3.5 shrink-0 text-[#86868B]" aria-hidden="true" />
+            <UserRound className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
             <dd>{event.organizer}</dd>
           </div>
         )}
         {Array.isArray(event.audience) && event.audience.length > 0 && (
           <div className="flex items-center gap-2">
-            <Users className="h-3.5 w-3.5 shrink-0 text-[#86868B]" aria-hidden="true" />
+            <Users className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
             <dd>{event.audience.join(", ")}</dd>
           </div>
         )}
       </dl>
       {event.navigationHref && (
-        <Link to={event.navigationHref} className={`mt-4 inline-flex min-h-10 items-center gap-2 rounded-full bg-brand-700 px-4 text-xs font-semibold text-white transition-colors duration-200 hover:bg-brand-800 ${focusRing}`}>
+        <Link to={event.navigationHref} className={`mt-4 inline-flex min-h-10 items-center gap-2 rounded-full bg-brand-700 px-4 text-xs font-semibold text-on-ink transition-colors duration-200 hover:bg-brand-800 ${focusRing}`}>
           Navigate to Venue <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
         </Link>
       )}
@@ -82,19 +82,19 @@ function MonthCalendar({ events, todayKey }) {
 
   return (
     <div className={`${card} overflow-hidden`}>
-      <div className="flex items-center justify-between border-b border-[#E5E5E7] px-5 py-4">
+      <div className="flex items-center justify-between border-b border-line px-5 py-4">
         <h3 className="text-lg font-semibold tracking-tight">{format(month, "MMMM yyyy")}</h3>
         <div className="flex gap-1.5">
-          <button type="button" onClick={() => setMonth((current) => addMonths(current, -1))} aria-label="Previous month" className={`flex h-9 w-9 items-center justify-center rounded-full border border-[#D2D2D7] transition-colors hover:border-[#86868B] ${focusRing}`}>
+          <button type="button" onClick={() => setMonth((current) => addMonths(current, -1))} aria-label="Previous month" className={`flex h-9 w-9 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-ink-faint ${focusRing}`}>
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           </button>
-          <button type="button" onClick={() => setMonth((current) => addMonths(current, 1))} aria-label="Next month" className={`flex h-9 w-9 items-center justify-center rounded-full border border-[#D2D2D7] transition-colors hover:border-[#86868B] ${focusRing}`}>
+          <button type="button" onClick={() => setMonth((current) => addMonths(current, 1))} aria-label="Next month" className={`flex h-9 w-9 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-ink-faint ${focusRing}`}>
             <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 border-b border-[#F0F0F2] px-3 pt-3 text-center text-[10px] font-semibold uppercase tracking-wide text-[#86868B]">
+      <div className="grid grid-cols-7 border-b border-line px-3 pt-3 text-center text-[10px] font-semibold uppercase tracking-wide text-ink-faint">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => <span key={day} className="pb-2">{day}</span>)}
       </div>
 
@@ -114,32 +114,32 @@ function MonthCalendar({ events, todayKey }) {
               aria-label={`${format(day, "MMMM d, yyyy")}${hasEvents ? ", has events" : ""}`}
               className={cn(
                 "relative mx-auto flex h-10 w-10 flex-col items-center justify-center rounded-full text-sm tabular-nums transition-colors duration-150",
-                inMonth ? "text-[#1D1D1F]" : "text-[#C7C7CC]",
-                isSelected ? "bg-brand-700 font-semibold text-white" : "hover:bg-brand-50",
+                inMonth ? "text-ink" : "text-ink-ghost",
+                isSelected ? "bg-brand-700 font-semibold text-on-ink" : "hover:bg-brand-50",
                 isToday && !isSelected && "border-[1.5px] border-brand-700 font-semibold text-brand-800",
                 focusRing
               )}
             >
               {format(day, "d")}
-              {hasEvents && <span aria-hidden="true" className={cn("absolute bottom-1 h-1 w-1 rounded-full", isSelected ? "bg-white" : "bg-brand-600")} />}
+              {hasEvents && <span aria-hidden="true" className={cn("absolute bottom-1 h-1 w-1 rounded-full", isSelected ? "bg-surface" : "bg-brand-600")} />}
             </button>
           )
         })}
       </div>
 
-      <div className="border-t border-[#E5E5E7] bg-[#FAFAFA] p-5">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868B]">{selectedKey === todayKey ? "Today" : format(new Date(`${selectedKey}T00:00:00`), "MMMM d, yyyy")}</p>
+      <div className="border-t border-line bg-subtle p-5">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">{selectedKey === todayKey ? "Today" : format(new Date(`${selectedKey}T00:00:00`), "MMMM d, yyyy")}</p>
         {selectedEvents.length ? (
           <ul className="mt-3 space-y-2">
             {selectedEvents.map((event) => (
-              <li key={event.id} className="rounded-xl border border-[#E5E5E7] bg-white p-3.5">
+              <li key={event.id} className="rounded-xl border border-line bg-surface p-3.5">
                 <p className="text-sm font-semibold">{event.title}</p>
-                <p className="mt-0.5 text-xs text-[#6E6E73]">{formatCampusShortTime(event.startAt)}–{formatCampusShortTime(event.endAt)}{event.location ? ` · ${event.location}` : ""}</p>
+                <p className="mt-0.5 text-xs text-ink-soft">{formatCampusShortTime(event.startAt)}–{formatCampusShortTime(event.endAt)}{event.location ? ` · ${event.location}` : ""}</p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="mt-2 text-xs text-[#6E6E73]">No events on this date.</p>
+          <p className="mt-2 text-xs text-ink-soft">No events on this date.</p>
         )}
       </div>
     </div>
@@ -167,14 +167,14 @@ export default function Events() {
   const allEvents = useMemo(() => [...events.today, ...events.upcoming], [events])
 
   return (
-    <div className="app-page bg-[#F5F5F7]">
+    <div className="app-page bg-canvas">
       <div className="app-container">
         <PageHeader
           eyebrow="Campus calendar"
           title="Events"
           lead="Official campus events, activities, and schedules — published records only."
           actions={
-            <div role="tablist" aria-label="Event views" className="flex shrink-0 rounded-full border border-[#D2D2D7] bg-white p-1 text-xs font-semibold">
+            <div role="tablist" aria-label="Event views" className="flex shrink-0 rounded-full border border-line-strong bg-surface p-1 text-xs font-semibold">
               {TABS.map((item) => (
                 <button
                   key={item.id}
@@ -182,7 +182,7 @@ export default function Events() {
                   role="tab"
                   aria-selected={tab === item.id}
                   onClick={() => setTab(item.id)}
-                  className={cn("rounded-full px-4 py-2 transition-colors duration-200", tab === item.id ? "bg-brand-700 text-white" : "text-[#6E6E73] hover:text-[#1D1D1F]", focusRing)}
+                  className={cn("rounded-full px-4 py-2 transition-colors duration-200", tab === item.id ? "bg-brand-700 text-on-ink" : "text-ink-soft hover:text-ink", focusRing)}
                 >
                   {item.label}
                 </button>
@@ -192,11 +192,11 @@ export default function Events() {
         />
 
         {demo && (
-          <div role="status" className="mt-6 flex items-start gap-3 rounded-2xl border-2 border-[#1D1D1F] bg-[#1D1D1F] p-4 text-white">
+          <div role="status" className="mt-6 flex items-start gap-3 rounded-2xl border-2 border-ink bg-ink p-4 text-on-ink">
             <Activity className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.16em]">Demo data</p>
-              <p className="mt-1 text-sm text-white/75">Sample data — not official school information.</p>
+              <p className="mt-1 text-sm text-on-ink/75">Sample data — not official school information.</p>
             </div>
           </div>
         )}
@@ -236,7 +236,7 @@ export default function Events() {
             <div className="grid gap-5 lg:grid-cols-[minmax(420px,0.9fr)_minmax(0,1.1fr)]">
               <MonthCalendar events={allEvents} todayKey={todayKey} />
               <div>
-                <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868B]">All published events</h2>
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint">All published events</h2>
                 {allEvents.length ? (
                   <div className="mt-4 space-y-4">
                     {allEvents.map((event) => <EventCard key={event.id} event={event} />)}

@@ -50,12 +50,12 @@ export const markNotificationsSeen = () => {
   writeSeenIds([...seen])
 }
 
-function PanelSection({ icon: Icon, title, tint = "text-[#6E6E73]", children }) {
+function PanelSection({ icon: Icon, title, tint = "text-ink-soft", children }) {
   return (
     <section aria-label={title}>
       <div className="flex items-center gap-2 px-4 pb-2 pt-4">
         <Icon className={`h-3.5 w-3.5 ${tint}`} aria-hidden="true" />
-        <h3 className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868B]">{title}</h3>
+        <h3 className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">{title}</h3>
       </div>
       <div className="space-y-1 px-2">{children}</div>
     </section>
@@ -66,15 +66,15 @@ function PanelItem({ record, href = null, meta = null }) {
   const body = (
     <>
       <div className="flex items-start justify-between gap-2">
-        <p className="text-[13px] font-semibold leading-snug text-[#1D1D1F]">{record.title || record.subject || record.name}</p>
+        <p className="text-[13px] font-semibold leading-snug text-ink">{record.title || record.subject || record.name}</p>
         {record.priority && <PriorityBadge priority={record.priority} className="min-h-6 shrink-0 px-2 text-[8px]" />}
       </div>
-      {record.message && <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[#6E6E73]">{record.message}</p>}
-      {meta && <p className="mt-1.5 text-[10px] font-medium uppercase tracking-wide text-[#86868B]">{meta}</p>}
+      {record.message && <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-ink-soft">{record.message}</p>}
+      {meta && <p className="mt-1.5 text-[10px] font-medium uppercase tracking-wide text-ink-faint">{meta}</p>}
     </>
   )
   if (href) {
-    return <Link to={href} className={`block rounded-xl px-2.5 py-2.5 transition-colors duration-150 hover:bg-[#F5F5F7] ${focusRing}`}>{body}</Link>
+    return <Link to={href} className={`block rounded-xl px-2.5 py-2.5 transition-colors duration-150 hover:bg-fill ${focusRing}`}>{body}</Link>
   }
   return <div className="rounded-xl px-2.5 py-2.5">{body}</div>
 }
@@ -91,6 +91,7 @@ export default function NotificationPanel({ open, onClose }) {
   useEffect(() => {
     if (!open) return
     const onPointerDown = (event) => {
+      if (event.target instanceof Element && event.target.closest("[data-shell-panel-toggle]")) return
       if (panelRef.current && !panelRef.current.contains(event.target)) onClose()
     }
     const onKeyDown = (event) => {
@@ -113,11 +114,11 @@ export default function NotificationPanel({ open, onClose }) {
       ref={panelRef}
       role="region"
       aria-label="Notifications"
-      className="ink-blueprint fixed inset-x-3 top-[72px] z-[60] flex max-h-[min(70vh,560px)] flex-col overflow-hidden shadow-[0_18px_42px_rgba(29,31,32,0.14)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-[380px]"
+      className="ink-blueprint fixed z-dropdown overflow-hidden rounded-[18px] shadow-[0_12px_36px_rgba(0,0,0,0.14)] max-md:inset-x-3 max-md:top-[calc(var(--app-header-height)+0.5rem)] md:bottom-3 md:left-[calc(var(--sidebar-width)+0.5rem)] flex max-h-[min(70dvh,560px)] flex-col md:w-[380px]"
     >
-      <header className="flex items-center justify-between border-b border-[#E5E5E7] px-4 py-3.5">
-        <h2 className="text-sm font-semibold text-[#1D1D1F]">Notifications</h2>
-        <span className="text-[10px] font-medium uppercase tracking-wide text-[#86868B]">Official campus updates</span>
+      <header className="flex items-center justify-between border-b border-line px-4 py-3.5">
+        <h2 className="text-sm font-semibold text-ink">Notifications</h2>
+        <span className="text-[10px] font-medium uppercase tracking-wide text-ink-faint">Official campus updates</span>
       </header>
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-3">
@@ -128,17 +129,17 @@ export default function NotificationPanel({ open, onClose }) {
         ) : (
           <>
             {feed.alerts.length > 0 && (
-              <PanelSection icon={BellRing} title="Priority Alerts" tint="text-red-700">
+              <PanelSection icon={BellRing} title="Priority Alerts" tint="text-ink">
                 {feed.alerts.map((record) => <PanelItem key={record.id} record={record} href={record.emergencyHref || record.navigationHref || record.facilityHref || "/dashboard"} />)}
               </PanelSection>
             )}
             {feed.classes.length > 0 && (
-              <PanelSection icon={BookOpen} title="Schedule Updates" tint="text-blue-700">
+              <PanelSection icon={BookOpen} title="Schedule Updates" tint="text-ink">
                 {feed.classes.map((record) => <PanelItem key={record.id} record={{ ...record, title: record.subject, message: `${record.room} · ${formatCampusShortTime(record.startAt)}–${formatCampusShortTime(record.endAt)}` }} href={record.facilityHref || "/dashboard"} />)}
               </PanelSection>
             )}
             {feed.advisories.length > 0 && (
-              <PanelSection icon={Construction} title="Facility Advisories" tint="text-amber-700">
+              <PanelSection icon={Construction} title="Facility Advisories" tint="text-ink">
                 {feed.advisories.map((record) => <PanelItem key={record.id} record={record} href={record.facilityHref || "/dashboard"} />)}
               </PanelSection>
             )}
@@ -159,7 +160,7 @@ export default function NotificationPanel({ open, onClose }) {
       <Link
         to="/dashboard"
         onClick={onClose}
-        className={`flex items-center justify-center gap-2 border-t border-[#E5E5E7] bg-[#FAFAFA] px-4 py-3.5 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-50 ${focusRing}`}
+        className={`flex items-center justify-center gap-2 border-t border-line bg-subtle px-4 py-3.5 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-50 ${focusRing}`}
       >
         View All in Dashboard <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </Link>

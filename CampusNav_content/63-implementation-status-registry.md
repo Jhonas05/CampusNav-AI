@@ -3,6 +3,68 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Frozen UI baseline integration onto Phase 4-FS-3B — 3 October 2026 (`DEC-UI-005`)
+
+**Classification:** `UI FROZEN — INTEGRATED — IMPLEMENTED_VERIFIED (automated, headless Chromium) / OWNER VISUAL REVIEW PENDING`. Branch `wip/ui-freeze-integration`, based on `c7037e3`; not merged, deployed, or pushed. Phase 4 status is unchanged.
+
+The owner-approved frozen interface (`DEC-UI-003` shell and floating CLARA, `DEC-UI-004` theme and motion, `DEC-UI-005` freeze) was built on `577610c` and predates FS-2C, FS-3A, and FS-3B. It was integrated as a three-way semantic merge: only `src/App.jsx`, `AdminShell.jsx`, `package.json`, this file, and `CHANGELOG.md` had changed on both sides. On the `wip/map-ui-redesign-v2` branch the frozen work had recorded `IMPLEMENTED_UNVERIFIED` shell/theme passes and an `ACCEPTED_WITH_ADVISORY` freeze pass with headless-Chromium evidence; the evidence below is fresh for the integrated tree.
+
+| Area | Result | Evidence / boundary |
+|---|---|---|
+| Preserved functionality | `PASS` | Services, data, providers, Supabase files, and the navigation, pathfinding, emergency, QR/checkpoint, 3D, WebGL, authorization, and route-authorization libraries are byte-identical to `c7037e3`; `getFacilityHours`/`getFacilityStatus`/`facilityStatusEvaluator`, `facilityAdminService`, and the FS-3B routes, pages, editor, and `facilityAdminUi` are retained |
+| Deterministic regression | `PASS` | `test:data`, `navigation`, `multi-floor`, `qr`, `emergency`, `3d`, `dashboard`, `theme`, `phase8a`, `phase8b`, `phase8c`, `phase8c2`, `phase4-fs1a`, `fs1b`, `fs2a`, `fs2b`, `fs2c` (81 scenarios), `fs3a`, `fs3b`, `render`, ESLint, typecheck, and production build pass under Node 22; the six navigation/QR/emergency/3D/render scripts are unchanged and `test-dashboard.mjs` was strengthened, not weakened |
+| Frozen reference parity | `VERIFIED` (pixel comparison) | The frozen snapshot was built and served beside the integrated build with the same fixture, clock, and reduced motion: 10 public routes × 1440/390 × Light/Dark (40 captures) are pixel-identical; Admin captures differ only in the Admin section rail at 1440px (0.37–1.47% of pixels), where the current FS-3B Facilities/Services group is inserted. Measured at integration time; the later approved map upgrade (section above) intentionally replaces the Home and Dashboard visuals with the real map and changes the Navigate map controls and the Facility Detail thumbnail container, so those surfaces now differ from the snapshot by design. Parity of the other pages was not re-measured after the upgrade |
+| FS-3B Admin in the frozen visual system | `VERIFIED_WITH_FIXTURE` | `/admin/facilities` and `/admin/services` use semantic tokens in Light and Dark; filter-row overflow fix, visible editor borders, `useModalDialog` (focus entry, Tab containment, Escape, focus return) on editor and delete dialogs; table at `xl`+ with no inner scroll at 1280–1440px, cards below with every action on screen; `SUPER_ADMIN` route guards and RLS unchanged |
+| Role guards | `VERIFIED_WITH_FIXTURE` | `DEPARTMENT_ADMIN` denied `/admin`, `/admin/facilities`, `/admin/services` and allowed `/admin/personnel`; sidebar shows one Admin entry for admins and none for guests; guests are redirected to Login with a same-origin `returnTo` |
+| Responsive / theme | `VERIFIED` (headless) | 10 public and 18 Admin routes × 1440, 1366, 1280, 1024, 820, 768, 430, 390 × Light and Dark (448 renders): no horizontal overflow, no sidebar/content overlap, correct theme class, no console errors; System follows the OS scheme; reduced motion leaves no hidden content |
+| Keyboard / dialogs | `VERIFIED` (automated) | Skip link first in tab order; QR scanner, FS-3B editor and delete dialogs, and mobile drawer move focus in, contain Tab, close on Escape, and return focus to the opener; QR camera viewport is always dark |
+| Navigate 2D/3D | `VERIFIED` (automated) | Library 3F → Registrar 5F route; desktop Next Step / End Navigation work; 3D renders the same route with step state preserved; CLARA never intersects map tools, view toggle, 3D controls, legend, or route panels at the eight widths |
+| Map semantic colours | `VERIFIED` (2D automated; 3D screenshot) | Route `#15703C`, approved evacuation path and equipment `#B3261E`, exit `#15803D` (2D); legend swatches follow the marks each view draws, including floor-change, stairs, the 3D exit, and emergency-approved edges; dark mode inverts 2D lightness for map and legend alike |
+| CLARA | `VERIFIED` (automated; assistant remains `PARTIAL`) | Floating popup and mobile sheet fit the viewport; answers come from the unchanged conservative local matcher with no model, key, or network call |
+| Login `returnTo` | `VERIFIED_WITH_FIXTURE` | Through the real sign-in flow: `//host`, `/\host`, absolute, `javascript:`, and control-character paths land on `/dashboard`; plain same-origin paths are honored |
+| Frozen-snapshot defects not carried over | `FIXED` | Desktop route step controls had no handlers; the mobile drawer did not return focus; legend swatches for floor change/stairs/3D exit did not match the map; the approved-edge overlay had no legend entry |
+| Dependencies | `CLEANED` | 18 packages with zero imports in the integrated tree removed via `npm uninstall`; no version changed; `npm audit --omit=dev` 12 → 8 advisories (`react-router` moderate needing a major upgrade; `braces`/`micromatch`/`chokidar`/`fast-glob` via `tailwindcss`), not force-fixed |
+| Bundle | `REVIEWED` | Entry 471.6 kB / 145.2 kB gzip (frozen 470.4 kB), CSS 116.1 kB / 20.8 kB gzip (frozen 115.7 kB); lazy 3D chunk 878.4 kB (existing advisory), QR decoder 415.3 kB, Supabase client 218.6 kB, FS-3B Admin 27.3 kB |
+| Firefox / Safari (WebKit) | `NOT VERIFIED` | Not installed in this environment; support must not be claimed |
+| Real devices, physical camera | `MANUAL DEVICE QA PENDING` | No physical device or camera was used |
+| Live Supabase / real accounts | `NOT VERIFIED` | Signed-in evidence used a QA-only network fixture outside the repository; no request reached the live project |
+| Phase 4 | `UNCHANGED` | FS-1/FS-2 accepted with advisory; FS-3A/FS-3B `IMPLEMENTED_VERIFIED`; FS-3C not started; public UI still does not consume `getFacilityStatus` |
+
+## Owner visual refinement — 4 October 2026 (post-freeze refinement under `DEC-UI-005`)
+
+**Classification:** `IMPLEMENTED_VERIFIED (automated, headless Chromium) / OWNER VISUAL REVIEW PENDING`. Presentation only; Phase 4 status unchanged.
+
+| Area | Result | Evidence / boundary |
+|---|---|---|
+| Home composition | `VERIFIED` (automated) | Top-aligned hero. The real map stretches to the hero band. The hero has the destination search and the coverage strip. "Popular destinations" is visible in the first viewport at 1280, 1366, and 1440. The decorative graph band was removed. Height at 1440: 3208 → 2771 px |
+| Home destination search | `VERIFIED` (automated) | Same `DestinationSearch` component as Navigate. The dropdown paints above the strip. Keyboard selection opens `/map?facility=<id>` with the destination preselected at 1440, 1024, and 390 (18/18) |
+| Coverage strip | `PASS` | Values derived from `floors` and `facilities`: GF–5F and 94 facilities on the map. `test:map-experience` rejects typed-in figures |
+| Dashboard | `VERIFIED` (automated) | Contract section order guarded by `test:dashboard`. No column gap at 1440. Office Availability is a compact list. Height at 1440: 4330 → 2862 px; at 390: 8710 → 6816 px |
+| Facilities | `VERIFIED` (automated) | Denser auto-fill grid and phone row cards. Height at 1440: 10315 → 8173 px; at 390: 33080 → 14606 px |
+| 3D framing | `VERIFIED` (automated) | Portrait canvases keep the full bounding sphere, so the building is no longer clipped at the sides. Landscape is unchanged |
+| Regression | `PASS` | npm matrix 24/24 steps pass (21 suites, ESLint, typecheck, production build). Responsive matrix 448/448 (28 routes × 8 widths × Light/Dark). Interactions 144/144. Map QA 59/59. Layering 4/4 |
+| Bundle | `REVIEWED` | Entry 471.7 kB (unchanged), CSS 117.4 kB (+0.4 kB), lazy 3D 879.7 kB and QR decoder 415.3 kB (unchanged), 2D renderer 21.8 kB (unchanged). `DestinationSearch` is now a 4.8 kB chunk shared by Home and Navigate, so the Navigate chunk shrank by about 5 kB |
+| Not verified | `PENDING` | Owner visual sign-off; Firefox, Safari/WebKit, and physical devices; live authenticated Admin data |
+
+## Real map reuse and immersive fullscreen navigation — 3 October 2026 (post-freeze change under `DEC-UI-005`)
+
+**Classification:** `IMPLEMENTED_VERIFIED (automated, headless Chromium) / OWNER VISUAL REVIEW PENDING`. Approved new functional requirement (owner request), presentation only; Phase 4 status unchanged.
+
+| Area | Result | Evidence / boundary |
+|---|---|---|
+| One map, one spatial truth | `PASS` | `CampusMapCanvas` is the only component that mounts `IndoorMap2D` and `Campus3D` and imports the canonical floors, facilities, nodes/edges, QR checkpoints, and emergency records; Navigate, Home, and Dashboard use it; geometry still lives only in `src/data/floors.js` and `src/data/additionalFloorMaps.js` (`test:map-experience`) |
+| Home real map | `VERIFIED` (automated) | "Campus at a glance" shows the real 3D building on capable desktops (2D on phones/touch/low capability/no WebGL), floor selection focuses the floor, facility card and "Open full map" use `?floor=`/`?facility=`; the schematic floor stack is retired |
+| Dashboard real map | `VERIFIED` (automated) | "Campus Overview" shows the real 2D map (3D on request) beside the real count links; the conceptual orbit graphic is retired; one heavy renderer per page |
+| 2D pan/zoom | `VERIFIED` (automated) | Drag pans with a grab cursor; wheel zoom keeps the pointed map point fixed; zoom buttons step ×1.25; limits 0.6×–8× of the fitted scale; fit contains the floor; reset restores the readable Navigate default; keyboard arrows and +/− work; a drag never selects a room while a click does |
+| Touch | `VERIFIED_SYNTHETIC` | Chromium touch emulation: one-finger pan and pinch zoom on Navigate; on previews a vertical swipe scrolls the page without moving the map and a pinch zooms. Real touch hardware not exercised |
+| 3D orbit/pan/zoom | `VERIFIED` (automated) | Drag orbit, right-drag pan, wheel zoom, zoom in/out, aspect-aware fit, reset, and floor focus change the view; an orbit released over a room no longer selects it; a click still does; WebGL via SwiftShader only |
+| Fullscreen | `VERIFIED` (automated) | Native Fullscreen API and the forced overlay fallback (desktop and 390px phone): the map fills the viewport, route state and step survive entry and exit, navigation continues inside, focus is contained and returns to the control, Escape and the visible Exit button work, the 3D canvas resizes to the fullscreen area and after resize/orientation change, CLARA's trigger is hidden while immersive |
+| Emergency / QR / routing | `UNCHANGED` | Emergency Mode in fullscreen draws the same approved route with the same safety copy and legend; a QR-confirmed location is "you are here" in fullscreen 2D and 3D; no graph, route, restriction, QR, or emergency data changed; all deterministic suites pass |
+| Legend / theme | `VERIFIED` (automated) | Route stroke `#15703C` with matching legend in Light and Dark fullscreen; previews and controls use semantic tokens |
+| Responsive / console | `VERIFIED` (headless) | Home, Dashboard, and Navigate at 1440, 1366, 1280, 1024, 820, 768, 430, and 390 in Light and Dark with no horizontal overflow or console errors |
+| Bundle | `REVIEWED` | Entry 471.7 kB (+0.1 kB), CSS 117.0 kB (+0.9 kB), lazy 3D 879.7 kB (+1.3 kB, existing advisory), QR decoder 415.3 kB unchanged; the 2D renderer is now a 21.8 kB chunk shared by Navigate, Home, Dashboard, and Facility Detail, plus a 6.8 kB preview chunk; desktop Home now loads the lazy 3D chunk after first render |
+| Not verified | `PENDING` | Real phones/tablets and trackpads, iPhone/iPad Safari (overlay path verified only by disabling the API in Chromium), Firefox, device frame rate/memory for the 3D Home preview; 3D rotation has no keyboard equivalent |
+
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
 **Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — FS-3A/FS-3B IMPLEMENTED_VERIFIED`
@@ -771,7 +833,7 @@ Phase 2 changes only acceptance tracking documents. It does not deploy, refactor
 | Operating hours | `13`, `42`, `56` | pending-state handling in facility UI/data | `BLOCKED` — unknown hours are not invented | No authorized hours, exception calendar, or status engine dataset | Institutional-data decision and owner approval |
 | Notifications | `15`, `22`, `47` | `notifications` schema/RLS, Dashboard provider, Admin content pages | `IMPLEMENTED_UNVERIFIED` — local lifecycle/provider tests passed | Live audience and permission behavior not freshly reverified; optional push/SMS absent | Phase 2 live in-app verification; delivery channels deferred |
 | Events | `15`, `22`, `47` | `events` schema/RLS, `src/pages/Events.jsx`, Dashboard/Admin providers | `IMPLEMENTED_UNVERIFIED` — local lifecycle and rendering evidence passed | Live event CRUD/audience behavior not freshly reverified | Phase 2 live content verification |
-| CLARA | `17`, `18`, `20`, `41`, `60` | `src/pages/Clara.jsx` | `PARTIAL` — UI and conservative local facility matcher exist | No server-side model, tool orchestration, role-aware grounding, or provider endpoint; must not be called production AI | `DEFERRED` until internal services and authorization are accepted |
+| CLARA | `17`, `18`, `20`, `41`, `60` | `src/pages/Clara.jsx` at audit time; since `DEC-UI-003`/`DEC-UI-005` integration, `src/components/clara/*` and `src/services/claraService.js` (global floating assistant; same local matcher) | `PARTIAL` — UI and conservative local facility matcher exist | No server-side model, tool orchestration, role-aware grounding, or provider endpoint; must not be called production AI | `DEFERRED` until internal services and authorization are accepted |
 | PWA/offline emergency access | `12`, `24`, `30` | `public/manifest.json` only | `MISSING` — no service worker, cache strategy, or versioned emergency cache was found | Manifest alone can create an unsupported offline claim | Future approved PWA/emergency-cache phase |
 | Map administration | `11`, `16`, `45`, `46` | developer verification panel and `src/pages/admin/QRCheckpoints.jsx` | `PARTIAL` — inspection/QR tooling exists | No production floor-plan upload, calibration, geometry editor, map version history or coherent rollback | Future approved map-administration phase |
 | Reports/analytics | `23`, `49`, `60` | no dedicated implementation found | `MISSING` | No report workflow, verification queue, privacy model, or analytics dashboard | Future approved reporting phase |

@@ -1,6 +1,7 @@
 import { CalendarClock, FileText, Send, X } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { button, focusRing } from "@/components/campus/ui"
+import useModalDialog from "@/components/campus/useModalDialog"
 import {
   ADMIN_RESOURCE_CONFIG,
   ADMIN_RESOURCE_KEYS,
@@ -11,7 +12,7 @@ import {
 } from "@/services/adminService"
 import { cn } from "@/lib/utils"
 
-const fieldClass = cn("min-h-11 rounded-xl border-[#D2D2D7] bg-white shadow-none", focusRing)
+const fieldClass = cn("block min-h-11 w-full rounded-xl border border-line-strong bg-surface px-3 text-sm text-ink shadow-none placeholder:text-ink-faint", focusRing)
 
 const toLocalDateTime = (value) => {
   if (!value) return ""
@@ -102,38 +103,40 @@ export default function AdminContentEditor({ resource, record, audiences, facili
   const isAdvisory = resource === ADMIN_RESOURCE_KEYS.FACILITY_ADVISORIES
   const hasCategory = resource === ADMIN_RESOURCE_KEYS.ANNOUNCEMENTS || resource === ADMIN_RESOURCE_KEYS.NOTIFICATIONS
 
+  const dialogRef = useModalDialog({ active: open, onClose: busy ? null : () => onOpenChange(false) })
+
   if (!open) return null
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-3" onMouseDown={(event) => event.target === event.currentTarget && !busy && onOpenChange(false)}>
-      <section role="dialog" aria-modal="true" aria-labelledby="admin-editor-title" className="relative max-h-[94dvh] w-full max-w-4xl overflow-y-auto rounded-[1.5rem] border border-[#D2D2D7] bg-white shadow-2xl">
-        <header className="border-b border-[#E5E5E7] px-6 pb-5 pt-6 pr-12">
-          <h2 id="admin-editor-title" className="text-2xl font-semibold tracking-tight text-[#1D1D1F]">{record ? `Edit ${config.singular}` : `New ${config.singular}`}</h2>
-          <p className="mt-1.5 text-sm text-[#6E6E73]">Content is stored as plain text and remains private until explicitly published.</p>
+      <section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="admin-editor-title" className="relative max-h-[94dvh] w-full max-w-4xl overflow-y-auto rounded-[1.5rem] border border-line-strong bg-surface shadow-2xl">
+        <header className="border-b border-line px-6 pb-5 pt-6 pr-12">
+          <h2 id="admin-editor-title" className="text-2xl font-semibold tracking-tight text-ink">{record ? `Edit ${config.singular}` : `New ${config.singular}`}</h2>
+          <p className="mt-1.5 text-sm text-ink-soft">Content is stored as plain text and remains private until explicitly published.</p>
         </header>
-        <button type="button" disabled={busy} onClick={() => onOpenChange(false)} aria-label="Close editor" className={cn("absolute right-4 top-4 rounded-full p-2 text-[#6E6E73] hover:bg-[#F5F5F7]", focusRing)}><X className="h-4 w-4" /></button>
+        <button type="button" disabled={busy} onClick={() => onOpenChange(false)} aria-label="Close editor" className={cn("absolute right-4 top-4 rounded-full p-2 text-ink-soft hover:bg-fill", focusRing)}><X className="h-4 w-4" /></button>
 
         <div className="grid gap-4 px-5 py-4 sm:grid-cols-2 sm:px-6">
           <label className="sm:col-span-2">
-            <span className="text-xs font-semibold text-[#48484A]">Title</span>
+            <span className="text-xs font-semibold text-ink-mid">Title</span>
             <input value={form.title} maxLength={180} onChange={(event) => setField("title", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`} placeholder={`${config.singular} title`} />
           </label>
 
           <label className="sm:col-span-2">
-            <span className="text-xs font-semibold text-[#48484A]">{isEvent ? "Description" : "Message"}</span>
+            <span className="text-xs font-semibold text-ink-mid">{isEvent ? "Description" : "Message"}</span>
             <textarea
               value={isEvent ? form.description : form.message}
               maxLength={10_000}
               rows={6}
               onChange={(event) => setField(isEvent ? "description" : "message", event.target.value)}
-              className={`${fieldClass} mt-1.5 min-h-32 resize-y`}
+              className={`${fieldClass} mt-1.5 min-h-32 resize-y py-2.5`}
               placeholder="Plain-text content"
             />
           </label>
 
           {hasCategory && (
             <label>
-              <span className="text-xs font-semibold text-[#48484A]">Category</span>
+              <span className="text-xs font-semibold text-ink-mid">Category</span>
               <select value={form.category} onChange={(event) => setField("category", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`}>
                 {CATEGORIES.map((category) => <option key={category} value={category}>{pretty(category)}</option>)}
               </select>
@@ -142,7 +145,7 @@ export default function AdminContentEditor({ resource, record, audiences, facili
 
           {isAdvisory && (
             <label>
-              <span className="text-xs font-semibold text-[#48484A]">Advisory type</span>
+              <span className="text-xs font-semibold text-ink-mid">Advisory type</span>
               <select value={form.advisory_type} onChange={(event) => setField("advisory_type", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`}>
                 {ADVISORY_TYPES.map((type) => <option key={type} value={type}>{pretty(type)}</option>)}
               </select>
@@ -150,14 +153,14 @@ export default function AdminContentEditor({ resource, record, audiences, facili
           )}
 
           <label>
-            <span className="text-xs font-semibold text-[#48484A]">Priority</span>
+            <span className="text-xs font-semibold text-ink-mid">Priority</span>
             <select value={form.priority} onChange={(event) => setField("priority", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`}>
               {PRIORITIES.map((priority) => <option key={priority} value={priority}>{pretty(priority)}</option>)}
             </select>
           </label>
 
           <label>
-            <span className="text-xs font-semibold text-[#48484A]">Verification</span>
+            <span className="text-xs font-semibold text-ink-mid">Verification</span>
             <select value={form.verification_status} onChange={(event) => setField("verification_status", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`}>
               {VERIFICATION_STATUSES.map((status) => <option key={status} value={status}>{pretty(status)}</option>)}
             </select>
@@ -166,61 +169,61 @@ export default function AdminContentEditor({ resource, record, audiences, facili
           {isEvent && (
             <>
               <label>
-                <span className="text-xs font-semibold text-[#48484A]">Start time</span>
+                <span className="text-xs font-semibold text-ink-mid">Start time</span>
                 <input type="datetime-local" value={form.starts_at} onChange={(event) => setField("starts_at", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`} />
               </label>
               <label>
-                <span className="text-xs font-semibold text-[#48484A]">End time</span>
+                <span className="text-xs font-semibold text-ink-mid">End time</span>
                 <input type="datetime-local" value={form.ends_at} onChange={(event) => setField("ends_at", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`} />
               </label>
               <label>
-                <span className="text-xs font-semibold text-[#48484A]">Location label</span>
+                <span className="text-xs font-semibold text-ink-mid">Location label</span>
                 <input value={form.location} onChange={(event) => setField("location", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`} placeholder="Pending verification" />
               </label>
               <label>
-                <span className="text-xs font-semibold text-[#48484A]">Organizer</span>
+                <span className="text-xs font-semibold text-ink-mid">Organizer</span>
                 <input value={form.organizer} onChange={(event) => setField("organizer", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`} placeholder="Pending verification" />
               </label>
             </>
           )}
 
           <label className={isAdvisory ? "sm:col-span-2" : ""}>
-            <span className="text-xs font-semibold text-[#48484A]">Facility {isAdvisory ? "" : "(optional)"}</span>
+            <span className="text-xs font-semibold text-ink-mid">Facility {isAdvisory ? "" : "(optional)"}</span>
             <select value={form.related_facility_id} onChange={(event) => setField("related_facility_id", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`}>
               {!isAdvisory && <option value="">No linked facility</option>}
               {isAdvisory && <option value="">Select an existing facility</option>}
               {facilities.map((facility) => <option key={facility.id} value={facility.id}>{facility.name} — {facility.floorId}</option>)}
             </select>
-            <span className="mt-1 block text-[10px] text-[#86868B]">Uses the same stable CampusNav facility ID as maps, navigation, QR, and Dashboard.</span>
+            <span className="mt-1 block text-[10px] text-ink-faint">Uses the same stable CampusNav facility ID as maps, navigation, QR, and Dashboard.</span>
           </label>
 
           <label>
-            <span className="text-xs font-semibold text-[#48484A]">Effective at</span>
+            <span className="text-xs font-semibold text-ink-mid">Effective at</span>
             <input type="datetime-local" value={form.effective_at} onChange={(event) => setField("effective_at", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`} />
           </label>
           <label>
-            <span className="text-xs font-semibold text-[#48484A]">Expires at</span>
+            <span className="text-xs font-semibold text-ink-mid">Expires at</span>
             <input type="datetime-local" value={form.expires_at} onChange={(event) => setField("expires_at", event.target.value)} className={`${fieldClass} mt-1.5 w-full px-3 text-sm`} />
           </label>
 
           <fieldset className="sm:col-span-2">
-            <legend className="text-xs font-semibold text-[#48484A]">Audience targeting</legend>
+            <legend className="text-xs font-semibold text-ink-mid">Audience targeting</legend>
             {audiences.length ? (
-              <div className="mt-2 grid gap-2 rounded-2xl border border-[#E5E5E7] p-3 sm:grid-cols-2">
+              <div className="mt-2 grid gap-2 rounded-2xl border border-line p-3 sm:grid-cols-2">
                 {audiences.map((audience) => (
-                  <label key={audience.id} className="flex items-center gap-2 rounded-xl px-2 py-1.5 text-xs text-[#48484A] hover:bg-[#F5F5F7]">
+                  <label key={audience.id} className="flex items-center gap-2 rounded-xl px-2 py-1.5 text-xs text-ink-mid hover:bg-fill">
                     <input type="checkbox" checked={form.audienceIds.includes(audience.id)} onChange={(event) => toggleAudience(audience.id, event.target.checked)} className="h-4 w-4 accent-black" />
                     <span>{audience.label || pretty(audience.audience_type)}</span>
                   </label>
                 ))}
               </div>
-            ) : <p className="mt-2 text-xs text-[#86868B]">No audience records are currently configured. Public visibility still follows lifecycle and RLS.</p>}
+            ) : <p className="mt-2 text-xs text-ink-faint">No audience records are currently configured. Public visibility still follows lifecycle and RLS.</p>}
           </fieldset>
         </div>
 
-        {error && <p role="alert" className="mx-6 mb-4 rounded-xl border border-[#D2D2D7] bg-[#F5F5F7] px-4 py-3 text-sm text-[#1D1D1F]">{error}</p>}
+        {error && <p role="alert" className="mx-6 mb-4 rounded-xl border border-line-strong bg-fill px-4 py-3 text-sm text-ink">{error}</p>}
 
-        <footer className="sticky bottom-0 flex flex-wrap justify-end gap-2 border-t border-[#E5E5E7] bg-white px-6 py-4">
+        <footer className="sticky bottom-0 flex flex-wrap justify-end gap-2 border-t border-line bg-surface px-6 py-4">
           <button type="button" disabled={busy} onClick={() => onOpenChange(false)} className={button.ghost}>Close</button>
           <button type="button" disabled={busy} onClick={() => submit(record?.lifecycle || "DRAFT")} className={button.smallSecondary}>
             <FileText className="h-3.5 w-3.5" aria-hidden="true" /> {record ? "Save Changes" : "Save Draft"}

@@ -10,7 +10,7 @@ export default function ProtectedRoute({ children, requiredRoles = [] }) {
   const location = useLocation()
 
   if (auth.loading) {
-    return <main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-[#F5F5F7] px-6 text-sm text-[#6E6E73]">Checking session...</main>
+    return <main className="flex min-h-[calc(100dvh-var(--app-header-height))] items-center justify-center bg-canvas px-6 text-sm text-ink-soft">Checking session...</main>
   }
 
   if (!auth.isAuthenticated) {

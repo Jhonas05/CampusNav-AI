@@ -1,14 +1,24 @@
-import { ArrowRight, BookOpen, CalendarDays, Compass, Database, FlaskConical, HeartPulse, Landmark, LayoutGrid, MessageCircle, Monitor, Navigation, ShieldAlert, Sparkles, Users } from "lucide-react"
+import { ArrowRight, BookOpen, CalendarDays, Compass, Database, FlaskConical, HeartPulse, Landmark, LayoutGrid, MessageCircle, Monitor, Navigation, ShieldAlert, Users } from "lucide-react"
 import { useMemo, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import SchoolLogo from "@/components/campus/SchoolLogo"
 import { button, card, cardHover, EmptyState, focusRing, PriorityBadge, SectionHeader } from "@/components/campus/ui"
+import ClaraMark from "@/components/clara/ClaraMark"
+import { useClara } from "@/components/clara/ClaraContext"
+import HowItWorks from "@/components/home/HowItWorks"
+import QuickActions from "@/components/home/QuickActions"
+import SmartCampusStrip from "@/components/home/SmartCampusStrip"
+import CampusMapPreview from "@/components/map/CampusMapPreview"
+import DestinationSearch from "@/components/map/DestinationSearch"
+import MotionReveal, { StaggerGroup } from "@/components/motion/MotionReveal"
 import QuickAccessCard from "@/components/home/QuickAccessCard"
 import { announcements } from "@/data/announcements"
-import { getFacilityById } from "@/data/facilities"
+import { facilities, getFacilityById } from "@/data/facilities"
 import { getFloorById } from "@/data/floors"
+import { getFacilityEntranceNodes } from "@/data/mapNodes"
 import { formatCampusDateTime, formatCampusShortTime } from "@/lib/campusTime"
 import { getFacilityCategory } from "@/lib/facilityCategories"
+import { getNavigateHref } from "@/lib/mapLinks"
 import { getDashboardSnapshot } from "@/services/dashboardService"
 
 const QUICK_ACCESS = [
@@ -21,70 +31,15 @@ const QUICK_ACCESS = [
   { facilityId: "osas", label: "OSAS", icon: Users },
 ]
 
+const NAVIGABLE_FACILITIES = facilities.filter((facility) => facility.navigable !== false && getFacilityEntranceNodes(facility.id, facility.floorId).length > 0)
+
 const CLARA_SUGGESTIONS = ["Where is the Registrar?", "Is the Library open?", "What events are happening today?"]
 
-const HERO_FLOORS = [
-  { id: "5F", construction: true },
-  { id: "4F" },
-  { id: "3F", emphasized: true },
-  { id: "2F" },
-  { id: "GF" },
-]
-
-function CampusPreview() {
-  return (
-    <Link
-      to="/map"
-      aria-label="Open the campus map"
-      className={`ink-blueprint group relative block overflow-hidden p-4 transition-colors duration-200 hover:border-[#98989B] motion-reduce:transition-none sm:p-5 ${focusRing}`}
-    >
-      <div className="flex items-center justify-between">
-        <span className="rounded-full border border-[#D2D2D7] bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#48484A]">3D Campus · GF–5F</span>
-        <span className="hidden items-center gap-1.5 text-xs font-medium text-[#6E6E73] transition-colors duration-200 group-hover:text-[#1D1D1F] sm:flex">
-          Open map <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-        </span>
-      </div>
-
-      <svg viewBox="0 0 320 330" aria-hidden="true" className="mx-auto mt-2 block max-h-[320px] w-full max-w-[390px]">
-        <defs>
-          <pattern id="home-construction" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <rect width="8" height="8" fill="#F5F5F7" />
-            <path d="M0 0V8" stroke="#B8B8BD" strokeWidth="2" />
-          </pattern>
-        </defs>
-
-        {/* stair continuity line through the floor stack */}
-        <line x1="196" y1="34" x2="196" y2="286" stroke="#47A36B" strokeWidth="1.5" strokeDasharray="3 5" />
-
-        {HERO_FLOORS.map((floor, index) => {
-          const y = 28 + index * 58
-          const plate = `M40 ${y + 30} L160 ${y} L280 ${y + 30} L160 ${y + 60} Z`
-          return (
-            <g key={floor.id}>
-              <path d={plate} fill={floor.construction ? "url(#home-construction)" : floor.emphasized ? "#EEF7F1" : "#FFFFFF"} stroke={floor.emphasized ? "#15703C" : "#D4D4D7"} strokeWidth={floor.emphasized ? 2 : 1.25} />
-              {floor.emphasized && (
-                <>
-                  <rect x="86" y="150" width="30" height="14" rx="2" fill="#DBEAFE" stroke="#93C5FD" strokeWidth="1" transform="skewX(-14)" />
-                  <rect x="150" y="145" width="30" height="14" rx="2" fill="#EDE9FE" stroke="#C4B5FD" strokeWidth="1" transform="skewX(-14)" />
-                  <path d="M92 172 L128 163 L166 172 L196 165" fill="none" stroke="#1E7A45" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="92" cy="172" r="5" fill="#2563EB" stroke="#FFFFFF" strokeWidth="1.5" />
-                  <circle cx="196" cy="165" r="5.5" fill="#FFFFFF" stroke="#DC2626" strokeWidth="2.5" />
-                </>
-              )}
-              <text x="292" y={y + 34} fontSize="12" fontWeight="700" fill={floor.emphasized ? "#15703C" : "#7A7A7D"}>{floor.id}</text>
-            </g>
-          )
-        })}
-      </svg>
-
-      <p className="mt-4 text-center text-[10px] font-medium uppercase tracking-[0.14em] text-[#86868B]">Schematic preview · vertical dimensions estimated</p>
-    </Link>
-  )
-}
-
 export default function Home() {
+  const { openClara } = useClara()
   const navigate = useNavigate()
   const [claraQuery, setClaraQuery] = useState("")
+  const [destinationQuery, setDestinationQuery] = useState("")
   const snapshot = useMemo(() => getDashboardSnapshot({ now: new Date() }), [])
   const upcomingEvents = useMemo(() => [...snapshot.events.today, ...snapshot.events.upcoming].slice(0, 3), [snapshot])
   const navigationNotice = snapshot.navigationNotices[0] || null
@@ -95,48 +50,77 @@ export default function Home() {
 
   const askClara = (event) => {
     event.preventDefault()
-    navigate(`/clara${claraQuery.trim() ? `?q=${encodeURIComponent(claraQuery.trim())}` : ""}`)
+    openClara({ question: claraQuery.trim() || null })
+    setClaraQuery("")
   }
 
   return (
     <div>
-      <section className="ink-grid-paper overflow-hidden border-b border-[#98989B] px-[var(--app-page-gutter)] py-8 sm:py-10 lg:py-7">
-        <div className="mx-auto grid max-w-[var(--app-max-width)] items-center gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(380px,0.95fr)] xl:gap-10">
-          <div>
+      <section aria-label="CampusNav overview" className="relative border-b border-line bg-canvas-raised px-[var(--app-page-gutter)] pb-8 pt-7 sm:pt-9 lg:pb-9 lg:pt-8">
+        <div className="relative mx-auto grid max-w-[var(--app-max-width)] gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.12fr)] lg:items-stretch xl:gap-8">
+          <StaggerGroup className="flex flex-col">
             <div className="flex items-center gap-3">
               <SchoolLogo size="lg" />
               <p className="ink-kicker">St. Clare College of Caloocan</p>
             </div>
-            <h1 className="mt-3 font-display text-6xl font-extrabold uppercase leading-[0.84] tracking-[0.02em] text-[#1D1F20] sm:text-7xl xl:text-8xl">CampusNav</h1>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-[#6E6E73] sm:text-lg">
-              Smart Campus Navigation and Digital Campus Assistance for St. Clare College of Caloocan.
+            <h1 className="mt-4 font-display text-[2.5rem] font-semibold leading-[1.02] tracking-[-0.035em] text-ink sm:text-[3.25rem] xl:text-[3.75rem]">CampusNav</h1>
+            <p className="mt-3 max-w-xl text-lg font-medium leading-snug tracking-[-0.01em] text-ink sm:text-xl">
+              Smart Campus Navigation and Information Platform
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-2.5">
-              <Link to="/map" className={button.primary}>
-                <Navigation className="h-4 w-4" aria-hidden="true" /> Navigate Campus
+            <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-ink-soft">
+              Find any office, room, or laboratory across GF–5F, see how to get there in 2D or 3D, and ask CLARA along the way.
+            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-2.5">
+              <Link to="/map" className={`${button.primary} group`}>
+                <Navigation className="nav-icon h-4 w-4" data-motion="forward" aria-hidden="true" /> Navigate Campus
               </Link>
-              <Link to="/clara" className={button.secondary}>
-                <Sparkles className="h-4 w-4" aria-hidden="true" /> Ask CLARA
-              </Link>
+              <button type="button" onClick={() => openClara()} className={button.secondary}>
+                <ClaraMark className="h-4 w-4" /> Ask CLARA
+              </button>
               <Link to="/dashboard" className={button.ghost}>
                 <LayoutGrid className="h-4 w-4" aria-hidden="true" /> View Dashboard
               </Link>
             </div>
-          </div>
-          <CampusPreview />
-        </div>
-      </section>
+            <DestinationSearch
+              facilities={NAVIGABLE_FACILITIES}
+              query={destinationQuery}
+              onQueryChange={setDestinationQuery}
+              onSelect={(facility) => navigate(getNavigateHref({ facilityId: facility.id }))}
+              className="mt-6 max-w-xl"
+            />
+            <div className="mt-6 lg:mt-auto lg:pt-6">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-faint">What CampusNav covers</p>
+              <SmartCampusStrip />
+            </div>
+          </StaggerGroup>
 
-      <section aria-labelledby="quick-access-title" className="px-[var(--app-page-gutter)] py-10 sm:py-12">
-        <div className="mx-auto max-w-[var(--app-max-width)]">
+          <MotionReveal index={2} className="rounded-[22px] border border-line bg-surface p-3 shadow-soft sm:p-4 lg:flex lg:flex-col">
+            <div className="flex items-center justify-between gap-3 px-1">
+              <div>
+                <p className="ink-kicker">Campus at a glance</p>
+                <h2 className="mt-1 text-[15px] font-semibold tracking-[-0.01em] text-ink">Explore the campus</h2>
+              </div>
+              <Link to="/map" className={`group inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-ink-soft hover:text-ink ${focusRing}`}>
+                Open map <ArrowRight className="nav-icon h-3.5 w-3.5" data-motion="forward" aria-hidden="true" />
+              </Link>
+            </div>
+            <CampusMapPreview
+              className="mt-3 lg:flex lg:flex-1 lg:flex-col"
+              preferredView="3D"
+              label="St. Clare College campus map"
+              heightClass="h-[22rem] sm:h-[26rem] lg:h-auto lg:min-h-[25rem] lg:flex-1"
+            />
+          </MotionReveal>
+        </div>
+
+        <div className="relative mx-auto mt-8 max-w-[var(--app-max-width)]">
           <SectionHeader
             eyebrow="Quick Access"
-            title="Where do you need to go?"
+            title="Popular destinations"
             description="Frequently visited offices, laboratories, and services across the campus."
-            action={<Link to="/facilities" className={`hidden items-center gap-1.5 rounded-md text-sm font-medium text-[#1D1D1F] sm:inline-flex ${focusRing}`}>View all facilities <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>}
+            action={<Link to="/facilities" className={`hidden items-center gap-1.5 rounded-md text-sm font-medium text-ink sm:inline-flex ${focusRing}`}>View all facilities <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>}
           />
-          <h2 id="quick-access-title" className="sr-only">Quick access</h2>
-          <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
+          <StaggerGroup className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
             {quickAccessItems.map(({ facilityId, label, icon, facility }) => (
               <QuickAccessCard
                 key={facilityId}
@@ -148,46 +132,50 @@ export default function Home() {
               />
             ))}
             <QuickAccessCard to="/emergency" name="Emergency" detail="Verified safety information" icon={ShieldAlert} emphasis />
-          </div>
-          <Link to="/facilities" className={`mt-6 inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-[#1D1D1F] sm:hidden ${focusRing}`}>
+          </StaggerGroup>
+          <Link to="/facilities" className={`mt-4 inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-ink sm:hidden ${focusRing}`}>
             View all facilities <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
       </section>
 
-      <section aria-label="Campus status" className="border-y border-[#D4D4D7] bg-[#E9E9EA] px-[var(--app-page-gutter)] py-10 sm:py-12">
+      <section aria-labelledby="quick-actions-title" className="px-[var(--app-page-gutter)] pt-10 sm:pt-12">
+        <div className="mx-auto max-w-[var(--app-max-width)]">
+          <SectionHeader eyebrow="Quick Actions" title="Start here" />
+          <h2 id="quick-actions-title" className="sr-only">Quick actions</h2>
+          <div className="mt-5"><QuickActions /></div>
+        </div>
+      </section>
+
+      <HowItWorks />
+
+      <section aria-label="Campus status" className="border-y border-line bg-canvas-raised px-[var(--app-page-gutter)] py-10 sm:py-12">
         <div className="mx-auto max-w-[var(--app-max-width)]">
           <SectionHeader eyebrow="Campus Status" title="Right now on campus" />
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
-            <article className={`${card} p-5`}>
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700"><Navigation className="h-5 w-5" aria-hidden="true" /></span>
-              <p className="mt-5 text-3xl font-semibold tracking-tight">GF–5F</p>
-              <p className="mt-1 text-sm font-medium text-[#1D1D1F]">Indoor navigation coverage</p>
-              <p className="mt-2 text-xs leading-relaxed text-[#6E6E73]">Source-aligned floor maps with schematic route costs — not measured meters.</p>
-            </article>
+          <StaggerGroup className="mt-5 grid gap-4 md:grid-cols-2">
             <article className={`${card} p-5`}>
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-50 text-gold-700"><Database className="h-5 w-5" aria-hidden="true" /></span>
               <p className="mt-3 text-lg font-semibold tracking-tight">{snapshot.status.label}</p>
-              <p className="mt-1 text-sm font-medium text-[#1D1D1F]">Campus data status</p>
-              <p className="mt-2 text-xs leading-relaxed text-[#6E6E73]">{snapshot.status.notice}</p>
+              <p className="mt-1 text-sm font-medium text-ink">Campus data status</p>
+              <p className="mt-2 text-xs leading-relaxed text-ink-soft">{snapshot.status.notice}</p>
             </article>
             <article className={`${card} p-5`}>
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-700"><ShieldAlert className="h-5 w-5" aria-hidden="true" /></span>
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-fill text-ink"><ShieldAlert className="h-5 w-5" aria-hidden="true" /></span>
               {navigationNotice ? (
                 <>
                   <p className="mt-3 text-lg font-semibold tracking-tight">{navigationNotice.title}</p>
-                  <p className="mt-1 text-sm font-medium text-[#1D1D1F]">Navigation notice</p>
-                  <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-[#6E6E73]">{navigationNotice.message}</p>
+                  <p className="mt-1 text-sm font-medium text-ink">Navigation notice</p>
+                  <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-ink-soft">{navigationNotice.message}</p>
                 </>
               ) : (
                 <>
                   <p className="mt-3 text-lg font-semibold tracking-tight">No restrictions recorded</p>
-                  <p className="mt-1 text-sm font-medium text-[#1D1D1F]">Navigation notices</p>
-                  <p className="mt-2 text-xs leading-relaxed text-[#6E6E73]">Mapped route restrictions will appear here.</p>
+                  <p className="mt-1 text-sm font-medium text-ink">Navigation notices</p>
+                  <p className="mt-2 text-xs leading-relaxed text-ink-soft">Mapped route restrictions will appear here.</p>
                 </>
               )}
             </article>
-          </div>
+          </StaggerGroup>
         </div>
       </section>
 
@@ -196,7 +184,7 @@ export default function Home() {
           <SectionHeader
             eyebrow="Upcoming Events"
             title="On the campus calendar"
-            action={<Link to="/events" className={`inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-[#1D1D1F] ${focusRing}`}>All events <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>}
+            action={<Link to="/events" className={`inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-ink ${focusRing}`}>All events <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>}
           />
           <h2 id="home-events-title" className="sr-only">Upcoming events</h2>
           <div className="mt-5">
@@ -204,10 +192,10 @@ export default function Home() {
               <div className="grid gap-4 md:grid-cols-3">
                 {upcomingEvents.map((event) => (
                   <article key={event.id} className={`${card} ${cardHover} p-5`}>
-                    <CalendarDays className="h-5 w-5 text-[#6E6E73]" aria-hidden="true" />
+                    <CalendarDays className="h-5 w-5 text-ink-soft" aria-hidden="true" />
                     <h3 className="mt-4 font-semibold tracking-tight">{event.title}</h3>
-                    <p className="mt-2 text-sm text-[#6E6E73]">{formatCampusDateTime(event.startAt)}–{formatCampusShortTime(event.endAt)}</p>
-                    {event.location && <p className="mt-1 text-sm text-[#6E6E73]">{event.location}</p>}
+                    <p className="mt-2 text-sm text-ink-soft">{formatCampusDateTime(event.startAt)}–{formatCampusShortTime(event.endAt)}</p>
+                    {event.location && <p className="mt-1 text-sm text-ink-soft">{event.location}</p>}
                   </article>
                 ))}
               </div>
@@ -223,7 +211,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section aria-label="Announcements and CLARA" className="border-t border-[#E5E5E7] bg-[#F5F5F7] px-[var(--app-page-gutter)] py-10 sm:py-12">
+      <section aria-label="Announcements and CLARA" className="border-t border-line px-[var(--app-page-gutter)] py-10 sm:py-12">
         <div className="mx-auto grid max-w-[var(--app-max-width)] gap-5 lg:grid-cols-[1.35fr_1fr]">
           <div>
             <SectionHeader eyebrow="Important Announcements" title="Campus updates" />
@@ -232,9 +220,9 @@ export default function Home() {
                 <article key={announcement.id} className={`${card} p-5`}>
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="font-semibold tracking-tight text-[#1D1D1F]">{announcement.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">{announcement.body}</p>
-                      <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#86868B]">Source: {announcement.source}</p>
+                      <h3 className="font-semibold tracking-tight text-ink">{announcement.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-ink-soft">{announcement.body}</p>
+                      <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-faint">Source: {announcement.source}</p>
                     </div>
                     <PriorityBadge priority={announcement.priority === "high" ? "IMPORTANT" : "NORMAL"} className="shrink-0" />
                   </div>
@@ -243,41 +231,42 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="ink-blueprint flex flex-col justify-between border-brand-900 bg-brand-900 p-6 text-white">
+          <MotionReveal as="aside" className="flex flex-col justify-between rounded-[22px] bg-ink p-6 text-on-ink">
             <div>
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gold-500/20 text-gold-200">
-                <Sparkles className="h-5 w-5" aria-hidden="true" />
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-on-ink/15 text-on-ink">
+                <ClaraMark className="h-5 w-5" />
               </span>
-              <h2 className="mt-6 font-display text-3xl font-bold uppercase tracking-[0.04em]">Ask CLARA</h2>
-              <p className="mt-2 text-sm leading-relaxed text-white/65">
+              <h2 className="mt-6 font-display text-2xl font-semibold tracking-[-0.02em]">Ask CLARA</h2>
+              <p className="mt-2 text-sm leading-relaxed text-on-ink/70">
                 Campus Learning Alerts &amp; Response Assistant — locations, services, schedules, and official campus information.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {CLARA_SUGGESTIONS.map((suggestion) => (
-                  <Link
+                  <button
                     key={suggestion}
-                    to={`/clara?q=${encodeURIComponent(suggestion)}`}
-                    className={`rounded-full border border-white/25 px-3.5 py-1.5 text-xs text-white/85 transition-colors duration-200 hover:border-gold-300 hover:text-white ${focusRing} focus-visible:ring-white focus-visible:ring-offset-brand-900`}
+                    type="button"
+                    onClick={() => openClara({ question: suggestion })}
+                    className={`rounded-full border border-on-ink/25 px-3.5 py-1.5 text-xs text-on-ink/85 transition-colors duration-200 hover:border-on-ink/70 hover:text-on-ink ${focusRing} focus-visible:ring-on-ink focus-visible:ring-offset-ink`}
                   >
                     {suggestion}
-                  </Link>
+                  </button>
                 ))}
               </div>
             </div>
-            <form onSubmit={askClara} className="mt-8 flex items-center gap-2 rounded-full bg-white p-1.5 pl-4">
-              <MessageCircle className="h-4 w-4 shrink-0 text-[#86868B]" aria-hidden="true" />
+            <form onSubmit={askClara} className="mt-8 flex items-center gap-2 rounded-full bg-surface p-1.5 pl-4">
+              <MessageCircle className="h-4 w-4 shrink-0 text-ink-faint" aria-hidden="true" />
               <input
                 value={claraQuery}
                 onChange={(event) => setClaraQuery(event.target.value)}
                 placeholder="Ask CLARA..."
                 aria-label="Ask CLARA"
-                className="min-w-0 flex-1 bg-transparent text-sm text-[#1D1D1F] outline-none placeholder:text-[#86868B]"
+                className="min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-ink-faint"
               />
-              <button type="submit" aria-label="Send to CLARA" className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-700 text-white transition-colors hover:bg-brand-800 ${focusRing}`}>
+              <button type="submit" aria-label="Send to CLARA" className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-700 text-on-ink transition-colors hover:bg-brand-800 ${focusRing}`}>
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </button>
             </form>
-          </aside>
+          </MotionReveal>
         </div>
       </section>
     </div>

@@ -55,14 +55,14 @@ function Floor3D({
     <group ref={groupRef} position={[0, 0, 0]} visible={!isolateFloor || selectedFloor || opacity > 0.01}>
       <mesh position={[0, -MAP3D_CONFIG.floorThickness / 2, 0]} receiveShadow frustumCulled>
         <boxGeometry args={[width, MAP3D_CONFIG.floorThickness, depth]} />
-        <meshStandardMaterial color={selectedFloor ? "#F5F5F7" : "#E8E8ED"} transparent opacity={opacity} roughness={1} depthWrite={opacity > 0.2} />
+        <meshStandardMaterial color={selectedFloor ? "#FBFBFA" : "#E4E4E3"} transparent opacity={opacity} roughness={1} depthWrite={opacity > 0.2} />
       </mesh>
 
-      {floor.map.hallways.map((hallway) => <PolygonSurface key={hallway.id} points={localPoints(hallway.polygon, 0.01)} color="#C7C7CC" opacity={opacity} />)}
+      {floor.map.hallways.map((hallway) => <PolygonSurface key={hallway.id} points={localPoints(hallway.polygon, 0.01)} color="#D9D9D7" opacity={opacity} />)}
       {floor.map.stairways.map((stairway) => {
         const points = localPoints(stairway.polygon, 0.04)
         const outline = [...points.map((point) => [point.x, 0.18, point.z]), [points[0].x, 0.18, points[0].z]]
-        return <group key={stairway.id}><PolygonSurface points={points} height={0.16} color="#86868B" opacity={opacity} /><Line points={outline} color="#1D1D1F" lineWidth={1.5} transparent opacity={opacity} /></group>
+        return <group key={stairway.id}><PolygonSurface points={points} height={0.16} color="#8A8A8D" opacity={opacity} /><Line points={outline} color="#1D1F20" lineWidth={1.5} transparent opacity={opacity} /></group>
       })}
 
       {floor.map.rooms.map((room) => {
@@ -88,9 +88,9 @@ function Floor3D({
         )
       })}
 
-      <Html position={[-width / 2 - 0.8, MAP3D_CONFIG.wallHeight, -depth / 2]} center distanceFactor={13} style={{ pointerEvents: "none" }}>
-        <div className={`rounded-lg border px-3 py-2 text-center shadow-sm ${selectedFloor ? "border-[#213A92] bg-[#213A92] text-white" : "border-[#B8B8BD] bg-white/90 text-[#1D1D1F]"}`}>
-          <p className="text-sm font-bold">{floor.shortName}</p>
+      <Html position={[-width / 2 - 0.8, MAP3D_CONFIG.wallHeight, -depth / 2]} center distanceFactor={13} zIndexRange={[15, 0]} style={{ pointerEvents: "none" }}>
+        <div className={`rounded-md border px-2.5 py-1.5 text-center ${selectedFloor ? "border-ink bg-ink text-on-ink" : "border-line-strong bg-surface/90 text-ink-mid"}`}>
+          <p className="font-heading text-[15px] font-semibold leading-none">{floor.shortName}</p>
           {debugOptions?.show3DFloorElevations && <p className="mt-0.5 whitespace-nowrap text-[8px] opacity-70">Y {elevation.toFixed(2)} · ESTIMATED</p>}
         </div>
       </Html>

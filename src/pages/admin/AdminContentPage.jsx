@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AdminContentEditor from "@/components/admin/AdminContentEditor"
 import AdminShell from "@/components/admin/AdminShell"
+import useModalDialog from "@/components/campus/useModalDialog"
 import { EmptyState, PageHeader, PriorityBadge, Skeleton, StatusBadge, button, focusRing } from "@/components/campus/ui"
 import { useToast } from "@/components/ui/use-toast"
 import { ADMIN_RESOURCE_CONFIG, ADMIN_RESOURCE_KEYS, LIFECYCLES, PRIORITIES, getAdminService } from "@/services/adminService"
@@ -114,6 +115,8 @@ export default function AdminContentPage({ resource }) {
     }
   }
 
+  const deleteDialogRef = useModalDialog({ active: Boolean(deleteRecord), onClose: busy ? null : () => setDeleteRecord(null) })
+
   return (
     <AdminShell>
       <PageHeader
@@ -123,22 +126,22 @@ export default function AdminContentPage({ resource }) {
         actions={<button type="button" onClick={() => openEditor()} className={button.primary}><Plus className="h-4 w-4" aria-hidden="true" /> New {config.singular}</button>}
       />
 
-      <section aria-label={`${config.label} filters`} className="mt-5 grid gap-2.5 rounded-3xl border border-[#E5E5E7] bg-white p-3 md:grid-cols-[minmax(220px,1fr)_160px_160px_170px]">
+      <section aria-label={`${config.label} filters`} className="mt-5 grid gap-2.5 rounded-3xl border border-line bg-surface p-3 md:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_repeat(3,minmax(8.5rem,170px))]">
         <label className="relative">
           <span className="sr-only">Search by title</span>
-          <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-[#86868B]" aria-hidden="true" />
-          <input value={filters.search} onChange={(event) => setFilters((current) => ({ ...current, search: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-[#D2D2D7] bg-white pl-9 pr-3 text-sm", focusRing)} placeholder="Search title" />
+          <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-ink-faint" aria-hidden="true" />
+          <input value={filters.search} onChange={(event) => setFilters((current) => ({ ...current, search: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-line-strong bg-surface pl-9 pr-3 text-sm", focusRing)} placeholder="Search title" />
         </label>
         <label>
           <span className="sr-only">Lifecycle filter</span>
-          <select value={filters.lifecycle} onChange={(event) => setFilters((current) => ({ ...current, lifecycle: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-[#D2D2D7] bg-white px-3 text-sm", focusRing)}>
+          <select value={filters.lifecycle} onChange={(event) => setFilters((current) => ({ ...current, lifecycle: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-line-strong bg-surface px-3 text-sm", focusRing)}>
             <option value="ALL">All statuses</option>
             {LIFECYCLES.map((lifecycle) => <option key={lifecycle} value={lifecycle}>{pretty(lifecycle)}</option>)}
           </select>
         </label>
         <label>
           <span className="sr-only">Priority filter</span>
-          <select value={filters.priority} onChange={(event) => setFilters((current) => ({ ...current, priority: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-[#D2D2D7] bg-white px-3 text-sm", focusRing)}>
+          <select value={filters.priority} onChange={(event) => setFilters((current) => ({ ...current, priority: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-line-strong bg-surface px-3 text-sm", focusRing)}>
             <option value="ALL">All priorities</option>
             {PRIORITIES.map((priority) => <option key={priority} value={priority}>{pretty(priority)}</option>)}
           </select>
@@ -148,7 +151,7 @@ export default function AdminContentPage({ resource }) {
           <select value={`${filters.sortField}:${filters.ascending}`} onChange={(event) => {
             const [sortField, ascending] = event.target.value.split(":")
             setFilters((current) => ({ ...current, sortField, ascending: ascending === "true" }))
-          }} className={cn("min-h-11 w-full rounded-xl border border-[#D2D2D7] bg-white px-3 text-sm", focusRing)}>
+          }} className={cn("min-h-11 w-full rounded-xl border border-line-strong bg-surface px-3 text-sm", focusRing)}>
             <option value="updated_at:false">Recently updated</option>
             <option value="created_at:false">Recently created</option>
             <option value="title:true">Title A–Z</option>
@@ -159,34 +162,34 @@ export default function AdminContentPage({ resource }) {
       </section>
 
       {error && (
-        <div role="alert" className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D2D2D7] bg-white px-5 py-4 text-sm text-[#1D1D1F]">
+        <div role="alert" className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line-strong bg-surface px-5 py-4 text-sm text-ink">
           <span>{error}</span><button type="button" onClick={load} className={button.smallSecondary}>Try again</button>
         </div>
       )}
 
-      <section aria-label={`${config.label} records`} className="mt-4 overflow-hidden rounded-3xl border border-[#E5E5E7] bg-white">
+      <section aria-label={`${config.label} records`} className="mt-4 overflow-hidden rounded-3xl border border-line bg-surface">
         {loading ? (
           <div className="space-y-3 p-5">{[0, 1, 2].map((item) => <Skeleton key={item} className="h-20 w-full" />)}</div>
         ) : records.length ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] border-collapse text-left">
-              <thead className="border-b border-[#E5E5E7] bg-[#FAFAFA] text-[10px] font-bold uppercase tracking-[0.12em] text-[#86868B]">
+              <thead className="border-b border-line bg-subtle text-[10px] font-bold uppercase tracking-[0.12em] text-ink-faint">
                 <tr><th className="px-5 py-3">Title / Type</th><th className="px-4 py-3">Priority</th><th className="px-4 py-3">Lifecycle</th><th className="px-4 py-3">Effective / Expires</th><th className="px-4 py-3">Updated</th><th className="px-5 py-3 text-right">Actions</th></tr>
               </thead>
-              <tbody className="divide-y divide-[#E5E5E7]">
+              <tbody className="divide-y divide-line">
                 {records.map((record) => (
                   <tr key={record.id} className="align-top">
-                    <td className="max-w-sm px-5 py-4"><p className="font-semibold text-[#1D1D1F]">{record.title}</p><p className="mt-1 text-xs text-[#86868B]">{pretty(record.category || record.advisory_type || (resource === ADMIN_RESOURCE_KEYS.EVENTS ? "EVENT" : resource))}{record.audienceIds.length ? ` · ${record.audienceIds.length} audience${record.audienceIds.length === 1 ? "" : "s"}` : " · Public lifecycle only"}</p></td>
+                    <td className="max-w-sm px-5 py-4"><p className="font-semibold text-ink">{record.title}</p><p className="mt-1 text-xs text-ink-faint">{pretty(record.category || record.advisory_type || (resource === ADMIN_RESOURCE_KEYS.EVENTS ? "EVENT" : resource))}{record.audienceIds.length ? ` · ${record.audienceIds.length} audience${record.audienceIds.length === 1 ? "" : "s"}` : " · Public lifecycle only"}</p></td>
                     <td className="px-4 py-4"><PriorityBadge priority={record.priority} /></td>
                     <td className="px-4 py-4"><StatusBadge status={record.lifecycle} /></td>
-                    <td className="px-4 py-4 text-xs leading-relaxed text-[#48484A]"><span className="block">{formatDate(record.effective_at || record.starts_at)}</span><span className="block text-[#86868B]">to {formatDate(record.expires_at || record.ends_at)}</span></td>
-                    <td className="px-4 py-4 text-xs text-[#6E6E73]">{formatDate(record.updated_at || record.created_at)}</td>
+                    <td className="px-4 py-4 text-xs leading-relaxed text-ink-mid"><span className="block">{formatDate(record.effective_at || record.starts_at)}</span><span className="block text-ink-faint">to {formatDate(record.expires_at || record.ends_at)}</span></td>
+                    <td className="px-4 py-4 text-xs text-ink-soft">{formatDate(record.updated_at || record.created_at)}</td>
                     <td className="px-5 py-4">
                       <div className="flex justify-end gap-1">
-                        <button type="button" disabled={busy} onClick={() => openEditor(record)} aria-label={`Edit ${record.title}`} title="Edit" className={cn("rounded-full p-2 text-[#48484A] hover:bg-[#F5F5F7]", focusRing)}><Edit3 className="h-4 w-4" /></button>
-                        {!['CANCELLED', 'EXPIRED'].includes(record.lifecycle) && <button type="button" disabled={busy} onClick={() => transition(record, "CANCELLED")} aria-label={`Cancel ${record.title}`} title="Cancel content" className={cn("rounded-full p-2 text-[#48484A] hover:bg-[#F5F5F7]", focusRing)}><Ban className="h-4 w-4" /></button>}
-                        {record.lifecycle === "PUBLISHED" && <button type="button" disabled={busy} onClick={() => transition(record, "EXPIRED")} aria-label={`Expire ${record.title}`} title="Expire content" className={cn("rounded-full p-2 text-[#48484A] hover:bg-[#F5F5F7]", focusRing)}><CalendarX2 className="h-4 w-4" /></button>}
-                        <button type="button" disabled={busy} onClick={() => setDeleteRecord(record)} aria-label={`Delete ${record.title}`} title="Delete" className={cn("rounded-full p-2 text-[#48484A] hover:bg-[#F5F5F7]", focusRing)}><Trash2 className="h-4 w-4" /></button>
+                        <button type="button" disabled={busy} onClick={() => openEditor(record)} aria-label={`Edit ${record.title}`} title="Edit" className={cn("rounded-full p-2 text-ink-mid hover:bg-fill", focusRing)}><Edit3 className="h-4 w-4" /></button>
+                        {!['CANCELLED', 'EXPIRED'].includes(record.lifecycle) && <button type="button" disabled={busy} onClick={() => transition(record, "CANCELLED")} aria-label={`Cancel ${record.title}`} title="Cancel content" className={cn("rounded-full p-2 text-ink-mid hover:bg-fill", focusRing)}><Ban className="h-4 w-4" /></button>}
+                        {record.lifecycle === "PUBLISHED" && <button type="button" disabled={busy} onClick={() => transition(record, "EXPIRED")} aria-label={`Expire ${record.title}`} title="Expire content" className={cn("rounded-full p-2 text-ink-mid hover:bg-fill", focusRing)}><CalendarX2 className="h-4 w-4" /></button>}
+                        <button type="button" disabled={busy} onClick={() => setDeleteRecord(record)} aria-label={`Delete ${record.title}`} title="Delete" className={cn("rounded-full p-2 text-ink-mid hover:bg-fill", focusRing)}><Trash2 className="h-4 w-4" /></button>
                       </div>
                     </td>
                   </tr>
@@ -203,9 +206,9 @@ export default function AdminContentPage({ resource }) {
 
       {deleteRecord && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-4" onMouseDown={(event) => event.target === event.currentTarget && !busy && setDeleteRecord(null)}>
-          <section role="alertdialog" aria-modal="true" aria-labelledby="delete-title" aria-describedby="delete-description" className="w-full max-w-lg rounded-3xl border border-[#D2D2D7] bg-white p-6 shadow-2xl">
-            <h2 id="delete-title" className="text-lg font-semibold text-[#1D1D1F]">Delete this {config.singular.toLowerCase()}?</h2>
-            <p id="delete-description" className="mt-2 text-sm leading-relaxed text-[#6E6E73]">This permanently removes “{deleteRecord.title}” and its audience links. Prefer Cancel or Expire when retaining history is appropriate.</p>
+          <section ref={deleteDialogRef} role="alertdialog" aria-modal="true" aria-labelledby="delete-title" aria-describedby="delete-description" className="w-full max-w-lg rounded-3xl border border-line-strong bg-surface p-6 shadow-2xl">
+            <h2 id="delete-title" className="text-lg font-semibold text-ink">Delete this {config.singular.toLowerCase()}?</h2>
+            <p id="delete-description" className="mt-2 text-sm leading-relaxed text-ink-soft">This permanently removes “{deleteRecord.title}” and its audience links. Prefer Cancel or Expire when retaining history is appropriate.</p>
             <div className="mt-6 flex justify-end gap-2"><button type="button" disabled={busy} onClick={() => setDeleteRecord(null)} className={button.smallSecondary}>Keep record</button><button type="button" disabled={busy} onClick={remove} className={button.smallPrimary}>{busy ? "Deleting…" : "Delete permanently"}</button></div>
           </section>
         </div>

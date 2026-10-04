@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react"
 import { Link } from "react-router-dom"
-import { cardHover, focusRing } from "@/components/campus/ui"
+import { focusRing } from "@/components/campus/ui"
 import { cn } from "@/lib/utils"
 
 /** @param {Record<string, any>} props */
@@ -10,24 +10,23 @@ export default function QuickAccessCard(props) {
     <Link
       to={to}
       className={cn(
-        "group flex min-h-[106px] flex-col justify-between rounded-2xl border bg-white p-4",
-        emphasis ? "border-[1.5px] border-red-700" : "border-[#E5E5E7]",
-        cardHover,
+        "interactive-card group flex min-h-[106px] flex-col justify-between rounded-2xl border bg-surface p-4",
+        emphasis ? "border-[1.5px] border-ink" : "border-line",
         focusRing
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <span className={cn(
-          "flex h-9 w-9 items-center justify-center rounded-xl border border-transparent transition-transform duration-200 group-hover:scale-105 motion-reduce:transform-none",
-          emphasis ? "bg-red-700 text-white" : tileClass || "border-[#E5E5E7] bg-[#FAFAFA] text-[#1D1D1F]"
+          "flex h-9 w-9 items-center justify-center rounded-xl border border-transparent card-icon",
+          emphasis ? "bg-ink text-on-ink" : tileClass || "border-line bg-subtle text-ink"
         )}>
           <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
         </span>
-        <ChevronRight className="h-4 w-4 text-[#D2D2D7] transition-colors duration-200 group-hover:text-brand-700" aria-hidden="true" />
+        <ChevronRight className="card-arrow h-4 w-4 text-ink-ghost group-hover:text-ink" aria-hidden="true" />
       </div>
       <div>
-        <p className="text-[15px] font-semibold tracking-tight text-[#1D1D1F]">{name}</p>
-        <p className="mt-0.5 text-xs text-[#86868B]">{detail}</p>
+        <p className="text-[15px] font-semibold tracking-tight text-ink">{name}</p>
+        <p className="card-badge mt-0.5 inline-block text-xs text-ink-faint">{detail}</p>
       </div>
     </Link>
   )

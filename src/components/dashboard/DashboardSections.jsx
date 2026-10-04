@@ -2,6 +2,7 @@ import { AlertTriangle, ArrowRight, Building2, CalendarDays, Clock3, Constructio
 import { Link } from "react-router-dom"
 import { DashboardSection, EmptyState, RecordActions, VerificationMetadata, focusClass } from "./DashboardPrimitives"
 import { Chip, PriorityBadge, StatusBadge } from "@/components/campus/ui"
+import { useClara } from "@/components/clara/ClaraContext"
 import { formatCampusDateTime, formatCampusShortTime } from "@/lib/campusTime"
 
 /**
@@ -10,10 +11,10 @@ import { formatCampusDateTime, formatCampusShortTime } from "@/lib/campusTime"
  * INFORMATIONAL — dashed light gray.
  */
 const priorityStyles = {
-  URGENT: "border-2 border-red-700 bg-red-50/50",
-  IMPORTANT: "border-[1.5px] border-amber-400 bg-amber-50/50",
-  NORMAL: "border border-[#D2D2D7] bg-white",
-  INFORMATIONAL: "border border-dashed border-[#B8B8BD] bg-[#FAFAFA]",
+  URGENT: "border-2 border-ink bg-fill/50",
+  IMPORTANT: "border-[1.5px] border-ink-faint bg-fill/50",
+  NORMAL: "border border-line-strong bg-surface",
+  INFORMATIONAL: "border border-dashed border-ink-faint bg-subtle",
 }
 
 const priorityIcon = (category) => category === "EMERGENCY" || category === "SUSPENSION" ? ShieldAlert : category === "NAVIGATION" ? Navigation : AlertTriangle
@@ -27,9 +28,9 @@ export function PriorityAlertsSection({ records, verify }) {
             const Icon = priorityIcon(record.category)
             const urgent = record.priority === "URGENT"
             return (
-              <article key={record.id} className={`rounded-2xl p-4 ${priorityStyles[record.priority] || priorityStyles.NORMAL}`}>
+              <article key={record.id} className={`rounded-2xl p-4 ${urgent ? "urgent-emphasis" : ""} ${priorityStyles[record.priority] || priorityStyles.NORMAL}`}>
                 <div className="flex items-start gap-4">
-                  <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${urgent ? "bg-red-700 text-white" : "bg-amber-100 text-amber-800"}`}>
+                  <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${urgent ? "bg-ink text-on-ink" : "bg-fill text-ink"}`}>
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -39,7 +40,7 @@ export function PriorityAlertsSection({ records, verify }) {
                       {record.demo && <Chip>Demo data</Chip>}
                     </div>
                     <h3 className={`mt-3 text-base font-semibold tracking-tight ${urgent ? "text-[17px]" : ""}`}>{record.title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-[#6E6E73]">{record.message}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-ink-soft">{record.message}</p>
                     <RecordActions record={record} />
                     <VerificationMetadata record={record} visible={verify} />
                   </div>
@@ -61,14 +62,14 @@ export function ClassesSection({ records, verify }) {
           {records.map((record, index) => (
             <li key={record.id} className="relative flex gap-3 pb-4 last:pb-0 sm:gap-4">
               <div className="flex w-[74px] shrink-0 flex-col items-end pt-4 text-right">
-                <span className="text-sm font-semibold tabular-nums text-[#1D1D1F]">{formatCampusShortTime(record.startAt)}</span>
-                <span className="mt-0.5 text-xs tabular-nums text-[#86868B]">{formatCampusShortTime(record.endAt)}</span>
+                <span className="text-sm font-semibold tabular-nums text-ink">{formatCampusShortTime(record.startAt)}</span>
+                <span className="mt-0.5 text-xs tabular-nums text-ink-faint">{formatCampusShortTime(record.endAt)}</span>
               </div>
               <div aria-hidden="true" className="relative flex w-3 shrink-0 justify-center">
-                {index < records.length - 1 && <span className="absolute bottom-0 top-6 w-px bg-[#E5E5E7]" />}
-                <span className={`mt-[22px] h-2.5 w-2.5 shrink-0 rounded-full ${record.scheduleStatus === "SCHEDULED_NOW" ? "bg-green-600" : "border-2 border-blue-300 bg-white"}`} />
+                {index < records.length - 1 && <span className="absolute bottom-0 top-6 w-px bg-line" />}
+                <span className={`mt-[22px] h-2.5 w-2.5 shrink-0 rounded-full ${record.scheduleStatus === "SCHEDULED_NOW" ? "bg-ink" : "border-2 border-line-strong bg-surface"}`} />
               </div>
-              <article className="min-w-0 flex-1 rounded-2xl border border-[#E5E5E7] p-4">
+              <article className="min-w-0 flex-1 rounded-2xl border border-line p-4">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <h3 className="font-semibold tracking-tight">{record.subject}</h3>
                   <div className="flex flex-wrap gap-2">
@@ -76,10 +77,10 @@ export function ClassesSection({ records, verify }) {
                     {record.demo && <Chip>Demo data</Chip>}
                   </div>
                 </div>
-                <p className="mt-1 text-xs font-medium text-[#6E6E73]">{record.courseCode} · {record.section}</p>
-                <dl className="mt-3 space-y-1.5 text-sm text-[#6E6E73]">
-                  <div><dt className="inline font-medium text-[#1D1D1F]">Professor: </dt><dd className="inline">{record.professor}</dd></div>
-                  <div><dt className="inline font-medium text-[#1D1D1F]">Room: </dt><dd className="inline">{record.room}</dd></div>
+                <p className="mt-1 text-xs font-medium text-ink-soft">{record.courseCode} · {record.section}</p>
+                <dl className="mt-3 space-y-1.5 text-sm text-ink-soft">
+                  <div><dt className="inline font-medium text-ink">Professor: </dt><dd className="inline">{record.professor}</dd></div>
+                  <div><dt className="inline font-medium text-ink">Room: </dt><dd className="inline">{record.room}</dd></div>
                 </dl>
                 <RecordActions record={record} facilityLabel="View Room" />
                 <VerificationMetadata record={record} visible={verify} />
@@ -95,24 +96,29 @@ export function ClassesSection({ records, verify }) {
 export function OfficesSection({ records, verify }) {
   return (
     <DashboardSection id="office-availability" eyebrow="Facility information" title="Office Availability" description="Operating status remains unknown until official hours are connected and verified.">
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="divide-y divide-line overflow-hidden rounded-2xl border border-line">
         {records.map((record) => (
-          <article key={record.id} className="flex flex-col rounded-2xl border border-[#E5E5E7] p-4">
-            <div className="flex items-start justify-between gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E5E5E7] bg-[#FAFAFA]"><Building2 className="h-[18px] w-[18px]" aria-hidden="true" /></span>
-              {record.demo && <Chip>Demo data</Chip>}
-            </div>
-            <h3 className="mt-4 font-semibold tracking-tight">{record.facilityName}</h3>
-            <p className="mt-0.5 text-xs text-[#86868B]">{record.floorId}</p>
-            <div className="mt-3"><StatusBadge status={record.operatingStatus} /></div>
-            <p className="mt-3 text-sm leading-relaxed text-[#6E6E73]">
-              {record.openingTime && record.closingTime ? `${record.openingTime}–${record.closingTime}` : "Operating hours pending verification."}
-            </p>
-            <RecordActions record={record} />
-            <VerificationMetadata record={record} visible={verify} />
-          </article>
+          <li key={record.id}>
+            <article className="flex flex-col gap-2.5 px-3.5 py-3 sm:flex-row sm:items-center sm:gap-3 lg:flex-col lg:items-stretch xl:flex-row xl:items-center">
+              <div className="flex min-w-0 flex-1 items-start gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-subtle"><Building2 className="h-4 w-4" aria-hidden="true" /></span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <h3 className="text-sm font-semibold leading-snug tracking-tight">{record.facilityName}</h3>
+                    <StatusBadge status={record.operatingStatus} className="min-h-6 px-2.5 text-[9px]" />
+                    {record.demo && <Chip>Demo data</Chip>}
+                  </div>
+                  <p className="mt-1 text-xs text-ink-faint">
+                    {record.floorId} · {record.openingTime && record.closingTime ? `${record.openingTime}–${record.closingTime}` : "Operating hours pending verification."}
+                  </p>
+                </div>
+              </div>
+              <RecordActions record={record} className="mt-0 shrink-0 pl-12 sm:pl-0 lg:pl-12 xl:pl-0" />
+            </article>
+            <div className="px-3.5 pb-3 empty:hidden"><VerificationMetadata record={record} visible={verify} /></div>
+          </li>
         ))}
-      </div>
+      </ul>
     </DashboardSection>
   )
 }
@@ -129,28 +135,29 @@ const personnelMessage = (record) => {
 const initials = (name = "") => name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "—"
 
 export function PersonnelSection({ records, verify }) {
+  const { openClara } = useClara()
   return (
     <DashboardSection id="personnel-availability" eyebrow="Privacy-aware status" title="Personnel Availability" description="A schedule is not proof of physical presence. Only a CHECKED_IN record may indicate confirmed presence.">
       {!records.length ? <EmptyState title="Personnel availability information is not available." message="No authorized personnel schedule or check-in source is connected." /> : (
         <div className="grid gap-3 md:grid-cols-2">
           {records.map((record) => (
-            <article key={record.id} className="rounded-2xl border border-[#E5E5E7] p-4">
+            <article key={record.id} className="rounded-2xl border border-line p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E5E5E7] bg-[#FAFAFA] text-sm font-semibold text-[#48484A]">{initials(record.name)}</span>
+                  <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-subtle text-sm font-semibold text-ink-mid">{initials(record.name)}</span>
                   <div>
                     <h3 className="font-semibold tracking-tight">{record.name}</h3>
-                    <p className="text-xs text-[#86868B]">{record.role}</p>
+                    <p className="text-xs text-ink-faint">{record.role}</p>
                   </div>
                 </div>
                 {record.demo && <Chip>Demo data</Chip>}
               </div>
               <div className="mt-4"><StatusBadge status={record.status} /></div>
-              <p className="mt-3 text-sm leading-relaxed text-[#6E6E73]">{personnelMessage(record)}</p>
+              <p className="mt-3 text-sm leading-relaxed text-ink-soft">{personnelMessage(record)}</p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Link to={`/clara?q=${encodeURIComponent(`Where is ${record.name} scheduled today?`)}`} className={`${focusClass} inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[#D2D2D7] bg-white px-4 text-xs font-semibold text-[#1D1D1F] transition-colors duration-200 hover:border-[#86868B]`}>
+                <button type="button" onClick={() => openClara({ question: `Where is ${record.name} scheduled today?` })} className={`${focusClass} inline-flex min-h-10 items-center gap-1.5 rounded-full border border-line-strong bg-surface px-4 text-xs font-semibold text-ink transition-colors duration-200 hover:border-ink-faint`}>
                   <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> Ask CLARA
-                </Link>
+                </button>
               </div>
               <VerificationMetadata record={record} visible={verify} />
             </article>
@@ -167,14 +174,14 @@ export function AdvisoriesSection({ records, verify }) {
       {!records.length ? <EmptyState title="No current facility advisories." message="Official closure, maintenance, restriction, and interruption notices will appear here." /> : (
         <div className="space-y-3">
           {records.map((record) => (
-            <article key={record.id} className="rounded-2xl border-[1.5px] border-amber-400 bg-amber-50/40 p-4">
+            <article key={record.id} className="rounded-2xl border-[1.5px] border-ink-faint bg-fill/40 p-4">
               <div className="flex flex-wrap items-center gap-2">
-                <Construction className="h-5 w-5 text-amber-700" aria-hidden="true" />
+                <Construction className="h-5 w-5 text-ink" aria-hidden="true" />
                 <PriorityBadge priority={record.priority} />
                 {record.demo && <Chip>Demo data</Chip>}
               </div>
               <h3 className="mt-3 font-semibold tracking-tight">{record.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">{record.message}</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{record.message}</p>
               <RecordActions record={record} />
               <VerificationMetadata record={record} visible={verify} />
             </article>
@@ -188,17 +195,17 @@ export function AdvisoriesSection({ records, verify }) {
 const EventList = ({ records, verify, emptyTitle }) => !records.length ? <EmptyState title={emptyTitle} /> : (
   <div className="space-y-3">
     {records.map((record) => (
-      <article key={record.id} className="rounded-2xl border border-[#E5E5E7] p-4">
+      <article key={record.id} className="rounded-2xl border border-line p-4">
         <div className="flex items-start justify-between gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E5E5E7] bg-[#FAFAFA]"><CalendarDays className="h-[18px] w-[18px]" aria-hidden="true" /></span>
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-subtle"><CalendarDays className="h-[18px] w-[18px]" aria-hidden="true" /></span>
           <div className="flex flex-wrap justify-end gap-2">
             <StatusBadge status={record.status} />
             {record.demo && <Chip>Demo data</Chip>}
           </div>
         </div>
         <h3 className="mt-4 font-semibold tracking-tight">{record.title}</h3>
-        <p className="mt-2 text-sm text-[#6E6E73]">{formatCampusDateTime(record.startAt)}–{formatCampusShortTime(record.endAt)}</p>
-        <p className="mt-1 text-sm text-[#6E6E73]">{record.location} · {record.organizer}</p>
+        <p className="mt-2 text-sm text-ink-soft">{formatCampusDateTime(record.startAt)}–{formatCampusShortTime(record.endAt)}</p>
+        <p className="mt-1 text-sm text-ink-soft">{record.location} · {record.organizer}</p>
         <RecordActions record={record} navigateLabel="Navigate to Venue" />
         <VerificationMetadata record={record} visible={verify} />
       </article>
@@ -212,7 +219,7 @@ export function EventsSection({ events, verify }) {
       id="events-calendar"
       eyebrow="Calendar"
       title="Events & Calendar"
-      action={<Link to="/events" className={`${focusClass} inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-[#1D1D1F]`}>All events <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>}
+      action={<Link to="/events" className={`${focusClass} inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-ink`}>All events <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>}
     >
       <div className="grid gap-5 lg:grid-cols-2">
         <div>
@@ -234,7 +241,7 @@ export function AnnouncementsSection({ records, verify }) {
       {!records.length ? <EmptyState title="No general announcements are available." /> : (
         <div className="space-y-3">
           {records.map((record) => (
-            <article key={record.id} className="rounded-2xl border border-[#E5E5E7] p-4">
+            <article key={record.id} className="rounded-2xl border border-line p-4">
               <div className="flex items-start gap-3">
                 <Megaphone className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
                 <div className="min-w-0 flex-1">
@@ -243,7 +250,7 @@ export function AnnouncementsSection({ records, verify }) {
                     {record.demo && <Chip>Demo data</Chip>}
                   </div>
                   <h3 className="mt-3 font-semibold tracking-tight">{record.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">{record.message}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{record.message}</p>
                 </div>
               </div>
               <VerificationMetadata record={record} visible={verify} />
@@ -261,7 +268,7 @@ export function NavigationNoticesSection({ records, verify }) {
       {!records.length ? <EmptyState title="No current navigation notices." /> : (
         <div className="space-y-3">
           {records.map((record) => (
-            <article key={record.id} className="rounded-2xl border border-dashed border-[#86868B] bg-[#FAFAFA] p-4">
+            <article key={record.id} className="rounded-2xl border border-dashed border-ink-faint bg-subtle p-4">
               <div className="flex flex-wrap items-center gap-2">
                 <Navigation className="h-5 w-5 text-brand-700" aria-hidden="true" />
                 <PriorityBadge priority={record.priority} />
@@ -269,7 +276,7 @@ export function NavigationNoticesSection({ records, verify }) {
                 {record.demo && <Chip>Demo data</Chip>}
               </div>
               <h3 className="mt-3 font-semibold tracking-tight">{record.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">{record.message}</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{record.message}</p>
               <RecordActions record={record} />
               <VerificationMetadata record={record} visible={verify} />
             </article>

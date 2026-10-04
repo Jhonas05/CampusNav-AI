@@ -50,7 +50,7 @@ export default function FacilityPhoto(props) {
       />
       <Icon aria-hidden="true" className={cn("relative", variant === "thumb" ? "h-5 w-5" : "h-8 w-8")} />
       {showHint && variant !== "thumb" && (
-        <span className="relative mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide">
+        <span className="relative mt-2 inline-flex items-center gap-1.5 rounded-full bg-surface/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide">
           <ImagePlus className="h-3 w-3" aria-hidden="true" /> Photo slot
         </span>
       )}

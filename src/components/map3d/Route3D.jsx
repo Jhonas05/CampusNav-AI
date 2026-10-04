@@ -71,28 +71,47 @@ export default function Route3D({
     : segments
 
   if (!route || !eligibleRoute) return null
+  const palette = emergencyMode
+    ? { current: MAP_COLORS.emergencyRoute, complete: MAP_COLORS.emergencyRouteComplete, upcoming: MAP_COLORS.emergencyRouteUpcoming }
+    : { current: MAP_COLORS.route, complete: MAP_COLORS.routeComplete, upcoming: MAP_COLORS.routeUpcoming }
+  const transitionPoints = visibleSegments
+    .filter((segment) => segment.edgeType === "FLOOR_TRANSITION")
+    .flatMap((segment) => [segment.from, segment.to])
   return (
     <group>
-      {visibleSegments.map((segment, index) => {
-        const state = segmentProgress(index, segments.length, activeStep, instructionCount, navigationStatus)
+      {visibleSegments.map((segment) => (
+        <Line
+          key={`${segment.id}-casing`}
+          points={[worldToArray(segment.from), worldToArray(segment.to)]}
+          color="#FFFFFF"
+          lineWidth={7}
+          transparent
+          opacity={0.85}
+        />
+      ))}
+      {visibleSegments.map((segment) => {
+        const state = segmentProgress(segments.indexOf(segment), segments.length, activeStep, instructionCount, navigationStatus)
         const vertical = segment.edgeType === "FLOOR_TRANSITION" || segment.from.floorId !== segment.to.floorId
-        const palette = emergencyMode
-          ? { current: MAP_COLORS.emergencyRoute, complete: "#7F1D1D", upcoming: "#FCA5A5" }
-          : { current: MAP_COLORS.route, complete: MAP_COLORS.routeComplete, upcoming: MAP_COLORS.routeUpcoming }
         return (
           <Line
             key={segment.id}
             points={[worldToArray(segment.from), worldToArray(segment.to)]}
             color={palette[state]}
-            lineWidth={state === "current" ? 5 : vertical ? 4 : 3}
+            lineWidth={state === "current" ? 5 : vertical ? 4 : 3.5}
             dashed={state === "upcoming" || emergencyMode}
             dashSize={0.22}
             gapSize={0.13}
             transparent
-            opacity={state === "upcoming" ? 0.78 : 1}
+            opacity={state === "upcoming" ? 0.85 : 1}
           />
         )
       })}
+      {transitionPoints.map((point, index) => (
+        <mesh key={`${point.nodeId}-${index}`} position={worldToArray(point)} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.12, 0.19, 4, 1, Math.PI / 4]} />
+          <meshBasicMaterial color={palette.current} />
+        </mesh>
+      ))}
       {showRoutePoints && points.map((point) => (
         <mesh key={point.nodeId} position={worldToArray(point)}>
           <sphereGeometry args={[0.07, 8, 8]} />

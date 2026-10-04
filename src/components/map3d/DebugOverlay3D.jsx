@@ -23,7 +23,7 @@ export default function DebugOverlay3D({ nodes, edges, floors, viewMode, selecte
       {options.show3DNavigationNodes && visibleNodes.map((node) => (
         <group key={node.id} position={debugPoint({ node, floors, viewMode, offset: 0.54 })}>
           <mesh><sphereGeometry args={[0.055, 7, 7]} /><meshBasicMaterial color="#000000" /></mesh>
-          {options.show3DNodeIds && <Html position={[0, 0.12, 0]} center distanceFactor={17} style={{ pointerEvents: "none" }}><span className="whitespace-nowrap bg-white/85 px-1 font-mono text-[7px] text-black">{node.id}</span></Html>}
+          {options.show3DNodeIds && <Html position={[0, 0.12, 0]} center distanceFactor={17} zIndexRange={[15, 0]} style={{ pointerEvents: "none" }}><span className="whitespace-nowrap bg-surface/85 px-1 font-mono text-[7px] text-ink-strong">{node.id}</span></Html>}
         </group>
       ))}
     </group>

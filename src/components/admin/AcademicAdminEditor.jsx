@@ -1,6 +1,7 @@
 import { Save, X } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { button, focusRing } from "@/components/campus/ui"
+import useModalDialog from "@/components/campus/useModalDialog"
 import { cn } from "@/lib/utils"
 import {
   ACADEMIC_ADMIN_CONFIG,
@@ -13,7 +14,7 @@ import {
   VERIFICATION_STATUSES,
 } from "@/services/academicAdminService"
 
-const fieldClass = cn("min-h-11 w-full rounded-xl border border-[#D2D2D7] bg-white px-3 text-sm text-[#1D1D1F]", focusRing)
+const fieldClass = cn("min-h-11 w-full rounded-xl border border-line-strong bg-surface px-3 text-sm text-ink", focusRing)
 const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Manila", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date())
 const localDateTime = (value) => value ? new Date(value).toLocaleString("sv-SE", { timeZone: "Asia/Manila" }).slice(0, 16).replace(" ", "T") : ""
 const pretty = (value) => String(value || "").replaceAll("_", " ").toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase())
@@ -42,11 +43,11 @@ const defaultsFor = (resource, record) => {
 }
 
 function Field({ label, children, help = null, wide = false }) {
-  return <label className={wide ? "sm:col-span-2" : ""}><span className="text-xs font-semibold text-[#48484A]">{label}</span>{children}{help && <span className="mt-1 block text-[10px] leading-relaxed text-[#86868B]">{help}</span>}</label>
+  return <label className={wide ? "sm:col-span-2" : ""}><span className="text-xs font-semibold text-ink-mid">{label}</span>{children}{help && <span className="mt-1 block text-[10px] leading-relaxed text-ink-faint">{help}</span>}</label>
 }
 
 function Select({ value, onChange, children, disabled = false }) {
-  return <select value={value ?? ""} disabled={disabled} onChange={(event) => onChange(event.target.value)} className={`${fieldClass} mt-1.5 disabled:bg-[#F5F5F7] disabled:text-[#86868B]`}>{children}</select>
+  return <select value={value ?? ""} disabled={disabled} onChange={(event) => onChange(event.target.value)} className={`${fieldClass} mt-1.5 disabled:bg-fill disabled:text-ink-faint`}>{children}</select>
 }
 
 function Input({ value, onChange, type = "text", ...props }) {
@@ -54,7 +55,7 @@ function Input({ value, onChange, type = "text", ...props }) {
 }
 
 function Toggle({ checked, onChange, label, help }) {
-  return <label className="flex min-h-11 items-start gap-3 rounded-xl border border-[#D2D2D7] px-3 py-2.5"><input type="checkbox" checked={Boolean(checked)} onChange={(event) => onChange(event.target.checked)} className="mt-0.5 h-4 w-4 accent-black" /><span><span className="block text-xs font-semibold text-[#1D1D1F]">{label}</span>{help && <span className="mt-0.5 block text-[10px] leading-relaxed text-[#86868B]">{help}</span>}</span></label>
+  return <label className="flex min-h-11 items-start gap-3 rounded-xl border border-line-strong px-3 py-2.5"><input type="checkbox" checked={Boolean(checked)} onChange={(event) => onChange(event.target.checked)} className="mt-0.5 h-4 w-4 accent-black" /><span><span className="block text-xs font-semibold text-ink">{label}</span>{help && <span className="mt-0.5 block text-[10px] leading-relaxed text-ink-faint">{help}</span>}</span></label>
 }
 
 export default function AcademicAdminEditor({ resource, record, initialValues = null, references, open, busy, onOpenChange, onSave }) {
@@ -84,6 +85,8 @@ export default function AcademicAdminEditor({ resource, record, initialValues = 
     try { await onSave(form) } catch (saveError) { setError(saveError?.message || "The record could not be saved.") }
   }
 
+  const dialogRef = useModalDialog({ active: open, onClose: busy ? null : () => onOpenChange(false) })
+
   if (!open) return null
   const departmentOptions = <>{departments.filter((item) => item.active !== false).map((item) => <option key={item.id} value={item.id}>{item.code} — {item.name}</option>)}</>
   const personnelOptions = <>{personnel.filter((item) => item.active !== false).map((item) => <option key={item.id} value={item.id}>{item.display_name} — {pretty(item.personnel_type)}</option>)}</>
@@ -91,12 +94,12 @@ export default function AcademicAdminEditor({ resource, record, initialValues = 
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-3" onMouseDown={(event) => event.target === event.currentTarget && !busy && onOpenChange(false)}>
-      <section role="dialog" aria-modal="true" aria-labelledby="academic-editor-title" className="relative max-h-[94dvh] w-full max-w-4xl overflow-y-auto rounded-[1.5rem] border border-[#D2D2D7] bg-white shadow-2xl">
-        <header className="border-b border-[#E5E5E7] px-6 pb-5 pt-6 pr-12">
-          <h2 id="academic-editor-title" className="text-2xl font-semibold tracking-tight text-[#1D1D1F]">{record ? `Edit ${config.singular}` : resource === ACADEMIC_ADMIN_RESOURCES.SCHEDULE_EXCEPTIONS ? "Add Exception" : resource === ACADEMIC_ADMIN_RESOURCES.CHECK_INS ? "Check In Personnel" : `New ${config.singular}`}</h2>
-          <p className="mt-1.5 text-sm text-[#6E6E73]">Changes use the existing CampusNav tables, role-scoped RLS, audit stream, and Realtime refresh signal.</p>
+      <section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="academic-editor-title" className="relative max-h-[94dvh] w-full max-w-4xl overflow-y-auto rounded-[1.5rem] border border-line-strong bg-surface shadow-2xl">
+        <header className="border-b border-line px-6 pb-5 pt-6 pr-12">
+          <h2 id="academic-editor-title" className="text-2xl font-semibold tracking-tight text-ink">{record ? `Edit ${config.singular}` : resource === ACADEMIC_ADMIN_RESOURCES.SCHEDULE_EXCEPTIONS ? "Add Exception" : resource === ACADEMIC_ADMIN_RESOURCES.CHECK_INS ? "Check In Personnel" : `New ${config.singular}`}</h2>
+          <p className="mt-1.5 text-sm text-ink-soft">Changes use the existing CampusNav tables, role-scoped RLS, audit stream, and Realtime refresh signal.</p>
         </header>
-        <button type="button" disabled={busy} onClick={() => onOpenChange(false)} aria-label="Close editor" className={cn("absolute right-4 top-4 rounded-full p-2 text-[#6E6E73] hover:bg-[#F5F5F7]", focusRing)}><X className="h-4 w-4" /></button>
+        <button type="button" disabled={busy} onClick={() => onOpenChange(false)} aria-label="Close editor" className={cn("absolute right-4 top-4 rounded-full p-2 text-ink-soft hover:bg-fill", focusRing)}><X className="h-4 w-4" /></button>
 
         <div className="grid gap-4 px-5 py-4 sm:grid-cols-2 sm:px-6">
           {resource === ACADEMIC_ADMIN_RESOURCES.PERSONNEL && <>
@@ -170,8 +173,8 @@ export default function AcademicAdminEditor({ resource, record, initialValues = 
           </>}
         </div>
 
-        {error && <p role="alert" className="mx-6 mb-4 rounded-xl border border-[#D2D2D7] bg-[#F5F5F7] px-4 py-3 text-sm text-[#1D1D1F]">{error}</p>}
-        <footer className="sticky bottom-0 flex justify-end gap-2 border-t border-[#E5E5E7] bg-white px-6 py-4"><button type="button" disabled={busy} onClick={() => onOpenChange(false)} className={button.smallSecondary}>Cancel</button><button type="button" disabled={busy} onClick={submit} className={button.smallPrimary}><Save className="h-3.5 w-3.5" />{busy ? "Saving…" : resource === ACADEMIC_ADMIN_RESOURCES.CHECK_INS ? "Continue" : "Save"}</button></footer>
+        {error && <p role="alert" className="mx-6 mb-4 rounded-xl border border-line-strong bg-fill px-4 py-3 text-sm text-ink">{error}</p>}
+        <footer className="sticky bottom-0 flex justify-end gap-2 border-t border-line bg-surface px-6 py-4"><button type="button" disabled={busy} onClick={() => onOpenChange(false)} className={button.smallSecondary}>Cancel</button><button type="button" disabled={busy} onClick={submit} className={button.smallPrimary}><Save className="h-3.5 w-3.5" />{busy ? "Saving…" : resource === ACADEMIC_ADMIN_RESOURCES.CHECK_INS ? "Continue" : "Save"}</button></footer>
       </section>
     </div>
   )

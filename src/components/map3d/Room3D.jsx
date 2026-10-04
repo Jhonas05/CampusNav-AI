@@ -31,6 +31,7 @@ function Room3D({ room, facility, points, opacity, selected, destination, curren
   const restricted = state !== "NAVIGABLE"
   const geometry = useMemo(() => createExtrudedPolygonGeometry(points, MAP3D_CONFIG.wallHeight), [points])
   useEffect(() => () => geometry.dispose(), [geometry])
+  useEffect(() => () => { if (hovered) document.body.style.cursor = "" }, [hovered])
   const outline = [...points.map((point) => [point.x, MAP3D_CONFIG.wallHeight + 0.02, point.z]), [points[0].x, MAP3D_CONFIG.wallHeight + 0.02, points[0].z]]
   const labelPosition = [
     points.reduce((sum, point) => sum + point.x, 0) / points.length,
@@ -39,14 +40,16 @@ function Room3D({ room, facility, points, opacity, selected, destination, curren
   ]
   const category = getFacilityCategory(facility)
   const fill = restricted
-    ? "#9A9AA0"
+    ? "#B7B7BA"
     : destination
-      ? "#FCA5A5"
+      ? "#B9DCC6"
       : current
-        ? "#93C5FD"
-        : selected || hovered
-          ? category.map.stroke
-          : category.map.fill
+        ? "#CFCFD2"
+        : selected
+          ? MAP_COLORS.destinationTint
+          : hovered
+            ? category.map.stroke
+            : category.map.fill
 
   if (!showGeometry) return null
   return (
@@ -54,14 +57,19 @@ function Room3D({ room, facility, points, opacity, selected, destination, curren
       <mesh
         geometry={geometry}
         position={[0, MAP3D_CONFIG.floorThickness / 2, 0]}
-        onPointerOver={(event) => { event.stopPropagation(); setHovered(true) }}
-        onPointerOut={() => setHovered(false)}
-        onClick={(event) => { event.stopPropagation(); if (facility) onSelect?.(facility.id) }}
+        onPointerOver={(event) => { event.stopPropagation(); setHovered(true); document.body.style.cursor = "pointer" }}
+        onPointerOut={() => { setHovered(false); document.body.style.cursor = "" }}
+        onClick={(event) => {
+          event.stopPropagation()
+          // A release after orbiting/panning is not a selection (same 4px rule as 2D).
+          if (event.delta > 4) return
+          if (facility) onSelect?.(facility.id)
+        }}
         frustumCulled
       >
         <meshStandardMaterial color={fill} transparent opacity={opacity} roughness={0.92} metalness={0} depthWrite={opacity > 0.2} />
       </mesh>
-      <Line points={outline} color={destination ? MAP_COLORS.destination : current ? MAP_COLORS.current : selected ? category.map.strong : "#9A9AA0"} lineWidth={selected || destination || current ? 3 : 1} transparent opacity={opacity} />
+      <Line points={outline} color={destination ? MAP_COLORS.destination : current ? MAP_COLORS.current : selected ? MAP_COLORS.selected : "#9A9A9D"} lineWidth={selected || destination || current ? 2.6 : 1} transparent opacity={opacity} />
       {state === "UNDER_CONSTRUCTION" && <ConstructionHatch points={points} height={MAP3D_CONFIG.wallHeight + 0.05} opacity={opacity} />}
       {showLabel && facility && <FacilityLabel3D position={labelPosition} label={state === "UNDER_CONSTRUCTION" ? `${facility.name} · UNDER CONSTRUCTION` : facility.name} strong={selected || destination || current} />}
     </group>

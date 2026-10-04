@@ -20,11 +20,11 @@ export default class Map3DErrorBoundary extends Component {
   render() {
     if (!this.state.failed) return this.props.children
     return (
-      <div className="flex h-full min-h-[inherit] items-center justify-center bg-[#F5F5F7] p-8 text-center">
-        <div className="max-w-md rounded-3xl border border-[#1D1D1F] bg-white p-6">
-          <h2 className="text-xl font-semibold">3D view is unavailable</h2>
-          <p className="mt-3 text-sm leading-relaxed text-[#6E6E73]">Your navigation state is safe. Return to the 2D map to continue.</p>
-          <button type="button" onClick={this.props.onReturnTo2D} className="mt-5 rounded-full bg-[#1D1D1F] px-5 py-2.5 text-sm font-medium text-white">Return to 2D View</button>
+      <div className="ink-grid-paper flex h-full min-h-[inherit] items-center justify-center p-8 text-center">
+        <div role="alert" className="max-w-md rounded-2xl border border-ink bg-surface p-6">
+          <h2 className="font-heading text-xl font-semibold">3D view unavailable</h2>
+          <p className="mt-2 text-sm leading-relaxed text-ink-soft">Your current location, destination, and route are preserved. Return to the 2D map to continue.</p>
+          <button type="button" onClick={this.props.onReturnTo2D} className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-ink px-5 font-heading text-sm font-semibold text-on-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-700 focus-visible:ring-offset-2">Return to 2D View</button>
         </div>
       </div>
     )

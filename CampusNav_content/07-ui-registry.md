@@ -13,18 +13,18 @@ Do not duplicate business logic in UI components. UI must consume the existing s
 
 ## Approved design-system baseline
 
-`DEC-UI-002` establishes CampusNav Ink / architectural blueprint as the application-wide presentation baseline. The implementation must use centralized neutral, CampusNav green, emergency red, typography, geometry, border, and motion tokens rather than copying bundled artifact markup or inline styles.
+The frozen UI baseline (`DEC-UI-005`) is the monochrome application shell of `DEC-UI-003` with the Light/Dark/System theme and motion system of `DEC-UI-004`; it supersedes the CampusNav Ink chrome of `DEC-UI-002`. The implementation uses the centralized semantic tokens in `src/index.css` / `tailwind.config.js` (`canvas`, `surface`, `fill`, `line`, `ink`, `on-ink`, ...) rather than hex color classes; `npm run test:theme` enforces this. Map-canvas wayfinding colors remain the `MAP_COLORS` semantics.
 
 | Pattern | Visual structure | Required behavior/accessibility | React mapping |
 |---|---|---|---|
-| Application shell | Off-white canvas, charcoal typography, thin borders, clear desktop/mobile navigation | Current route exposed; keyboard access; mobile navigation preserved | `AppLayout`, `Navbar`, `MobileTabBar` |
-| Blueprint panel | Sharp bordered surface with optional corner registration marks | Decorative marks hidden from assistive technology; caller supplies content semantics | shared CampusNav UI primitive |
-| Kicker / section label | Compact uppercase condensed label with tracking | Never substitutes for a semantic heading | shared CampusNav UI primitive |
-| Primary action | CampusNav green fill, high-contrast label, compact radius | Visible hover, active, focus, loading, and disabled states | shared button primitives and page actions |
-| Emergency action | Emergency red with icon/text reinforcement | Red is never the only signal; confirmation where destructive | Emergency surfaces and destructive action variants |
-| Data/status chip | Neutral or controlled semantic color, compact technical shape | Text or icon states meaning explicitly | shared badge/status primitives |
-| Map frame | Blueprint panel surrounding the existing 2D/3D renderer | One spatial dataset and one A* engine; 2D fallback; map legend; color-independent cues | Navigate map components |
-| Dialog/drawer | Bordered neutral surface with restrained elevation | Focus management, close behavior, and labelled title | existing dialog/sheet primitives |
+| Application shell | Grayscale canvas, left sidebar (expanded / icon rail / mobile drawer), floating CLARA | Current route exposed; skip link; keyboard access; drawer traps focus, closes on Escape, and returns focus to its opener | `AppShell`, `Sidebar`, `MobileSidebarDrawer`, `MobileTopBar` |
+| Blueprint panel | Soft-radius bordered surface (registration marks retired by `DEC-UI-003`) | Caller supplies content semantics | shared CampusNav UI primitive |
+| Kicker / section label | Compact uppercase label with modest tracking | Never substitutes for a semantic heading | shared CampusNav UI primitive |
+| Primary action | Ink fill with on-ink label, soft radius (light ink in Dark) | Visible hover, active, focus, loading, and disabled states | shared button primitives and page actions |
+| Emergency / destructive action | Heaviest ink treatment (solid ink-strong with a double rule, or a 2px ink outline) plus icon/text; no hue in chrome | Never relies on color; confirmation where destructive | Emergency surfaces and destructive action variants |
+| Data/status chip | Monochrome tone (fill, border weight, dashed outline) plus icon and text | Text or icon states meaning explicitly | shared badge/status primitives |
+| Map frame | Bordered surface around the existing 2D/3D renderer; the canvas keeps semantic `MAP_COLORS` | One spatial dataset and one A* engine; 2D fallback; legend swatches match the drawn marks per view; color-independent cues | Navigate map components |
+| Dialog/drawer | Bordered surface with restrained elevation | Focus entry, Tab containment, Escape, and focus return (`useModalDialog` for custom dialogs; Radix for drawer/sheets); labelled title | `src/components/campus/useModalDialog.js`, existing dialog/sheet primitives |
 
 ---
 
@@ -38,8 +38,8 @@ Do not duplicate business logic in UI components. UI must consume the existing s
 | Facility Detail `/facilities/:id` | Facility facts, services, hours/availability, nearby facilities, navigation CTA | Blueprint detail header with structured fact and action panels | Existing verified/published facility records only | Semantic labels; no invented room, schedule, or institutional data | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
 | Navigate `/map` | Start/destination, 2D/3D map, route summary, steps | Blueprint map frame with separate controls and route instruction rail | Canonical spatial dataset, one A* engine, existing route state | 2D fallback, keyboard controls, text steps, non-color cues, reduced motion | ACCEPTED_WITH_ADVISORY — 2D desktop render and 2D/3D regressions passed; manual 3D/device QA pending |
 | Events `/events` | Today/upcoming event discovery and details | Calendar/list sections with compact date blocks and bordered entries | Existing published event records | Date/time in text; empty/loading/error states | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
-| Emergency `/emergency` | Emergency contacts, procedures, approved evacuation assistance | High-priority red-accented blueprint panels without decorative urgency | Existing verified emergency contacts, procedures, and emergency-approved graph only | Red reinforced with icons/headings/text; immediate keyboard/touch access | ACCEPTED_WITH_ADVISORY — automated desktop render and safety regressions passed; manual device QA pending |
-| CLARA `/clara` | Current concierge placeholder and suggested prompts | Calm conversational panel with clear capability boundary | Existing placeholder/local behavior; not final grounded Groq/tool integration | Messages and controls labelled; limitations visible | PARTIAL — presentation only; final grounding deferred |
+| Emergency `/emergency` | Emergency contacts, procedures, approved evacuation assistance | High-priority heavy-ink panels without decorative urgency; only the map canvas keeps semantic red | Existing verified emergency contacts, procedures, and emergency-approved graph only | Urgency carried by weight, icons, headings, and text; immediate keyboard/touch access | ACCEPTED_WITH_ADVISORY — automated desktop render and safety regressions passed; manual device QA pending |
+| CLARA (floating assistant; `/clara` opens it) | Current concierge placeholder and suggested prompts | Lower-right floating trigger with a non-modal chat popup / mobile sheet and a clear capability boundary | Existing placeholder/local behavior; not final grounded Groq/tool integration | Messages and controls labelled; limitations visible | PARTIAL — presentation only; final grounding deferred |
 | Login `/login` | Supabase authentication entry | Focused blueprint sign-in panel on neutral canvas | Existing Supabase Auth integration | Explicit labels/errors, password autocomplete, visible focus | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual authenticated flow QA pending |
 | Admin `/admin/*` | RBAC-protected CMS, personnel/schedules, audit views | Dense technical shell, section navigation, tables/forms/dialogs | Existing Supabase services and RLS-authorized operations | Tables scroll/reflow; errors linked; authorization is not visual-only | IMPLEMENTED_UNVERIFIED visually — render/RBAC regressions pass; authenticated graphical Admin QA pending |
 
@@ -64,43 +64,64 @@ Known page files include:
 - `src/pages/Map.jsx`
 - `src/pages/Emergency.jsx`
 - `src/pages/Events.jsx`
-- `src/pages/Clara.jsx`
+- `src/components/clara/ClaraAssistant.jsx`
 - `src/pages/Login.jsx`
 
 ---
 
 ## 2. Global shell registry
 
-### `AppLayout`
-Path: `src/components/layout/AppLayout.jsx`
+### `AppShell`
+Path: `src/components/layout/AppShell.jsx`
 
 Responsibilities:
-- Global page shell
-- Desktop/mobile composition
-- Main navigation placement
-- Shared page spacing
+- Single application shell (`DEC-UI-003`): left sidebar, page content, floating CLARA
+- Sidebar collapsed/expanded state, mobile drawer state, universal search, notification and account panels
+- Provides `ClaraProvider` to every page
 
-### `Navbar`
-Path: `src/components/layout/Navbar.jsx`
+### `Sidebar` / `MobileSidebarDrawer`
+Paths: `src/components/layout/sidebar/Sidebar.jsx`, `SidebarParts.jsx`, `MobileSidebarDrawer.jsx`, `navigation.js`
 
 Responsibilities:
-- School logo / CampusNav branding
-- Main navigation
-- Search
-- Notifications
-- Profile/account entry
+- Only global navigation: Home, Dashboard, Navigate, Facilities · Events, Alerts, Emergency · role-aware Admin
+- Search trigger, notifications trigger with unread count, collapse control, account area
+- Icon-rail tooltips; left drawer below 768px
 
-### `MobileTabBar`
-Path: `src/components/layout/MobileTabBar.jsx`
+CLARA must not appear in this navigation. Emergency must remain one tap away.
 
-Recommended primary mobile tabs:
-- Home
-- Dashboard
-- Navigate
-- CLARA
-- More
+### `MobileTopBar`
+Path: `src/components/layout/MobileTopBar.jsx`
 
-Emergency must remain easy to access.
+A phone-only context bar (menu trigger, brand, search, notifications). It is not a navigation bar.
+
+### `ClaraAssistant`
+Paths: `src/components/clara/*`, `src/services/claraService.js`
+
+The single global CLARA instance: `ClaraFloatingButton`, `ClaraChatPanel` (`ClaraHeader`, `ClaraMessageList`, `ClaraSuggestionChips`, `ClaraResultCard`, `ClaraComposer`), `ClaraContext`, and `ClaraRoute` (legacy `/clara` URL). All "Ask CLARA" actions call `useClara().openClara()`.
+
+### Theme
+Paths: `src/lib/theme.js`, `src/contexts/ThemeContext.jsx`, `src/components/theme/ThemeToggle.jsx`, inline script in `index.html`
+
+Light / Dark / System with persisted preference (`campusnav-theme`). Tokens in `src/index.css`.
+
+### Motion components
+Path: `src/components/motion/*`, plus `src/components/home/QuickActions.jsx` and `src/components/home/HowItWorks.jsx`
+
+Page-independent motion primitives and the CampusNav motifs (route, graph, QR checkpoint). The former schematic floor stack and conceptual Campus Overview were replaced by the real map (section 6). `CampusGraphBackground` keeps only its full-field variant (Login); the decorative Home graph band and its scroll fade were removed in the owner visual refinement (DEC-UI-005).
+
+### `SmartCampusStrip`
+Path: `src/components/home/SmartCampusStrip.jsx`
+
+The Home coverage strip. It shows four facts, each derived from the canonical data and each linking to the page that provides it:
+- the mapped floor range, for example GF–5F, with the number of mapped floors
+- the count of facilities placed on the map
+- QR + manual indoor positioning
+- 2D + 3D views of one route
+
+It never shows live, usage, availability, or invented figures.
+
+### Home destination search
+Home reuses `src/components/map/DestinationSearch.jsx`, the same combobox as Navigate, with the same navigable-destination rule. Choosing a destination opens Navigate with `?facility=<id>` (`getNavigateHref`). No second search implementation exists.
 
 ### `GlobalSearch`
 Path: `src/components/layout/GlobalSearch.jsx`
@@ -137,7 +158,7 @@ Future-ready items:
 Path: `src/components/campus/SchoolLogo.jsx`
 
 Use the official St. Clare College logo tastefully in:
-- Navbar
+- Sidebar header and mobile context bar
 - Login
 - Home hero
 - Admin shell
@@ -184,6 +205,12 @@ Display:
 - Optional image thumbnail
 - View/details affordance
 
+Layout:
+- On phones, the card is a compact row: an 80px category tile beside the details. The kind chip and arrow are hidden there.
+- On wider screens, it is a vertical card with a short photo band.
+- The Facilities grid auto-fills columns with a minimum width of 230px.
+- Content and states are identical in both layouts.
+
 ### `FacilityStatusBadge`
 Path: `src/components/facilities/FacilityStatusBadge.jsx`
 
@@ -204,6 +231,7 @@ Do not invent operating hours.
 Known components:
 - `src/components/dashboard/DashboardPrimitives.jsx`
 - `src/components/dashboard/DashboardSections.jsx`
+- `src/components/dashboard/CampusOverview.jsx` (`CampusOverview`: the real map preview plus campus counts; `NavigationShortcuts`)
 
 Primary sections:
 1. Priority Alerts
@@ -221,10 +249,20 @@ Dashboard rules:
 - Normal mode must not fabricate official data.
 - Demo data must be visibly labeled.
 - Realtime records come through the existing provider/service layer.
+- Sections render in the order above. Campus Overview sits beside Priority Alerts and Navigation Shortcuts, and its map grows to that column’s height.
+- Office Availability is a compact list with one row per office: name and status, then floor and hours, then the Navigate and View Facility actions. `RecordActions` accepts a `className` so a row can drop its top margin.
 
 ---
 
 ## 6. 2D map UI registry
+
+### Shared map presentation (one renderer, one dataset)
+- `src/components/map/CampusMapCanvas.jsx`: the only component that mounts the 2D renderer (`IndoorMap2D`) and the lazy 3D renderer (`Campus3D`); it imports the canonical floors, facilities, nodes/edges, QR checkpoints, and emergency records itself. Used by Navigate and `CampusMapPreview`
+- `src/components/map/CampusMapPreview.jsx`: Home and Dashboard preview variant (floor selector, 2D/3D, zoom, reset, facility card, "Open full map"; cooperative gestures; 3D mounted near the viewport and paused off screen)
+- `src/components/map/MapViewControls.jsx`: shared Zoom in / Zoom out / Fit / Reset / Center / Fullscreen control group for 2D and 3D (replaces `MapTools2D`)
+- `src/components/map/usePanZoom2D.js`: 2D pan, pinch, wheel zoom at the pointer, keyboard, resize, and view requests; math in `src/lib/mapViewport.js`
+- `src/components/map/useMapFullscreen.js` and `ImmersiveMapPanel.jsx`: immersive Navigate map (native Fullscreen API or fixed-overlay fallback); `src/lib/mapLinks.js` builds Navigate links from the existing `?floor=` / `?facility=` parameters
+- the Facility Detail page shows a static, non-interactive thumbnail of `IndoorMap2D` for the same canonical floor
 
 Known components:
 - `src/components/map/IndoorMap2D.jsx`
@@ -245,6 +283,8 @@ Core controls:
 - Start Navigation
 - Navigate / Emergency Mode
 - 2D / 3D
+- Zoom in / Zoom out / Fit / Reset / Center on facility
+- Enter / Exit fullscreen map
 
 ### Map color policy
 Under `DEC-UI-002`, controlled map colors remain valid inside the neutral-dominant CampusNav Ink system. CampusNav green identifies the active route/action system, emergency red is reserved for emergency meaning, and other map category/status colors must remain restrained and reinforced by icon, label, pattern, or shape.
@@ -289,10 +329,11 @@ Known components:
 - Exploded
 - Stacked
 - Isolate Floor
-- Entire Building
-- Reset View
+- Focus Floor / Focus Facility
 - Animate Route
 - Switch to 2D
+- Zoom in / Zoom out / Fit building to view / Reset map view (shared `MapViewControls` on Navigate and previews; `Map3DControls` keeps its own Entire Building / Reset View tools when rendered without them)
+- orbit (drag), pan (right-drag / two fingers), zoom (wheel / pinch) through the existing OrbitControls
 
 Label policy:
 - Full building: floor labels only
@@ -327,6 +368,8 @@ Known components/pages include:
 - `src/pages/admin/AdminContentPage.jsx`
 - `src/pages/admin/AdminAudit.jsx`
 - `src/pages/admin/QRCheckpoints.jsx`
+- `src/pages/admin/FacilityAdminPage.jsx` and `src/pages/admin/ServiceAdminPage.jsx` (`/admin/facilities`, `/admin/services`; `SUPER_ADMIN`; Phase 4-FS-3B)
+- `src/pages/admin/FacilityOperationsAdminPage.jsx` and `src/components/admin/FacilityOperationsEditor.jsx` (shared FS-3B list/editor; table at `xl` and wider, cards below)
 
 Phase 8C.2 work may also include academic/personnel admin surfaces such as:
 - Personnel
@@ -340,8 +383,8 @@ Phase 8C.2 work may also include academic/personnel admin surfaces such as:
 - Availability Overrides
 
 Admin design rules:
-- Same CampusNav identity as public app
-- Tables on desktop, stacked cards/rows on mobile
+- Same CampusNav identity and semantic theme tokens as the public app (`DEC-UI-003`/`DEC-UI-004`), in Light and Dark
+- Tables on desktop, stacked cards/rows on mobile; record actions must stay visible beside the sidebar rail and Admin section rail at 1280px
 - Strong empty/loading/error states
 - Prefer deactivate/cancel/end over destructive deletion when history matters
 - Audit remains read-only

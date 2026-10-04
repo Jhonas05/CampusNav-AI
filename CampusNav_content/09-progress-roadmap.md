@@ -88,6 +88,18 @@ Advisories:
 
 This checkpoint is presentation-only and does not authorize Phase 3 or any new capability.
 
+## Frozen UI baseline integration checkpoint (`DEC-UI-005`)
+
+**Status:** INTEGRATED ON `wip/ui-freeze-integration` — 3 October 2026; owner visual review pending; not merged or deployed
+
+The owner-approved frozen interface (`DEC-UI-003` left sidebar and floating CLARA, `DEC-UI-004` Light/Dark/System theme and motion) replaces the CampusNav Ink chrome of the checkpoint above. Because the frozen snapshot predates FS-2C, FS-3A, and FS-3B, it was integrated selectively onto the Phase 4-FS-3B baseline: current services, tests, RBAC/RLS, and canonical documentation remain authoritative, and the FS-3B Admin workflows were restyled into the frozen Admin system. Evidence and open advisories are recorded in `63-implementation-status-registry.md`.
+
+This checkpoint is a presentation track only. It does not change Phase 4 sequencing or status, does not start FS-3C, and does not authorize further UI redesign; after the freeze the UI changes only for the reasons listed in `DEC-UI-005`.
+
+Post-freeze approved change on the same branch (3 October 2026): Home and Dashboard embed the real CampusNav map through the shared renderer, and Navigate gains 2D pan/zoom, 3D zoom/fit/reset, and immersive fullscreen. It is an approved new functional requirement under `DEC-UI-005`, presentation only, with no change to Phase 4 sequencing; evidence is in `63-implementation-status-registry.md`.
+
+Owner visual refinement on the same branch (4 October 2026): Home, Dashboard, and Facilities were recomposed within the frozen visual system after owner review. Home now has a top-aligned hero with a larger map, the shared destination search, and a factual coverage strip, with Popular destinations in the first viewport and the decorative route band removed. The Dashboard renders its sections in contract order without column gaps, and the Facilities directory is denser. This is a post-freeze refinement recorded under `DEC-UI-005`, presentation only, with no change to Phase 4 sequencing; evidence is in `63-implementation-status-registry.md`.
+
 ## Recommended Phase 3 — Accepted Baseline Release and Manual QA
 
 **Status:** COMPLETE — 19 September 2026 (`ACCEPTED_WITH_ADVISORY`)

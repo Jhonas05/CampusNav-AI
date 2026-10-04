@@ -38,8 +38,8 @@ export default function EmergencyOverlay3D({
             <boxGeometry args={[0.24, 0.28, 0.08]} />
             <meshBasicMaterial color="#1D1D1F" />
           </mesh>
-          <Html position={[0, 0.31, 0]} center distanceFactor={14} style={{ pointerEvents: "none" }}>
-            <span className="whitespace-nowrap rounded-md border border-[#1D1D1F] bg-white/95 px-2 py-1 text-[8px] font-bold text-[#1D1D1F]">EXIT</span>
+          <Html position={[0, 0.31, 0]} center distanceFactor={14} zIndexRange={[15, 0]} style={{ pointerEvents: "none" }}>
+            <span className="whitespace-nowrap rounded-md border border-ink bg-surface/95 px-2 py-1 text-[8px] font-bold text-ink">EXIT</span>
           </Html>
         </group>
       ))}

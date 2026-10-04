@@ -47,13 +47,32 @@ A full visual floor-plan editor/version rollback is source-required/valuable but
 ## Formal title mismatch risk
 Proposal wording is tablet-based, while current architecture is responsive web-based. This should be explained as broader device compatibility, not hidden. Any formal title revision should go through thesis approval.
 
-## CampusNav Ink adoption verification
-The owner-approved application-wide visual direction is governed by `DEC-UI-002`, which supersedes the older strict grayscale / Apple-only limitation where it conflicts.
+## Monochrome shell adoption verification
+The application-wide visual direction is governed by `DEC-UI-003` (left sidebar, floating CLARA, grayscale chrome).
 
-- neutral surfaces remain dominant
-- CampusNav green, emergency red, and controlled map/status colors have explicit semantic roles
+- application chrome is grayscale in both Light and Dark themes (`DEC-UI-004`); the 2D/3D map canvas keeps its semantic wayfinding colors
+- decorative motion (route motifs, campus graph) is conceptual and never represents a real route, live activity, or navigation history; the Home and Dashboard maps are the real CampusNav map, not decoration
 - color must not be the only signal
-- full graphical/device/browser confirmation remains pending until supported by real render evidence
+- headless Chromium renders at 1440, 1366, 1280, 1024, 820, 768, 430, and 390px in Light and Dark were inspected for the integrated build; real-device/browser confirmation and live authenticated Admin visual QA remain pending
+
+## UI freeze verification limits (`DEC-UI-005`)
+- automated UI evidence for the frozen pass and for its integration onto the Phase 4-FS-3B baseline is headless Chromium only; Firefox, Safari/WebKit, and physical phones/tablets have not been tested
+- Admin screens, including `/admin/facilities` and `/admin/services`, were verified with a QA-only network fixture (fake signed-in `SUPER_ADMIN` / `DEPARTMENT_ADMIN` session and sample rows outside the repository), not with live Supabase data or real accounts
+- QR camera start/stop and error states were verified with a simulated camera; scanning a printed checkpoint with a real camera has not been re-verified since Phase 3
+- CLARA's behaviour with a phone's software keyboard was simulated, not observed on a device
+- in dark mode the 2D map inverts lightness while preserving hue, so rendered map colors differ from the light-mode hex values; the legend follows the same treatment
+- `npm audit` advisories for `react-router` (requires a major upgrade) and build-tool dependencies remain open
+
+## Map interaction and fullscreen verification limits
+- 2D drag, wheel, keyboard, and synthetic touch pan/pinch, 3D orbit/pan/zoom, and fullscreen (native Fullscreen API and the overlay fallback) were verified in headless Chromium only; trackpad gestures and real touch hardware (phones, tablets) have not been exercised
+- iPhone Safari offers no element fullscreen, so it uses the fixed full-viewport overlay; this fallback was verified by disabling the Fullscreen API in Chromium, not on an iPhone
+- 3D rotation has no keyboard equivalent; keyboard users have the zoom, fit, reset, floor-focus, and facility-focus buttons and the full 2D map
+- WebGL 3D was rendered with a software renderer (SwiftShader); frame rate and memory of the 3D Home preview on low-powered devices are not measured
+- the operational facility status (`getFacilityStatus`) is still not shown on the map or the previews
+
+## Owner visual refinement limits (4 October 2026)
+- The Home coverage strip states dataset coverage only: the mapped floor range, the facilities placed on the map, the positioning methods, and the 2D/3D views. It does not claim verified physical dimensions, live availability, or usage.
+- The refined Home, Dashboard, and Facilities layouts were verified in headless Chromium only. Owner visual sign-off, Firefox, Safari/WebKit, and physical-device review remain pending.
 
 ## Source basis
 - CampusNav AI Final Expanded Architecture — thesis feasibility/claims boundaries

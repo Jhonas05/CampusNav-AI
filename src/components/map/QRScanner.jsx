@@ -1,6 +1,7 @@
 import { Camera, X } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { button } from "@/components/campus/ui"
+import useModalDialog from "@/components/campus/useModalDialog"
 import { getCameraAccessMessage } from "@/lib/cameraAccess"
 
 const FRAME_CORNERS = [
@@ -79,27 +80,29 @@ export default function QRScanner({ onDetected, onClose, onManual }) {
     onClose()
   }
 
+  const dialogRef = useModalDialog({ onClose: closeScanner })
+
   const useManualLocation = () => {
     stopCamera()
     onManual()
   }
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-[#1D1D1F]/70 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="qr-scanner-title">
-      <section className="w-full max-w-xl overflow-hidden rounded-[1.75rem] border border-[#E5E5E7] bg-white shadow-[0_32px_80px_rgba(0,0,0,0.3)]">
-        <header className="flex items-start justify-between gap-4 border-b border-[#E5E5E7] p-5 sm:p-6">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="qr-scanner-title">
+      <section ref={dialogRef} className="w-full max-w-xl overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_32px_80px_rgba(0,0,0,0.3)]">
+        <header className="flex items-start justify-between gap-4 border-b border-line p-5 sm:p-6">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868B]">QR positioning</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint">QR positioning</p>
             <h2 id="qr-scanner-title" className="mt-2 text-2xl font-semibold tracking-tight">Scan CampusNav Checkpoint</h2>
-            <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">Align the CampusNav QR code inside the frame.</p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">Align the CampusNav QR code inside the frame.</p>
           </div>
-          <button type="button" onClick={closeScanner} aria-label="Close QR scanner" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#D2D2D7] transition-colors duration-200 hover:border-[#86868B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D1D1F] focus-visible:ring-offset-2">
+          <button type="button" onClick={closeScanner} aria-label="Close QR scanner" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong transition-colors duration-200 hover:border-ink-faint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2">
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </header>
 
         <div className="p-5 sm:p-6">
-          <div className="relative aspect-video overflow-hidden rounded-2xl bg-[#1D1D1F]">
+          <div className="relative aspect-video overflow-hidden rounded-2xl bg-black">
             <video ref={videoRef} autoPlay muted playsInline className="h-full w-full object-cover" aria-label="QR camera preview" />
             {!cameraError && (
               <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
@@ -121,7 +124,7 @@ export default function QRScanner({ onDetected, onClose, onManual }) {
             )}
           </div>
 
-          <p className="mt-4 text-xs leading-relaxed text-[#6E6E73]">Camera frames are processed locally for QR recognition and are not recorded, stored, or uploaded.</p>
+          <p className="mt-4 text-xs leading-relaxed text-ink-soft">Camera frames are processed locally for QR recognition and are not recorded, stored, or uploaded.</p>
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
             <button type="button" onClick={useManualLocation} className={`${button.outline} w-full sm:flex-1`}>
               Set Location Manually

@@ -1,6 +1,7 @@
 import { AlertTriangle, LockKeyhole, RotateCcw, Save, X } from "lucide-react"
-import { useEffect, useId, useMemo, useRef, useState } from "react"
+import { useEffect, useId, useMemo, useState } from "react"
 import { button, focusRing } from "@/components/campus/ui"
+import useModalDialog from "@/components/campus/useModalDialog"
 import { cn } from "@/lib/utils"
 import {
   FACILITY_ADMIN_UI_DATA_STATUSES,
@@ -14,14 +15,14 @@ import {
 import { FACILITY_ADMIN_RESOURCES } from "@/services/facilityAdminService"
 
 const pretty = (value) => String(value || "").replaceAll("_", " ").toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase())
-const fieldClass = cn("mt-1.5 min-h-11 w-full rounded-xl border border-[#D2D2D7] bg-white px-3 text-sm text-[#1D1D1F] disabled:cursor-not-allowed disabled:bg-[#F5F5F7] disabled:text-[#6E6E73]", focusRing)
+const fieldClass = cn("mt-1.5 block min-h-11 w-full rounded-xl border border-line-strong bg-surface px-3 text-sm text-ink shadow-none placeholder:text-ink-faint disabled:cursor-not-allowed disabled:bg-fill disabled:text-ink-soft", focusRing)
 
 function Field({ label, help = null, wide = false, children }) {
   return (
     <label className={wide ? "sm:col-span-2" : ""}>
-      <span className="text-xs font-semibold text-[#48484A]">{label}</span>
+      <span className="text-xs font-semibold text-ink-mid">{label}</span>
       {children}
-      {help && <span className="mt-1 block text-[11px] leading-relaxed text-[#6E6E73]">{help}</span>}
+      {help && <span className="mt-1 block text-[11px] leading-relaxed text-ink-soft">{help}</span>}
     </label>
   )
 }
@@ -36,9 +37,9 @@ function Select({ value, onChange, children, ...props }) {
 
 function Group({ title, description, children }) {
   return (
-    <fieldset className="rounded-2xl border border-[#E5E5E7] p-4 sm:p-5">
-      <legend className="px-1 font-heading text-xs font-bold uppercase tracking-[0.12em] text-[#1D1F20]">{title}</legend>
-      <p className="mb-4 text-xs leading-relaxed text-[#6E6E73]">{description}</p>
+    <fieldset className="rounded-2xl border border-line p-4 sm:p-5">
+      <legend className="px-1 text-xs font-semibold uppercase tracking-[0.06em] text-ink">{title}</legend>
+      <p className="mb-4 text-xs leading-relaxed text-ink-soft">{description}</p>
       <div className="grid gap-4 sm:grid-cols-2">{children}</div>
     </fieldset>
   )
@@ -57,7 +58,6 @@ export default function FacilityOperationsEditor({
   onReload,
 }) {
   const titleId = useId()
-  const dialogRef = useRef(null)
   const isProfile = resource === FACILITY_ADMIN_RESOURCES.PROFILES
   const [form, setForm] = useState(() => createFacilityAdminForm(resource, record, initialIdentity))
   const [formError, setFormError] = useState(null)
@@ -68,20 +68,7 @@ export default function FacilityOperationsEditor({
     setFormError(null)
   }, [initialIdentity, open, record, resource])
 
-  useEffect(() => {
-    if (!open) return undefined
-    const previousFocus = document.activeElement
-    const firstControl = dialogRef.current?.querySelector("input:not(:disabled), select:not(:disabled), textarea:not(:disabled), button:not(:disabled)")
-    if (firstControl instanceof HTMLElement) firstControl.focus()
-    const closeOnEscape = (event) => {
-      if (event.key === "Escape" && !busy) onOpenChange(false)
-    }
-    document.addEventListener("keydown", closeOnEscape)
-    return () => {
-      document.removeEventListener("keydown", closeOnEscape)
-      if (previousFocus instanceof HTMLElement) previousFocus.focus()
-    }
-  }, [busy, onOpenChange, open])
+  const dialogRef = useModalDialog({ active: open, onClose: busy ? null : () => onOpenChange(false) })
 
   const selectedFacility = useMemo(
     () => facilities.find((facility) => facility.id === form.facility_id),
@@ -109,19 +96,19 @@ export default function FacilityOperationsEditor({
 
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-3" onMouseDown={(event) => event.target === event.currentTarget && !busy && onOpenChange(false)}>
-      <section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} className="relative max-h-[94dvh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-[#D2D2D7] bg-white shadow-2xl sm:rounded-3xl">
-        <header className="border-b border-[#E5E5E7] px-5 pb-5 pt-6 text-left sm:px-6">
-          <h2 id={titleId} className="font-display text-3xl font-bold uppercase tracking-[0.02em] text-[#1D1F20]">{editorTitle}</h2>
-          <p className="mt-1.5 text-sm leading-relaxed text-[#6E6E73]">
+      <section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} className="relative max-h-[94dvh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-line-strong bg-surface shadow-2xl sm:rounded-3xl">
+        <header className="border-b border-line px-5 pb-5 pt-6 text-left sm:px-6">
+          <h2 id={titleId} className="text-2xl font-semibold tracking-tight text-ink">{editorTitle}</h2>
+          <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
             Save stores operational metadata only. It does not publish the record or change canonical spatial data.
           </p>
         </header>
-        <button type="button" disabled={busy} onClick={() => onOpenChange(false)} aria-label="Close editor" className={cn("absolute right-4 top-4 rounded-full p-2 text-[#6E6E73] hover:bg-[#F5F5F7]", focusRing)}><X className="h-4 w-4" aria-hidden="true" /></button>
+        <button type="button" disabled={busy} onClick={() => onOpenChange(false)} aria-label="Close editor" className={cn("absolute right-4 top-4 rounded-full p-2 text-ink-soft hover:bg-fill", focusRing)}><X className="h-4 w-4" aria-hidden="true" /></button>
 
         <form onSubmit={submit} noValidate>
           <div className="space-y-4 px-4 py-5 sm:px-6">
             {nonOfficial && (
-              <div role="status" className="flex gap-3 rounded-2xl border border-dashed border-amber-500 bg-amber-50 p-4 text-sm text-amber-900">
+              <div role="status" className="flex gap-3 rounded-2xl border-[1.5px] border-dashed border-ink-faint bg-subtle p-4 text-sm text-ink">
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                 <p><strong>Demo / non-official record.</strong> This state must not be presented as verified institutional information.</p>
               </div>
@@ -139,7 +126,7 @@ export default function FacilityOperationsEditor({
                 <Field label="Service code" help={record ? "Stable identity is immutable after creation." : "Required lowercase kebab-case, for example student-records."}>
                   <div className="relative">
                     <Input value={form.code} onChange={(value) => setField("code", value)} disabled={Boolean(record)} pattern="[a-z0-9]+(?:-[a-z0-9]+)*" required />
-                    {record && <LockKeyhole className="pointer-events-none absolute right-3 top-5 h-4 w-4 text-[#86868B]" aria-hidden="true" />}
+                    {record && <LockKeyhole className="pointer-events-none absolute right-3 top-5 h-4 w-4 text-ink-faint" aria-hidden="true" />}
                   </div>
                 </Field>
               )}
@@ -168,8 +155,8 @@ export default function FacilityOperationsEditor({
                   {FACILITY_ADMIN_UI_LIFECYCLES.map((value) => <option key={value} value={value}>{pretty(value)}</option>)}
                 </Select>
               </Field>
-              <label className="flex min-h-11 items-center gap-3 self-end rounded-xl border border-[#D2D2D7] bg-[#F5F5F7] px-3 py-2.5 text-sm text-[#48484A]">
-                <input type="checkbox" checked={Boolean(form.public_visibility)} readOnly disabled className="h-4 w-4 accent-green-700" />
+              <label className="flex min-h-11 items-center gap-3 self-end rounded-xl border border-line-strong bg-fill px-3 py-2.5 text-sm text-ink-mid">
+                <input type="checkbox" checked={Boolean(form.public_visibility)} readOnly disabled className="h-4 w-4 accent-ink" />
                 <span>Public visibility (controlled by Publish)</span>
               </label>
               <Field label="Effective time (Asia/Manila)" help="Required when the record is scheduled."><Input type="datetime-local" value={form.effective_at} onChange={(value) => setField("effective_at", value)} /></Field>
@@ -194,20 +181,20 @@ export default function FacilityOperationsEditor({
             </Group>
 
             {isProfile && selectedFacility && (
-              <p className="rounded-xl bg-[#F5F5F7] px-4 py-3 text-xs leading-relaxed text-[#48484A]">
+              <p className="rounded-xl bg-fill px-4 py-3 text-xs leading-relaxed text-ink-mid">
                 Canonical reference: <strong>{selectedFacility.name}</strong> · {selectedFacility.floor} · {selectedFacility.id}. These values are read-only.
               </p>
             )}
 
             {formError && (
-              <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#B3261E] bg-red-50 px-4 py-3 text-sm text-[#7A1B17]">
+              <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border-[1.5px] border-ink bg-surface px-4 py-3 text-sm font-medium text-ink">
                 <span>{formError.message}</span>
                 {formError.code === "STALE_RECORD" && <button type="button" onClick={onReload} className={button.smallSecondary}><RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Reload stored version</button>}
               </div>
             )}
           </div>
 
-          <footer className="sticky bottom-0 flex flex-col-reverse gap-2 border-t border-[#E5E5E7] bg-white px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
+          <footer className="sticky bottom-0 flex flex-col-reverse gap-2 border-t border-line bg-surface px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
             <button type="button" disabled={busy} onClick={() => onOpenChange(false)} className={button.smallSecondary}>Cancel</button>
             <button type="submit" disabled={busy} className={button.smallPrimary}><Save className="h-3.5 w-3.5" aria-hidden="true" />{busy ? "Saving…" : record ? "Save changes" : "Save draft"}</button>
           </footer>

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AdminShell from "@/components/admin/AdminShell"
 import FacilityOperationsEditor from "@/components/admin/FacilityOperationsEditor"
+import useModalDialog from "@/components/campus/useModalDialog"
 import { EmptyState, PageHeader, Skeleton, StatusBadge, button, focusRing } from "@/components/campus/ui"
 import { useToast } from "@/components/ui/use-toast"
 import { isNonOfficialFacilityAdminRecord, safeFacilityAdminMessage } from "@/lib/facilityAdminUi"
@@ -195,6 +196,7 @@ export default function FacilityOperationsAdminPage({ resource }) {
 
   const editorFacilities = selectedRecord ? facilities : missingFacilities
   const newDisabled = isProfile && missingFacilities.length === 0
+  const deleteDialogRef = useModalDialog({ active: Boolean(deleteRecord), onClose: busy ? null : () => setDeleteRecord(null) })
 
   return (
     <AdminShell>
@@ -205,15 +207,15 @@ export default function FacilityOperationsAdminPage({ resource }) {
         actions={<button type="button" disabled={newDisabled} onClick={() => openEditor()} className={button.primary}><Plus className="h-4 w-4" aria-hidden="true" />{newDisabled ? "All profiles configured" : config.newLabel}</button>}
       />
 
-      <section aria-label={`${config.title} filters`} className="mt-5 grid gap-2.5 rounded-3xl border border-[#E5E5E7] bg-white p-3 sm:grid-cols-[minmax(220px,1fr)_180px_auto]">
+      <section aria-label={`${config.title} filters`} className="mt-5 grid gap-2.5 rounded-3xl border border-line bg-surface p-3 sm:grid-cols-[minmax(0,1fr)_minmax(8.5rem,180px)_auto]">
         <label className="relative">
           <span className="sr-only">Search {config.title.toLowerCase()}</span>
-          <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-[#86868B]" aria-hidden="true" />
-          <input value={filters.search} onChange={(event) => setFilters((current) => ({ ...current, search: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-[#D2D2D7] bg-white pl-9 pr-3 text-sm", focusRing)} placeholder={isProfile ? "Search facility, ID, or floor" : "Search service name or code"} />
+          <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-ink-faint" aria-hidden="true" />
+          <input value={filters.search} onChange={(event) => setFilters((current) => ({ ...current, search: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-line-strong bg-surface pl-9 pr-3 text-sm", focusRing)} placeholder={isProfile ? "Search facility, ID, or floor" : "Search service name or code"} />
         </label>
         <label>
           <span className="sr-only">Lifecycle filter</span>
-          <select value={filters.lifecycle} onChange={(event) => setFilters((current) => ({ ...current, lifecycle: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-[#D2D2D7] bg-white px-3 text-sm", focusRing)}>
+          <select value={filters.lifecycle} onChange={(event) => setFilters((current) => ({ ...current, lifecycle: event.target.value }))} className={cn("min-h-11 w-full rounded-xl border border-line-strong bg-surface px-3 text-sm", focusRing)}>
             <option value="ALL">All lifecycle states</option>
             {FACILITY_ADMIN_LIFECYCLES.map((value) => <option key={value} value={value}>{pretty(value)}</option>)}
           </select>
@@ -221,30 +223,30 @@ export default function FacilityOperationsAdminPage({ resource }) {
         <button type="button" disabled={loading} onClick={load} className={button.smallSecondary}><RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin motion-reduce:animate-none")} aria-hidden="true" />Refresh</button>
       </section>
 
-      <p className="mt-3 text-xs leading-relaxed text-[#6E6E73]">
+      <p className="mt-3 text-xs leading-relaxed text-ink-soft">
         {isProfile ? `${facilities.length} canonical facilities · ${records.length} operational profiles` : `${records.length} configured services`} · Configured does not mean verified or official.
       </p>
 
       {error && (
-        <div role="alert" className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D2D2D7] bg-white px-5 py-4 text-sm text-[#1D1D1F]">
+        <div role="alert" className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line-strong bg-surface px-5 py-4 text-sm text-ink">
           <span>{error.message}{["DELETE_CONFLICT", "DELETE_NOT_ALLOWED"].includes(error.code) ? " Prefer Expire or refresh the record." : ""}</span>
           <button type="button" onClick={load} className={button.smallSecondary}>Refresh</button>
         </div>
       )}
 
-      <section aria-label={`${config.title} records`} className="mt-4 overflow-hidden rounded-3xl border border-[#E5E5E7] bg-white">
+      <section aria-label={`${config.title} records`} className="mt-4 overflow-hidden rounded-3xl border border-line bg-surface">
         {loading ? (
           <div className="space-y-3 p-5">{[0, 1, 2].map((item) => <Skeleton key={item} className="h-24 w-full" />)}</div>
         ) : rows.length ? <>
-          <div className="hidden overflow-x-auto lg:block">
-            <table className="w-full min-w-[980px] border-collapse text-left">
-              <thead className="border-b border-[#E5E5E7] bg-[#FAFAFA] text-[10px] font-bold uppercase tracking-[0.12em] text-[#6E6E73]">
+          <div className="hidden overflow-x-auto xl:block">
+            <table className="w-full min-w-[860px] border-collapse text-left">
+              <thead className="border-b border-line bg-subtle text-[10px] font-bold uppercase tracking-[0.12em] text-ink-soft">
                 <tr><th className="px-5 py-3">{isProfile ? "Facility" : "Service"}</th><th className="px-4 py-3">{isProfile ? "Overlay state" : "Department"}</th><th className="px-4 py-3">Lifecycle</th><th className="px-4 py-3">Verification</th><th className="px-4 py-3">Visibility / Updated</th><th className="px-5 py-3 text-right">Actions</th></tr>
               </thead>
-              <tbody className="divide-y divide-[#E5E5E7]">{rows.map((item) => <OperationsRow key={isProfile ? item.id : item.record.id} item={item} isProfile={isProfile} departments={departments} busy={busy} onEdit={openEditor} onPublish={(record) => runLifecycleAction(record, config.publishMethod, `${pretty(config.singular)} published`)} onExpire={(record) => runLifecycleAction(record, config.expireMethod, `${pretty(config.singular)} expired`)} onDelete={setDeleteRecord} />)}</tbody>
+              <tbody className="divide-y divide-line">{rows.map((item) => <OperationsRow key={isProfile ? item.id : item.record.id} item={item} isProfile={isProfile} departments={departments} busy={busy} onEdit={openEditor} onPublish={(record) => runLifecycleAction(record, config.publishMethod, `${pretty(config.singular)} published`)} onExpire={(record) => runLifecycleAction(record, config.expireMethod, `${pretty(config.singular)} expired`)} onDelete={setDeleteRecord} />)}</tbody>
             </table>
           </div>
-          <div className="divide-y divide-[#E5E5E7] lg:hidden">{rows.map((item) => <OperationsCard key={isProfile ? item.id : item.record.id} item={item} isProfile={isProfile} departments={departments} busy={busy} onEdit={openEditor} onPublish={(record) => runLifecycleAction(record, config.publishMethod, `${pretty(config.singular)} published`)} onExpire={(record) => runLifecycleAction(record, config.expireMethod, `${pretty(config.singular)} expired`)} onDelete={setDeleteRecord} />)}</div>
+          <div className="divide-y divide-line xl:hidden">{rows.map((item) => <OperationsCard key={isProfile ? item.id : item.record.id} item={item} isProfile={isProfile} departments={departments} busy={busy} onEdit={openEditor} onPublish={(record) => runLifecycleAction(record, config.publishMethod, `${pretty(config.singular)} published`)} onExpire={(record) => runLifecycleAction(record, config.expireMethod, `${pretty(config.singular)} expired`)} onDelete={setDeleteRecord} />)}</div>
         </> : (
           <div className="p-5"><EmptyState title={`No ${config.title.toLowerCase()} match`} message={isProfile ? "All canonical facilities remain in the registry; clear filters to see missing profiles." : "No official or demo services are created automatically."} /></div>
         )}
@@ -254,12 +256,12 @@ export default function FacilityOperationsAdminPage({ resource }) {
 
       {deleteRecord && (
         <div className="fixed inset-0 z-[95] flex items-center justify-center bg-black/70 p-4" onMouseDown={(event) => event.target === event.currentTarget && !busy && setDeleteRecord(null)}>
-          <section role="alertdialog" aria-modal="true" aria-labelledby="facility-delete-title" aria-describedby="facility-delete-description" className="w-full max-w-lg rounded-2xl border border-[#D2D2D7] bg-white p-6 shadow-2xl sm:rounded-3xl">
-            <h2 id="facility-delete-title" className="text-lg font-semibold text-[#1D1D1F]">Delete this {config.singular}?</h2>
-            <p id="facility-delete-description" className="mt-2 text-sm leading-relaxed text-[#6E6E73]">Hard deletion is allowed only for disposable, unreferenced records. Prefer Expire to retain operational history. No dependent record will be force-deleted.</p>
+          <section ref={deleteDialogRef} role="alertdialog" aria-modal="true" aria-labelledby="facility-delete-title" aria-describedby="facility-delete-description" className="w-full max-w-lg rounded-2xl border border-line-strong bg-surface p-6 shadow-2xl sm:rounded-3xl">
+            <h2 id="facility-delete-title" className="text-lg font-semibold text-ink">Delete this {config.singular}?</h2>
+            <p id="facility-delete-description" className="mt-2 text-sm leading-relaxed text-ink-soft">Hard deletion is allowed only for disposable, unreferenced records. Prefer Expire to retain operational history. No dependent record will be force-deleted.</p>
             <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <button type="button" autoFocus disabled={busy} onClick={() => setDeleteRecord(null)} className={button.smallSecondary}>Keep record</button>
-              <button type="button" disabled={busy} onClick={remove} className={cn(button.smallPrimary, "bg-[#B3261E] hover:bg-red-800")}>{busy ? "Deleting…" : "Delete disposable record"}</button>
+              <button type="button" disabled={busy} onClick={() => setDeleteRecord(null)} className={button.smallSecondary}>Keep record</button>
+              <button type="button" disabled={busy} onClick={remove} className={cn(button.smallPrimary, "bg-ink-strong font-semibold ring-2 ring-ink-strong ring-offset-2 ring-offset-surface hover:bg-ink")}>{busy ? "Deleting…" : "Delete disposable record"}</button>
             </div>
           </section>
         </div>
@@ -295,7 +297,7 @@ function RecordActions({ item, isProfile, busy, onEdit, onPublish, onExpire, onD
       <button type="button" disabled={busy} onClick={() => onEdit(record)} aria-label={`Edit ${label}`} className={button.smallSecondary}><Edit3 className="h-3.5 w-3.5" aria-hidden="true" />Edit</button>
       {record.lifecycle !== "PUBLISHED" && <button type="button" disabled={busy} onClick={() => onPublish(record)} aria-label={`Publish ${label}`} className={button.smallPrimary}><Send className="h-3.5 w-3.5" aria-hidden="true" />Publish</button>}
       {!['EXPIRED', 'CANCELLED'].includes(record.lifecycle) && <button type="button" disabled={busy} onClick={() => onExpire(record)} aria-label={`Expire ${label}`} className={button.smallSecondary}><CalendarX2 className="h-3.5 w-3.5" aria-hidden="true" />Expire</button>}
-      <button type="button" disabled={busy} onClick={() => onDelete(record)} aria-label={`Delete ${label}`} className={cn(button.smallSecondary, "border-[#B3261E] text-[#B3261E] hover:bg-red-50")}><Trash2 className="h-3.5 w-3.5" aria-hidden="true" />Delete</button>
+      <button type="button" disabled={busy} onClick={() => onDelete(record)} aria-label={`Delete ${label}`} className={cn(button.smallSecondary, "border-2 border-ink-strong font-semibold text-ink-strong hover:border-ink-strong hover:bg-fill")}><Trash2 className="h-3.5 w-3.5" aria-hidden="true" />Delete</button>
     </div>
   )
 }
@@ -306,11 +308,11 @@ function OperationsRow({ item, isProfile, departments, ...actions }) {
   const identity = identityFor(item, isProfile)
   return (
     <tr className="align-top">
-      <td className="px-5 py-4"><p className="font-semibold text-[#1D1D1F]">{identity.title}</p><p className="mt-1 text-xs text-[#6E6E73]">{identity.subtitle}</p></td>
-      <td className="px-4 py-4 text-xs leading-relaxed text-[#48484A]">{isProfile ? (record ? <><span className="font-semibold">Configured</span><span className="mt-1 block line-clamp-2">{record.description || "No public description provided."}</span></> : "No operational profile") : departmentName(record, departments)}</td>
+      <td className="px-5 py-4"><p className="font-semibold text-ink">{identity.title}</p><p className="mt-1 text-xs text-ink-soft">{identity.subtitle}</p></td>
+      <td className="px-4 py-4 text-xs leading-relaxed text-ink-mid">{isProfile ? (record ? <><span className="font-semibold">Configured</span><span className="mt-1 block line-clamp-2">{record.description || "No public description provided."}</span></> : "No operational profile") : departmentName(record, departments)}</td>
       <td className="px-4 py-4">{record ? <StatusBadge status={record.lifecycle} /> : <StatusBadge status="PENDING_VERIFICATION" label="Not configured" />}</td>
       <td className="px-4 py-4"><VerificationState record={record} /></td>
-      <td className="px-4 py-4 text-xs leading-relaxed text-[#48484A]"><span className="block font-semibold">{record?.public_visibility ? "Public" : "Not public"}</span><span className="block text-[#6E6E73]">{record ? formatDate(record.updated_at) : "Never updated"}</span></td>
+      <td className="px-4 py-4 text-xs leading-relaxed text-ink-mid"><span className="block font-semibold">{record?.public_visibility ? "Public" : "Not public"}</span><span className="block text-ink-soft">{record ? formatDate(record.updated_at) : "Never updated"}</span></td>
       <td className="px-5 py-4"><RecordActions item={item} isProfile={isProfile} {...actions} /></td>
     </tr>
   )
@@ -323,16 +325,16 @@ function OperationsCard({ item, isProfile, departments, ...actions }) {
   return (
     <article className="p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div><h2 className="font-semibold text-[#1D1D1F]">{identity.title}</h2><p className="mt-1 text-xs text-[#6E6E73]">{identity.subtitle}</p></div>
+        <div><h2 className="font-semibold text-ink">{identity.title}</h2><p className="mt-1 text-xs text-ink-soft">{identity.subtitle}</p></div>
         {record ? <StatusBadge status={record.lifecycle} /> : <StatusBadge status="PENDING_VERIFICATION" label="Not configured" />}
       </div>
       <dl className="mt-4 grid gap-3 text-xs sm:grid-cols-2">
-        <div><dt className="font-bold uppercase tracking-[0.08em] text-[#86868B]">{isProfile ? "Overlay" : "Department"}</dt><dd className="mt-1 text-[#48484A]">{isProfile ? (record ? "Configured" : "No operational profile") : departmentName(record, departments)}</dd></div>
-        <div><dt className="font-bold uppercase tracking-[0.08em] text-[#86868B]">Verification</dt><dd className="mt-1"><VerificationState record={record} /></dd></div>
-        <div><dt className="font-bold uppercase tracking-[0.08em] text-[#86868B]">Public visibility</dt><dd className="mt-1 text-[#48484A]">{record?.public_visibility ? "Public" : "Not public"}</dd></div>
-        <div><dt className="font-bold uppercase tracking-[0.08em] text-[#86868B]">Last updated</dt><dd className="mt-1 text-[#48484A]">{record ? formatDate(record.updated_at) : "Never updated"}</dd></div>
+        <div><dt className="font-bold uppercase tracking-[0.08em] text-ink-faint">{isProfile ? "Overlay" : "Department"}</dt><dd className="mt-1 text-ink-mid">{isProfile ? (record ? "Configured" : "No operational profile") : departmentName(record, departments)}</dd></div>
+        <div><dt className="font-bold uppercase tracking-[0.08em] text-ink-faint">Verification</dt><dd className="mt-1"><VerificationState record={record} /></dd></div>
+        <div><dt className="font-bold uppercase tracking-[0.08em] text-ink-faint">Public visibility</dt><dd className="mt-1 text-ink-mid">{record?.public_visibility ? "Public" : "Not public"}</dd></div>
+        <div><dt className="font-bold uppercase tracking-[0.08em] text-ink-faint">Last updated</dt><dd className="mt-1 text-ink-mid">{record ? formatDate(record.updated_at) : "Never updated"}</dd></div>
       </dl>
-      <div className="mt-4 border-t border-[#E5E5E7] pt-4"><RecordActions item={item} isProfile={isProfile} {...actions} /></div>
+      <div className="mt-4 border-t border-line pt-4"><RecordActions item={item} isProfile={isProfile} {...actions} /></div>
     </article>
   )
 }

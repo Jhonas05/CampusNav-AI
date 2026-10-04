@@ -5,6 +5,7 @@ import { facilities } from "@/data/facilities"
 import { getFloorById } from "@/data/floors"
 import { getFacilityCategory } from "@/lib/facilityCategories"
 import { getDashboardSnapshot } from "@/services/dashboardService"
+import { useClara } from "@/components/clara/ClaraContext"
 import { cn } from "@/lib/utils"
 
 const normalize = (value) => value.trim().toLowerCase()
@@ -29,6 +30,7 @@ const QUICK_LINKS = [
 
 export default function GlobalSearch({ open, onClose }) {
   const navigate = useNavigate()
+  const { openClara } = useClara()
   const inputRef = useRef(null)
   const listRef = useRef(null)
   const [query, setQuery] = useState("")
@@ -66,7 +68,7 @@ export default function GlobalSearch({ open, onClose }) {
     if (eventItems.length) result.push({ title: "Events", items: eventItems.map((event) => ({ type: "event", event, id: `event-${event.id}` })) })
     result.push({
       title: "Assistance",
-      items: [{ type: "action", id: "action-clara", label: `Ask CLARA about “${query.trim()}”`, detail: "Campus digital concierge", href: `/clara?q=${encodeURIComponent(query.trim())}`, icon: MessageCircle }],
+      items: [{ type: "clara", id: "action-clara", label: `Ask CLARA about “${query.trim()}”`, detail: "Campus digital concierge", question: query.trim(), icon: MessageCircle }],
     })
     return result
   }, [events, query])
@@ -105,6 +107,7 @@ export default function GlobalSearch({ open, onClose }) {
     onClose()
     if (item.type === "facility") navigate(`/facilities/${item.facility.id}`)
     else if (item.type === "event") navigate("/events")
+    else if (item.type === "clara") openClara({ question: item.question })
     else navigate(item.href)
   }
 
@@ -127,19 +130,19 @@ export default function GlobalSearch({ open, onClose }) {
   let itemOffset = 0
 
   return (
-    <div className="fixed inset-0 z-[70] overflow-y-auto bg-[#1D1D1F]/40 px-4 pb-10 pt-[9vh] backdrop-blur-sm" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}>
-      <div role="dialog" aria-modal="true" aria-label="Search CampusNav" onKeyDown={onKeyDown} className="ink-blueprint mx-auto w-full max-w-xl overflow-hidden shadow-[0_18px_42px_rgba(29,31,32,0.16)]">
-        <div className="flex items-center gap-3 border-b border-[#E5E5E7] px-5 py-4">
-          <Search className="h-5 w-5 shrink-0 text-[#86868B]" aria-hidden="true" />
+    <div className="fixed inset-0 z-modal overflow-y-auto bg-black/30 px-4 pb-10 pt-[9vh] backdrop-blur-sm" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}>
+      <div role="dialog" aria-modal="true" aria-label="Search CampusNav" onKeyDown={onKeyDown} className="ink-blueprint mx-auto w-full max-w-xl overflow-hidden rounded-[20px] shadow-[0_24px_60px_rgba(0,0,0,0.18)]">
+        <div className="flex items-center gap-3 border-b border-line px-5 py-4">
+          <Search className="h-5 w-5 shrink-0 text-ink-faint" aria-hidden="true" />
           <input
             ref={inputRef}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search facilities, rooms, services, events..."
             aria-label="Search facilities, rooms, services, and events"
-            className="min-w-0 flex-1 bg-transparent text-[15px] text-[#1D1D1F] outline-none placeholder:text-[#86868B]"
+            className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-ink-faint"
           />
-          <button type="button" onClick={onClose} aria-label="Close search" className="flex h-8 w-8 items-center justify-center rounded-full text-[#6E6E73] transition-colors hover:bg-[#F5F5F7] hover:text-[#1D1D1F]">
+          <button type="button" onClick={onClose} aria-label="Close search" className="flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-fill hover:text-ink">
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
@@ -147,8 +150,8 @@ export default function GlobalSearch({ open, onClose }) {
         <div ref={listRef} className="max-h-[52vh] overflow-y-auto overscroll-contain p-2.5">
           {flatItems.length === 0 ? (
             <div className="px-4 py-12 text-center">
-              <p className="text-sm font-semibold text-[#1D1D1F]">No matches in the verified directory</p>
-              <p className="mt-1 text-xs leading-relaxed text-[#6E6E73]">Try an office, laboratory, room number, or floor.</p>
+              <p className="text-sm font-semibold text-ink">No matches in the verified directory</p>
+              <p className="mt-1 text-xs leading-relaxed text-ink-soft">Try an office, laboratory, room number, or floor.</p>
             </div>
           ) : (
             groups.map((group) => {
@@ -156,7 +159,7 @@ export default function GlobalSearch({ open, onClose }) {
               itemOffset += group.items.length
               return (
                 <div key={group.title} className="mb-1.5">
-                  <p className="px-3 pb-1.5 pt-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868B]">{group.title}</p>
+                  <p className="px-3 pb-1.5 pt-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">{group.title}</p>
                   <ul>
                     {group.items.map((item, index) => {
                       const flatIndex = startIndex + index
@@ -175,23 +178,23 @@ export default function GlobalSearch({ open, onClose }) {
                             onMouseMove={() => setActiveIndex(flatIndex)}
                             className={cn(
                               "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors duration-150",
-                              active ? "bg-brand-50" : "bg-transparent"
+                              active ? "bg-fill-strong" : "bg-transparent"
                             )}
                           >
                             <span className={cn(
                               "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-transparent",
                               item.type === "facility"
                                 ? getFacilityCategory(item.facility).tile
-                                : active ? "bg-brand-700 text-white" : "border-[#E5E5E7] bg-white text-[#6E6E73]"
+                                : active ? "bg-brand-700 text-on-ink" : "border-line bg-surface text-ink-soft"
                             )}>
                               <Icon className="h-4 w-4" aria-hidden="true" />
                             </span>
                             <span className="min-w-0 flex-1">
-                              <span className="block truncate text-sm font-medium text-[#1D1D1F]">{label}</span>
-                              <span className="block truncate text-xs text-[#86868B]">{detail}</span>
+                              <span className="block truncate text-sm font-medium text-ink">{label}</span>
+                              <span className="block truncate text-xs text-ink-faint">{detail}</span>
                             </span>
-                            {item.type === "facility" && <span className="shrink-0 rounded-full border border-[#D2D2D7] bg-white px-2 py-0.5 text-[10px] font-bold text-[#6E6E73]">{item.facility.floorId}</span>}
-                            {active ? <CornerDownLeft className="h-3.5 w-3.5 shrink-0 text-brand-700" aria-hidden="true" /> : <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#D2D2D7]" aria-hidden="true" />}
+                            {item.type === "facility" && <span className="shrink-0 rounded-full border border-line-strong bg-surface px-2 py-0.5 text-[10px] font-bold text-ink-soft">{item.facility.floorId}</span>}
+                            {active ? <CornerDownLeft className="h-3.5 w-3.5 shrink-0 text-brand-700" aria-hidden="true" /> : <ArrowRight className="h-3.5 w-3.5 shrink-0 text-ink-ghost" aria-hidden="true" />}
                           </button>
                         </li>
                       )
@@ -203,7 +206,7 @@ export default function GlobalSearch({ open, onClose }) {
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-[#E5E5E7] bg-[#FAFAFA] px-5 py-3 text-[10px] font-medium text-[#86868B]">
+        <div className="flex items-center justify-between border-t border-line bg-subtle px-5 py-3 text-[10px] font-medium text-ink-faint">
           <span>↑↓ to browse · Enter to open · Esc to close</span>
           <span className="hidden sm:block">Verified floor assignments only</span>
         </div>

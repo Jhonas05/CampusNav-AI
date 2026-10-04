@@ -83,7 +83,7 @@ const vite = await createServer({
 
 try {
   const { default: Dashboard } = await vite.ssrLoadModule("/src/pages/Dashboard.jsx")
-  const { default: Navbar } = await vite.ssrLoadModule("/src/components/layout/Navbar.jsx")
+  const { default: Sidebar } = await vite.ssrLoadModule("/src/components/layout/sidebar/Sidebar.jsx")
   const renderDashboard = (entry) => renderToString(React.createElement(MemoryRouter, { initialEntries: [entry] }, React.createElement(Dashboard)))
 
   const normalHtml = renderDashboard("/dashboard")
@@ -101,10 +101,20 @@ try {
   assert.doesNotMatch(normalHtml, /Sample Faculty/)
   assert.doesNotMatch(normalHtml, /Sample Event/)
   assert.doesNotMatch(normalHtml, />Demo data</)
+  // Sections render in the dashboard contract order (15-dashboard-notification-contract).
+  const sectionOrder = ["priority-alerts", "todays-classes", "office-availability", "personnel-availability", "facility-advisories", "events-calendar", "general-announcements", "navigation-notices"]
+    .map((id) => normalHtml.indexOf(`id="${id}"`))
+  assert.ok(sectionOrder.every((index, position) => index >= 0 && (position === 0 || index > sectionOrder[position - 1])), `dashboard sections follow the contract order: ${sectionOrder.join(", ")}`)
 
-  const navbarHtml = renderToString(React.createElement(MemoryRouter, { initialEntries: ["/dashboard"] }, React.createElement(Navbar)))
-  assert.match(navbarHtml, /href="\/dashboard"/)
-  assert.match(navbarHtml, />Dashboard</)
+  // Global navigation is the left sidebar. CLARA is the floating assistant, not a navigation entry,
+  // and guests never see admin navigation.
+  const sidebarHtml = renderToString(React.createElement(MemoryRouter, { initialEntries: ["/dashboard"] }, React.createElement(Sidebar)))
+  assert.match(sidebarHtml, /href="\/dashboard"/)
+  assert.match(sidebarHtml, />Dashboard</)
+  assert.match(sidebarHtml, /href="\/dashboard"[^>]*aria-current="page"|aria-current="page"[^>]*href="\/dashboard"/)
+  assert.match(sidebarHtml, /href="\/emergency"/)
+  assert.doesNotMatch(sidebarHtml, /href="\/clara"/)
+  assert.doesNotMatch(sidebarHtml, /href="\/admin/)
 
   const demoHtml = renderDashboard("/dashboard?demo=1")
   assert.match(demoHtml, /Demo data/)

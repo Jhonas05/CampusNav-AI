@@ -3,9 +3,10 @@ import { BookOpen, Building2, Construction, DoorClosed, DoorOpen, FlaskConical, 
 /**
  * Presentation-only facility category system.
  * Maps existing verified facility `kind` values (plus the known student-service
- * office ids) to a shared color language used by the 2D/3D maps, cards, chips,
- * and legends. Colors follow the Tailwind default palette plus a dedicated
- * route green; no facility data is modified.
+ * office ids) to a category label and icon. Application chrome (chips, tiles,
+ * dots) is monochrome under DEC-UI-003 and distinguishes categories by icon
+ * and label; `map` holds the map-canvas wayfinding tints used only inside the
+ * 2D/3D viewport and its legend. No facility data is modified.
  */
 
 const CATEGORIES = {
@@ -14,117 +15,117 @@ const CATEGORIES = {
     label: "Classrooms",
     icon: DoorOpen,
     map: { fill: "#DBEAFE", stroke: "#93C5FD", strong: "#2563EB" },
-    chip: "border-blue-200 bg-blue-50 text-blue-700",
-    tile: "bg-blue-100 text-blue-700",
-    dot: "bg-blue-500",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   academic: {
     key: "academic",
     label: "Academic Spaces",
     icon: BookOpen,
     map: { fill: "#E0E7FF", stroke: "#A5B4FC", strong: "#4F46E5" },
-    chip: "border-indigo-200 bg-indigo-50 text-indigo-700",
-    tile: "bg-indigo-100 text-indigo-700",
-    dot: "bg-indigo-500",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   laboratory: {
     key: "laboratory",
     label: "Laboratories",
     icon: FlaskConical,
     map: { fill: "#EDE9FE", stroke: "#C4B5FD", strong: "#7C3AED" },
-    chip: "border-violet-200 bg-violet-50 text-violet-700",
-    tile: "bg-violet-100 text-violet-700",
-    dot: "bg-violet-500",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   administrative: {
     key: "administrative",
     label: "Administrative Offices",
     icon: Landmark,
     map: { fill: "#FEF3C7", stroke: "#FCD34D", strong: "#B45309" },
-    chip: "border-amber-200 bg-amber-50 text-amber-800",
-    tile: "bg-amber-100 text-amber-800",
-    dot: "bg-amber-500",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   studentServices: {
     key: "studentServices",
     label: "Student Services",
     icon: Users,
     map: { fill: "#CCFBF1", stroke: "#5EEAD4", strong: "#0F766E" },
-    chip: "border-teal-200 bg-teal-50 text-teal-700",
-    tile: "bg-teal-100 text-teal-700",
-    dot: "bg-teal-500",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   health: {
     key: "health",
     label: "Health Services",
     icon: HeartPulse,
     map: { fill: "#FFE4E6", stroke: "#FDA4AF", strong: "#BE123C" },
-    chip: "border-rose-200 bg-rose-50 text-rose-700",
-    tile: "bg-rose-100 text-rose-700",
-    dot: "bg-rose-500",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   food: {
     key: "food",
     label: "Food Areas",
     icon: UtensilsCrossed,
     map: { fill: "#FFEDD5", stroke: "#FDBA74", strong: "#C2410C" },
-    chip: "border-orange-200 bg-orange-50 text-orange-700",
-    tile: "bg-orange-100 text-orange-700",
-    dot: "bg-orange-500",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   restroom: {
     key: "restroom",
     label: "Restrooms",
     icon: DoorClosed,
     map: { fill: "#CFFAFE", stroke: "#67E8F9", strong: "#0E7490" },
-    chip: "border-cyan-200 bg-cyan-50 text-cyan-700",
-    tile: "bg-cyan-100 text-cyan-700",
-    dot: "bg-cyan-500",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   utility: {
     key: "utility",
     label: "Utility & Support",
     icon: Wrench,
     map: { fill: "#F4F4F5", stroke: "#D4D4D8", strong: "#52525B" },
-    chip: "border-zinc-200 bg-zinc-50 text-zinc-600",
-    tile: "bg-zinc-100 text-zinc-600",
-    dot: "bg-zinc-400",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   access: {
     key: "access",
     label: "Entrances & Parking",
     icon: SquareParking,
     map: { fill: "#F1F5F9", stroke: "#CBD5E1", strong: "#475569" },
-    chip: "border-slate-200 bg-slate-50 text-slate-600",
-    tile: "bg-slate-100 text-slate-600",
-    dot: "bg-slate-400",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   safety: {
     key: "safety",
     label: "Safety & Security",
     icon: ShieldCheck,
     map: { fill: "#FEE2E2", stroke: "#FCA5A5", strong: "#B91C1C" },
-    chip: "border-red-200 bg-red-50 text-red-700",
-    tile: "bg-red-100 text-red-700",
-    dot: "bg-red-500",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   general: {
     key: "general",
     label: "Campus Facilities",
     icon: Building2,
     map: { fill: "#F3F4F6", stroke: "#D1D5DB", strong: "#4B5563" },
-    chip: "border-gray-200 bg-gray-50 text-gray-600",
-    tile: "bg-gray-100 text-gray-600",
-    dot: "bg-gray-400",
+    chip: "border-line-strong bg-fill text-ink",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
   construction: {
     key: "construction",
     label: "Under Construction",
     icon: Construction,
     map: { fill: "#F5F5F7", stroke: "#9CA3AF", strong: "#6B7280" },
-    chip: "border-dashed border-gray-300 bg-gray-50 text-gray-500",
-    tile: "bg-gray-100 text-gray-500",
-    dot: "bg-gray-400",
+    chip: "border-dashed border-ink-faint bg-surface text-ink-soft",
+    tile: "bg-fill-strong text-ink",
+    dot: "bg-ink-faint",
   },
 }
 
@@ -164,21 +165,34 @@ export const listMapCategories = (facilityList) => {
 }
 
 /**
- * Wayfinding semantics shared by the 2D and 3D maps and their legends.
- * Conventions: blue = you are here · red = destination / emergency path ·
- * route green = recommended route · safety green = EXIT signage ·
- * red = fire equipment.
+ * Wayfinding semantics shared by the 2D and 3D maps and their legends
+ * (CampusNav Ink, DEC-UI-002). Conventions: ink = you are here ·
+ * CampusNav green = route and destination (the destination is also a pin
+ * shape, so it never relies on color alone) · emergency red = approved
+ * evacuation path and fire equipment, Emergency Mode only · safety green =
+ * EXIT signage.
  */
 export const MAP_COLORS = {
-  route: "#1E7A45",
+  route: "#15703C",
+  routeOutline: "#0B4224",
   routeCasing: "#FFFFFF",
   routeUpcoming: "#8BC9A4",
-  routeComplete: "#144D2E",
-  emergencyRoute: "#DC2626",
-  current: "#2563EB",
-  destination: "#DC2626",
-  arrivedFill: "#186238",
-  stairs: "#6E6E73",
+  routeComplete: "#0B4224",
+  emergencyRoute: "#B3261E",
+  emergencyRouteComplete: "#7A1A14",
+  emergencyRouteUpcoming: "#E3A39E",
+  current: "#1D1F20",
+  destination: "#15703C",
+  destinationTint: "#DCEEE2",
+  arrivedFill: "#15703C",
+  selected: "#15703C",
+  stairs: "#5D5D60",
   exit: "#15803D",
-  equipment: "#B91C1C",
+  equipment: "#B3261E",
+  paper: "#FBFBFA",
+  hallway: "#EDEDEB",
+  hallwayLine: "#C9C9CB",
+  wall: "#8A8A8D",
+  label: "#1D1F20",
+  labelMuted: "#7A7A7D",
 }

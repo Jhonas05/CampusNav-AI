@@ -25,8 +25,8 @@ const buildQrImage = (payload) => QRCode.toDataURL(payload, {
   color: { dark: "#000000", light: "#FFFFFF" },
 })
 
-const actionButtonClass = cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full border border-[#D2D2D7] bg-white px-3.5 text-xs font-medium text-[#1D1D1F] transition-colors duration-200 hover:border-[#86868B] disabled:cursor-not-allowed disabled:text-[#B8B8BD]", focusRing)
-const primaryActionClass = cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full bg-brand-700 px-3.5 text-xs font-medium text-white transition-colors duration-200 hover:bg-brand-800", focusRing)
+const actionButtonClass = cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full border border-line-strong bg-surface px-3.5 text-xs font-medium text-ink transition-colors duration-200 hover:border-ink-faint disabled:cursor-not-allowed disabled:text-ink-ghost", focusRing)
+const primaryActionClass = cn("inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full bg-brand-700 px-3.5 text-xs font-medium text-on-ink transition-colors duration-200 hover:bg-brand-800", focusRing)
 
 export default function QRCheckpoints() {
   const developerModeAvailable = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_VERIFICATION === "true"
@@ -36,8 +36,8 @@ export default function QRCheckpoints() {
 
   if (!developerModeAvailable) {
     return (
-      <div className="min-h-[calc(100vh-64px)] bg-[#F5F5F7] px-6 py-20 text-center">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868B]">Developer-only</p>
+      <div className="min-h-[calc(100dvh-var(--app-header-height))] bg-canvas px-6 py-20 text-center">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint">Developer-only</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight">QR checkpoint tools are unavailable in this build.</h1>
       </div>
     )
@@ -102,7 +102,7 @@ export default function QRCheckpoints() {
           <Download className="h-3.5 w-3.5" aria-hidden="true" /> Save QR
         </a>
       ) : (
-        <span aria-disabled="true" className={cn(actionButtonClass, "cursor-not-allowed text-[#B8B8BD] hover:border-[#D2D2D7]")}>
+        <span aria-disabled="true" className={cn(actionButtonClass, "cursor-not-allowed text-ink-ghost hover:border-line-strong")}>
           <Download className="h-3.5 w-3.5" aria-hidden="true" /> Save QR
         </span>
       )}
@@ -111,25 +111,25 @@ export default function QRCheckpoints() {
 
   return (
     <AdminShell>
-      <Link to="/map?verify=1" className={`inline-flex items-center gap-2 rounded-md text-sm font-medium text-[#6E6E73] transition-colors hover:text-[#1D1D1F] ${focusRing}`}>
+      <Link to="/map?verify=1" className={`inline-flex items-center gap-2 rounded-md text-sm font-medium text-ink-soft transition-colors hover:text-ink ${focusRing}`}>
         <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Map verification
       </Link>
       <div className="mt-5 flex flex-col justify-between gap-5 md:flex-row md:items-end">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-700">Developer-only · authentication pending</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">QR Checkpoints</h1>
-          <p className="mt-3 max-w-2xl text-[#6E6E73]">Generate, verify, print, and save checkpoint labels. Payloads identify checkpoint IDs only.</p>
+          <p className="mt-3 max-w-2xl text-ink-soft">Generate, verify, print, and save checkpoint labels. Payloads identify checkpoint IDs only.</p>
         </div>
-        <div className="shrink-0 rounded-full border border-[#D2D2D7] bg-white px-4 py-2 text-xs font-medium text-[#6E6E73]">{qrCheckpoints.length} active checkpoints</div>
+        <div className="shrink-0 rounded-full border border-line-strong bg-surface px-4 py-2 text-xs font-medium text-ink-soft">{qrCheckpoints.length} active checkpoints</div>
       </div>
 
-      {generationError && <p role="alert" className="mt-5 rounded-2xl border-[1.5px] border-[#1D1D1F] bg-white p-4 text-sm font-medium">{generationError}</p>}
+      {generationError && <p role="alert" className="mt-5 rounded-2xl border-[1.5px] border-ink bg-surface p-4 text-sm font-medium">{generationError}</p>}
 
       {/* Desktop: clean admin table */}
-      <div className="mt-7 hidden overflow-hidden rounded-[1.5rem] border border-[#E5E5E7] bg-white lg:block">
+      <div className="mt-7 hidden overflow-hidden rounded-[1.5rem] border border-line bg-surface lg:block">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-[#E5E5E7] text-[10px] font-semibold uppercase tracking-[0.14em] text-[#86868B]">
+            <tr className="border-b border-line text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
               <th scope="col" className="px-5 py-4 font-semibold">Checkpoint</th>
               <th scope="col" className="px-4 py-4 font-semibold">Facility</th>
               <th scope="col" className="px-4 py-4 font-semibold">Floor</th>
@@ -146,22 +146,22 @@ export default function QRCheckpoints() {
               const node = getMapNodeById(checkpoint.nodeId)
               const image = qrImages[checkpoint.id]
               return (
-                <tr key={checkpoint.id} className="border-b border-[#F0F0F2] align-middle transition-colors duration-150 last:border-0 hover:bg-[#FAFAFA]">
+                <tr key={checkpoint.id} className="border-b border-line align-middle transition-colors duration-150 last:border-0 hover:bg-subtle">
                   <td className="px-5 py-4">
-                    <p className="font-mono text-xs font-bold text-[#1D1D1F]">{checkpoint.id}</p>
-                    <p className="mt-1 text-[10px] uppercase tracking-wide text-[#86868B]">{checkpoint.verificationStatus}</p>
+                    <p className="font-mono text-xs font-bold text-ink">{checkpoint.id}</p>
+                    <p className="mt-1 text-[10px] uppercase tracking-wide text-ink-faint">{checkpoint.verificationStatus}</p>
                   </td>
                   <td className="px-4 py-4 font-medium">{facility?.name}</td>
-                  <td className="px-4 py-4 text-[#6E6E73]">{floor?.shortName || checkpoint.floorId}</td>
-                  <td className="max-w-40 truncate px-4 py-4 font-mono text-xs text-[#6E6E73]">{node?.id}</td>
+                  <td className="px-4 py-4 text-ink-soft">{floor?.shortName || checkpoint.floorId}</td>
+                  <td className="max-w-40 truncate px-4 py-4 font-mono text-xs text-ink-soft">{node?.id}</td>
                   <td className="px-4 py-4">
-                    <span className="rounded-full bg-brand-700 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide text-white">{checkpoint.status}</span>
+                    <span className="rounded-full bg-brand-700 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide text-on-ink">{checkpoint.status}</span>
                   </td>
                   <td className="px-4 py-4">
                     {image ? (
-                      <img src={image} alt={`${checkpoint.id} QR preview`} className="h-12 w-12 rounded-lg border border-[#E5E5E7] object-contain [image-rendering:pixelated]" />
+                      <img src={image} alt={`${checkpoint.id} QR preview`} className="h-12 w-12 rounded-lg border border-line object-contain [image-rendering:pixelated]" />
                     ) : (
-                      <span className="flex h-12 w-12 items-center justify-center rounded-lg border border-dashed border-[#D2D2D7] text-[#C7C7CC]"><QrCodeIcon className="h-5 w-5" aria-hidden="true" /></span>
+                      <span className="flex h-12 w-12 items-center justify-center rounded-lg border border-dashed border-line-strong text-ink-ghost"><QrCodeIcon className="h-5 w-5" aria-hidden="true" /></span>
                     )}
                   </td>
                   <td className="px-5 py-4">
@@ -184,37 +184,37 @@ export default function QRCheckpoints() {
           const image = qrImages[checkpoint.id]
 
           return (
-            <article key={checkpoint.id} className="overflow-hidden rounded-[1.5rem] border border-[#E5E5E7] bg-white">
-              <div className="border-b border-[#F0F0F2] p-5">
+            <article key={checkpoint.id} className="overflow-hidden rounded-[1.5rem] border border-line bg-surface">
+              <div className="border-b border-line p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-[#86868B]">Checkpoint ID</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-ink-faint">Checkpoint ID</p>
                     <h2 className="mt-1 font-mono text-sm font-bold">{checkpoint.id}</h2>
                   </div>
-                  <span className="rounded-full bg-brand-700 px-2.5 py-1 text-[10px] font-bold text-white">{checkpoint.status}</span>
+                  <span className="rounded-full bg-brand-700 px-2.5 py-1 text-[10px] font-bold text-on-ink">{checkpoint.status}</span>
                 </div>
                 <dl className="mt-5 grid grid-cols-2 gap-4 text-sm">
-                  <div><dt className="text-[10px] uppercase tracking-wide text-[#86868B]">Facility</dt><dd className="mt-1 font-medium">{facility?.name}</dd></div>
-                  <div><dt className="text-[10px] uppercase tracking-wide text-[#86868B]">Floor</dt><dd className="mt-1 font-medium">{floor?.name}</dd></div>
-                  <div className="col-span-2"><dt className="text-[10px] uppercase tracking-wide text-[#86868B]">Linked node</dt><dd className="mt-1 break-all font-mono text-xs font-medium">{node?.id}</dd></div>
-                  <div className="col-span-2"><dt className="text-[10px] uppercase tracking-wide text-[#86868B]">Verification status</dt><dd className="mt-1 text-xs font-medium">{checkpoint.verificationStatus}</dd></div>
+                  <div><dt className="text-[10px] uppercase tracking-wide text-ink-faint">Facility</dt><dd className="mt-1 font-medium">{facility?.name}</dd></div>
+                  <div><dt className="text-[10px] uppercase tracking-wide text-ink-faint">Floor</dt><dd className="mt-1 font-medium">{floor?.name}</dd></div>
+                  <div className="col-span-2"><dt className="text-[10px] uppercase tracking-wide text-ink-faint">Linked node</dt><dd className="mt-1 break-all font-mono text-xs font-medium">{node?.id}</dd></div>
+                  <div className="col-span-2"><dt className="text-[10px] uppercase tracking-wide text-ink-faint">Verification status</dt><dd className="mt-1 text-xs font-medium">{checkpoint.verificationStatus}</dd></div>
                 </dl>
               </div>
 
               <div className="p-5">
-                <div className="flex aspect-square items-center justify-center rounded-2xl bg-[#F5F5F7] p-5">
+                <div className="flex aspect-square items-center justify-center rounded-2xl bg-fill p-5">
                   {image ? (
                     <img src={image} alt={`${checkpoint.id} QR preview`} className="h-full w-full object-contain [image-rendering:pixelated]" />
                   ) : (
-                    <div className="text-center text-[#86868B]">
+                    <div className="text-center text-ink-faint">
                       <QrCodeIcon className="mx-auto h-10 w-10" aria-hidden="true" />
                       <p className="mt-3 text-xs">QR Preview</p>
                     </div>
                   )}
                 </div>
-                <div className="mt-4 rounded-xl bg-[#F5F5F7] p-3">
-                  <p className="text-[10px] uppercase tracking-wide text-[#86868B]">Payload</p>
-                  <code className="mt-1 block break-all text-xs font-semibold text-[#1D1D1F]">{payload}</code>
+                <div className="mt-4 rounded-xl bg-fill p-3">
+                  <p className="text-[10px] uppercase tracking-wide text-ink-faint">Payload</p>
+                  <code className="mt-1 block break-all text-xs font-semibold text-ink">{payload}</code>
                 </div>
                 <div className="mt-4 grid grid-cols-2 gap-2">{renderActions(checkpoint, image)}</div>
               </div>
@@ -223,8 +223,8 @@ export default function QRCheckpoints() {
         })}
       </div>
 
-      <div className="mt-6 flex items-center gap-2 rounded-2xl border border-[#E5E5E7] bg-white p-4 text-xs text-[#6E6E73]">
-        <Check className="h-4 w-4 shrink-0 text-[#1D1D1F]" aria-hidden="true" /> QR payloads contain no routes, coordinates, facility metadata, or sensitive information.
+      <div className="mt-6 flex items-center gap-2 rounded-2xl border border-line bg-surface p-4 text-xs text-ink-soft">
+        <Check className="h-4 w-4 shrink-0 text-ink" aria-hidden="true" /> QR payloads contain no routes, coordinates, facility metadata, or sensitive information.
       </div>
     </AdminShell>
   )

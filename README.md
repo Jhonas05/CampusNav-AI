@@ -33,6 +33,8 @@ npm run test:qr
 npm run test:emergency
 npm run test:3d
 npm run test:dashboard
+npm run test:theme
+npm run test:map-experience
 npm run test:phase8a
 npm run test:phase8a:cloud
 npm run test:phase8a:realtime
@@ -54,6 +56,7 @@ npm run test:render
 
 - `src/` contains the React application.
 - `src/components/` contains reusable interface and map components.
+- `src/components/layout/` holds the frozen UI shell (`DEC-UI-005`): `AppShell`, the left sidebar and mobile drawer, and the phone context bar; `src/components/clara/` holds the floating CLARA assistant; `src/lib/theme.js` and `src/contexts/ThemeContext.jsx` implement the Light/Dark/System theme, whose semantic color tokens live in `src/index.css` and `tailwind.config.js` (`npm run test:theme` rejects hex color classes in components).
 - `src/data/facilities.js` contains verified facility-to-floor assignments and pending-verification fields.
 - `src/data/floors.js` contains editable floor and room geometry.
 - `src/data/additionalFloorMaps.js` contains source-aligned GF, 2F, 4F, and 5F polygons, hallways, doors, and stair areas.
@@ -83,6 +86,8 @@ Multi-floor routes can be viewed one floor at a time using the route-floor selec
 During local development, open `/map?verify=1` to use the developer-only calibration and graph-verification panel. Production builds hide this panel unless `VITE_ENABLE_MAP_VERIFICATION=true` is explicitly set.
 
 ## Optional 3D map
+
+One map renderer serves every page: `src/components/map/CampusMapCanvas.jsx` draws the canonical floor maps, facilities, graph, QR checkpoints, and emergency records with `IndoorMap2D` (2D) or the lazily loaded `Campus3D` (3D). Navigate uses it with the full route workflow; Home ("Campus at a glance") and Dashboard ("Campus Overview") use the `CampusMapPreview` variant (floor selector, 2D/3D, zoom, reset, "Open full map"). The Home hero also reuses Navigate's destination search (`DestinationSearch`); choosing a destination opens Navigate with `?facility=`. The 2D map supports drag/pinch pan and wheel, pinch, button, or keyboard zoom; Navigate also offers an immersive fullscreen view that keeps the same mounted map and navigation state (browser Fullscreen API, or a full-viewport overlay where it is unavailable). `npm run test:map-experience` checks the shared-renderer and single-dataset rules.
 
 The Navigate page defaults to the 2D map and offers an optional lazy-loaded 3D view. Exploded and stacked modes use the same floor polygons and the same A* route node sequence as 2D; the central `mapToWorld()` transform maps digital-map `x, y` to Three.js `x, elevation, z`. The 3D renderer supports floor isolation, orbit/pan/zoom controls, facility focus, QR/current and destination markers, multi-floor stair-route visualization, reduced motion, and a one-click return to 2D. Unsupported or failed WebGL initialization returns to 2D without resetting navigation state.
 

@@ -42,22 +42,22 @@ export default function AdminOverview() {
         actions={<button type="button" onClick={load} disabled={loading} className={button.secondary}><RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} aria-hidden="true" /> Refresh</button>}
       />
 
-      {error && <div role="alert" className="mt-7 rounded-2xl border border-[#D2D2D7] bg-white px-5 py-4 text-sm text-[#1D1D1F]">{error}</div>}
+      {error && <div role="alert" className="mt-7 rounded-2xl border border-line-strong bg-surface px-5 py-4 text-sm text-ink">{error}</div>}
 
       <section aria-label="Content counts" className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
         {CARDS.map(({ key, label, icon: Icon, path }) => (
           <Link key={key} to={path} className={`${card} ${focusRing} p-4 transition-transform hover:-translate-y-0.5`}>
             <div className="flex items-start justify-between gap-4">
-              <div><p className="text-xs font-medium text-[#6E6E73]">{label}</p>{loading ? <Skeleton className="mt-3 h-10 w-20" /> : <p className="mt-2 text-4xl font-semibold tracking-tight text-[#1D1D1F]">{counts?.[key] ?? "—"}</p>}</div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F5F5F7] text-[#48484A]"><Icon className="h-4 w-4" aria-hidden="true" /></div>
+              <div><p className="text-xs font-medium text-ink-soft">{label}</p>{loading ? <Skeleton className="mt-3 h-10 w-20" /> : <p className="mt-2 text-4xl font-semibold tracking-tight text-ink">{counts?.[key] ?? "—"}</p>}</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-fill text-ink-mid"><Icon className="h-4 w-4" aria-hidden="true" /></div>
             </div>
           </Link>
         ))}
       </section>
 
-      <section className="mt-4 rounded-3xl border border-[#E5E5E7] bg-white p-5">
-        <h2 className="text-lg font-semibold tracking-tight text-[#1D1D1F]">Content workflow</h2>
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#6E6E73]">Draft and scheduled records remain private. Publishing makes an effective record eligible for the existing public Dashboard provider and Realtime update flow, subject to database RLS.</p>
+      <section className="mt-4 rounded-3xl border border-line bg-surface p-5">
+        <h2 className="text-lg font-semibold tracking-tight text-ink">Content workflow</h2>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">Draft and scheduled records remain private. Publishing makes an effective record eligible for the existing public Dashboard provider and Realtime update flow, subject to database RLS.</p>
       </section>
     </AdminShell>
   )

@@ -35,9 +35,9 @@ export default function SchoolLogo(props) {
     <span
       role="img"
       aria-label="St. Clare College of Caloocan logo placeholder"
-      className={cn(SIZES[size], "flex shrink-0 items-center justify-center rounded-full border-2 border-gold-500 bg-brand-700 shadow-[inset_0_0_0_2px_#FFFFFF]", className)}
+      className={cn(SIZES[size], "flex shrink-0 items-center justify-center rounded-full border-2 border-gold-500 bg-brand-700 shadow-[inset_0_0_0_2px_rgb(var(--surface))]", className)}
     >
-      <span className={cn("font-bold tracking-tight text-white", size === "sm" ? "text-[10px]" : size === "md" ? "text-xs" : "text-base")}>SCC</span>
+      <span className={cn("font-bold tracking-tight text-on-ink", size === "sm" ? "text-[10px]" : size === "md" ? "text-xs" : "text-base")}>SCC</span>
     </span>
   )
 }
