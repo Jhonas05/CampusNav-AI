@@ -58,14 +58,16 @@ The application-wide visual direction is governed by `DEC-UI-003` (left sidebar,
 ## UI freeze verification limits (`DEC-UI-005`)
 - automated UI evidence for the frozen pass and for its integration onto the Phase 4-FS-3B baseline is headless Chromium only; Firefox, Safari/WebKit, and physical phones/tablets have not been tested
 - Admin screens, including `/admin/facilities`, `/admin/services`, `/admin/service-aliases`, `/admin/facility-service-mappings`, `/admin/facility-hours`, and `/admin/facility-hour-exceptions`, have deterministic/Vite fixture evidence rather than live Supabase data or real-account mutation evidence. The hours/exceptions routes additionally passed headless Chrome QA with a development-only intercepted network fixture at the required responsive widths; real authenticated Supabase mutation, Firefox, Safari/WebKit, and physical-device QA remain pending
-- the single Admin navigation shell (Admin sidebar, Admin menu drawer, "Back to CampusNav", and the theme, notification, and account controls in it) and the editor error placement were verified in headless Chromium with a QA network fixture; the owner's live authenticated `SUPER_ADMIN` reviews predate it and should be repeated
+- the owner supplied visual/functional sign-off for the frozen UI direction, final single Admin navigation shell, FS-3C aliases/mappings UI, weekly-hours UI, and dated-exceptions UI. The single shell and editor behavior also passed headless Chromium fixture QA. No browser, OS, physical-device, screen-reader, credential, or live-mutation details are inferred from those sign-offs
+- the reused legacy facility-advisory CRUD remains intentionally unchanged under FS-3. It uses confirmed deletion plus existing RLS, constraints, and trusted audit, but not the newer FS-3 optimistic `updated_at` stale-token pattern
+- no deployment-equivalence claim exists for the FS-3 revision
 - the Admin navigation lists about 20 sections for `SUPER_ADMIN`, so on laptop-height screens the section list scrolls inside the sidebar; it keeps its position and the current section in view
 - inside Admin there is no universal-search button; the Ctrl/⌘ K shortcut still opens it, and "Back to CampusNav" returns to the public pages where the search control is
 - `/admin/qr-checkpoints` is a developer-only tool (hidden and disabled in production builds unless `VITE_ENABLE_MAP_VERIFICATION=true`); its route requires a signed-in `SUPER_ADMIN`. It is not a production Admin feature
 - QR camera start/stop and error states were verified with a simulated camera; scanning a printed checkpoint with a real camera has not been re-verified since Phase 3
 - CLARA's behaviour with a phone's software keyboard was simulated, not observed on a device
 - in dark mode the 2D map inverts lightness while preserving hue, so rendered map colors differ from the light-mode hex values; the legend follows the same treatment
-- `npm audit` advisories for `react-router` (requires a major upgrade) and build-tool dependencies remain open
+- as of the FS-3 final reconciliation on 6 October 2026, `npm audit` reports 17 open advisories (8 moderate, 9 high, 0 critical), while `npm audit --omit=dev` reports 11 (5 moderate, 6 high). Vite has a non-major remediation, React Router requires a deliberate major upgrade, and the Tailwind dependency chain has no complete automated fix; none was changed by the documentation-only reconciliation
 
 ## Map interaction and fullscreen verification limits
 - 2D drag, wheel, keyboard, and synthetic touch pan/pinch, 3D orbit/pan/zoom, and fullscreen (native Fullscreen API and the overlay fallback) were verified in headless Chromium only; trackpad gestures and real touch hardware (phones, tablets) have not been exercised
@@ -76,7 +78,7 @@ The application-wide visual direction is governed by `DEC-UI-003` (left sidebar,
 
 ## Owner visual refinement limits (4 October 2026)
 - The Home coverage strip states dataset coverage only: the mapped floor range, the facilities placed on the map, the positioning methods, and the 2D/3D views. It does not claim verified physical dimensions, live availability, or usage.
-- The refined Home, Dashboard, and Facilities layouts were verified in headless Chromium only. Owner visual sign-off, Firefox, Safari/WebKit, and physical-device review remain pending.
+- The refined Home, Dashboard, and Facilities layouts were verified in headless Chromium only. The recorded frozen-UI owner sign-off does not establish Firefox, Safari/WebKit, or physical-device certification for these later refinements.
 
 ## Source basis
 - CampusNav AI Final Expanded Architecture — thesis feasibility/claims boundaries

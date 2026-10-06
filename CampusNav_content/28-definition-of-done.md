@@ -7,6 +7,8 @@ CampusNav is thesis-demo ready when all required core items below are either imp
 
 **Owner defense-scope decision — 19 September 2026:** `DEC-DEFENSE-001` proposes the accepted baseline as `CORE_FOR_DEFENSE`, conditionally defers grounded CLARA and PWA/offline pending adviser direction, and keeps AR/other expansions optional/deferred. This owner decision does not complete `UNSATISFIED` items, provide institutional data/sign-off, or replace adviser confirmation and research-methodology approval.
 
+**Phase 4-FS-3 reconciliation — 6 October 2026:** the facility operational foundation, computed facility-status engine, and all currently defined facility/service Admin workflows are complete and `ACCEPTED_WITH_ADVISORY`. This technical acceptance does not supply official institutional data, complete public search/recommendation, implement facility media, or complete later Phase 4 work.
+
 ### Spatial/navigation
 - [x] GF–5F digitized map foundation — `SATISFIED_WITH_ADVISORY`; source-aligned geometry exists, while final institutional verification and exact dimensions remain pending
 - [x] same-floor and multi-floor normal navigation — `SATISFIED`
@@ -25,9 +27,11 @@ CampusNav is thesis-demo ready when all required core items below are either imp
 
 ### Facility/service
 - [x] facility directory/details foundation — `SATISFIED_WITH_ADVISORY`; verified/source-aligned foundation exists, while institutional completeness varies
+- [x] facility operational schema/service/status foundation — `SATISFIED_WITH_ADVISORY`; FS-1 and FS-2 are complete and accepted with retained live-data and institutional-data advisories
+- [x] facility/service Admin workflows — `SATISFIED_WITH_ADVISORY`; operational profiles, services, aliases, mappings, weekly hours, dated exceptions, reused advisories, single `SUPER_ADMIN` shell, lifecycle, provenance, stale-write, guarded-delete, RLS, and trusted-audit boundaries passed FS-3 final reconciliation
 - [ ] verify official hours/services completeness — `UNSATISFIED`; authorized institutional data is missing
-- [ ] verify service→facility recommendation coverage — `UNSATISFIED`; approved service mappings are missing
-- [ ] verify facility image/status/admin workflows as required — `UNSATISFIED`; the foundation is partial and final required scope/data remain unresolved
+- [ ] verify public service→facility recommendation coverage — `UNSATISFIED`; the Admin mapping workflow exists, but approved institutional mappings and the FS-4 public recommendation consumer remain pending
+- [ ] verify facility media workflow and approved assets — `UNSATISFIED`; Phase 4-FS-5 remains `NOT_STARTED`
 
 ### Identity/security
 - [x] Supabase Auth — `SATISFIED`

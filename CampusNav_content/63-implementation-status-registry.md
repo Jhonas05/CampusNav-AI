@@ -67,7 +67,7 @@ The owner-approved frozen interface (`DEC-UI-003` shell and floating CLARA, `DEC
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — ALL DEFINED IMPLEMENTATION CAPABILITIES IMPLEMENTED_VERIFIED; FINAL RECONCILIATION PENDING`
+**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 NOT_STARTED`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -84,7 +84,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Hours and exceptions schema/security foundation | `ACCEPTED — FS-2A` | Linked migration, 89/89 corrected canonical pgTAP, remote structure/security/audit checks, and exact zero-fixture verification pass on the actual CampusNav project |
 | Hours, exceptions, and closure source reads | `ACCEPTED_WITH_ADVISORY — FS-2B` | Provider-neutral local/null plus public-view aggregate read, strict Manila date ranges, defensive normalization, ordering, provenance, errors, and full deterministic regressions pass; no live FS-2B Data API read is claimed |
 | Facility-status engine | `ACCEPTED_WITH_ADVISORY — FS-2C` | Pure Manila-time evaluator and public FacilityService orchestration pass final reconciliation; no live official-hours/status evidence is claimed |
-| Facility Admin workflows beyond advisories | `IMPLEMENTED_VERIFIED — FINAL RECONCILIATION PENDING` | Dedicated mutation service plus SUPER_ADMIN profile/service/alias/mapping/hours/exception routes, lists, schedule-aware editors, explicit lifecycle actions, stale handling, guarded deletion, safe errors, deterministic regressions, and fixture-backed browser QA pass; live authenticated Supabase mutation remains unclaimed |
+| Facility Admin workflows beyond advisories | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Dedicated mutation service plus `SUPER_ADMIN` profile/service/alias/mapping/hours/exception routes, lists, schedule-aware editors, explicit lifecycle actions, stale handling, guarded deletion, safe errors, deterministic regressions, owner sign-offs at the recorded level, and fixture-backed browser QA pass; live authenticated Supabase mutation remains unclaimed |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
 | Public search/recommendation enrichment | `NOT_IMPLEMENTED` | Existing name/kind/floor search is only the baseline |
 | Dashboard operational availability | `PARTIAL` | Pending/unknown local states and advisories exist; connected computed office availability is not implemented |
@@ -94,7 +94,28 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-2 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability are `IMPLEMENTED_VERIFIED`. No further FS-3 implementation capability is currently defined. Full FS-3 remains `IN_PROGRESS` pending a separately authorized final acceptance reconciliation; live authenticated Supabase mutation remains outside this evidence.
+**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Live authenticated mutation for every FS-3 resource and official institutional data remain outside the evidence. FS-4 is `NOT_STARTED` and requires separate owner authorization/readiness review.
+
+### Phase 4-FS-3 final reconciliation and acceptance — 6 October 2026
+
+**Classification:** `COMPLETE — ACCEPTED_WITH_ADVISORY`
+
+This final record supersedes the prior current-state `IN_PROGRESS` / final-reconciliation-pending classification without rewriting the dated FS-3A, FS-3B, FS-3C, or hours/exceptions implementation evidence below.
+
+| Evidence area | Result | Evidence / advisory |
+|---|---|---|
+| Accepted scope | `PASS` | One `facilityAdminService` foundation; operational profiles; service catalog; aliases; facility-service mappings; weekly hours; dated exceptions; intentional reuse of facility advisories; single `SUPER_ADMIN` Admin shell; and lifecycle/provenance/stale-write/guarded-delete/RLS/audit boundaries for the new resources |
+| FS-3A / FS-3B / FS-3C | `ACCEPTED_WITH_ADVISORY` | Allowlisted provider-neutral mutations, immutable identities, normalized safe errors, profile/service/alias/mapping workflows, optimistic concurrency, guarded deletion, provenance, and the single Admin shell reconcile successfully; no fresh live mutation for every resource is claimed |
+| Hours and exceptions | `ACCEPTED_WITH_ADVISORY` | Split/overnight/closed schedules, strict Manila dates, replacement semantics, overlap/closed-marker safety, lifecycle, provenance, stale handling, guarded deletion, and the FS-2 status boundary pass; no official institutional schedule is claimed |
+| Reused facility advisories | `ACCEPTED_WITH_ADVISORY` | `TEMPORARY_CLOSURE`, `MAINTENANCE`, `RESTRICTED_ACCESS`, and `SERVICE_INTERRUPTION` remain in the existing accepted Admin workflow. Its confirmed deletion/RLS/audit behavior is retained unchanged; it does not use the newer FS-3 optimistic stale-token pattern |
+| Security, RLS, and audit | `PASS` | PostgreSQL RLS remains authoritative, initial facility-operation writes remain `SUPER_ADMIN` only, UI code contains no privileged key or direct audit write, and trusted triggers remain the audit writer; no schema or remote change was required |
+| Focused final verification | `PASS_WITH_EXISTING_ADVISORIES` | Fresh FS-3A, FS-3B, FS-3C, hours/exceptions, FS-2C 81/81, route render, ESLint, typecheck, production build, and diff checks pass; the complete earlier deterministic matrix remains accepted evidence |
+| Owner sign-offs | `RECORDED_AT_SUPPLIED_LEVEL` | The owner supplied visual/functional sign-off for the frozen UI direction, final single Admin shell, aliases/mappings UI, weekly-hours UI, and dated-exceptions UI. Browser, OS, physical-device, screen-reader, credential, and exact live-mutation details are not inferred. This newer evidence supersedes the earlier current-state caveat that the owner's reviews predated the single shell |
+| Browser/accessibility evidence | `ACCEPTED_WITH_ADVISORY` | Headless Chrome fixture evidence covers the recorded responsive widths, themes, schedule workflows, keyboard/dialog behavior, drawer behavior, and zero console errors; Firefox, Safari/WebKit, physical phone/tablet, and current FS-3 manual screen-reader verification remain pending |
+| Institutional and deployment boundary | `ADVISORY` | Official operational data remains incomplete; no deployment-equivalence claim exists for this FS-3 revision; unresolved facility/department delegation remains an open institutional decision |
+| Performance and dependencies | `ADVISORY` | The lazy Campus3D chunk remains approximately 879.70 kB. On 6 October 2026, full `npm audit` reports 17 advisories (8 moderate, 9 high, 0 critical) and `--omit=dev` reports 11 (5 moderate, 6 high); no dependency was changed or claimed fixed |
+| Cross-phase boundary | `PASS` | FS-3 adds no public fuzzy/alias search, recommendation algorithm/consumer, media, Dashboard availability, Realtime integration, spatial/routing editing, or later-phase implementation |
+| Final decision | `COMPLETE — ACCEPTED_WITH_ADVISORY` | All currently defined FS-3 implementation scope is accepted with named nonblocking limitations. FS-4 remains `NOT_STARTED` and requires separate owner authorization/readiness review |
 
 ### Phase 4-FS-3 unnumbered final capability — weekly operating-hours and dated operating-hour exceptions Admin UI — 4 October 2026
 

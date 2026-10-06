@@ -1,5 +1,16 @@
 # CampusNav Content Pack — Changelog
 
+## v3.44 — 6 October 2026
+
+Completed the documentation-only final reconciliation for **Phase 4-FS-3 — Facility and Service Admin Workflows** and classified the phase as `COMPLETE — ACCEPTED_WITH_ADVISORY`.
+
+- reconciled FS-3A, FS-3B, FS-3C, weekly hours, dated exceptions, the reused facility-advisory workflow, the single `SUPER_ADMIN` Admin shell, and the accepted lifecycle/provenance/stale-write/guarded-delete/RLS/audit boundaries
+- recorded owner visual/functional sign-offs for the frozen UI direction, final single Admin shell, aliases/mappings UI, weekly-hours UI, and dated-exceptions UI without inventing browser, device, screen-reader, credential, or live-mutation detail
+- preserved the official-data, live-mutation, Firefox, Safari/WebKit, physical-device, screen-reader, Campus3D chunk, broader-role, deployment-equivalence, legacy-advisory-concurrency, and dependency advisories
+- refreshed the unresolved dependency counts: full audit 17 (8 moderate, 9 high, 0 critical); `--omit=dev` 11 (5 moderate, 6 high); no dependency was changed or fixed
+- changed documentation only: no application source, test, package, lockfile, schema, migration, RLS, database, Supabase project, deployment, or FS-4 implementation changed
+- kept Phase 4-FS-4 `NOT_STARTED`; it requires a separate owner authorization/readiness task
+
 ## v3.43 — 4 October 2026
 
 Implemented and locally verified the **unnumbered final Phase 4-FS-3 capability — Weekly Operating-Hours and Dated Operating-Hour Exceptions Admin UI** without inventing an FS-3D label or starting FS-4.

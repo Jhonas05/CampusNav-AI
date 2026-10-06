@@ -337,7 +337,9 @@ Run the targeted deterministic UI/service-boundary and Vite-render checks with:
 npm run test:phase4-fs3-hours
 ```
 
-No official operating hours are seeded or inferred. Live authenticated Supabase mutation remains outside the local evidence; missing institutional schedules continue to produce unavailable/pending public states. Overall FS-3 still requires a separately authorized final acceptance reconciliation before it may be declared complete.
+No official operating hours are seeded or inferred. Live authenticated Supabase mutation remains outside the local evidence; missing institutional schedules continue to produce unavailable/pending public states.
+
+**Overall Phase 4-FS-3 status:** `COMPLETE — ACCEPTED_WITH_ADVISORY` as of the 6 October 2026 final documentation reconciliation. Acceptance covers the Admin mutation/service foundation, operational profiles, service catalog, aliases, facility-service mappings, weekly hours, dated exceptions, intentional reuse of Facility Advisories, and the single `SUPER_ADMIN` Admin shell. It retains the documented official-data, live-mutation, browser/device, screen-reader, performance, role-delegation, deployment-equivalence, legacy-advisory-concurrency, and dependency advisories. Phase 4-FS-4 remains `NOT_STARTED` and requires separate owner authorization/readiness review.
 
 ## Admin CMS foundation (Phase 8B.1)
 

@@ -36,6 +36,20 @@
 - public/Admin/Dashboard consumers reuse the provider-neutral FacilityService and centralized Realtime/provider pattern
 - navigation, QR/manual, Emergency, Dashboard, Admin, and schedule/personnel regressions pass before Phase 4 acceptance
 
+## Phase 4-FS-3 final acceptance evidence — 6 October 2026
+
+- `PASS` — FS-3A mutation/service foundation, allowlists, normalized errors, stale-write protection, guarded deletion, advisory reuse, and security boundaries
+- `PASS` — FS-3B operational-profile and service-catalog workflows
+- `PASS` — FS-3C service-alias and facility-service-mapping workflows
+- `PASS` — weekly-hours and dated-exception workflows, including split, overnight, closed-all-day, strict Manila dates, lifecycle, provenance, stale handling, and guarded deletion
+- `81/81 PASS` — FS-2C status evaluator/orchestration regression
+- `PASS` — route rendering, ESLint, typecheck, production build, and diff checks
+- `PASS AT SUPPLIED EVIDENCE LEVEL` — owner visual/functional sign-offs for the frozen UI direction, final single Admin shell, aliases/mappings UI, weekly-hours UI, and dated-exceptions UI; no browser, OS, physical-device, screen-reader, credential, or live-mutation detail is inferred
+- `ACCEPTED_WITH_ADVISORY` — incomplete official institutional data; no fresh authenticated live mutation for every FS-3 resource; Firefox, Safari/WebKit, physical phone/tablet, and current FS-3 manual screen-reader verification pending; approximately 879.70 kB lazy Campus3D chunk; unresolved broader role delegation; no deployment-equivalence claim; reused legacy advisory CRUD without the newer optimistic stale-token pattern; and open dependency/security advisories
+- `DEPENDENCY ADVISORY` — full `npm audit`: 17 total (8 moderate, 9 high, 0 critical); `npm audit --omit=dev`: 11 total (5 moderate, 6 high); no package was changed or claimed fixed
+- `PHASE 4-FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY` — no implementation, database, RLS, audit, or test blocker remains
+- `FS-4 NOT_STARTED` — public Facilities/search/recommendation requires separate owner authorization/readiness review
+
 ## Schedule/personnel gate
 - precedence/exceptions tested
 - UI language does not claim presence from schedule

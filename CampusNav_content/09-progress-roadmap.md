@@ -428,7 +428,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — ALL DEFINED IMPLEMENTATION CAPABILITIES IMPLEMENTED_VERIFIED; FINAL RECONCILIATION PENDING`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 NOT_STARTED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -466,7 +466,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `IN_PROGRESS — ALL DEFINED IMPLEMENTATION CAPABILITIES IMPLEMENTED_VERIFIED; FINAL RECONCILIATION PENDING`
+3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
@@ -480,7 +480,17 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-2 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability are implemented and locally verified. No further FS-3 implementation capability is currently defined. Full FS-3 remains `IN_PROGRESS` until a separately authorized final acceptance reconciliation reviews the combined evidence and advisories; FS-4 has not started.
+**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability have passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. FS-4 remains `NOT_STARTED` and requires separate owner authorization/readiness review.
+
+### Phase 4-FS-3 final reconciliation and acceptance — 6 October 2026
+
+**Status:** `COMPLETE — ACCEPTED_WITH_ADVISORY`
+
+Final acceptance covers the dedicated facility Admin mutation/service foundation; operational facility profiles; service catalog; service aliases; facility-service mappings; weekly operating hours; dated operating-hour exceptions; intentional reuse of the existing facility-advisory workflow; the single `SUPER_ADMIN` Admin navigation shell; and the lifecycle, provenance, optimistic-stale-write, guarded-delete, RLS, and trusted-audit boundaries implemented for the new FS-3 resources. Earlier `IMPLEMENTED_VERIFIED` slice records remain historical implementation evidence.
+
+The focused final audit passed FS-3A, FS-3B, FS-3C, hours/exceptions, FS-2C 81/81, route rendering, ESLint, typecheck, production build, and diff checks. The owner provided visual/functional sign-off for the frozen UI direction, final single Admin shell, aliases/mappings UI, weekly-hours UI, and dated-exceptions UI; no browser, OS, physical-device, screen-reader, credential, or live-mutation detail is inferred beyond the recorded evidence.
+
+Acceptance retains nonblocking advisories: incomplete official institutional operational data; no fresh authenticated live mutation for every FS-3 resource; no Firefox, Safari/WebKit, physical phone/tablet, or current FS-3 manual screen-reader verification; the approximately 879.70 kB lazy Campus3D chunk; unresolved broader facility/department role delegation; no deployment-equivalence claim for this revision; the reused legacy advisory CRUD's older concurrency boundary; and open dependency/security advisories. No schema, migration, Supabase mutation, dependency change, deployment, or FS-4 implementation was required. FS-4 remains `NOT_STARTED`.
 
 ### Phase 4-FS-3 unnumbered final implementation capability — weekly hours and dated exceptions Admin UI — 4 October 2026
 
