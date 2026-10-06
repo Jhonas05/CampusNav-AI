@@ -376,6 +376,8 @@ Known components/pages include:
 - `src/pages/admin/FacilityAdminPage.jsx` and `src/pages/admin/ServiceAdminPage.jsx` (`/admin/facilities`, `/admin/services`; `SUPER_ADMIN`; Phase 4-FS-3B)
 - `src/pages/admin/ServiceAliasAdminPage.jsx` and `src/pages/admin/FacilityServiceMappingAdminPage.jsx` (`/admin/service-aliases`, `/admin/facility-service-mappings`; `SUPER_ADMIN`; Phase 4-FS-3C)
 - `src/pages/admin/FacilityOperationsAdminPage.jsx` and `src/components/admin/FacilityOperationsEditor.jsx` (shared FS-3B/FS-3C list/editor for profiles, services, aliases, and mappings; table at `xl` and wider, cards below)
+- `src/pages/admin/FacilityHoursAdminPage.jsx` and `src/pages/admin/FacilityHourExceptionsAdminPage.jsx` (`/admin/facility-hours`, `/admin/facility-hour-exceptions`; `SUPER_ADMIN`; unnumbered final FS-3 implementation capability)
+- `src/pages/admin/FacilityScheduleAdminPage.jsx` and `src/components/admin/FacilityScheduleEditor.jsx` (shared hours/exceptions list and schedule-aware editor; explicit split/overnight intervals, closed-all-day markers, strict Manila exception dates, lifecycle, provenance, stale handling, and responsive table/cards)
 
 Phase 8C.2 work may also include academic/personnel admin surfaces such as:
 - Personnel

@@ -428,7 +428,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — FS-3A/FS-3B/FS-3C IMPLEMENTED_VERIFIED`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — ALL DEFINED IMPLEMENTATION CAPABILITIES IMPLEMENTED_VERIFIED; FINAL RECONCILIATION PENDING`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -466,7 +466,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `IN_PROGRESS — FS-3A/FS-3B/FS-3C IMPLEMENTED_VERIFIED`
+3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `IN_PROGRESS — ALL DEFINED IMPLEMENTATION CAPABILITIES IMPLEMENTED_VERIFIED; FINAL RECONCILIATION PENDING`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `NOT_STARTED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
@@ -480,7 +480,17 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-2 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, and FS-3C are implemented and locally verified at their deterministic service/API and Admin UI boundaries below. Full FS-3 remains in progress: weekly-hours, dated-exception, and any separately authorized later Admin workflow remain outside FS-3C, and live authenticated browser mutation QA is not claimed.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-1 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`; Phase 4-FS-2 is therefore `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability are implemented and locally verified. No further FS-3 implementation capability is currently defined. Full FS-3 remains `IN_PROGRESS` until a separately authorized final acceptance reconciliation reviews the combined evidence and advisories; FS-4 has not started.
+
+### Phase 4-FS-3 unnumbered final implementation capability — weekly hours and dated exceptions Admin UI — 4 October 2026
+
+**Status:** `IMPLEMENTED_VERIFIED — FINAL FS-3 RECONCILIATION PENDING`
+
+The single Admin shell now exposes `SUPER_ADMIN`-only `/admin/facility-hours` and `/admin/facility-hour-exceptions` routes. Both use the accepted `facilityAdminService` through `AdminService`, restrict facility choices to canonical facilities with operational profiles, and manage only source rows. The schedule-aware editor supports explicit split intervals, legal overnight intervals, closed-all-day markers, strict unconverted Manila `YYYY-MM-DD` exception dates, conservative draft/non-public/pending creation, lifecycle/effectivity, provenance/verification, original `updated_at` stale protection with explicit reload, and confirmed guarded deletion. Safe UI copy covers overlap and closed-marker conflicts without exposing provider details.
+
+Dated exceptions remain replacement schedules for their campus date, and previous-date overnight ownership remains in the accepted FS-2 status engine. The Admin UI does not compute or store `OPEN_NOW`, `CLOSED`, `CLOSING_SOON`, `SCHEDULED_TO_OPEN`, or other status values, and it does not duplicate the existing facility-advisory workflow. No official hours or exceptions were created.
+
+The dedicated `test:phase4-fs3-hours` suite, FS-3A/B/C and FS-1/FS-2 regressions, the 81-scenario FS-2C suite, the complete deterministic matrix, route rendering, ESLint, typecheck, production build, and `git diff --check` pass under Node 22. Headless Chrome with a development-only intercepted network fixture exercised both routes and the surrounding Admin routes, split/overnight/closed schedules, dated replacements, stale reload, publish/expire/delete, keyboard/dialog behavior, Light/Dark, and the required 1440 through 390 widths with zero console errors; no request reached Supabase and no fixture persisted. No schema, migration, RLS, provider, service-layer, database, dependency, public UI, media, Dashboard/Realtime, spatial/navigation, commit, push, merge, deployment, or FS-4 change was made.
 
 ### Phase 4-FS-3C aliases and facility-service mappings Admin workflow — 4 October 2026
 

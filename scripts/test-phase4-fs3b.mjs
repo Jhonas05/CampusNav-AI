@@ -97,7 +97,7 @@ assert.equal(safeFacilityAdminMessage({ code: "ADMIN_ERROR", message: "relation 
 assert.doesNotMatch(`${pageSource}\n${editorSource}`, /getSupabaseClient|\.from\s*\(|@supabase\/supabase-js/)
 assert.doesNotMatch(`${pageSource}\n${editorSource}`, /audit_logs|insertAudit|createAudit/i)
 assert.match(pageSource, /Change saved and recorded in Audit Activity/)
-assert.doesNotMatch(`${appSource}\n${shellSource}\n${pageSource}\n${editorSource}`, /admin\/(?:facility-hours|facility-hour-exceptions|hours|exceptions)/)
+assert.doesNotMatch(`${pageSource}\n${editorSource}`, /FACILITY_ADMIN_RESOURCES\.(?:HOURS|EXCEPTIONS)/, "FS-3B profile/service components remain separate from the schedule-specific Admin UI")
 assert.doesNotMatch(`${pageSource}\n${editorSource}`, /mapNodes|mapEdges|qrCheckpoints|emergencyRoutes|src\/data\/floors/)
 for (const method of ["listFacilityOperationalProfiles", "createFacilityOperationalProfile", "listFacilityAdminServices", "createFacilityAdminServiceRecord"]) assert.match(adminServiceSource, new RegExp(`\\.\\.\\.facilityAdmin|${method}`))
 assert.match(appSource, /ProtectedRoute/)

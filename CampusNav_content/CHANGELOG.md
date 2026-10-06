@@ -1,5 +1,23 @@
 # CampusNav Content Pack — Changelog
 
+## v3.43 — 4 October 2026
+
+Implemented and locally verified the **unnumbered final Phase 4-FS-3 capability — Weekly Operating-Hours and Dated Operating-Hour Exceptions Admin UI** without inventing an FS-3D label or starting FS-4.
+
+### Implementation
+- added lazy `SUPER_ADMIN` `/admin/facility-hours` and `/admin/facility-hour-exceptions` routes to the existing single Admin navigation shell
+- added a shared schedule list and schedule-aware editor that reuse the accepted `AdminService` / `facilityAdminService` hours and exception methods, filter choices to canonical facilities with operational profiles, and make facility identity immutable after creation
+- supported explicit one/split/overnight intervals, closed-all-day markers, strict unconverted Manila exception dates, lifecycle/effectivity, full verification/provenance controls, conservative draft/non-public/pending defaults, original-`updated_at` stale reload, and confirmed guarded deletion
+- added normalized `HOURS_OVERLAP` and `CLOSED_MARKER_CONFLICT` copy; components expose no raw provider detail and contain no direct Supabase/audit mutation
+- retained FS-2 as the sole status engine and reused the existing facility-advisory workflow; no editable status override or advisory duplication was added
+
+### Verification and boundary
+- added `npm run test:phase4-fs3-hours` for routes/RBAC, weekly and exception CRUD wiring, split/overnight/closed/date validation, lifecycle/provenance, profile-backed references, stale/delete safety, conflict copy, accessibility/responsive structure, rendering, and provider/status/spatial/advisory boundaries
+- passed FS-3A/B/C, FS-1/FS-2 including all 81 FS-2C scenarios, the complete deterministic matrix, route rendering, ESLint, typecheck, production build, and `git diff --check` under Node 22
+- headless Chrome with a fully intercepted development fixture exercised the two new routes plus five surrounding Admin routes, both themes, all eight required widths, split/overnight/closed schedules, dated replacements, stale reload, publish/expire/delete, keyboard/dialog behavior, Admin drawer behavior, and zero console errors; no request reached Supabase and no fixture persisted
+- changed no schema, migration, RLS, pgTAP, seed, provider, accepted service method, database row, remote Supabase project, dependency/lockfile, public UI, media, Dashboard/Realtime, spatial/navigation/QR/Emergency behavior, commit, push, merge, deployment, or FS-4 work
+- classified the final implementation capability as `IMPLEMENTED_VERIFIED`; full FS-3 remains `IN_PROGRESS` pending separately authorized final acceptance reconciliation
+
 ## v3.42 — 4 October 2026
 
 Implemented and locally verified **Phase 4-FS-3C — Service Aliases and Facility-Service Mappings Admin UI** without completing full FS-3 or starting FS-4.

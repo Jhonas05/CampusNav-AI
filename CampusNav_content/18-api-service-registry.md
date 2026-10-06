@@ -116,6 +116,8 @@ FS-3B adds only the `SUPER_ADMIN` Admin consumers for operational profiles and t
 
 FS-3C adds the `SUPER_ADMIN` `/admin/service-aliases` and `/admin/facility-service-mappings` consumers. Both use `loadFacilityAdminReferences` and the existing alias/mapping CRUD and lifecycle methods through `AdminService`. Alias service identity and mapping facility/service identities are creation-only in the UI, original `updated_at` values protect every mutation, and the UI adds no direct Supabase/audit write. Mapping facility choices are limited to canonical facilities with operational profiles; configured rank remains stored administrative data and is not a recommendation algorithm or public consumer.
 
+The unnumbered final FS-3 implementation capability adds `SUPER_ADMIN` `/admin/facility-hours` and `/admin/facility-hour-exceptions` consumers. They reuse the existing hours/exception list, create, update, publish, expire, and guarded-delete methods; allow only canonical facilities with operational profiles; preserve one database source row per interval or closed marker; and support split/overnight schedules plus strict Manila exception dates without duplicating status computation. Batch draft creation performs best-effort cleanup through the same guarded service if a later source-row creation fails. Original row `updated_at` values protect edits, lifecycle actions, and deletes. Components contain no direct Supabase, audit, public status, advisory, spatial, or routing mutation.
+
 ## CLARAToolService (future)
 Thin authorized wrapper that exposes only safe internal functions to CLARA.
 

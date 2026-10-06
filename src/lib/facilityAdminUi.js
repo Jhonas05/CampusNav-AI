@@ -28,6 +28,8 @@ const SAFE_ERROR_COPY = Object.freeze({
   DUPLICATE_SERVICE_CODE: "That service code is already in use. Choose another stable code.",
   DUPLICATE_ALIAS: "That alias already exists for the selected service.",
   DUPLICATE_MAPPING: "That service is already mapped to the selected facility.",
+  HOURS_OVERLAP: "This interval overlaps another active interval for the same facility and schedule key.",
+  CLOSED_MARKER_CONFLICT: "A closed-all-day marker conflicts with another active interval for the same facility and schedule key.",
   STALE_RECORD: "This record changed elsewhere. Your values were not overwritten; reload the stored version before saving again.",
   DELETE_CONFLICT: "This record is still referenced. Expire it or remove dependent records in a later authorized workflow.",
   DELETE_NOT_ALLOWED: "This record must be expired or cancelled instead of deleted.",
@@ -108,6 +110,19 @@ export const createFacilityAdminForm = (resource, record = null, identity = null
     }
   }
 
+  if ([FACILITY_ADMIN_RESOURCES.HOURS, FACILITY_ADMIN_RESOURCES.EXCEPTIONS].includes(resource)) {
+    return {
+      ...base,
+      facility_id: record?.facility_id || identity?.facility_id || identity || "",
+      day_of_week: record?.day_of_week ?? 1,
+      exception_date: record?.exception_date || "",
+      closed_all_day: Boolean(record?.closed_all_day),
+      intervals: record?.closed_all_day
+        ? []
+        : [{ key: "interval-1", start_time: String(record?.start_time || "08:00").slice(0, 5), end_time: String(record?.end_time || "17:00").slice(0, 5) }],
+    }
+  }
+
   return {
     ...base,
     code: record?.code || "",
@@ -117,20 +132,45 @@ export const createFacilityAdminForm = (resource, record = null, identity = null
   }
 }
 
-export const buildFacilityAdminPayload = (resource, form, { operation = "create" } = {}) => {
-  const common = {
-    lifecycle: form.lifecycle || "DRAFT",
-    public_visibility: Boolean(form.public_visibility),
-    published_at: toAbsoluteTimestamp(form.published_at),
-    effective_at: toAbsoluteTimestamp(form.effective_at),
-    expires_at: toAbsoluteTimestamp(form.expires_at),
-    verification_status: form.verification_status || "PENDING_VERIFICATION",
-    data_status: form.data_status || "PENDING_VERIFICATION",
-    source_type: nullableText(form.source_type) || "ADMIN_CMS",
-    source_id: nullableText(form.source_id),
-    source_label: nullableText(form.source_label),
-    last_verified_at: toAbsoluteTimestamp(form.last_verified_at),
+const commonFacilityAdminPayload = (form) => ({
+  lifecycle: form.lifecycle || "DRAFT",
+  public_visibility: Boolean(form.public_visibility),
+  published_at: toAbsoluteTimestamp(form.published_at),
+  effective_at: toAbsoluteTimestamp(form.effective_at),
+  expires_at: toAbsoluteTimestamp(form.expires_at),
+  verification_status: form.verification_status || "PENDING_VERIFICATION",
+  data_status: form.data_status || "PENDING_VERIFICATION",
+  source_type: nullableText(form.source_type) || "ADMIN_CMS",
+  source_id: nullableText(form.source_id),
+  source_label: nullableText(form.source_label),
+  last_verified_at: toAbsoluteTimestamp(form.last_verified_at),
+})
+
+export const buildFacilitySchedulePayloads = (resource, form, { operation = "create" } = {}) => {
+  if (![FACILITY_ADMIN_RESOURCES.HOURS, FACILITY_ADMIN_RESOURCES.EXCEPTIONS].includes(resource)) return []
+  const identity = operation === "create" ? { facility_id: form.facility_id } : {}
+  const scheduleKey = resource === FACILITY_ADMIN_RESOURCES.HOURS
+    ? { day_of_week: Number(form.day_of_week) }
+    : { exception_date: String(form.exception_date || "") }
+  const common = commonFacilityAdminPayload(form)
+
+  if (form.closed_all_day) {
+    return [{ ...identity, ...scheduleKey, closed_all_day: true, start_time: null, end_time: null, ...common }]
   }
+
+  const intervals = Array.isArray(form.intervals) ? form.intervals : []
+  return intervals.map((interval) => ({
+    ...identity,
+    ...scheduleKey,
+    closed_all_day: false,
+    start_time: String(interval.start_time || ""),
+    end_time: String(interval.end_time || ""),
+    ...common,
+  }))
+}
+
+export const buildFacilityAdminPayload = (resource, form, { operation = "create" } = {}) => {
+  const common = commonFacilityAdminPayload(form)
 
   if (resource === FACILITY_ADMIN_RESOURCES.PROFILES) {
     return {

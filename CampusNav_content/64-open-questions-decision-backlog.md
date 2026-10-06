@@ -30,7 +30,7 @@ The former strict-grayscale question is resolved by `DEC-UI-002` in `29-decision
 
 Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` and `75-adviser-confirmation-package.md` remain preserved; the package is `PREPARED / AWAITING_ADVISER_CONFIRMATION` and no adviser approval is claimed.
 
-`DEC-ROADMAP-002` makes **Phase 4 — Core Facility & Service Workflow Completion** the active owner-controlled software-development phase. Missing official data does not block generic workflows that preserve unavailable/pending states or use isolated visibly labeled fixtures. Phase 4-FS-1 and Phase 4-FS-2 are now `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4-FS-3 is `IN_PROGRESS`: FS-3A, FS-3B, and FS-3C are `IMPLEMENTED_VERIFIED` at their local deterministic service/API and Admin UI boundaries; full FS-3 acceptance and any later Admin workflow remain separately gated.
+`DEC-ROADMAP-002` makes **Phase 4 — Core Facility & Service Workflow Completion** the active owner-controlled software-development phase. Missing official data does not block generic workflows that preserve unavailable/pending states or use isolated visibly labeled fixtures. Phase 4-FS-1 and Phase 4-FS-2 are now `COMPLETE — ACCEPTED_WITH_ADVISORY`. Phase 4-FS-3 is `IN_PROGRESS`: FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability are `IMPLEMENTED_VERIFIED`; no further FS-3 implementation capability is currently defined, but overall FS-3 acceptance remains separately gated through final reconciliation.
 
 Adviser confirmation remains a separate external action and still controls adviser/academic claims. Institutional questions above still control whether values may be presented as official; they do not authorize agents to invent those values.
 

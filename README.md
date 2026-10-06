@@ -325,6 +325,20 @@ npm run test:phase4-fs3c
 
 Live authenticated mutation and official institutional alias/mapping records are not part of local FS-3C evidence. No schema, migration, provider, public Facilities/search/recommendation, spatial/navigation, or FS-4 behavior is added.
 
+## Weekly hours and dated exceptions Admin UI (final unnumbered Phase 4-FS-3 implementation capability)
+
+Authenticated `SUPER_ADMIN` users can manage recurring facility operating hours at `/admin/facility-hours` and campus-date replacement schedules at `/admin/facility-hour-exceptions`. Both routes use only canonical facilities with existing operational profiles and call the accepted hours/exception methods through `AdminService`; components perform no direct Supabase or audit writes.
+
+The schedule editor supports explicit split and overnight intervals, closed-all-day markers, strict Manila `YYYY-MM-DD` exception dates, separate Save/Publish/Expire behavior, full verification/provenance controls, original-`updated_at` stale protection, guarded deletion, and normalized overlap/closed-marker errors. It edits source records only: facility status remains computed by FS-2, and temporary closures remain in the existing Facility Advisories workflow.
+
+Run the targeted deterministic UI/service-boundary and Vite-render checks with:
+
+```bash
+npm run test:phase4-fs3-hours
+```
+
+No official operating hours are seeded or inferred. Live authenticated Supabase mutation remains outside the local evidence; missing institutional schedules continue to produce unavailable/pending public states. Overall FS-3 still requires a separately authorized final acceptance reconciliation before it may be declared complete.
+
 ## Admin CMS foundation (Phase 8B.1)
 
 The protected `/admin` area is available only to authenticated `SUPER_ADMIN` accounts. It provides live Supabase counts plus content management for announcements, events, facility advisories, and notifications. Each list supports title search, lifecycle and priority filters, sorting, explicit draft/schedule/publish actions, cancellation or expiration, and confirmed deletion. Facility links always use the stable IDs from `src/data/facilities.js`; no second facility namespace is created.

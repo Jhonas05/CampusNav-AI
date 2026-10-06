@@ -37,6 +37,8 @@ export const NAV_GROUPS = [
       { label: "Services", icon: Tags, path: "/admin/services", superAdminOnly: true },
       { label: "Service Aliases", icon: Tags, path: "/admin/service-aliases", superAdminOnly: true },
       { label: "Service Mappings", icon: Building2, path: "/admin/facility-service-mappings", superAdminOnly: true },
+      { label: "Operating Hours", icon: Clock3, path: "/admin/facility-hours", superAdminOnly: true },
+      { label: "Hour Exceptions", icon: CalendarX2, path: "/admin/facility-hour-exceptions", superAdminOnly: true },
     ],
   },
   {

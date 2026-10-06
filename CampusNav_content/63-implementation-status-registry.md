@@ -67,7 +67,7 @@ The owner-approved frozen interface (`DEC-UI-003` shell and floating CLARA, `DEC
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — FS-3A/FS-3B IMPLEMENTED_VERIFIED`
+**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 IN_PROGRESS — ALL DEFINED IMPLEMENTATION CAPABILITIES IMPLEMENTED_VERIFIED; FINAL RECONCILIATION PENDING`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -84,7 +84,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Hours and exceptions schema/security foundation | `ACCEPTED — FS-2A` | Linked migration, 89/89 corrected canonical pgTAP, remote structure/security/audit checks, and exact zero-fixture verification pass on the actual CampusNav project |
 | Hours, exceptions, and closure source reads | `ACCEPTED_WITH_ADVISORY — FS-2B` | Provider-neutral local/null plus public-view aggregate read, strict Manila date ranges, defensive normalization, ordering, provenance, errors, and full deterministic regressions pass; no live FS-2B Data API read is claimed |
 | Facility-status engine | `ACCEPTED_WITH_ADVISORY — FS-2C` | Pure Manila-time evaluator and public FacilityService orchestration pass final reconciliation; no live official-hours/status evidence is claimed |
-| Facility Admin workflows beyond advisories | `PARTIAL — FS-3A/FS-3B/FS-3C IMPLEMENTED_VERIFIED` | Dedicated mutation service plus SUPER_ADMIN profile/service/alias/mapping routes, lists, editors, immutable identities, explicit lifecycle actions, stale handling, guarded deletion, and safe errors pass deterministic/local render checks; hours/exceptions UI and live authenticated mutation QA remain later FS-3 work |
+| Facility Admin workflows beyond advisories | `IMPLEMENTED_VERIFIED — FINAL RECONCILIATION PENDING` | Dedicated mutation service plus SUPER_ADMIN profile/service/alias/mapping/hours/exception routes, lists, schedule-aware editors, explicit lifecycle actions, stale handling, guarded deletion, safe errors, deterministic regressions, and fixture-backed browser QA pass; live authenticated Supabase mutation remains unclaimed |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
 | Public search/recommendation enrichment | `NOT_IMPLEMENTED` | Existing name/kind/floor search is only the baseline |
 | Dashboard operational availability | `PARTIAL` | Pending/unknown local states and advisories exist; connected computed office availability is not implemented |
@@ -94,7 +94,26 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-2 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, and FS-3C are `IMPLEMENTED_VERIFIED` at their local deterministic service/API and Admin UI boundaries. Full FS-3 remains in progress; weekly-hours/dated-exception UI, any separately authorized later Admin workflow, and live authenticated mutation QA remain outside this evidence.
+**Current Phase 4 boundary:** FS-1A and FS-1B are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-1 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-2A is `ACCEPTED`, while FS-2B and FS-2C are `ACCEPTED_WITH_ADVISORY`, so Phase 4-FS-2 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability are `IMPLEMENTED_VERIFIED`. No further FS-3 implementation capability is currently defined. Full FS-3 remains `IN_PROGRESS` pending a separately authorized final acceptance reconciliation; live authenticated Supabase mutation remains outside this evidence.
+
+### Phase 4-FS-3 unnumbered final capability — weekly operating-hours and dated operating-hour exceptions Admin UI — 4 October 2026
+
+**Classification:** `IMPLEMENTED_VERIFIED — FINAL FS-3 RECONCILIATION PENDING`
+
+| Evidence area | Result | Evidence / boundary |
+|---|---|---|
+| Routes and authorization | `PASS` | `/admin/facility-hours` and `/admin/facility-hour-exceptions` are lazy `SUPER_ADMIN` routes in the single Admin shell; all other listed roles remain denied and existing RLS stays authoritative |
+| Source-record workflows | `PASS` | List/search/filter/create/edit/publish/expire/guarded-delete use the accepted AdminService methods; no component calls Supabase or audit tables directly |
+| Facility references | `PASS` | Choices are canonical local facilities filtered to existing operational profiles; facility identity is immutable after creation |
+| Schedule semantics | `PASS` | One or multiple explicit intervals, split schedules, legal overnight intervals, and closed-all-day markers are supported; exception dates remain strict unconverted Manila `YYYY-MM-DD` values |
+| Status/advisory boundary | `PASS` | The UI edits source rows only, contains no computed status selector/evaluator, and does not duplicate `/admin/facility-advisories` |
+| Lifecycle/provenance | `PASS` | New rows remain draft/non-public/pending; Publish and Expire are explicit; effectivity, expiration, verification/data status, source type/ID/label, and last verification remain visible |
+| Stale/delete/error safety | `PASS` | Original `updated_at` protects edits/lifecycle/deletes; stale forms remain open with explicit reload; delete is confirmed and guarded; overlap/closed-marker errors use normalized safe copy |
+| Accessibility/responsive | `PASS_WITH_BROADER_DEVICE_ADVISORY` | Labeled interval/date/day controls, modal focus behavior, keyboard access, visible non-color states, table/cards, stacked mobile controls, and 1440/1366/1280/1024/820/768/430/390 widths passed headless Chrome fixture QA with zero console errors |
+| Deterministic/regression evidence | `PASS_WITH_EXISTING_BUILD_ADVISORY` | Targeted suite, FS-3A/B/C, FS-1/FS-2 including FS-2C 81/81, the complete deterministic matrix, render, ESLint, typecheck, build, and diff check pass under Node 22; the existing approximately 880 kB lazy 3D warning remains unrelated |
+| Data/database/dependency boundary | `PASS` | No official record, schema, migration, RLS, public projection, provider/service, remote database, dependency, public UI, media, Dashboard/Realtime, spatial/navigation, or FS-4 change exists |
+| Live evidence | `NOT_CLAIMED` | Browser QA used a development-only fully intercepted network fixture; no request reached Supabase and no real account or remote row was used |
+| Current boundary | `IN_PROGRESS` | All currently defined FS-3 implementation capability is implemented and verified; overall FS-3 acceptance requires separate final reconciliation |
 
 ### Phase 4-FS-3C Service aliases and facility-service mappings Admin workflow — 4 October 2026
 
