@@ -1,9 +1,10 @@
-import { Accessibility, ArrowLeft, Bookmark, BookmarkCheck, Building2, CalendarClock, Clock3, ConciergeBell, Construction, MapPin, MessageCircle, Navigation, UserRound, Users } from "lucide-react"
-import { useState } from "react"
+import { Accessibility, ArrowLeft, Bookmark, BookmarkCheck, Building2, Construction, MapPin, MessageCircle, Navigation, RefreshCw } from "lucide-react"
+import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import FacilityPhoto from "@/components/campus/FacilityPhoto"
 import { button, card, EmptyState, focusRing, StatusBadge } from "@/components/campus/ui"
 import { useClara } from "@/components/clara/ClaraContext"
+import FacilityOperationalDetails from "@/components/facilities/FacilityOperationalDetails"
 import FacilityStatusBadge from "@/components/facilities/FacilityStatusBadge"
 import IndoorMap2D from "@/components/map/IndoorMap2D"
 import { FACILITY_DATA_NOTICE, facilities, getFacilityById } from "@/data/facilities"
@@ -11,6 +12,7 @@ import { getFloorById } from "@/data/floors"
 import { getFacilityCategory } from "@/lib/facilityCategories"
 import { isLocationSaved, toggleSavedLocation } from "@/lib/savedLocations"
 import { getFacilityNavigationHref } from "@/services/dashboardService"
+import { getFacilityDetail } from "@/services/facilityService"
 import { cn } from "@/lib/utils"
 
 const VERIFICATION_BADGE = {
@@ -43,6 +45,31 @@ export default function FacilityDetail() {
   const floor = facility ? getFloorById(facility.floorId) : null
   const navigationHref = facility ? getFacilityNavigationHref(facility.id) : null
   const [saved, setSaved] = useState(() => (facility ? isLocationSaved(facility.id) : false))
+  const [requestVersion, setRequestVersion] = useState(0)
+  const [operationalState, setOperationalState] = useState({ loading: Boolean(facility), detail: null })
+
+  useEffect(() => {
+    let active = true
+    if (!facility) {
+      setOperationalState({ loading: false, detail: null })
+      return () => { active = false }
+    }
+
+    setOperationalState({ loading: true, detail: null })
+    getFacilityDetail(facility.id)
+      .then((result) => {
+        if (!active) return
+        setOperationalState({
+          loading: false,
+          detail: result.ok && result.data ? result.data : null,
+        })
+      })
+      .catch(() => {
+        if (active) setOperationalState({ loading: false, detail: null })
+      })
+
+    return () => { active = false }
+  }, [facility, requestVersion])
 
   if (!facility) {
     return (
@@ -60,6 +87,19 @@ export default function FacilityDetail() {
 
   const underConstruction = facility.status === "UNDER_CONSTRUCTION"
   const category = getFacilityCategory(facility)
+  const operationalDetail = operationalState.detail
+  const operationalStatus = operationalDetail?.status?.data?.status || "UNKNOWN"
+  const operationalProfile = operationalDetail?.operationalProfile?.data
+  const hasOperationalFailure = Boolean(operationalDetail && [
+    operationalDetail.operationalProfile,
+    operationalDetail.services,
+    operationalDetail.hours,
+    operationalDetail.status,
+  ].some((section) => !section?.ok))
+  const operationalDescription = operationalState.loading
+    ? "Loading published operational information…"
+    : operationalProfile?.description
+      || (operationalDetail ? "Operational description unavailable." : "Facility information is temporarily unavailable.")
   const advisories = []
   if (underConstruction) advisories.push({ id: "construction", title: "Under construction", message: "This area is marked under construction in the source plan and is not navigable." })
   else if (facility.navigable === false) advisories.push({ id: "not-navigable", title: "Entrance pending verification", message: "This facility is source-confirmed, but its usable entrance is pending verification, so indoor routing is not available yet." })
@@ -81,6 +121,16 @@ export default function FacilityDetail() {
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   {underConstruction || facility.status === "PENDING_VERIFICATION" ? <StatusBadge status={facility.status} /> : <FacilityStatusBadge />}
+                  <StatusBadge
+                    status={operationalStatus}
+                    label={operationalState.loading
+                      ? "Loading status"
+                      : !operationalDetail
+                        ? "Status unavailable"
+                        : operationalStatus === "UNKNOWN"
+                          ? "Unknown"
+                          : null}
+                  />
                   <span className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em]", category.chip)}>
                     <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full", category.dot)} /> {facility.kind}
                   </span>
@@ -90,6 +140,7 @@ export default function FacilityDetail() {
                   <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" /> {floor?.name || facility.floorId}
                   <span aria-hidden="true" className="text-ink-ghost">·</span> {category.label}
                 </p>
+                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ink-soft">{operationalDescription}</p>
               </div>
               <div className={cn("flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl", category.tile)}>
                 <Building2 className="h-7 w-7" aria-hidden="true" />
@@ -114,18 +165,23 @@ export default function FacilityDetail() {
           </div>
 
           <div className="grid gap-0 lg:grid-cols-[1.2fr_0.8fr]">
-            <section aria-label="Facility information" className="p-5 sm:p-7">
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint">Location &amp; availability</h2>
+            <section aria-labelledby="public-facility-details-heading" className="p-5 sm:p-7">
+              <h2 id="public-facility-details-heading" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint">Public facility details</h2>
+              <div className="mt-4">
+                <FacilityOperationalDetails detail={operationalDetail} loading={operationalState.loading} />
+              </div>
+              {!operationalState.loading && (!operationalDetail || hasOperationalFailure) && (
+                <button type="button" onClick={() => setRequestVersion((value) => value + 1)} className={cn(button.smallSecondary, "mt-3")}>
+                  <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" /> Retry operational data
+                </button>
+              )}
+
+              <h2 className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint">Location &amp; spatial information</h2>
               <div className="mt-2">
                 <InfoRow icon={MapPin} label="Floor assignment" value={floor?.name || facility.floorId} verification={facility.verification.floor} />
                 <InfoRow icon={Navigation} label="Exact room position" value={facility.mapRoomId ? "Source-aligned map estimate" : "Not mapped"} verification={facility.verification.exactLocation} />
                 <InfoRow icon={Building2} label="Room number" value={facility.roomNumber || "Not provided"} verification={facility.verification.roomNumber} />
-                <InfoRow icon={Clock3} label="Operating hours" value={facility.operatingHours || "Not provided"} verification={facility.verification.operatingHours} />
-                <InfoRow icon={ConciergeBell} label="Services" value="Not provided" />
-                <InfoRow icon={Users} label="Department" value="Not provided" />
-                <InfoRow icon={UserRound} label="Personnel" value="Not provided" verification={facility.verification.personnelSchedule} />
-                <InfoRow icon={CalendarClock} label="Schedule" value={facility.personnelSchedule || "Not provided"} verification={facility.verification.personnelSchedule} />
-                <InfoRow icon={Accessibility} label="Accessibility" value={facility.accessibility || "Not provided"} />
+                <InfoRow icon={Accessibility} label="Accessibility" value={facility.accessibility || "Information pending verification"} />
               </div>
             </section>
 

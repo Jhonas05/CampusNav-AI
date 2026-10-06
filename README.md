@@ -339,7 +339,21 @@ npm run test:phase4-fs3-hours
 
 No official operating hours are seeded or inferred. Live authenticated Supabase mutation remains outside the local evidence; missing institutional schedules continue to produce unavailable/pending public states.
 
-**Overall Phase 4-FS-3 status:** `COMPLETE — ACCEPTED_WITH_ADVISORY` as of the 6 October 2026 final documentation reconciliation. Acceptance covers the Admin mutation/service foundation, operational profiles, service catalog, aliases, facility-service mappings, weekly hours, dated exceptions, intentional reuse of Facility Advisories, and the single `SUPER_ADMIN` Admin shell. It retains the documented official-data, live-mutation, browser/device, screen-reader, performance, role-delegation, deployment-equivalence, legacy-advisory-concurrency, and dependency advisories. Phase 4-FS-4 remains `NOT_STARTED` and requires separate owner authorization/readiness review.
+**Overall Phase 4-FS-3 status:** `COMPLETE — ACCEPTED_WITH_ADVISORY` as of the 6 October 2026 final documentation reconciliation. Acceptance covers the Admin mutation/service foundation, operational profiles, service catalog, aliases, facility-service mappings, weekly hours, dated exceptions, intentional reuse of Facility Advisories, and the single `SUPER_ADMIN` Admin shell. It retains the documented official-data, live-mutation, browser/device, screen-reader, performance, role-delegation, deployment-equivalence, legacy-advisory-concurrency, and dependency advisories.
+
+## Public Facility Detail composition (first Phase 4-FS-4 slice)
+
+`/facilities/:id` now keeps the canonical local facility identity and Navigate handoff while composing the accepted public operational overlay through `getFacilityDetail(facilityId, dateTime?)`. The aggregate returns independently safe profile, configured-service, hours/exception, and FS-2 status sections. One hours-provider read supplies both the visible schedule and the existing pure status evaluator, so Facility Detail does not duplicate the hours request or status logic.
+
+The page labels demo, pending, unavailable, and provider-failure states; missing sections do not erase canonical facility/spatial information or unrelated successful sections. Weekly, split, overnight, closed-all-day, and applicable dated-exception sources are shown without inventing typical hours. Operational `CLOSED` and `TEMPORARILY_UNAVAILABLE` do not alter canonical navigability.
+
+Run the targeted deterministic contract and rendering checks with:
+
+```bash
+npm run test:phase4-fs4-detail
+```
+
+This first slice is `IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`; overall FS-4 remains `IN_PROGRESS`. Directory/card enrichment, public search, service/alias resolution, recommendations, GlobalSearch/DestinationSearch, media, Dashboard/Realtime, and later FS-4 work remain unstarted. No schema, migration, remote Supabase mutation, dependency, or official institutional data was added.
 
 ## Admin CMS foundation (Phase 8B.1)
 

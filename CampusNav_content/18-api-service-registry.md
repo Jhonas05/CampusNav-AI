@@ -27,6 +27,7 @@ Responsibilities:
 Expected operations:
 - `searchFacilities(query, filters?)`
 - `getFacilityById(facilityId)`
+- `getFacilityDetail(facilityId, dateTime?)`
 - `getFacilityStatus(facilityId, dateTime)`
 - `getFacilitiesByService(serviceIdOrQuery)`
 - `getServices(filters?)`
@@ -37,6 +38,8 @@ Expected operations:
 FS-2B must not expand weekly occurrences, interpret overnight carry, replace weekly hours with exceptions, apply closure precedence, or compute `OPEN_NOW`, `CLOSED`, `CLOSING_SOON`, `SCHEDULED_TO_OPEN`, `TEMPORARILY_UNAVAILABLE`, `PENDING_VERIFICATION`, or `UNKNOWN`.
 
 `getFacilityStatus(facilityId, dateTime?)` is the FS-2C public orchestration surface. It validates canonical local facility identity first, accepts only an explicit absolute RFC3339 timestamp when `dateTime` is supplied, otherwise uses the service's injected clock, and requests only the previous/current Manila dates through `getFacilityHours`. The pure status evaluator remains the sole implementation of weekly/overnight/exception/closure/verification rules. Successful results use the existing envelope and return canonical facility identity, status, normalized evaluation time, `Asia/Manila`, next transition, independently provenanced controlling records, and demo state. Empty accepted sources produce `UNKNOWN` with `UNAVAILABLE`; configured but non-applicable sources produce `UNKNOWN` with `CONFIGURED`; provider failure remains retryable `PROVIDER_UNAVAILABLE` and is never converted into an operational status. Providers expose no separate status method or query.
+
+`getFacilityDetail(facilityId, dateTime?)` is the first FS-4 public composition surface for one canonical Facility Detail page. It preserves canonical local identity and returns independent result envelopes for the public operational profile, configured public services, weekly hours/current dated exceptions, and FS-2-computed status. It performs one bounded hours read for the previous/current Manila dates and passes those normalized source records to the existing pure evaluator, avoiding a duplicate status fetch or a second evaluator. A failed overlay section does not erase canonical identity or other successful sections; failed hours/status return a safe unavailable/`UNKNOWN` section. The method adds no provider query, private-table access, mutation path, search, alias matching, ranking, or recommendation behavior.
 
 Phase 4 rules:
 - every result is keyed by an existing canonical local facility ID

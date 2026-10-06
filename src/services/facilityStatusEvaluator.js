@@ -229,6 +229,9 @@ const closureIntervals = (statusAdvisories) => statusAdvisories
   })
   .filter(Boolean)
 
+/**
+ * @param {{ evaluatedAt?: string, weeklyHours?: Array<object>, exceptions?: Array<object>, statusAdvisories?: Array<object> }} input
+ */
 export const evaluateFacilityStatus = ({
   evaluatedAt,
   weeklyHours = [],

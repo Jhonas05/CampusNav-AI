@@ -45,6 +45,7 @@
     "test:phase4-fs3c": "node scripts/test-phase4-fs3c.mjs",
     "test:phase4:fs3c": "npm run test:phase4-fs3c",
     "test:phase4-fs3-hours": "node scripts/test-phase4-fs3-hours.mjs",
+    "test:phase4-fs4-detail": "node scripts/test-phase4-fs4-detail.mjs",
     "test:rls": "npx --yes supabase@2.79.0 test db",
     "test:render": "node scripts/test-route-render.mjs",
     "preview": "vite preview"

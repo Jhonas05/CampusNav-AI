@@ -36,6 +36,19 @@
 - public/Admin/Dashboard consumers reuse the provider-neutral FacilityService and centralized Realtime/provider pattern
 - navigation, QR/manual, Emergency, Dashboard, Admin, and schedule/personnel regressions pass before Phase 4 acceptance
 
+## Phase 4-FS-4 first-slice implementation evidence — 6 October 2026
+
+- `PASS` — canonical Facility Detail identity and existing Navigate handoff remain local/spatially authoritative
+- `PASS` — provider-neutral `getFacilityDetail` composes independent profile, service, hours, and status envelopes with one hours-provider read and the sole accepted FS-2 evaluator
+- `PASS` — missing/failed sections preserve canonical identity and successful sections; failed hours/status remain unavailable/`UNKNOWN` without an inferred closed state
+- `PASS` — demo, pending, unavailable, published, split/overnight, closed-all-day, exception, and all seven accepted operational-status presentations are covered
+- `PASS` — no public component queries Supabase directly; existing public projections and browser-safe provider remain the boundary
+- `24/24 PASS` — intercepted headless-Chromium Facility Detail captures across both themes, eight required widths, and representative success/failure/status/not-found states; no horizontal overflow or console error
+- `PASS` — dedicated FS-4 test, all current deterministic FS-1/FS-2/FS-3 and retained safety/regression suites, route rendering, ESLint, typecheck, production build, and diff checks
+- `NO DATABASE / REMOTE / DEPENDENCY CHANGE` — no schema, migration, RLS, fixture, official data, remote Supabase mutation, package dependency, or lockfile change
+- `OWNER REVIEW PENDING` — owner-visible UI is not committed, merged, pushed, or deployed before explicit approval
+- `FS-4 IN_PROGRESS` — search/discovery/recommendation, directory/card enrichment, GlobalSearch/DestinationSearch, media, Dashboard/Realtime, and later FS-4 work remain unstarted
+
 ## Phase 4-FS-3 final acceptance evidence — 6 October 2026
 
 - `PASS` — FS-3A mutation/service foundation, allowlists, normalized errors, stale-write protection, guarded deletion, advisory reuse, and security boundaries
@@ -48,7 +61,7 @@
 - `ACCEPTED_WITH_ADVISORY` — incomplete official institutional data; no fresh authenticated live mutation for every FS-3 resource; Firefox, Safari/WebKit, physical phone/tablet, and current FS-3 manual screen-reader verification pending; approximately 879.70 kB lazy Campus3D chunk; unresolved broader role delegation; no deployment-equivalence claim; reused legacy advisory CRUD without the newer optimistic stale-token pattern; and open dependency/security advisories
 - `DEPENDENCY ADVISORY` — full `npm audit`: 17 total (8 moderate, 9 high, 0 critical); `npm audit --omit=dev`: 11 total (5 moderate, 6 high); no package was changed or claimed fixed
 - `PHASE 4-FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY` — no implementation, database, RLS, audit, or test blocker remains
-- `FS-4 NOT_STARTED` — public Facilities/search/recommendation requires separate owner authorization/readiness review
+- `FS-4 NOT_STARTED AT THIS CHECKPOINT` — the later first-slice FS-4 evidence above controls current status
 
 ## Schedule/personnel gate
 - precedence/exceptions tested

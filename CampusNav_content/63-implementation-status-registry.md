@@ -67,7 +67,7 @@ The owner-approved frozen interface (`DEC-UI-003` shell and floating CLARA, `DEC
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 NOT_STARTED`
+**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — FIRST SLICE IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -78,7 +78,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Phase 1 | `COMPLETE` | Historical evidence preserved; not reopened |
 | Phase 2 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
 | Phase 3 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
-| Facility directory/detail/navigation foundation | `PARTIAL / IMPLEMENTED_BASELINE` | Existing local stable IDs, spatial truth, navigation links, and pending states remain authoritative |
+| Facility directory/detail/navigation foundation | `DETAIL IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING` | Existing local stable IDs, spatial truth, and navigation links remain authoritative; the first FS-4 slice composes the accepted public operational overlay only on `/facilities/:id`, while directory enrichment remains unstarted |
 | Facility operational profiles | `ACCEPTED_WITH_ADVISORY — FS-1B1 READ PATH` | FS-1A linked schema/RLS/audit acceptance is preserved; provider-neutral canonical-local plus optional public-view overlay read behavior passed final FS-1B reconciliation |
 | Services, aliases, and facility-service mappings | `ACCEPTED_WITH_ADVISORY — FS-1B2/FS-1B3 READ PATHS` | Provider-neutral catalog/code/alias, facility-mapping, and reverse canonical-facility reads passed final FS-1B reconciliation; no live FS-1B Data API read is claimed |
 | Hours and exceptions schema/security foundation | `ACCEPTED — FS-2A` | Linked migration, 89/89 corrected canonical pgTAP, remote structure/security/audit checks, and exact zero-fixture verification pass on the actual CampusNav project |
@@ -94,7 +94,24 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Live authenticated mutation for every FS-3 resource and official institutional data remain outside the evidence. FS-4 is `NOT_STARTED` and requires separate owner authorization/readiness review.
+**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Live authenticated mutation for every FS-3 resource and official institutional data remain outside the evidence. The first authorized FS-4 public Facility Detail slice is `IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`, making FS-4 `IN_PROGRESS`; all later FS-4 discovery/recommendation consumers remain unstarted.
+
+### Phase 4-FS-4 first implementation slice — public Facility Detail composition — 6 October 2026
+
+**Classification:** `IMPLEMENTED_VERIFIED (deterministic + intercepted headless Chromium) / OWNER REVIEW PENDING`. Overall FS-4 remains `IN_PROGRESS`; no FS-4A label is created.
+
+| Evidence area | Result | Boundary |
+|---|---|---|
+| Canonical identity and navigation | `PASS` | `/facilities/:id` retains the local canonical name/floor/category/map identity and existing `getFacilityNavigationHref` handoff; the operational overlay cannot redefine spatial or routing truth |
+| Aggregate service | `PASS` | `getFacilityDetail(facilityId, dateTime?)` composes profile, mapped public services, hours/exceptions, and status into independent safe envelopes after canonical ID validation |
+| Status ownership / read count | `PASS` | One hours-provider read supplies both hours display and the accepted FS-2 evaluator; no duplicate status query or second evaluator exists |
+| Provenance and failures | `PASS` | Demo, pending, published, unavailable, and provider-failure states remain explicit; profile/service/hour failures degrade by section and failed hours/status remain safe `UNKNOWN`, never inferred `CLOSED` |
+| Public/provider security | `PASS` | Existing public projections and browser-safe provider remain the only remote read boundary; no private/Admin table, mutation, privileged key, schema, migration, RLS, seed, or remote Supabase change exists |
+| UI/accessibility | `PASS AT AUTOMATED EVIDENCE LEVEL` | Operational and spatial badges remain semantically separate; headings, text labels, loading status, alert state, retry action, Light/Dark/System tokens, and reduced-motion loading behavior are present; no WCAG or manual assistive-technology claim is made |
+| Responsive browser QA | `24/24 PASS` | Intercepted local fixtures cover Light/Dark at 1440, 1366, 1280, 1024, 820, 768, 430, and 390 pixels plus full, missing, failed, all-status, demo, and canonical-not-found states; no horizontal overflow or console error |
+| Deterministic/regression gates | `PASS` | Dedicated FS-4 suite; FS-1A/B, FS-2A/B/C (81/81), FS-3A/B/C/hours; data, navigation, multi-floor, QR, Emergency, 3D, Dashboard, theme, map-experience, Phase 8A/B/C/C2, route render, lint, typecheck, build, and diff checks |
+| Remaining scope | `UNSTARTED / SEPARATELY GATED` | Directory/card enrichment, public search, aliases, service resolution, ranking/recommendation, GlobalSearch, DestinationSearch, media, Dashboard/Realtime, and later FS-4 work |
+| Owner-visible gate | `PENDING` | No commit, merge, push, or deployment until explicit owner visual approval |
 
 ### Phase 4-FS-3 final reconciliation and acceptance — 6 October 2026
 
@@ -115,7 +132,7 @@ This final record supersedes the prior current-state `IN_PROGRESS` / final-recon
 | Institutional and deployment boundary | `ADVISORY` | Official operational data remains incomplete; no deployment-equivalence claim exists for this FS-3 revision; unresolved facility/department delegation remains an open institutional decision |
 | Performance and dependencies | `ADVISORY` | The lazy Campus3D chunk remains approximately 879.70 kB. On 6 October 2026, full `npm audit` reports 17 advisories (8 moderate, 9 high, 0 critical) and `--omit=dev` reports 11 (5 moderate, 6 high); no dependency was changed or claimed fixed |
 | Cross-phase boundary | `PASS` | FS-3 adds no public fuzzy/alias search, recommendation algorithm/consumer, media, Dashboard availability, Realtime integration, spatial/routing editing, or later-phase implementation |
-| Final decision | `COMPLETE — ACCEPTED_WITH_ADVISORY` | All currently defined FS-3 implementation scope is accepted with named nonblocking limitations. FS-4 remains `NOT_STARTED` and requires separate owner authorization/readiness review |
+| Final decision | `COMPLETE — ACCEPTED_WITH_ADVISORY` | All currently defined FS-3 implementation scope is accepted with named nonblocking limitations. At this FS-3 checkpoint, FS-4 was `NOT_STARTED`; the later first-slice FS-4 record above controls current status |
 
 ### Phase 4-FS-3 unnumbered final capability — weekly operating-hours and dated operating-hour exceptions Admin UI — 4 October 2026
 

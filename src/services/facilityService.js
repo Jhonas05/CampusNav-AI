@@ -2,6 +2,7 @@ import {
   createFacilityResult,
   FACILITY_AVAILABILITY,
   FACILITY_ERROR_CODES,
+  FACILITY_OPERATIONAL_STATUS,
   normalizeFacilityHourException,
   normalizeFacilityOperationalProfile,
   normalizeFacilityServiceMapping,
@@ -14,6 +15,7 @@ import {
 import { getFacilityById as getCanonicalFacilityById } from "../data/facilities.js"
 import {
   addCampusDays,
+  CAMPUS_TIME_ZONE,
   getCampusDateKey,
   getCampusDateRangeBounds,
   isValidCampusDateKey,
@@ -272,6 +274,74 @@ const defaultProviderLoader = async () => {
 }
 
 const defaultClock = () => new Date().toISOString()
+
+const resolveFacilityStatusTimestamp = (dateTime, clock) => {
+  let dateTimeValue
+  try {
+    dateTimeValue = dateTime === undefined ? clock() : dateTime
+  } catch {
+    return null
+  }
+  return normalizeFacilityStatusTimestamp(dateTimeValue)
+}
+
+const facilityStatusData = (facility, evaluatedAt, overrides = {}) => ({
+  facility: cloneCanonicalFacility(facility),
+  status: FACILITY_OPERATIONAL_STATUS.UNKNOWN,
+  evaluatedAt,
+  timezone: CAMPUS_TIME_ZONE,
+  nextTransitionAt: null,
+  controllingRecords: [],
+  demo: false,
+  ...overrides,
+})
+
+const evaluateFacilityStatusResult = ({
+  facility,
+  evaluatedAt,
+  hoursResult,
+  statusEvaluator,
+}) => {
+  const evaluation = statusEvaluator({
+    evaluatedAt,
+    weeklyHours: hoursResult.data.weeklyHours,
+    exceptions: hoursResult.data.exceptions,
+    statusAdvisories: hoursResult.data.statusAdvisories,
+  })
+  return createFacilityResult({
+    ok: true,
+    availability: hoursResult.availability,
+    data: facilityStatusData(facility, evaluatedAt, evaluation),
+  })
+}
+
+const statusUnavailableResult = ({ facility, evaluatedAt, sourceResult = null }) => createFacilityResult({
+  ok: false,
+  availability: sourceResult?.availability || FACILITY_AVAILABILITY.PROVIDER_UNAVAILABLE,
+  data: facilityStatusData(facility, evaluatedAt),
+  error: sourceResult?.error || {
+    code: FACILITY_ERROR_CODES.PROVIDER_UNAVAILABLE,
+    message: "Facility information is temporarily unavailable.",
+    retryable: true,
+  },
+})
+
+const sectionResult = (result, data) => createFacilityResult({
+  ok: result.ok,
+  availability: result.availability,
+  data,
+  error: result.error,
+})
+
+const detailAvailability = (sections) => {
+  if (sections.some(({ availability }) => availability === FACILITY_AVAILABILITY.CONFIGURED)) {
+    return FACILITY_AVAILABILITY.CONFIGURED
+  }
+  if (sections.every(({ availability }) => availability === FACILITY_AVAILABILITY.PROVIDER_UNAVAILABLE)) {
+    return FACILITY_AVAILABILITY.PROVIDER_UNAVAILABLE
+  }
+  return FACILITY_AVAILABILITY.UNAVAILABLE
+}
 
 const createFacilityReadService = ({
   provider = null,
@@ -543,13 +613,7 @@ export const createFacilityService = ({
     const facility = normalizedId ? getCanonicalFacilityById(normalizedId) : null
     if (!facility) return notFoundResult()
 
-    let dateTimeValue
-    try {
-      dateTimeValue = dateTime === undefined ? clock() : dateTime
-    } catch {
-      return invalidDateTimeResult()
-    }
-    const evaluatedAt = normalizeFacilityStatusTimestamp(dateTimeValue)
+    const evaluatedAt = resolveFacilityStatusTimestamp(dateTime, clock)
     if (!evaluatedAt) return invalidDateTimeResult()
 
     const campusDate = getCampusDateKey(new Date(evaluatedAt))
@@ -559,18 +623,78 @@ export const createFacilityService = ({
     })
     if (!hoursResult.ok) return hoursResult
 
-    const evaluation = statusEvaluator({
+    return evaluateFacilityStatusResult({
+      facility,
       evaluatedAt,
-      weeklyHours: hoursResult.data.weeklyHours,
-      exceptions: hoursResult.data.exceptions,
-      statusAdvisories: hoursResult.data.statusAdvisories,
+      hoursResult,
+      statusEvaluator,
     })
+  }
+
+  service.getFacilityDetail = async (facilityId, dateTime) => {
+    const normalizedId = typeof facilityId === "string" ? facilityId.trim() : ""
+    const facility = normalizedId ? getCanonicalFacilityById(normalizedId) : null
+    if (!facility) return notFoundResult()
+
+    const evaluatedAt = resolveFacilityStatusTimestamp(dateTime, clock)
+    if (!evaluatedAt) return invalidDateTimeResult()
+
+    const campusDate = getCampusDateKey(new Date(evaluatedAt))
+    const dateRange = {
+      startDate: addCampusDays(campusDate, -1),
+      endDate: campusDate,
+    }
+    const [profileResult, servicesResult, hoursResult] = await Promise.all([
+      service.getFacilityById(facility.id),
+      service.getServicesForFacility(facility.id),
+      service.getFacilityHours(facility.id, dateRange),
+    ])
+
+    let statusResult
+    if (!hoursResult.ok) {
+      statusResult = statusUnavailableResult({ facility, evaluatedAt, sourceResult: hoursResult })
+    } else {
+      try {
+        statusResult = evaluateFacilityStatusResult({
+          facility,
+          evaluatedAt,
+          hoursResult,
+          statusEvaluator,
+        })
+      } catch {
+        statusResult = statusUnavailableResult({ facility, evaluatedAt })
+      }
+    }
+
+    const operationalProfile = sectionResult(
+      profileResult,
+      profileResult.data?.operationalProfile || null,
+    )
+    const hours = sectionResult(hoursResult, {
+      dateRange: hoursResult.data?.dateRange || dateRange,
+      weeklyHours: hoursResult.data?.weeklyHours || [],
+      exceptions: hoursResult.data?.exceptions || [],
+      statusAdvisories: hoursResult.data?.statusAdvisories || [],
+    })
+    const status = sectionResult(statusResult, {
+      status: statusResult.data?.status || FACILITY_OPERATIONAL_STATUS.UNKNOWN,
+      evaluatedAt: statusResult.data?.evaluatedAt || evaluatedAt,
+      timezone: statusResult.data?.timezone || CAMPUS_TIME_ZONE,
+      nextTransitionAt: statusResult.data?.nextTransitionAt || null,
+      controllingRecords: statusResult.data?.controllingRecords || [],
+      demo: statusResult.data?.demo || false,
+    })
+    const sections = [operationalProfile, servicesResult, hours, status]
+
     return createFacilityResult({
       ok: true,
-      availability: hoursResult.availability,
+      availability: detailAvailability(sections),
       data: {
         facility: cloneCanonicalFacility(facility),
-        ...evaluation,
+        operationalProfile,
+        services: servicesResult,
+        hours,
+        status,
       },
     })
   }
@@ -588,3 +712,4 @@ export const getServicesForFacility = (facilityId) => defaultFacilityService.get
 export const getFacilitiesByService = (serviceCode) => defaultFacilityService.getFacilitiesByService(serviceCode)
 export const getFacilityHours = (facilityId, dateRange) => defaultFacilityService.getFacilityHours(facilityId, dateRange)
 export const getFacilityStatus = async (facilityId, dateTime) => defaultFacilityService.getFacilityStatus(facilityId, dateTime)
+export const getFacilityDetail = async (facilityId, dateTime) => defaultFacilityService.getFacilityDetail(facilityId, dateTime)

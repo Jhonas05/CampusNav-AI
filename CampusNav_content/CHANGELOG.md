@@ -1,5 +1,22 @@
 # CampusNav Content Pack — Changelog
 
+## v3.45 — 6 October 2026
+
+Implemented and locally verified the **first authorized Phase 4-FS-4 slice — Public Facility Detail Composition** without inventing an FS-4A label or starting search/discovery/recommendation work.
+
+### Implementation
+- added provider-neutral `getFacilityDetail(facilityId, dateTime?)`, composing canonical local identity with independent public operational-profile, mapped-service, hours/exception, and status envelopes
+- reused one bounded hours read and the accepted FS-2 evaluator for status, preserving `getFacilityStatus` compatibility and avoiding duplicate provider reads or a second status implementation
+- extended `/facilities/:id` with separately labeled spatial and operational status, safe operational description/contact, configured services, weekly/split/overnight/closed-all-day hours, current exception context, explicit demo/pending/unavailable states, loading/error/retry behavior, and preserved canonical Navigate handoff
+- retained section-by-section degradation so an overlay failure never erases canonical identity, navigation, or unrelated successful sections; failed hours/status remain unavailable/`UNKNOWN`
+
+### Verification and boundary
+- added `npm run test:phase4-fs4-detail` for aggregate composition, single-read/evaluator ownership, all accepted statuses, provenance/demo/pending, sanitized partial failures, public provider/security boundaries, navigation, and UI structure/rendering
+- passed FS-1A/B, FS-2A/B/C (81/81), FS-3A/B/C/hours, data/navigation/multi-floor/QR/Emergency/3D/Dashboard/theme/map-experience, Phase 8A/B/C/C2, route-render, ESLint, typecheck, production-build, and diff checks
+- intercepted local headless-Chromium QA passed 24/24 responsive/theme/state captures with no remote request, horizontal overflow, or console error
+- changed no schema, migration, RLS, seed, database row, official institutional data, remote Supabase project, dependency/lockfile, Admin, Dashboard/Realtime, media, routing/QR/Emergency, search, recommendation, commit, merge, push, or deployment
+- classified the first slice as `IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`; overall FS-4 remains `IN_PROGRESS`
+
 ## v3.44 — 6 October 2026
 
 Completed the documentation-only final reconciliation for **Phase 4-FS-3 — Facility and Service Admin Workflows** and classified the phase as `COMPLETE — ACCEPTED_WITH_ADVISORY`.
