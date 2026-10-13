@@ -24,6 +24,7 @@ const vite = await createServer({
 
 try {
   const { default: Navigate } = await vite.ssrLoadModule("/src/pages/Map.jsx")
+  const { ConnectivityProvider } = await vite.ssrLoadModule("/src/contexts/ConnectivityContext.jsx")
   const { default: Login } = await vite.ssrLoadModule("/src/pages/Login.jsx")
   const { default: QRCheckpoints } = await vite.ssrLoadModule("/src/pages/admin/QRCheckpoints.jsx")
   const { default: AdminOverview } = await vite.ssrLoadModule("/src/pages/admin/AdminOverview.jsx")
@@ -45,7 +46,7 @@ try {
     React.createElement(
       MemoryRouter,
       { initialEntries: [initialEntry] },
-      React.createElement(Navigate)
+      React.createElement(ConnectivityProvider, null, React.createElement(Navigate))
     )
   )
   // DEC-UI-006: a fresh Navigate session has no current location and no destination; CampusNav

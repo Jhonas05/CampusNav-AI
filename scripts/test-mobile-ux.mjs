@@ -30,7 +30,14 @@ console.error = (...args) => { if (!String(args[0]).includes("useLayoutEffect do
 
 try {
   const load = async (path) => vite.ssrLoadModule(path)
-  const render = (entry, element) => renderToString(React.createElement(MemoryRouter, { initialEntries: [entry] }, element))
+  const { ConnectivityProvider } = await load("/src/contexts/ConnectivityContext.jsx")
+  const render = (entry, element) => renderToString(
+    React.createElement(
+      MemoryRouter,
+      { initialEntries: [entry] },
+      React.createElement(ConnectivityProvider, null, element)
+    )
+  )
 
   // 1. Navigation model: five phone slots at most, nothing lost, no CLARA entry.
   const navigation = await load("/src/components/layout/sidebar/navigation.js")
