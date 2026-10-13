@@ -23,6 +23,7 @@ export const FACILITY_ERROR_CODES = Object.freeze({
 })
 
 export const FACILITY_PROVIDER_METHODS = Object.freeze([
+  "getFacilitiesDirectoryOperationalData",
   "getFacilityOperationalProfile",
   "getServices",
   "getServiceByCode",

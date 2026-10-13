@@ -1,5 +1,5 @@
 import { Layers, Search, SlidersHorizontal } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { BlueprintPanel, button, EmptyState, focusRing, PageHeader } from "@/components/campus/ui"
 import FacilityCard from "@/components/facilities/FacilityCard"
@@ -7,6 +7,7 @@ import { FACILITY_DATA_NOTICE, facilities } from "@/data/facilities"
 import { floors, getFloorById } from "@/data/floors"
 import { getCategoryByKey } from "@/lib/facilityCategories"
 import { cn } from "@/lib/utils"
+import { getFacilitiesDirectory } from "@/services/facilityService"
 
 /**
  * Presentation-only groupings over verified facility kinds.
@@ -33,6 +34,25 @@ export default function Facilities() {
   const [query, setQuery] = useState(searchParams.get("q") || "")
   const [category, setCategory] = useState("All")
   const [floorId, setFloorId] = useState("ALL")
+  const [requestVersion, setRequestVersion] = useState(0)
+  const [operationalState, setOperationalState] = useState({ loading: true, result: null })
+
+  useEffect(() => {
+    let active = true
+    setOperationalState((state) => ({ ...state, loading: true }))
+    getFacilitiesDirectory()
+      .then((result) => {
+        if (active) setOperationalState({ loading: false, result })
+      })
+      .catch(() => {
+        if (active) setOperationalState({ loading: false, result: null })
+      })
+    return () => { active = false }
+  }, [requestVersion])
+
+  const directoryById = useMemo(() => new Map(
+    (operationalState.result?.data?.facilities || []).map((entry) => [entry.facility.id, entry]),
+  ), [operationalState.result])
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase()
@@ -45,6 +65,10 @@ export default function Facilities() {
       return !needle || searchable.includes(needle)
     })
   }, [category, floorId, query])
+
+  const overlayUnavailable = !operationalState.loading && (
+    !operationalState.result || !operationalState.result.ok
+  )
 
   const clearFilters = () => {
     setQuery("")
@@ -69,7 +93,7 @@ export default function Facilities() {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search by office, service, room, or floor"
+              placeholder="Search by facility, office, room, or floor"
               aria-label="Search facilities"
               className="w-full bg-transparent py-3.5 text-sm text-ink outline-none placeholder:text-ink-faint"
             />
@@ -115,12 +139,31 @@ export default function Facilities() {
           </div>
         </BlueprintPanel>
 
-        <div className="min-w-0">
+        <div className="min-w-0 pr-20 xl:pr-44">
         <p className="rounded-2xl border border-dashed border-line-strong bg-surface px-4 py-3 text-xs leading-relaxed text-ink-soft">{FACILITY_DATA_NOTICE}</p>
+
+        {operationalState.loading && (
+          <p role="status" aria-live="polite" className="mt-3 rounded-2xl border border-line bg-subtle px-4 py-3 text-xs text-ink-soft">
+            Loading public operational information. Canonical facilities remain available.
+          </p>
+        )}
+        {overlayUnavailable && (
+          <div role="alert" className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-dashed border-ink-faint bg-subtle px-4 py-3">
+            <p className="text-xs leading-relaxed text-ink">Facility information is temporarily unavailable. Canonical locations remain available.</p>
+            <button type="button" onClick={() => setRequestVersion((value) => value + 1)} className={button.smallSecondary}>Retry</button>
+          </div>
+        )}
 
         {filtered.length > 0 ? (
           <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(230px,1fr))] sm:gap-4">
-            {filtered.map((facility) => <FacilityCard key={facility.id} facility={facility} />)}
+            {filtered.map((facility) => (
+              <FacilityCard
+                key={facility.id}
+                facility={facility}
+                operational={directoryById.get(facility.id) || null}
+                operationalLoading={operationalState.loading}
+              />
+            ))}
           </div>
         ) : (
           <EmptyState

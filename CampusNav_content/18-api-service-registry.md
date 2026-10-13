@@ -28,6 +28,7 @@ Expected operations:
 - `searchFacilities(query, filters?)`
 - `getFacilityById(facilityId)`
 - `getFacilityDetail(facilityId, dateTime?)`
+- `getFacilitiesDirectory(dateTime?)`
 - `getFacilityStatus(facilityId, dateTime)`
 - `getFacilitiesByService(serviceIdOrQuery)`
 - `getServices(filters?)`
@@ -40,6 +41,8 @@ FS-2B must not expand weekly occurrences, interpret overnight carry, replace wee
 `getFacilityStatus(facilityId, dateTime?)` is the FS-2C public orchestration surface. It validates canonical local facility identity first, accepts only an explicit absolute RFC3339 timestamp when `dateTime` is supplied, otherwise uses the service's injected clock, and requests only the previous/current Manila dates through `getFacilityHours`. The pure status evaluator remains the sole implementation of weekly/overnight/exception/closure/verification rules. Successful results use the existing envelope and return canonical facility identity, status, normalized evaluation time, `Asia/Manila`, next transition, independently provenanced controlling records, and demo state. Empty accepted sources produce `UNKNOWN` with `UNAVAILABLE`; configured but non-applicable sources produce `UNKNOWN` with `CONFIGURED`; provider failure remains retryable `PROVIDER_UNAVAILABLE` and is never converted into an operational status. Providers expose no separate status method or query.
 
 `getFacilityDetail(facilityId, dateTime?)` is the first FS-4 public composition surface for one canonical Facility Detail page. It preserves canonical local identity and returns independent result envelopes for the public operational profile, configured public services, weekly hours/current dated exceptions, and FS-2-computed status. It performs one bounded hours read for the previous/current Manila dates and passes those normalized source records to the existing pure evaluator, avoiding a duplicate status fetch or a second evaluator. A failed overlay section does not erase canonical identity or other successful sections; failed hours/status return a safe unavailable/`UNKNOWN` section. The method adds no provider query, private-table access, mutation path, search, alias matching, ranking, or recommendation behavior.
+
+`getFacilitiesDirectory(dateTime?)` is the bounded FS-4 public composition surface for all canonical Facilities cards. Its provider aggregate performs exactly four accepted public-projection reads—operational profiles, weekly hours, previous/current Manila-date exceptions, and status advisories—independent of facility count. The service validates and groups the overlay by existing canonical facility ID, preserves canonical ordering and identity, and invokes the accepted pure FS-2 evaluator for each facility. Missing records produce explicit unavailable/`UNKNOWN` results; a provider or payload failure returns every canonical facility with safe `UNKNOWN` status and a sanitized retryable error. It adds no per-card query, service/alias discovery, fuzzy matching, ranking, recommendation, mutation, or private-table access.
 
 Phase 4 rules:
 - every result is keyed by an existing canonical local facility ID

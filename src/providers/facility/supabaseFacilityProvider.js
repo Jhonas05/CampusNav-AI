@@ -145,6 +145,66 @@ const PUBLIC_FACILITY_STATUS_ADVISORY_COLUMNS = [
 
 export const createSupabaseFacilityProvider = (client) => ({
   mode: BACKEND_MODES.SUPABASE,
+  async getFacilitiesDirectoryOperationalData(dateRange) {
+    const operationalProfilesQuery = client
+      .from(PUBLIC_FACILITY_PROFILE_VIEW)
+      .select(PUBLIC_FACILITY_PROFILE_COLUMNS)
+      .order("facility_id", { ascending: true })
+      .order("updated_at", { ascending: true })
+
+    const weeklyHoursQuery = client
+      .from(PUBLIC_FACILITY_HOURS_VIEW)
+      .select(PUBLIC_FACILITY_HOUR_COLUMNS)
+      .order("facility_id", { ascending: true })
+      .order("day_of_week", { ascending: true })
+      .order("closed_all_day", { ascending: false })
+      .order("start_time", { ascending: true, nullsFirst: true })
+      .order("end_time", { ascending: true, nullsFirst: true })
+      .order("source_type", { ascending: true })
+      .order("source_id", { ascending: true, nullsFirst: false })
+
+    const exceptionsQuery = client
+      .from(PUBLIC_FACILITY_HOUR_EXCEPTIONS_VIEW)
+      .select(PUBLIC_FACILITY_HOUR_EXCEPTION_COLUMNS)
+      .gte("exception_date", dateRange.startDate)
+      .lte("exception_date", dateRange.endDate)
+      .order("facility_id", { ascending: true })
+      .order("exception_date", { ascending: true })
+      .order("closed_all_day", { ascending: false })
+      .order("start_time", { ascending: true, nullsFirst: true })
+      .order("end_time", { ascending: true, nullsFirst: true })
+      .order("source_type", { ascending: true })
+      .order("source_id", { ascending: true, nullsFirst: false })
+
+    const statusAdvisoriesQuery = client
+      .from(PUBLIC_FACILITY_STATUS_ADVISORIES_VIEW)
+      .select(PUBLIC_FACILITY_STATUS_ADVISORY_COLUMNS)
+      .order("facility_id", { ascending: true })
+      .order("effective_at", { ascending: true, nullsFirst: true })
+      .order("published_at", { ascending: true })
+      .order("expires_at", { ascending: true, nullsFirst: false })
+      .order("source_type", { ascending: true })
+      .order("source_id", { ascending: true, nullsFirst: false })
+
+    const [operationalProfilesResult, weeklyHoursResult, exceptionsResult, statusAdvisoriesResult] = await Promise.all([
+      operationalProfilesQuery,
+      weeklyHoursQuery,
+      exceptionsQuery,
+      statusAdvisoriesQuery,
+    ])
+    const error = operationalProfilesResult.error
+      || weeklyHoursResult.error
+      || exceptionsResult.error
+      || statusAdvisoriesResult.error
+    if (error) throw error
+
+    return {
+      operationalProfiles: (operationalProfilesResult.data || []).map(normalizeFacilityOperationalProfile),
+      weeklyHours: (weeklyHoursResult.data || []).map(normalizeFacilityWeeklyHour),
+      exceptions: (exceptionsResult.data || []).map(normalizeFacilityHourException),
+      statusAdvisories: (statusAdvisoriesResult.data || []).map(normalizeFacilityStatusAdvisory),
+    }
+  },
   async getFacilityOperationalProfile(facilityId) {
     const { data, error } = await client
       .from(PUBLIC_FACILITY_PROFILE_VIEW)

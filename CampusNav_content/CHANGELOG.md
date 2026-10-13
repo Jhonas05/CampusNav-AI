@@ -1,5 +1,23 @@
 # CampusNav Content Pack — Changelog
 
+## v3.46 — 13 October 2026
+
+Implemented, locally verified, and owner-approved the **next authorized Phase 4-FS-4 slice — Public Facilities Directory and Facility-Card Operational Composition** while preserving the approved Facility Detail slice.
+
+### Implementation
+- added provider-neutral `getFacilitiesDirectory(dateTime?)` composition for all 95 canonical facilities, preserving canonical identity, order, floor, category, and routing
+- added one bounded provider aggregate with exactly four public-projection reads for profiles, weekly hours, current/previous Manila-date exceptions, and status advisories; request count is independent of card count and no React component queries Supabase
+- reused the accepted FS-2 evaluator for all seven operational statuses, keeping `UNKNOWN` distinct from `PENDING_VERIFICATION` and leaving `CLOSED`/`TEMPORARILY_UNAVAILABLE` routing unchanged
+- enriched compact directory cards with safe descriptions, status, demo/pending markers, labelled Details, and optional canonical Navigate; retained canonical-name search, category/floor filters, and result count
+- retained all canonical cards during overlay failure with one sanitized retry notice and no repeated raw provider error
+
+### Verification and boundary
+- added `npm run test:phase4-fs4-directory` for bounded composition, all canonical IDs/statuses/provenance/fallbacks, no N+1/direct React Supabase use, filter/search/result/action structure, and rendered cards
+- passed the complete 25-script deterministic matrix, ESLint, typecheck, production build, and diff checks
+- passed 18/18 intercepted headless-Chromium directory captures across populated Light/Dark responsive views and provider-failure states; search/category/floor/count interactions, bounded public-view reads, no overflow, no CLARA/action overlap, and no console errors also passed
+- recorded both Facility Detail and directory/card composition as `IMPLEMENTED_VERIFIED / OWNER APPROVED`; overall FS-4 remains `IN_PROGRESS`
+- changed no schema, migration, RLS, database row, official institutional data, remote Supabase project, dependency/lockfile, Admin, Dashboard/Realtime, media, spatial/routing/QR/Emergency behavior, search aliases/fuzzy matching, recommendation, or deployment
+
 ## v3.45 — 6 October 2026
 
 Implemented and locally verified the **first authorized Phase 4-FS-4 slice — Public Facility Detail Composition** without inventing an FS-4A label or starting search/discovery/recommendation work.

@@ -67,7 +67,7 @@ The owner-approved frozen interface (`DEC-UI-003` shell and floating CLARA, `DEC
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — FIRST SLICE IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`
+**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL AND DIRECTORY IMPLEMENTED_VERIFIED / OWNER APPROVED`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -78,7 +78,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Phase 1 | `COMPLETE` | Historical evidence preserved; not reopened |
 | Phase 2 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
 | Phase 3 | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Historical evidence preserved; not reopened |
-| Facility directory/detail/navigation foundation | `DETAIL IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING` | Existing local stable IDs, spatial truth, and navigation links remain authoritative; the first FS-4 slice composes the accepted public operational overlay only on `/facilities/:id`, while directory enrichment remains unstarted |
+| Facility directory/detail/navigation foundation | `DETAIL AND DIRECTORY IMPLEMENTED_VERIFIED / OWNER APPROVED` | Existing local stable IDs, spatial truth, and navigation links remain authoritative; both public surfaces compose the accepted operational overlay without redefining identity or routing |
 | Facility operational profiles | `ACCEPTED_WITH_ADVISORY — FS-1B1 READ PATH` | FS-1A linked schema/RLS/audit acceptance is preserved; provider-neutral canonical-local plus optional public-view overlay read behavior passed final FS-1B reconciliation |
 | Services, aliases, and facility-service mappings | `ACCEPTED_WITH_ADVISORY — FS-1B2/FS-1B3 READ PATHS` | Provider-neutral catalog/code/alias, facility-mapping, and reverse canonical-facility reads passed final FS-1B reconciliation; no live FS-1B Data API read is claimed |
 | Hours and exceptions schema/security foundation | `ACCEPTED — FS-2A` | Linked migration, 89/89 corrected canonical pgTAP, remote structure/security/audit checks, and exact zero-fixture verification pass on the actual CampusNav project |
@@ -94,11 +94,29 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Live authenticated mutation for every FS-3 resource and official institutional data remain outside the evidence. The first authorized FS-4 public Facility Detail slice is `IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`, making FS-4 `IN_PROGRESS`; all later FS-4 discovery/recommendation consumers remain unstarted.
+**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Live authenticated mutation for every FS-3 resource and official institutional data remain outside the evidence. The public Facility Detail and Facilities directory/card slices are `IMPLEMENTED_VERIFIED / OWNER APPROVED`, making FS-4 `IN_PROGRESS`; all later FS-4 discovery/recommendation consumers remain unstarted.
+
+### Phase 4-FS-4 next implementation slice — public Facilities directory/card composition — 13 October 2026
+
+**Classification:** `IMPLEMENTED_VERIFIED (deterministic + intercepted headless Chromium) / OWNER APPROVED`. Overall FS-4 remains `IN_PROGRESS`; no FS-4A label is created.
+
+| Evidence area | Result | Boundary |
+|---|---|---|
+| Canonical directory | `PASS` | All 95 canonical facilities and stable IDs/order remain present; local name, floor, category, map identity, and navigability remain authoritative |
+| Aggregate service/provider | `PASS` | `getFacilitiesDirectory(dateTime?)` performs one provider call backed by exactly four public-view reads for profiles, weekly hours, previous/current Manila-date exceptions, and advisories; request count is independent of card count |
+| Status ownership | `PASS` | The accepted FS-2 evaluator is invoked outside React for each canonical facility; all seven statuses are covered and `UNKNOWN` stays distinct from `PENDING_VERIFICATION` |
+| UI/actions | `PASS` | Cards show canonical identity, concise description when present, status, demo/pending markers, Details, and optional Navigate; closed/unavailable status does not alter routing |
+| Search/filter boundary | `PASS` | Existing canonical-name/kind/floor search, category/floor filters, and announced result count remain; no service/alias/fuzzy/ranking/recommendation behavior is added |
+| Degraded mode | `PASS` | Provider or payload failure retains every canonical card with `UNKNOWN`, one sanitized retry notice, and no repeated/raw provider error |
+| Public/provider security | `PASS` | Only accepted public projections and the browser-safe provider are read; React has no direct Supabase access and no private/Admin table, mutation, privileged key, schema, migration, RLS, seed, or remote change exists |
+| Responsive browser QA | `18/18 PASS` | Intercepted headless-Chromium fixtures cover the populated directory in Light/Dark at 1440, 1366, 1280, 1024, 820, 768, 430, and 390 pixels plus provider failure at 1280 and 390; search, category, floor, result count, Details/Navigate actions, no overflow, no CLARA/action overlap, and no console errors are checked |
+| Deterministic/regression gates | `25/25 PASS + TOOLING PASS` | Dedicated directory and retained detail suites; FS-1A/B, FS-2A/B/C, FS-3A/B/C/hours; data, navigation, multi-floor, QR, Emergency, 3D, Dashboard, theme, map-experience, Phase 8A/B/C/C2, route render, lint, typecheck, build, and diff checks |
+| Remaining scope | `UNSTARTED / SEPARATELY GATED` | Unified search/discovery, service/alias resolution, fuzzy matching, ranking/recommendation, GlobalSearch, DestinationSearch, media, Dashboard/Realtime, and later FS-4 work |
+| Owner-visible gate | `APPROVED` | The owner accepted the Facilities directory/card slice for Git completion |
 
 ### Phase 4-FS-4 first implementation slice — public Facility Detail composition — 6 October 2026
 
-**Classification:** `IMPLEMENTED_VERIFIED (deterministic + intercepted headless Chromium) / OWNER REVIEW PENDING`. Overall FS-4 remains `IN_PROGRESS`; no FS-4A label is created.
+**Classification:** `IMPLEMENTED_VERIFIED (deterministic + intercepted headless Chromium) / OWNER APPROVED`. Overall FS-4 remains `IN_PROGRESS`; no FS-4A label is created.
 
 | Evidence area | Result | Boundary |
 |---|---|---|
@@ -110,8 +128,8 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | UI/accessibility | `PASS AT AUTOMATED EVIDENCE LEVEL` | Operational and spatial badges remain semantically separate; headings, text labels, loading status, alert state, retry action, Light/Dark/System tokens, and reduced-motion loading behavior are present; no WCAG or manual assistive-technology claim is made |
 | Responsive browser QA | `24/24 PASS` | Intercepted local fixtures cover Light/Dark at 1440, 1366, 1280, 1024, 820, 768, 430, and 390 pixels plus full, missing, failed, all-status, demo, and canonical-not-found states; no horizontal overflow or console error |
 | Deterministic/regression gates | `PASS` | Dedicated FS-4 suite; FS-1A/B, FS-2A/B/C (81/81), FS-3A/B/C/hours; data, navigation, multi-floor, QR, Emergency, 3D, Dashboard, theme, map-experience, Phase 8A/B/C/C2, route render, lint, typecheck, build, and diff checks |
-| Remaining scope | `UNSTARTED / SEPARATELY GATED` | Directory/card enrichment, public search, aliases, service resolution, ranking/recommendation, GlobalSearch, DestinationSearch, media, Dashboard/Realtime, and later FS-4 work |
-| Owner-visible gate | `PENDING` | No commit, merge, push, or deployment until explicit owner visual approval |
+| Remaining scope | `UNSTARTED / SEPARATELY GATED` | Public search, aliases, service resolution, ranking/recommendation, GlobalSearch, DestinationSearch, media, Dashboard/Realtime, and later FS-4 work |
+| Owner-visible gate | `APPROVED` | The owner accepted this Facility Detail slice |
 
 ### Phase 4-FS-3 final reconciliation and acceptance — 6 October 2026
 

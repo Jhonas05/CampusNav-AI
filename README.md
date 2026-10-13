@@ -353,7 +353,23 @@ Run the targeted deterministic contract and rendering checks with:
 npm run test:phase4-fs4-detail
 ```
 
-This first slice is `IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`; overall FS-4 remains `IN_PROGRESS`. Directory/card enrichment, public search, service/alias resolution, recommendations, GlobalSearch/DestinationSearch, media, Dashboard/Realtime, and later FS-4 work remain unstarted. No schema, migration, remote Supabase mutation, dependency, or official institutional data was added.
+This first slice is `IMPLEMENTED_VERIFIED / OWNER APPROVED`; overall FS-4 remains `IN_PROGRESS`. Its public identity, detail composition, status, provenance, and Navigate behavior remain the accepted baseline for later FS-4 consumers.
+
+## Public Facilities directory/card composition (next Phase 4-FS-4 slice)
+
+`/facilities` now keeps all 95 canonical local facilities and overlays safe public operational information through `getFacilitiesDirectory(dateTime?)`. The provider performs exactly four aggregate public-projection reads—profiles, weekly hours, current/previous Manila-date exceptions, and status advisories—regardless of the number of cards. `FacilityService` validates and groups those records, then calls the accepted FS-2 evaluator for each canonical facility; React does not compute status or query Supabase.
+
+Cards retain canonical name, floor, category, Details, and optional Navigate actions. Where available they add a short published operational description, one of the seven FS-2 statuses, and restrained demo/pending markers. Missing data stays `UNKNOWN`; `PENDING_VERIFICATION` remains distinct. Operational `CLOSED` and `TEMPORARILY_UNAVAILABLE` do not alter canonical routing. If the overlay fails, all canonical cards remain visible with one safe retry notice and no raw provider detail.
+
+Existing canonical-name/kind/floor search, category and floor filters, and result counts are preserved. This slice does not add service or alias discovery, fuzzy matching, ranking, recommendation behavior, media, Dashboard/Realtime integration, or later FS-4 consumers.
+
+Run the targeted deterministic composition and card checks with:
+
+```bash
+npm run test:phase4-fs4-directory
+```
+
+This directory/card slice is `IMPLEMENTED_VERIFIED / OWNER APPROVED`; overall FS-4 remains `IN_PROGRESS`. No schema, migration, remote Supabase mutation, dependency, or official institutional data was added.
 
 ## Admin CMS foundation (Phase 8B.1)
 

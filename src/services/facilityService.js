@@ -12,7 +12,10 @@ import {
   normalizeServiceAlias,
   normalizeServiceCode,
 } from "../data/facilityContracts.js"
-import { getFacilityById as getCanonicalFacilityById } from "../data/facilities.js"
+import {
+  facilities as canonicalFacilities,
+  getFacilityById as getCanonicalFacilityById,
+} from "../data/facilities.js"
 import {
   addCampusDays,
   CAMPUS_TIME_ZONE,
@@ -295,6 +298,61 @@ const facilityStatusData = (facility, evaluatedAt, overrides = {}) => ({
   demo: false,
   ...overrides,
 })
+
+const directoryStatusData = (evaluatedAt, overrides = {}) => ({
+  status: FACILITY_OPERATIONAL_STATUS.UNKNOWN,
+  evaluatedAt,
+  timezone: CAMPUS_TIME_ZONE,
+  nextTransitionAt: null,
+  controllingRecords: [],
+  demo: false,
+  ...overrides,
+})
+
+/** @param {Record<string, any>} options */
+const createDirectoryEntry = (facility, evaluatedAt, options = {}) => {
+  const {
+    operationalProfile = null,
+    operationalProfileAvailability = FACILITY_AVAILABILITY.UNAVAILABLE,
+    status = null,
+    statusAvailability = FACILITY_AVAILABILITY.UNAVAILABLE,
+  } = options
+  return {
+    facility: cloneCanonicalFacility(facility),
+    operationalProfile,
+    operationalProfileAvailability,
+    status: status || directoryStatusData(evaluatedAt),
+    statusAvailability,
+  }
+}
+
+const directoryData = (evaluatedAt, entries = canonicalFacilities.map((facility) => (
+  createDirectoryEntry(facility, evaluatedAt)
+))) => ({
+  evaluatedAt,
+  timezone: CAMPUS_TIME_ZONE,
+  facilities: entries,
+})
+
+const isValidOperationalProfile = (record) => (
+  record
+  && Boolean(getCanonicalFacilityById(record.facilityId))
+  && isNullableString(record.description)
+  && record.publicContact
+  && isNullableString(record.publicContact.name)
+  && isNullableString(record.publicContact.email)
+  && isNullableString(record.publicContact.phone)
+  && isValidProvenance(record.provenance)
+)
+
+const groupRecordsByFacility = (records) => {
+  const grouped = new Map()
+  for (const record of records) {
+    if (!grouped.has(record.facilityId)) grouped.set(record.facilityId, [])
+    grouped.get(record.facilityId).push(record)
+  }
+  return grouped
+}
 
 const evaluateFacilityStatusResult = ({
   facility,
@@ -608,6 +666,106 @@ export const createFacilityService = ({
 } = {}) => {
   const service = createFacilityReadService({ provider, providerLoader })
 
+  service.getFacilitiesDirectory = async (dateTime) => {
+    const evaluatedAt = resolveFacilityStatusTimestamp(dateTime, clock)
+    if (!evaluatedAt) return invalidDateTimeResult()
+
+    const fallbackData = directoryData(evaluatedAt)
+    const campusDate = getCampusDateKey(new Date(evaluatedAt))
+    const dateRange = {
+      startDate: addCampusDays(campusDate, -1),
+      endDate: campusDate,
+    }
+
+    try {
+      const activeProvider = provider || await providerLoader()
+      const records = await activeProvider.getFacilitiesDirectoryOperationalData(dateRange)
+      if (
+        !records
+        || !Array.isArray(records.operationalProfiles)
+        || !Array.isArray(records.weeklyHours)
+        || !Array.isArray(records.exceptions)
+        || !Array.isArray(records.statusAdvisories)
+      ) return providerUnavailableResult(fallbackData)
+
+      const operationalProfiles = records.operationalProfiles
+        .map(normalizeFacilityOperationalProfile)
+        .filter((record) => record && getCanonicalFacilityById(record.facilityId))
+      const weeklyHours = records.weeklyHours
+        .map(normalizeFacilityWeeklyHour)
+        .filter((record) => record && getCanonicalFacilityById(record.facilityId))
+      const exceptions = records.exceptions
+        .map(normalizeFacilityHourException)
+        .filter((record) => record && getCanonicalFacilityById(record.facilityId))
+      const statusAdvisories = records.statusAdvisories
+        .map(normalizeFacilityStatusAdvisory)
+        .filter((record) => record && getCanonicalFacilityById(record.facilityId))
+        .filter((record) => record.advisoryType !== "SERVICE_INTERRUPTION")
+
+      const duplicateProfile = operationalProfiles.some((record, index) => (
+        operationalProfiles.findIndex((candidate) => candidate.facilityId === record.facilityId) !== index
+      ))
+      if (
+        duplicateProfile
+        || !operationalProfiles.every(isValidOperationalProfile)
+        || !weeklyHours.every((record) => isValidWeeklyHour(record, record.facilityId))
+        || !exceptions.every((record) => (
+          isValidHourException(record, record.facilityId)
+          && record.exceptionDate >= dateRange.startDate
+          && record.exceptionDate <= dateRange.endDate
+        ))
+        || !statusAdvisories.every((record) => isValidStatusAdvisory(record, record.facilityId))
+      ) return providerUnavailableResult(fallbackData)
+
+      const profileByFacility = new Map(operationalProfiles.map((record) => [record.facilityId, record]))
+      const weeklyByFacility = groupRecordsByFacility(weeklyHours)
+      const exceptionsByFacility = groupRecordsByFacility(exceptions)
+      const advisoriesByFacility = groupRecordsByFacility(statusAdvisories)
+
+      const entries = canonicalFacilities.map((facility) => {
+        const operationalProfile = profileByFacility.get(facility.id) || null
+        const facilityWeeklyHours = (weeklyByFacility.get(facility.id) || []).toSorted(compareWeeklyHours)
+        const facilityExceptions = (exceptionsByFacility.get(facility.id) || []).toSorted(compareExceptions)
+        const facilityAdvisories = (advisoriesByFacility.get(facility.id) || [])
+          .filter((record) => advisoryOverlapsDateRange(record, dateRange))
+          .toSorted(compareStatusAdvisories)
+        const hasStatusSources = Boolean(
+          facilityWeeklyHours.length || facilityExceptions.length || facilityAdvisories.length,
+        )
+        const evaluation = statusEvaluator({
+          evaluatedAt,
+          weeklyHours: facilityWeeklyHours,
+          exceptions: facilityExceptions,
+          statusAdvisories: facilityAdvisories,
+        })
+
+        return createDirectoryEntry(facility, evaluatedAt, {
+          operationalProfile,
+          operationalProfileAvailability: operationalProfile
+            ? FACILITY_AVAILABILITY.CONFIGURED
+            : FACILITY_AVAILABILITY.UNAVAILABLE,
+          status: directoryStatusData(evaluatedAt, evaluation),
+          statusAvailability: hasStatusSources
+            ? FACILITY_AVAILABILITY.CONFIGURED
+            : FACILITY_AVAILABILITY.UNAVAILABLE,
+        })
+      })
+      const hasOperationalData = Boolean(
+        operationalProfiles.length || weeklyHours.length || exceptions.length || statusAdvisories.length,
+      )
+
+      return createFacilityResult({
+        ok: true,
+        availability: hasOperationalData
+          ? FACILITY_AVAILABILITY.CONFIGURED
+          : FACILITY_AVAILABILITY.UNAVAILABLE,
+        data: directoryData(evaluatedAt, entries),
+      })
+    } catch {
+      return providerUnavailableResult(fallbackData)
+    }
+  }
+
   service.getFacilityStatus = async (facilityId, dateTime) => {
     const normalizedId = typeof facilityId === "string" ? facilityId.trim() : ""
     const facility = normalizedId ? getCanonicalFacilityById(normalizedId) : null
@@ -705,6 +863,7 @@ export const createFacilityService = ({
 const defaultFacilityService = createFacilityService()
 
 export const getFacilityById = (facilityId) => defaultFacilityService.getFacilityById(facilityId)
+export const getFacilitiesDirectory = async (dateTime) => defaultFacilityService.getFacilitiesDirectory(dateTime)
 export const getServices = (filters) => defaultFacilityService.getServices(filters)
 export const getServiceByCode = (serviceCode) => defaultFacilityService.getServiceByCode(serviceCode)
 export const getServiceAliases = (serviceCode) => defaultFacilityService.getServiceAliases(serviceCode)

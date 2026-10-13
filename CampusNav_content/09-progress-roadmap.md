@@ -428,7 +428,7 @@ The prepared package remains pending external evidence and is not adviser-approv
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — FIRST SLICE IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`
+**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL AND DIRECTORY IMPLEMENTED_VERIFIED / OWNER APPROVED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -467,7 +467,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `IN_PROGRESS — FIRST SLICE IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`
+4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `IN_PROGRESS — DETAIL AND DIRECTORY IMPLEMENTED_VERIFIED / OWNER APPROVED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
 7. **Phase 4-FS-7 — Final Acceptance and Evidence Reconciliation** — `NOT_STARTED`
@@ -480,15 +480,23 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability have passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. The first authorized FS-4 slice—public Facility Detail composition—is `IMPLEMENTED_VERIFIED / OWNER REVIEW PENDING`, so FS-4 is `IN_PROGRESS`. Public directory/card enrichment, search/discovery, service/alias resolution, recommendations, media, Dashboard/Realtime, and later FS-4 consumers remain unstarted and separately gated.
+**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability have passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. The public Facility Detail and Facilities directory/card slices are `IMPLEMENTED_VERIFIED / OWNER APPROVED`; therefore FS-4 remains `IN_PROGRESS`. Unified search/discovery, service/alias resolution, fuzzy matching, recommendations, media, Dashboard/Realtime, and later FS-4 consumers remain unstarted and separately gated.
 
 ### Phase 4-FS-4 first implementation slice — public Facility Detail composition — 6 October 2026
 
-**Status:** `IMPLEMENTED_VERIFIED — OWNER REVIEW PENDING`; overall FS-4 remains `IN_PROGRESS`.
+**Status:** `IMPLEMENTED_VERIFIED — OWNER APPROVED`; overall FS-4 remains `IN_PROGRESS`.
 
 The canonical `/facilities/:id` page now composes the accepted FS-1 and FS-2 public operational overlay over the existing local facility identity. One provider-neutral `getFacilityDetail(facilityId, dateTime?)` call returns independent safe envelopes for the public operational profile, configured public services, weekly hours/current dated exceptions, and computed operational status. It validates the canonical facility first and performs one hours-provider read, then reuses the accepted FS-2 evaluator rather than fetching hours again or creating a second status implementation. Partial provider failures preserve canonical identity, navigation, and successful sections; failed hours/status remain unavailable/`UNKNOWN` and never become `CLOSED`.
 
 The UI distinguishes spatial verification from operational status, preserves the existing canonical Navigate handoff, labels demo/pending/unavailable states, renders weekly/split/overnight/closed-all-day schedules without inventing missing hours, and exposes only public contact fields. Deterministic FS-4 coverage, all FS-1/FS-2/FS-3 and safety regressions, route rendering, ESLint, typecheck, production build, and diff checks pass. Local intercepted browser QA covers Light/Dark at 1440, 1366, 1280, 1024, 820, 768, 430, and 390 pixels plus representative profile/service/hour/status/not-found states with no horizontal overflow or console error. No schema, migration, RLS, remote Supabase data, dependency, routing, QR, Emergency, Admin, Dashboard, Realtime, media, search, recommendation, commit, merge, push, or deployment changed.
+
+### Phase 4-FS-4 next implementation slice — public Facilities directory/card composition — 13 October 2026
+
+**Status:** `IMPLEMENTED_VERIFIED — OWNER APPROVED`; overall FS-4 remains `IN_PROGRESS`.
+
+The canonical `/facilities` page retains all 95 local facilities, stable IDs and order, canonical-name/kind/floor search, category/floor filters, result count, Details links, and the existing Navigate handoff. One provider-neutral `getFacilitiesDirectory(dateTime?)` composition reads public operational profiles, weekly hours, current/previous Manila-date exceptions, and status advisories through a fixed four-query provider aggregate. `FacilityService` validates and groups those records by canonical facility ID and invokes the accepted FS-2 evaluator; React neither queries Supabase nor computes status.
+
+Cards add only a concise published description when available, the seven accepted operational statuses, and restrained demo/pending markers. Missing overlay data remains `UNKNOWN`, distinct from `PENDING_VERIFICATION`; closed or temporarily unavailable cards remain routable where canonical navigation permits. A provider or payload failure keeps every canonical card, exposes one safe retry notice, and leaks no provider detail. No service/alias discovery, fuzzy matching, ranking, recommendation, media, Dashboard/Realtime, schema, migration, RLS, remote Supabase mutation, dependency, or official institutional data was added. The complete 25-script deterministic matrix, lint, typecheck, production build, and diff checks pass. Intercepted browser QA passed 18/18 populated Light/Dark and provider-failure captures at the required responsive widths; search, category, floor, result-count, and action checks also passed without horizontal overflow, CLARA/action overlap, or console errors.
 
 ### Phase 4-FS-3 final reconciliation and acceptance — 6 October 2026
 
