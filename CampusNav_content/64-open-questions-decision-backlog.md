@@ -20,7 +20,15 @@ Only unresolved decisions belong here. Resolved decisions move to `29-decision-l
 - Is the current source-aligned emergency coverage sufficient for the thesis demonstration, or is a new formal safety-authority sign-off required?
 
 ## Product/implementation
-- Does the adviser require PWA offline emergency access for the final defense, or confirm its conditional deferral under `DEC-DEFENSE-001`?
+- Does the adviser classify the owner-proposed PWA as required for final defense, optional before defense, conditional, or deferred until after defense?
+- Is the approved PWA capability limited to installability, or does it include offline canonical 2D navigation?
+- Does the installed application use the existing official SCC seal or a separately approved dedicated CampusNav app icon?
+- Is the approved initial cache scope limited to the public app shell and canonical 2D navigation, or is another scope required?
+- Which Android, iPhone/iPad, desktop, browser, and physical-device targets must pass before the approved PWA claim may be made?
+- May the implementation add reviewed development dependencies for `vite-plugin-pwa` and Workbox `injectManifest`, or must it use a handwritten service worker?
+- Does the adviser permit a separate cross-cutting PWA workstream after the owner records the returned decisions and authorizes an exact slice?
+- Which PWA capabilities, including optional QR/3D caching, must remain deferred until after defense?
+- Offline Emergency navigation remains blocked pending safety/institutional authority. Is any separately approved offline Emergency reference scope required after those prerequisites are satisfied?
 - Does the adviser require any owner-deferred feature—reports/analytics, map editor/version rollback, expanded positioning, AR, push/SMS, hardware presence, or photorealistic 3D—for the final defense?
 - Does the adviser require additional browser/device evidence beyond the accepted Phase 3 baseline for a specific final-defense claim?
 
@@ -33,6 +41,8 @@ Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` and `75-advi
 `DEC-ROADMAP-002` makes **Phase 4 — Core Facility & Service Workflow Completion** the active owner-controlled software-development phase. Missing official data does not block generic workflows that preserve unavailable/pending states or use isolated visibly labeled fixtures. Phase 4-FS-1, Phase 4-FS-2, and Phase 4-FS-3 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Phase 4-FS-4 is `IN_PROGRESS`: the public Facility Detail and Facilities directory/card slices are `IMPLEMENTED_VERIFIED / OWNER APPROVED`. Unified search/discovery, service and alias resolution, ranking/recommendation, and the remaining FS-4 work are unstarted and each requires a separately authorized owner task.
 
 Adviser confirmation remains a separate external action and still controls adviser/academic claims. Institutional questions above still control whether values may be presented as official; they do not authorize agents to invent those values.
+
+`DEC-PWA-001` and the expanded section 4 of `75-adviser-confirmation-package.md` prepare the PWA choices without answering them. PWA implementation remains unauthorized, manifest-only, and outside Phase 4 until completed adviser evidence is returned and the owner separately authorizes the selected workstream and first slice.
 
 ### AR-Assisted Camera Navigation planning
 - After current Phase 3 acceptance, when—if ever—may AR-0 be authorized on the roadmap?

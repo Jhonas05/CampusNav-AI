@@ -84,21 +84,188 @@ ______________________________________________________________________________
 
 A `YES` or `CONDITIONAL` decision creates a separate future workstream. It does not authorize immediate implementation; the workstream must first satisfy the canonical Definition of Ready.
 
-## 4. PWA/offline emergency support
+## 4. PWA installability and offline-navigation proposal
+
+**Proposal status:** `OWNER-PROPOSED / AWAITING_ADVISER_CONFIRMATION / NOT_IMPLEMENTED`
 
 Current evidence:
 
-- a web manifest exists
-- no service worker or versioned offline emergency cache is implemented
-- CampusNav must not currently be described as providing offline/PWA emergency support
+- CampusNav is already a responsive mobile-first React/Vite application deployed over HTTPS through Cloudflare Workers Static Assets
+- a web app manifest exists and requests standalone display
+- the manifest does not yet have the complete approved raster/maskable icon set required for consistent installation presentation
+- no service worker, Cache Storage policy, offline SPA fallback, update lifecycle, or versioned offline content release is implemented
+- the canonical spatial graph, floor data, 2D renderer, A* pathfinding, QR checkpoint interpretation, and manual positioning logic are client-side, but they are not currently guaranteed to be available after connectivity loss
+- CampusNav must not currently be described as providing offline navigation or offline/PWA emergency support
 
-Is PWA/offline emergency support required for the final defense?
+### 4.1 Purpose and academic scope
 
-- [ ] **YES — REQUIRED.**
-- [ ] **NO — DEFER.**
+The owner proposes a separate cross-cutting PWA enhancement so students can install CampusNav, launch it in a standalone mobile experience, and retain a deliberately limited public navigation capability after a successful online load. The proposal builds on the accepted mobile-first interface and the existing one-campus-dataset/one-routing-engine architecture. It is not part of Phase 4 facility search/recommendation work and does not start FS-5 or FS-6.
+
+The adviser must decide whether this enhancement is required for the thesis defense, optional before defense, or deferred until after defense. Preparing this package does not select that classification.
+
+### 4.2 Owner-proposed first-release scope
+
+The following scope is proposed by the owner and is **not yet adviser-approved or authorized for implementation**.
+
+**Installability**
+
+- complete, valid application manifest with stable identity and scope
+- approved CampusNav application icons, including raster and maskable variants
+- Android/Chromium installation flow
+- iPhone/iPad Add to Home Screen guidance
+- standalone launch behavior that preserves the accepted mobile-first interface, safe areas, bottom navigation, and accessibility behavior
+
+**Offline canonical navigation**
+
+- versioned public static application shell
+- supported SPA reload and deep links
+- canonical 2D map assets, floor data, nodes, edges, and existing A* routing
+- manual current-location selection
+- canonical facility identity and navigation targets without claiming current operational state
+- the existing 2D renderer remains the required low-resource and accessibility fallback
+
+**Operational data boundary**
+
+- facility status, hours, exceptions, advisories, personnel presence, announcements, and other time-sensitive institutional data remain network-only in the initial release
+- when current provider data cannot be obtained, operational status is `UNKNOWN` or unavailable; cached data must not create `OPEN_NOW`, `CLOSED`, personnel-presence, suspension, or current-advisory claims
+- `DEMO`, `PENDING_VERIFICATION`, source, and verification boundaries remain visible
+- reconnecting requires a real provider refresh; connectivity indication alone does not prove that current institutional data is available
+
+**Optional, later capability**
+
+- QR decoder and camera bundle cached only after explicit use or approved opt-in; manual positioning remains available when camera access fails
+- 3D bundle cached only after explicit use or approved opt-in; 3D is never required for first install or offline navigation
+
+**Excluded from this proposal**
+
+- offline Admin access or mutations
+- background mutation queues or replay
+- cached authenticated, user-specific, role-sensitive, Supabase API, Auth, Realtime, RPC, or Storage responses
+- cached access/refresh tokens or privileged keys
+- crowd inference, fabricated live information, or unverified wheelchair/accessibility routing
+- offline Emergency routes, emergency-route claims, or substitution of ordinary A* routes for emergency-approved routes
+
+### 4.3 Proposed technical architecture
+
+The audit recommends `vite-plugin-pwa` with Workbox `injectManifest`, subject to dependency approval and lockfile review:
+
+- Vite injects the revisioned build asset manifest into a root-scoped custom service worker
+- the custom worker applies an explicit public-static allowlist and API/auth denylist
+- cache names carry an application release version; superseded public caches are cleaned during controlled activation
+- updates wait and are presented to the user; the application does not silently force a new worker into an active navigation session
+- the initial precache excludes Admin chunks, the large lazy 3D bundle, the QR decoder, social-preview media, and dynamic/provider responses
+- non-`GET`, authenticated, cross-origin API, Supabase, and mutation requests are always excluded from Cache Storage
+
+This approach is recommended because CampusNav uses many Vite-hashed lazy chunks and needs a safety-specific caching policy. A handwritten worker without PWA tooling remains possible, but it would require custom build-manifest integration, manual revision handling, cache cleanup, navigation fallback, and additional lifecycle tests. A hand-maintained list of hashed files is not proposed.
+
+Approval of this architecture would permit a later dependency review; it does not install or approve a package in this documentation step.
+
+### 4.4 Security, privacy, and update boundaries
+
+- caches contain public static resources only
+- service-worker code never reads, copies, logs, or stores authentication tokens
+- no offline write queue or background synchronization is authorized
+- logout and account switching must not leave user-specific cached data; the proposed initial architecture creates no user-specific caches
+- session expiry and role checks remain controlled by the existing Auth/RBAC/RLS boundaries
+- cache loss, eviction, corruption, or a partial update must fail safely to online-only/unavailable behavior
+- update activation is user-controlled and must preserve route/current-location state where possible
+
+### 4.5 Emergency exclusion
+
+Offline Emergency navigation remains `BLOCKED` and outside the proposed PWA implementation until all of the following exist:
+
+- verified emergency-route coverage for the intended floors
+- approved cross-floor emergency transitions
+- verified emergency contacts and verification dates
+- approved emergency-data versioning and cache invalidation rules
+- an authorized safety release/invalidation owner
+
+No ordinary route may substitute for an emergency-approved route. Any future offline Emergency reference or route work requires separate safety/institutional approval and its own Definition-of-Ready review.
+
+### 4.6 Proposed implementation work packages
+
+These are proposed work packages, not automatically new canonical phase numbers:
+
+1. PWA authorization and scope confirmation
+2. manifest, approved icons, and installability
+3. root-scoped service worker and safe public-static caching
+4. offline canonical 2D navigation and supported deep links
+5. operational-data degraded states and reconnect refresh
+6. mobile install, offline, reconnect, and update experience
+7. optional QR and 3D cache-on-use capability
+8. cross-browser, physical-device, Cloudflare, accessibility, privacy, and upgrade acceptance
+
+Offline Emergency remains excluded unless separately approved.
+
+### 4.7 Required acceptance evidence
+
+Implementation, if later authorized, must verify:
+
+- manifest identity, approved icons, installation, and standalone launch
+- worker registration, first-control behavior, offline reload, and supported offline deep links
+- cache allowlist/denylist, no sensitive response storage, cache invalidation, corrupt-cache fallback, and version upgrades
+- deterministic equivalence of the existing canonical A* route result online and offline
+- truthful `UNKNOWN`/unavailable operational states and refresh after provider recovery
+- manual location fallback, QR permission denial, camera unavailable, and cache-on-use behavior
+- Android Chrome, current iPhone/iPad Add to Home Screen, desktop Chrome/Edge, and any additional adviser-required targets
+- keyboard, focus, touch target, safe-area, reduced-motion, low-resource 2D fallback, and Cloudflare production behavior
+
+Physical-camera, installed-app, iOS/iPadOS, and low-end-device claims require physical-device evidence; emulation alone is insufficient.
+
+### 4.8 Adviser decisions
+
+**A. Defense classification**
+
+- [ ] **REQUIRED FOR FINAL DEFENSE.**
+- [ ] **OPTIONAL BEFORE DEFENSE.**
+- [ ] **DEFER UNTIL AFTER DEFENSE.**
 - [ ] **CONDITIONAL:** ________________________________________________________
 
-A `YES` or `CONDITIONAL` decision requires a separate, Definition-of-Ready-approved workstream before implementation.
+**B. Capability scope**
+
+- [ ] **INSTALLABILITY ONLY** — manifest, icons, and standalone launch; no offline-navigation claim.
+- [ ] **INSTALLABILITY + OFFLINE CANONICAL 2D NAVIGATION** — approve the owner-proposed first-release boundary above.
+- [ ] **OTHER SCOPE:** ________________________________________________________
+
+**C. Application icon**
+
+- [ ] **A — EXISTING OFFICIAL SCC SEAL**, adapted only into approved app-icon sizes without changing its visual content.
+- [ ] **B — DEDICATED CAMPUSNAV APP ICON**, separately designed and approved while retaining institutional attribution in the application.
+- [ ] **OTHER:** ______________________________________________________________
+
+The technical recommendation is **B**, because a distinct, deliberately maskable CampusNav mark is more legible at small launcher sizes and distinguishes the application from the institution itself. No icon is created or replaced by this package. The social-sharing image must not be automatically cropped into an app icon.
+
+**D. Approved initial cache scope**
+
+- [ ] **PUBLIC APP SHELL + CANONICAL 2D NAVIGATION ONLY.**
+- [ ] **INSTALLABILITY ONLY / NO OFFLINE CACHE.**
+- [ ] **APPROVE WITH CHANGES:** ______________________________________________
+
+**E. First-release browser/device acceptance targets**
+
+- [ ] **APPROVE** Android Chrome, current iPhone/iPad Add to Home Screen, and desktop Chrome/Edge, with physical-device evidence where required.
+- [ ] **APPROVE WITH CHANGES:** ______________________________________________
+- [ ] **DEFER PHYSICAL-DEVICE CERTIFICATION UNTIL AFTER DEFENSE.**
+
+**F. Development dependency**
+
+- [ ] **APPROVE REVIEW AND USE OF `vite-plugin-pwa` + WORKBOX `injectManifest`.**
+- [ ] **REQUIRE A HANDWRITTEN SERVICE WORKER WITH NO NEW PACKAGE.**
+- [ ] **REQUIRE ANOTHER OPTION:** _____________________________________________
+
+**G. Separate workstream permission**
+
+- [ ] **AUTHORIZE A SEPARATE CROSS-CUTTING PWA WORKSTREAM** after owner records the completed adviser decision and confirms the first implementation slice.
+- [ ] **DO NOT AUTHORIZE IMPLEMENTATION YET.**
+- [ ] **AUTHORIZE WITH CONDITIONS:** _________________________________________
+
+**H. Features explicitly deferred until after defense**
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+
+Blank, conflicting, or ambiguous choices remain `PENDING` and do not authorize implementation. A `REQUIRED`, `OPTIONAL BEFORE DEFENSE`, or conditional decision still requires the owner to record the returned adviser evidence and authorize an exact implementation slice.
 
 ## 5. Verified, demo, and unavailable data policy
 
@@ -272,8 +439,45 @@ Approved/required wording: ___________________________________________________
 ### PWA/offline
 
 - [ ] **REQUIRED**
-- [ ] **DEFER**
+- [ ] **OPTIONAL BEFORE DEFENSE**
+- [ ] **DEFER UNTIL AFTER DEFENSE**
 - [ ] **CONDITIONAL**
+
+Approved capability:
+
+- [ ] **INSTALLABILITY ONLY**
+- [ ] **INSTALLABILITY + OFFLINE CANONICAL 2D NAVIGATION**
+- [ ] **OTHER:** ______________________________________________________________
+
+App icon:
+
+- [ ] **OFFICIAL SCC SEAL**
+- [ ] **DEDICATED CAMPUSNAV APP ICON**
+- [ ] **OTHER**
+
+Cache scope:
+
+- [ ] **PUBLIC APP SHELL + CANONICAL 2D NAVIGATION ONLY**
+- [ ] **NO OFFLINE CACHE**
+- [ ] **OTHER**
+
+Architecture/dependency:
+
+- [ ] **APPROVE `vite-plugin-pwa` + WORKBOX `injectManifest` REVIEW**
+- [ ] **REQUIRE HANDWRITTEN WORKER**
+- [ ] **OTHER**
+
+Separate cross-cutting PWA implementation after recorded confirmation:
+
+- [ ] **AUTHORIZED**
+- [ ] **NOT AUTHORIZED**
+- [ ] **AUTHORIZED WITH CONDITIONS**
+
+Conditions, browser/device targets, or post-defense deferrals:
+
+______________________________________________________________________________
+
+______________________________________________________________________________
 
 ### Demo-data policy
 

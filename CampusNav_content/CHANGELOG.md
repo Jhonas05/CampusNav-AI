@@ -1,5 +1,21 @@
 # CampusNav Content Pack — Changelog
 
+## v3.48 — 14 October 2026
+
+Prepared the documentation-only **PWA-0 canonical decision and adviser-confirmation package** after the owner-authorized PWA readiness audit.
+
+### Added
+- `DEC-PWA-001`, recording the owner-proposed installability and offline canonical 2D scope as `ADVISER CONFIRMATION REQUIRED / IMPLEMENTATION NOT AUTHORIZED`
+- explicit pending adviser choices for defense classification, installability-only versus offline 2D scope, app icon, cache boundary, browser/device targets, dependency/tooling approval, separate-workstream permission, and post-defense deferrals
+
+### Expanded
+- section 4 and the final decision summary in `75-adviser-confirmation-package.md` with the proposed scope, security/privacy rules, operational-data boundary, Emergency exclusion, technical recommendation, handwritten-worker alternative, staged work packages, and acceptance evidence
+- `64-open-questions-decision-backlog.md` with the unresolved PWA decisions and the separate safety-authority boundary for any future offline Emergency work
+
+### Boundary
+- PWA/offline remains `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION`; current implementation remains manifest-only with no service worker or offline cache
+- no adviser answer, institutional approval, safety approval, implementation authorization, canonical phase number, dependency, icon, application code, test, Supabase, route, Emergency path, commit to `main`, push, or deployment is supplied by this package
+
 ## v3.47 — 13 October 2026
 
 **Mobile-first UX simplification and information architecture** (`DEC-UI-006`; owner approved, `COMPLETE — ACCEPTED_WITH_ADVISORY`; a scoped exception to the `DEC-UI-005` freeze that supersedes only the mobile navigation provisions of `DEC-UI-003`). Capabilities are progressively disclosed, not removed; the visual system, theme, motion tokens, and map semantic colors are unchanged. Completed separately after the accepted FS-4 directory slice (v3.46) and authorized for automatic Git completion without another visual-review checkpoint.
