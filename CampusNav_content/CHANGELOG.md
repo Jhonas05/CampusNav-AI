@@ -1,5 +1,23 @@
 # CampusNav Content Pack — Changelog
 
+## v3.51 — 14 October 2026
+
+Replaced the initial generic PWA application mark with the owner-approved monochrome CampusNav campus-building/navigation artwork under `DEC-PWA-002`.
+
+### Changed
+- deterministically isolated the rounded-square illustration from the 1254×1254 owner source without including the separate wordmark, stretching, redrawing, AI approximation, or vector tracing
+- regenerated the established 192×192, 512×512, maskable 512×512, and Apple touch 180×180 PNG paths
+- inset the maskable illustration on an opaque white background and visually checked representative circular and rounded adaptive masks
+- changed the HTML favicon to the approved 192×192 PNG and removed the obsolete SVG from the manifest, cache glob, and repository
+- strengthened the deterministic manifest test with PNG decoding, opaque-format checks, nonempty artwork checks, and maskable safe-zone/background assertions
+- verified the resulting production precache at 43 revisioned entries totaling 1594.23 KiB; the detailed raster icons account for the increase from the earlier generic icon set
+
+### Preserved boundaries
+- manifest identity, app name, start URL, scope, standalone behavior, theme/background metadata, service-worker architecture, controlled updates, offline 2D navigation, operational freshness rules, and Emergency exclusions are unchanged
+- `public/branding/campusnav-og.png`, all Open Graph/Twitter metadata, the canonical production URL, and the in-application SCC seal are unchanged
+- physical Android/iOS installation, operating-system launcher-cache refresh timing, non-Chromium behavior, and screen-reader acceptance remain advisories
+- adviser/defense classification remains unanswered; the owner-approved icon does not make PWA thesis-core or adviser-approved
+
 ## v3.50 — 14 October 2026
 
 Completed and locally accepted the owner-directed cross-cutting PWA workstream under `DEC-PWA-001` without changing its pending adviser/defense classification.

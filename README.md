@@ -448,6 +448,12 @@ npx --yes supabase@2.79.0 db query --linked --file supabase/tests/phase_8c2_admi
 
 With the existing temporary development account credentials supplied only through process environment variables or the ignored `.env.phase8a.session`, `npm run test:phase8c2:cloud` additionally verifies authenticated Data API writes and the Dashboard class insert/edit/cancel and personnel check-in/check-out Realtime transitions. Delete the temporary session file immediately after the run.
 
+## Progressive Web App
+
+CampusNav uses the owner-approved monochrome campus-building/navigation illustration for its installed-app identity. The manifest references standard 192×192 and 512×512 PNGs plus a separately inset 512×512 maskable icon, while iPhone/iPad Home Screen installation uses `public/branding/apple-touch-icon.png`. The browser favicon uses the same approved 192×192 PNG.
+
+The SCC seal inside CampusNav and `public/branding/campusnav-og.png` for Open Graph/Twitter sharing are separate assets and are not used as launcher icons. Existing installations may retain an older launcher icon until the browser or operating system applies the application update or the user reinstalls it.
+
 ## Emergency Mode
 
 Open `/map?mode=emergency` to use the separate emergency overlay. Emergency routing is restricted to edges explicitly marked `emergencyApproved: true` with `VERIFIED` or `SOURCE_ALIGNED` status. It never falls back to the normal navigation graph. If a complete source-approved digital path is unavailable, the interface instructs users to follow posted signage and authorized emergency personnel.

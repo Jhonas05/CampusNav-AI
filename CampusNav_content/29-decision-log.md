@@ -291,6 +291,15 @@ The proposed work packages in `75` are planning labels, not new canonical phase 
 
 **Engineering outcome — 14 Oct 2026:** The owner-authorized workstream is `COMPLETE — ACCEPTED_WITH_ADVISORY`. CampusNav now has complete install identity, a bounded Workbox `injectManifest` worker, offline canonical 2D navigation using the existing data/graph/A* engine, manual positioning, conservative network-only operational data, explicit update UX, and tested optional 3D/QR script cache-on-use boundaries. Local production-build Chromium verified service-worker control, offline facility/spatial fallback, offline multi-floor routing, optional 3D reuse, Emergency blocking, and fail-closed Admin behavior. Physical-device installation/camera tests, iOS/iPadOS, non-Chromium browsers, screen-reader acceptance, and production deployment equivalence remain separate evidence boundaries. Every adviser choice remains unanswered; this outcome does not make PWA thesis-core or adviser-approved.
 
+## DEC-PWA-002 — Owner-approved installed-app icon
+**Status:** OWNER APPROVED / IMPLEMENTED_VERIFIED — 14 Oct 2026
+
+The owner selected the supplied 1254×1254 monochrome `CampusNav St. Clare College Icon.png` (SHA-256 `2CFBF3EAA8E5967AACB20B476A60A12144AC66F299A6BCB2E1025F6F69358779`) as the CampusNav installed-app identity. Launcher assets use only the rounded-square building/navigation illustration; the separate `CampusNav` wordmark is not reduced into small launcher icons.
+
+The illustration is deterministically cropped from source rectangle `(227,143,800,800)` without redrawing, tracing, stretching, or AI approximation. The standard 192×192 and 512×512 icons fill the square; the 512×512 maskable icon places the same illustration at `(64,64,384,384)` on an opaque white background so its pin, walkway, building, and school-name details remain inside representative adaptive masks. The Apple touch icon uses the same approved crop at 180×180.
+
+The inaccurate legacy SVG app mark is retired from the manifest and favicon in favor of the approved PNG asset set. Manifest `id`, name, start URL, scope, display mode, theme/background colors, service-worker/update policy, and offline boundaries are unchanged. The SCC seal and `campusnav-og.png` remain separate approved assets and are not replaced. Physical Android/iOS installation and launcher-cache refresh behavior remain device-level advisories; this owner decision does not resolve the pending adviser/defense classification in `DEC-PWA-001` or `75-adviser-confirmation-package.md`.
+
 ## DEC-ROADMAP-002 — Phase 4 product-completion reprioritization
 **Status:** OWNER APPROVED — 20 Sep 2026
 

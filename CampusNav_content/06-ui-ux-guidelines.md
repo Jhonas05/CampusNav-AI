@@ -47,6 +47,7 @@ Design and review at 390px and 430px first, then 768, 820, 1024, 1280, 1366, and
 
 ## Branding
 - use the owner-approved transparent `public/branding/scc-logo.png` in the sidebar header, mobile context bar, Home, and Login
+- use the separate owner-approved `DEC-PWA-002` campus-building/navigation illustration only for installed-app, launcher, Apple touch, and favicon identity; it does not replace the SCC seal inside the application or the social-sharing preview
 - support office/lab/classroom/facility photos and galleries; use polished placeholders when an image is unavailable
 
 ## Color decision

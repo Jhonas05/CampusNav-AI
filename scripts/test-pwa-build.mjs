@@ -17,9 +17,13 @@ for (const required of [
   'branding/campusnav-app-icon-192.png',
   'branding/campusnav-app-icon-512.png',
   'branding/campusnav-app-icon-maskable-512.png',
+  'branding/apple-touch-icon.png',
 ]) {
+  assert.ok(existsSync(new URL(required, distUrl)), `${required} must exist in the production build`)
   assert.ok(precacheUrls.includes(required), `${required} must be precached`)
 }
+
+assert.ok(!existsSync(new URL('branding/campusnav-app-icon.svg', distUrl)), 'retired vector icon must not be emitted')
 
 for (const pattern of [/^assets\/index-.*\.js$/, /^assets\/Map-.*\.js$/, /^assets\/IndoorMap2D-.*\.js$/, /^assets\/Facilities-.*\.js$/, /^assets\/FacilityDetail-.*\.js$/]) {
   assert.ok(precacheUrls.some((url) => pattern.test(url)), `${pattern} must be represented in the precache`)

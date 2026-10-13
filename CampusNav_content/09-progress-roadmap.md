@@ -453,13 +453,14 @@ The workstream may proceed only through independently verifiable commits and mus
 
 Implementation and acceptance evidence:
 - the manifest now has a stable identity/scope, standalone behavior, 192×192 and 512×512 raster icons, a maskable icon, an Apple touch icon, and deterministic validation
+- `DEC-PWA-002` replaces the initial generic app mark with the owner-supplied monochrome campus-building/navigation illustration: standard and Apple assets use the isolated rounded-square artwork, the maskable variant uses an opaque safe-zone inset, and the obsolete SVG is not traced or retained as an install/fav-icon source; the SCC seal and social preview remain unchanged
 - a Workbox `injectManifest` worker precaches the bounded public shell and canonical 2D navigation dependencies; Admin, Auth/provider data, Supabase responses, Emergency routes, the large optional 3D bundle, QR decoder, and social-preview media are excluded from initial precache
 - production-build Chromium acceptance verified worker control, supported offline SPA/deep-link loading, the 95-entry canonical facility fallback, manual positioning, and an offline multi-floor A* route using the existing graph and engine
 - operational data remains network-only; a real no-cache reachability probe controls revalidation, and failed/offline reads present `UNKNOWN` or unavailable rather than stale current status
 - installation guidance, offline/reconnected state, and explicit user-controlled worker updates preserve safe-area, bottom-navigation, CLARA, focus, and keyboard boundaries
 - QR and 3D scripts are cache-on-use only; Chromium verified 3D reuse after an online load, while physical camera/device behavior, iOS/iPadOS installation, non-Chromium behavior, screen-reader acceptance, and low-end-device performance remain unverified advisories
 - offline Emergency routing is blocked with conservative guidance; no ordinary A* route substitutes for an emergency-approved route
-- local acceptance measured 44 precache entries totaling 898.57 KiB; the optional Campus3D, QR decoder, and Supabase chunks remain outside the initial precache
+- after the `DEC-PWA-002` icon replacement, the current production build contains 43 precache entries totaling 1594.23 KiB; the optional Campus3D, QR decoder, and Supabase chunks remain outside the initial precache
 
 This acceptance is software engineering evidence, not adviser approval or a thesis-defense classification. Production asset verification follows automatic deployment from `main`; no manual deployment is authorized by this workstream.
 

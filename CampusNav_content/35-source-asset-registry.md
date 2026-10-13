@@ -36,7 +36,8 @@ The approved emergency/floor-plan material referenced by the master source is th
 | St. Clare College seal | `public/branding/scc-logo.png`, consumed through `SchoolLogo` | Owner-approved canonical institutional asset under `DEC-ASSET-001` | Tasteful institutional identification in the global shell, Login, Emergency, and selected institutional surfaces | Redrawing, wording/symbol/color/proportion changes, repeated decoration, implied new institutional endorsement, or use as data/routing evidence | OWNER_APPROVED / RUNTIME YES — high-resolution seal with edge-connected exterior background cleaned to transparency |
 | Legacy St. Clare College seal | historical `public/branding/scc-logo.jpg` | Previous runtime asset retained in Git history and non-runtime owner archive | Historical reference only | Active runtime use or automatic fallback | HISTORICAL_ASSET / RUNTIME NO |
 | CampusNav social preview | `public/branding/campusnav-og.png` | Existing owner-directed social-preview asset | Open Graph/Twitter preview for the current CampusNav identity | Replacement by the bundled design artifact or use as application runtime UI | ACCEPTED active asset |
-| CampusNav favicon | `public/favicon.svg` | Existing application branding asset | Browser/application identity | Institutional-data or routing authority | PRESERVED |
+| CampusNav installed-app icon source | Owner-supplied `CampusNav St. Clare College Icon.png`, 1254×1254 PNG, SHA-256 `2CFBF3EAA8E5967AACB20B476A60A12144AC66F299A6BCB2E1025F6F69358779` | Owner-approved under `DEC-PWA-002` | Deterministic rounded-square illustration crop for 192×192, 512×512, maskable 512×512, Apple touch 180×180, and PNG favicon assets | AI redraw, approximate SVG trace, inclusion of the separate wordmark in launcher icons, SCC-seal replacement, social-preview replacement, or institutional/spatial-data authority | OWNER_APPROVED / RUNTIME YES |
+| Legacy CampusNav favicon | `public/favicon.svg` | Previous application branding asset retained for history | Historical reference only | Active runtime identity, institutional-data authority, or routing authority | PRESERVED / RUNTIME NO |
 
 Duplicate filename variants with the same hash represent the same supplied artifact and do not create additional authority. Static controls in the artifact are not evidence that equivalent application behavior exists.
 
@@ -44,6 +45,7 @@ Duplicate filename variants with the same hash represent the same supplied artif
 
 - `public/branding/scc-logo.png` is the only approved SCC runtime logo for the current release.
 - `public/branding/campusnav-og.png` is the only approved CampusNav social-preview image for the current release.
+- the `campusnav-app-icon-*.png` and `apple-touch-icon.png` installed-app assets use the `DEC-PWA-002` owner-approved campus illustration; they do not replace the SCC seal or social preview.
 - the PNG retains its high-resolution source and uses transparency only outside the seal; legitimate internal white/light details remain opaque.
 - the former `scc-logo.jpg` is a historical asset and must not be an active runtime source or automatic fallback.
 - obsolete `campusnav-og-v2.png` and the unsupported-claims concept `campusnav-og-v3.png` must not be runtime public build inputs. Historical documentation references may remain as history.

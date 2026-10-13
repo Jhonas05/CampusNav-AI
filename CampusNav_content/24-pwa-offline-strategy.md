@@ -6,6 +6,11 @@ Defines the source requirement that essential emergency information should remai
 ## Current authorized boundary
 The implemented first release provides installability and offline canonical 2D navigation. Offline Emergency navigation is explicitly excluded by `DEC-PWA-001`; an offline session must direct users to posted campus instructions and authorized personnel instead of presenting an ordinary A* route as safety guidance.
 
+## Installed-app branding
+`DEC-PWA-002` records the owner-approved installed-app artwork. The 192×192 and 512×512 standard icons and the 180×180 Apple touch icon use only the approved rounded-square campus illustration. The separate 512×512 maskable asset places that illustration inside a conservative safe-zone inset on an opaque white background. The manifest and HTML use the PNG assets directly; no approximate traced SVG is used.
+
+These icon files are versioned public-static assets and receive normal build-revision cache invalidation. An existing installed launcher may retain an older icon until the browser/operating system accepts the application update or the user reinstalls it; CampusNav does not force service-worker activation to accelerate an icon change. The social-preview image and SCC seal remain separate assets.
+
 ## Future Emergency cache candidates — not authorized in the current release
 Only after separate safety/institutional approval, a future Emergency-offline workstream may consider versioned copies of:
 - emergency floor plans / static emergency map assets

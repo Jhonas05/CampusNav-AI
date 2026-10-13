@@ -24,7 +24,7 @@ export default defineConfig({
         globPatterns: [
           'index.html',
           'manifest.json',
-          'branding/campusnav-app-icon*.{png,svg}',
+          'branding/campusnav-app-icon*.png',
           'branding/apple-touch-icon.png',
           'assets/**/*.{css,js}',
         ],
