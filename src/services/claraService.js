@@ -70,10 +70,12 @@ const findMatch = (message) => {
 
 export const getClaraFacilityReply = (facility) => {
   const floor = getFloorById(facility.floorId)
-  const position = facility.mapRoomId
-    ? `Its relative position on the ${floor?.name || facility.floorId} is aligned to the official emergency plan; exact dimensions and physical distances are not yet verified.`
-    : "Its exact room position is pending verification."
-  return `${facility.name} has a verified assignment on the ${floor?.name || facility.floorId}. ${position} Operating hours and personnel schedules are pending verification.`
+  // Short answer first; the result card carries Navigate and Details. The
+  // caveats stay: map positions are estimates and hours are not yet verified.
+  const caveat = facility.mapRoomId
+    ? "Its map position is an estimate, and operating hours are pending verification."
+    : "Its exact room position and operating hours are pending verification."
+  return `${facility.name} is on the ${floor?.name || facility.floorId}. ${caveat}`
 }
 
 /**

@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Outlet, useLocation } from "react-router-dom"
 import GlobalSearch from "./GlobalSearch"
+import MobileBottomNav from "./MobileBottomNav"
 import MobileTopBar from "./MobileTopBar"
+import MoreSheet from "./MoreSheet"
 import NotificationPanel, { getUnseenNotificationCount } from "./NotificationPanel"
 import ProfileMenu from "./ProfileMenu"
 import MobileSidebarDrawer from "./sidebar/MobileSidebarDrawer"
@@ -103,13 +105,13 @@ const usePageEnter = (pathname) => {
 }
 
 /**
- * Application shell: one left navigation (sidebar, or a drawer on small
- * screens), page content, and the global floating CLARA assistant. There is
- * no top navigation bar.
+ * Application shell: one primary navigation (the left sidebar from 768px, the
+ * bottom navigation with its More sheet on phones), page content, and the
+ * global floating CLARA assistant. There is no top navigation bar.
  *
  * Public pages use the global navigation. Inside `/admin/*` a signed-in
  * administrator gets the Admin navigation instead, in the same slot: the
- * global sidebar, rail, and drawer are not rendered beside it. While the
+ * global sidebar, rail, and bottom navigation are not rendered beside it. While the
  * session is still being checked on an Admin URL neither is shown.
  */
 export default function AppShell() {
@@ -118,6 +120,7 @@ export default function AppShell() {
   const shell = !isAdminPath(location.pathname) ? "app" : auth.loading ? "pending" : usesAdminShell(location.pathname, auth) ? "admin" : "app"
   const [collapsed, toggleCollapsed] = useSidebarCollapsed()
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [moreOpen, setMoreOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [openPanel, setOpenPanel] = useState(null)
   const [unread, setUnread] = useState(0)
@@ -126,6 +129,7 @@ export default function AppShell() {
 
   useEffect(() => {
     setDrawerOpen(false)
+    setMoreOpen(false)
     setSearchOpen(false)
     setOpenPanel(null)
   }, [location.pathname, location.search])
@@ -140,6 +144,7 @@ export default function AppShell() {
         event.preventDefault()
         setOpenPanel(null)
         setDrawerOpen(false)
+        setMoreOpen(false)
         setSearchOpen((current) => !current)
       }
     }
@@ -151,6 +156,7 @@ export default function AppShell() {
   const togglePanel = (panel) => setOpenPanel((current) => (current === panel ? null : panel))
   const openSearch = () => { setOpenPanel(null); setSearchOpen(true) }
   const openDrawer = () => { setOpenPanel(null); setDrawerOpen(true) }
+  const openMore = () => { setOpenPanel(null); setMoreOpen(true) }
 
   const navigationProps = {
     unread,
@@ -180,10 +186,11 @@ export default function AppShell() {
         </a>
 
         {shell === "app" && <Sidebar collapsed={collapsed} onToggleCollapse={toggleCollapsed} {...navigationProps} />}
-        {shell === "app" && <MobileSidebarDrawer open={drawerOpen} onOpenChange={setDrawerOpen} {...navigationProps} />}
+        {shell === "app" && <MobileBottomNav moreOpen={moreOpen} onOpenMore={openMore} />}
+        {shell === "app" && <MoreSheet open={moreOpen} onOpenChange={setMoreOpen} onOpenProfile={() => togglePanel("profile")} />}
         {shell === "admin" && <AdminSidebar {...navigationProps} />}
         {shell === "admin" && (
-          <MobileSidebarDrawer open={drawerOpen} onOpenChange={setDrawerOpen} title="Admin menu" hideFrom="lg">
+          <MobileSidebarDrawer open={drawerOpen} onOpenChange={setDrawerOpen} title="Admin menu">
             {({ close }) => (
               <AdminNavigation
                 {...navigationProps}
@@ -197,11 +204,9 @@ export default function AppShell() {
           </MobileSidebarDrawer>
         )}
 
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-w-0 flex-1 flex-col pb-[var(--app-bottom-nav-height)]">
           {shell === "app" && (
             <MobileTopBar
-              menuOpen={drawerOpen}
-              onOpenMenu={openDrawer}
               onSearch={openSearch}
               onToggleNotifications={() => togglePanel("notifications")}
               notificationsOpen={openPanel === "notifications"}
@@ -214,8 +219,8 @@ export default function AppShell() {
               <Outlet />
             </div>
           </main>
-          <footer className="border-t border-line px-[var(--app-page-gutter)] py-4 pr-24 text-xs text-ink-faint print:hidden">
-            <p>CampusNav AI · St. Clare College of Caloocan · Independent campus navigation system</p>
+          <footer className="border-t border-line px-[var(--app-page-gutter)] py-4 pr-24 text-xs text-ink-faint max-md:hidden print:hidden">
+            <p>CampusNav AI · St. Clare College of Caloocan</p>
           </footer>
         </div>
 

@@ -1,8 +1,8 @@
 import { addMonths, eachDayOfInterval, endOfMonth, endOfWeek, format, isSameMonth, startOfMonth, startOfWeek } from "date-fns"
-import { Activity, ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Clock3, MapPin, UserRound, Users } from "lucide-react"
+import { Activity, ChevronLeft, ChevronRight, Clock3, MapPin, Navigation, UserRound, Users } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
-import { card, Chip, EmptyState, focusRing, PageHeader, StatusBadge } from "@/components/campus/ui"
+import { button, card, Chip, Disclosure, focusRing, PageHeader, StatusBadge } from "@/components/campus/ui"
 import { formatCampusDateTime, formatCampusShortTime, getCampusDateKey } from "@/lib/campusTime"
 import { getDashboardSnapshot, loadDashboardSnapshot } from "@/services/dashboardService"
 import { cn } from "@/lib/utils"
@@ -13,49 +13,69 @@ const TABS = [
   { id: "calendar", label: "Calendar" },
 ]
 
+/**
+ * Event list card: name, when, where, one status, and at most two actions.
+ * The organizer and audience open under Details.
+ */
 function EventCard({ event }) {
+  const audience = Array.isArray(event.audience) ? event.audience : []
+  const hasDetails = Boolean(event.organizer || audience.length || event.description)
   return (
-    <article className={`${card} p-5`}>
+    <article className={`${card} p-4`}>
       <div className="flex items-start justify-between gap-3">
-        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-50 text-gold-700">
-          <CalendarDays className="h-5 w-5" aria-hidden="true" />
-        </span>
-        <div className="flex flex-wrap justify-end gap-2">
+        <h3 className="min-w-0 text-[16px] font-semibold leading-snug tracking-tight">{event.title}</h3>
+        <div className="flex shrink-0 flex-wrap justify-end gap-1.5">
           <StatusBadge status={event.status} />
           {event.demo && <Chip>Demo data</Chip>}
         </div>
       </div>
-      <h3 className="mt-3 text-lg font-semibold tracking-tight">{event.title}</h3>
-      <dl className="mt-3 space-y-1.5 text-sm text-ink-soft">
-        <div className="flex items-center gap-2">
-          <Clock3 className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
-          <dd>{formatCampusDateTime(event.startAt)}–{formatCampusShortTime(event.endAt)}</dd>
-        </div>
-        {event.location && (
-          <div className="flex items-center gap-2">
-            <MapPin className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
-            <dd>{event.location}</dd>
-          </div>
-        )}
-        {event.organizer && (
-          <div className="flex items-center gap-2">
-            <UserRound className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
-            <dd>{event.organizer}</dd>
-          </div>
-        )}
-        {Array.isArray(event.audience) && event.audience.length > 0 && (
-          <div className="flex items-center gap-2">
-            <Users className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
-            <dd>{event.audience.join(", ")}</dd>
-          </div>
-        )}
-      </dl>
+      <p className="mt-1.5 flex items-center gap-2 text-sm text-ink-soft">
+        <Clock3 className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
+        {formatCampusDateTime(event.startAt)}–{formatCampusShortTime(event.endAt)}
+      </p>
+      {event.location && (
+        <p className="mt-1 flex items-center gap-2 text-sm text-ink-soft">
+          <MapPin className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
+          {event.location}
+        </p>
+      )}
       {event.navigationHref && (
-        <Link to={event.navigationHref} className={`mt-4 inline-flex min-h-10 items-center gap-2 rounded-full bg-brand-700 px-4 text-xs font-semibold text-on-ink transition-colors duration-200 hover:bg-brand-800 ${focusRing}`}>
-          Navigate to Venue <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+        <Link to={event.navigationHref} aria-label={`Navigate to the venue of ${event.title}`} className={cn(button.smallPrimary, "mt-3 min-h-11")}>
+          <Navigation className="h-3.5 w-3.5" aria-hidden="true" /> Navigate
         </Link>
       )}
+      {hasDetails && (
+        <Disclosure summary="Details" className="mt-2 border-t border-line">
+          <dl className="space-y-1.5 text-sm text-ink-soft">
+            {event.description && <dd className="leading-relaxed">{event.description}</dd>}
+            {event.organizer && (
+              <div className="flex items-center gap-2">
+                <dt className="sr-only">Organizer</dt>
+                <UserRound className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
+                <dd>{event.organizer}</dd>
+              </div>
+            )}
+            {audience.length > 0 && (
+              <div className="flex items-center gap-2">
+                <dt className="sr-only">Audience</dt>
+                <Users className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
+                <dd>{audience.join(", ")}</dd>
+              </div>
+            )}
+          </dl>
+        </Disclosure>
+      )}
     </article>
+  )
+}
+
+/** @param {{ title: string, action?: import("react").ReactNode }} props */
+function NoEvents({ title, action = null }) {
+  return (
+    <div role="status" className="rounded-[18px] border border-dashed border-line-strong bg-subtle px-4 py-8 text-center">
+      <p className="text-[15px] font-semibold text-ink">{title}</p>
+      {action && <div className="mt-3">{action}</div>}
+    </div>
   )
 }
 
@@ -85,10 +105,10 @@ function MonthCalendar({ events, todayKey }) {
       <div className="flex items-center justify-between border-b border-line px-5 py-4">
         <h3 className="text-lg font-semibold tracking-tight">{format(month, "MMMM yyyy")}</h3>
         <div className="flex gap-1.5">
-          <button type="button" onClick={() => setMonth((current) => addMonths(current, -1))} aria-label="Previous month" className={`flex h-9 w-9 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-ink-faint ${focusRing}`}>
+          <button type="button" onClick={() => setMonth((current) => addMonths(current, -1))} aria-label="Previous month" className={`flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-ink-faint ${focusRing}`}>
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           </button>
-          <button type="button" onClick={() => setMonth((current) => addMonths(current, 1))} aria-label="Next month" className={`flex h-9 w-9 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-ink-faint ${focusRing}`}>
+          <button type="button" onClick={() => setMonth((current) => addMonths(current, 1))} aria-label="Next month" className={`flex h-11 w-11 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-ink-faint ${focusRing}`}>
             <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
@@ -113,7 +133,7 @@ function MonthCalendar({ events, todayKey }) {
               aria-pressed={isSelected}
               aria-label={`${format(day, "MMMM d, yyyy")}${hasEvents ? ", has events" : ""}`}
               className={cn(
-                "relative mx-auto flex h-10 w-10 flex-col items-center justify-center rounded-full text-sm tabular-nums transition-colors duration-150",
+                "relative mx-auto flex h-11 w-11 flex-col items-center justify-center rounded-full text-sm tabular-nums transition-colors duration-150 max-[380px]:h-10 max-[380px]:w-10",
                 inMonth ? "text-ink" : "text-ink-ghost",
                 isSelected ? "bg-brand-700 font-semibold text-on-ink" : "hover:bg-brand-50",
                 isToday && !isSelected && "border-[1.5px] border-brand-700 font-semibold text-brand-800",
@@ -170,11 +190,12 @@ export default function Events() {
     <div className="app-page bg-canvas">
       <div className="app-container">
         <PageHeader
+          compact
           eyebrow="Campus calendar"
           title="Events"
-          lead="Official campus events, activities, and schedules — published records only."
+          lead="Published campus events."
           actions={
-            <div role="tablist" aria-label="Event views" className="flex shrink-0 rounded-full border border-line-strong bg-surface p-1 text-xs font-semibold">
+            <div role="tablist" aria-label="Event views" className="flex shrink-0 rounded-full border border-line-strong bg-surface p-1 text-[13px] font-semibold max-md:w-full">
               {TABS.map((item) => (
                 <button
                   key={item.id}
@@ -182,7 +203,7 @@ export default function Events() {
                   role="tab"
                   aria-selected={tab === item.id}
                   onClick={() => setTab(item.id)}
-                  className={cn("rounded-full px-4 py-2 transition-colors duration-200", tab === item.id ? "bg-brand-700 text-on-ink" : "text-ink-soft hover:text-ink", focusRing)}
+                  className={cn("min-h-11 flex-1 rounded-full px-4 transition-colors duration-200 md:min-h-9", tab === item.id ? "bg-brand-700 text-on-ink" : "text-ink-soft hover:text-ink", focusRing)}
                 >
                   {item.label}
                 </button>
@@ -201,34 +222,24 @@ export default function Events() {
           </div>
         )}
 
-        <div className="mt-6">
+        <div className="mt-4 sm:mt-6">
           {tab === "today" && (
             events.today.length ? (
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))] gap-3 sm:gap-4">
                 {events.today.map((event) => <EventCard key={event.id} event={event} />)}
               </div>
             ) : (
-              <EmptyState
-                icon={CalendarDays}
-                title="No events are available for today."
-                message="Published events for today will appear here once an official events source is connected."
-                className="min-h-64"
-              />
+              <NoEvents title="No events today." action={<button type="button" onClick={() => setTab("calendar")} className={cn(button.smallSecondary, "min-h-11")}>View calendar</button>} />
             )
           )}
 
           {tab === "upcoming" && (
             events.upcoming.length ? (
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))] gap-3 sm:gap-4">
                 {events.upcoming.map((event) => <EventCard key={event.id} event={event} />)}
               </div>
             ) : (
-              <EmptyState
-                icon={CalendarDays}
-                title="No upcoming events."
-                message="Future campus events will appear here when they are published."
-                className="min-h-64"
-              />
+              <NoEvents title="No upcoming events." action={<button type="button" onClick={() => setTab("calendar")} className={cn(button.smallSecondary, "min-h-11")}>View calendar</button>} />
             )
           )}
 
@@ -236,13 +247,13 @@ export default function Events() {
             <div className="grid gap-5 lg:grid-cols-[minmax(420px,0.9fr)_minmax(0,1.1fr)]">
               <MonthCalendar events={allEvents} todayKey={todayKey} />
               <div>
-                <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint">All published events</h2>
+                <h2 className="text-[17px] font-semibold tracking-[-0.01em] text-ink">All events</h2>
                 {allEvents.length ? (
-                  <div className="mt-4 space-y-4">
+                  <div className="mt-3 space-y-3">
                     {allEvents.map((event) => <EventCard key={event.id} event={event} />)}
                   </div>
                 ) : (
-                  <EmptyState icon={CalendarDays} title="Nothing on the calendar yet." message="Published events will be marked on the calendar automatically." className="mt-4 min-h-44" />
+                  <NoEvents title="No published events yet." />
                 )}
               </div>
             </div>

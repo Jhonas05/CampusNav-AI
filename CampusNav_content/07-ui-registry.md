@@ -17,7 +17,7 @@ The frozen UI baseline (`DEC-UI-005`) is the monochrome application shell of `DE
 
 | Pattern | Visual structure | Required behavior/accessibility | React mapping |
 |---|---|---|---|
-| Application shell | Grayscale canvas, left sidebar (expanded / icon rail / mobile drawer), floating CLARA | Current route exposed; skip link; keyboard access; drawer traps focus, closes on Escape, and returns focus to its opener | `AppShell`, `Sidebar`, `MobileSidebarDrawer`, `MobileTopBar` |
+| Application shell | Grayscale canvas, left sidebar from 768px (expanded / icon rail), phone bottom navigation with a More sheet (`DEC-UI-006`), floating CLARA | Current route exposed; skip link; keyboard access; sheets and the Admin drawer trap focus, close on Escape, and return focus to their opener | `AppShell`, `Sidebar`, `MobileBottomNav`, `MoreSheet`, `MobileBottomSheet`, `MobileTopBar` |
 | Blueprint panel | Soft-radius bordered surface (registration marks retired by `DEC-UI-003`) | Caller supplies content semantics | shared CampusNav UI primitive |
 | Kicker / section label | Compact uppercase label with modest tracking | Never substitutes for a semantic heading | shared CampusNav UI primitive |
 | Primary action | Ink fill with on-ink label, soft radius (light ink in Dark) | Visible hover, active, focus, loading, and disabled states | shared button primitives and page actions |
@@ -32,9 +32,9 @@ The frozen UI baseline (`DEC-UI-005`) is the monochrome application shell of `DE
 
 | Surface / route | Purpose and major components | Approved visual structure | Data source | Responsive/accessibility notes | Status |
 |---|---|---|---|---|---|
-| Home `/` | Entry point, global discovery, primary actions, campus summaries | Architectural hero, compact kicker/title, blueprint summary/action panels | Existing published facility, event, schedule, and advisory selectors only | Preserve mobile stacking, semantic heading order, and labelled actions | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
+| Home `/` | At-a-glance entry point: destination search, shortcuts, map preview, Campus status, four quick actions, Today (`DEC-UI-006`) | One column on phones and tablets; map in the wide right column from 1024px | Existing canonical facilities and the local dashboard snapshot only; no official status is stated that is not published | Search first in DOM order; three labelled sections; 44px targets | COMPLETE — ACCEPTED_WITH_ADVISORY; owner approved; physical-device/non-Chromium QA not performed |
 | Dashboard `/dashboard` | Today overview, classes, office/personnel availability, advisories | Dense modular grid with bordered sections and compact metadata | Existing Supabase-backed dashboard services and canonical derived status logic | Cards reflow; availability includes text and never implies presence from schedule alone | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
-| Facilities `/facilities` | Canonical-name search, category/floor browsing, operationally enriched facility cards | Technical filter rail and compact bordered results grid | All canonical local facilities plus bounded public profile/hours/exception/advisory overlay; missing or failed overlay stays `UNKNOWN` | Search labelled; filters keyboard operable; announced result count; status uses text/icon; labelled Details/Navigate; CLARA-safe responsive gutter | IMPLEMENTED_VERIFIED — OWNER APPROVED |
+| Facilities `/facilities` | Canonical-name search, category/floor browsing, operationally enriched facility cards | Phones and tablets: one search field and one chip row with categories in a Filters sheet; from 1024px a filter rail and results grid (`DEC-UI-006`) | All canonical local facilities plus bounded public profile/hours/exception/advisory overlay; missing or failed overlay stays `UNKNOWN` | Search labelled; filters keyboard operable; announced result count; status uses text/icon; labelled Navigate/Details (two actions at most) | FS-4 COMPOSITION OWNER APPROVED; MOBILE PRESENTATION COMPLETE — ACCEPTED_WITH_ADVISORY |
 | Facility Detail `/facilities/:id` | Facility facts, services, hours/availability, nearby facilities, navigation CTA | Blueprint detail header with structured fact and action panels | Existing verified/published facility records only | Semantic labels; no invented room, schedule, or institutional data | IMPLEMENTED_VERIFIED — OWNER APPROVED |
 | Navigate `/map` | Start/destination, 2D/3D map, route summary, steps | Blueprint map frame with separate controls and route instruction rail | Canonical spatial dataset, one A* engine, existing route state | 2D fallback, keyboard controls, text steps, non-color cues, reduced motion | ACCEPTED_WITH_ADVISORY — 2D desktop render and 2D/3D regressions passed; manual 3D/device QA pending |
 | Events `/events` | Today/upcoming event discovery and details | Calendar/list sections with compact date blocks and bordered entries | Existing published event records | Date/time in text; empty/loading/error states | ACCEPTED_WITH_ADVISORY — automated desktop render passed; manual device QA pending |
@@ -81,22 +81,43 @@ Responsibilities:
 - Notification panel, account menu, universal search, and CLARA are shared by both navigations
 - Provides `ClaraProvider` to every page
 
-### `Sidebar` / `MobileSidebarDrawer`
-Paths: `src/components/layout/sidebar/Sidebar.jsx`, `SidebarParts.jsx`, `MobileSidebarDrawer.jsx`, `navigation.js`
+### `Sidebar` (768px and wider)
+Paths: `src/components/layout/sidebar/Sidebar.jsx`, `SidebarParts.jsx`, `navigation.js`
 
 Responsibilities:
-- Only global navigation: Home, Dashboard, Navigate, Facilities · Events, Alerts, Emergency · role-aware Admin
-- Search trigger, notifications trigger with unread count, collapse control, account area
-- Icon-rail tooltips; left drawer below 768px
-- `MobileSidebarDrawer` is also the Admin menu drawer (it takes the Admin navigation as its content and hides from 1024px); it closes itself when the window grows past its breakpoint
+- Global navigation from 768px: Main (Home, Navigate, Facilities) · Campus (Events, Alerts, Emergency, Dashboard) · role-aware Admin
+- Search trigger, appearance, notifications trigger with unread count, collapse control, account area
+- Icon-rail tooltips
 - Not rendered inside `/admin/*` for administrators (see `AdminNavigation`)
 
-CLARA must not appear in this navigation. Emergency must remain one tap away.
+`navigation.js` is the one navigation model: `PRIMARY_NAV_SECTIONS` (sidebar), `MOBILE_NAV_ITEMS` and `MOBILE_MORE_ITEMS` (phones). Every sidebar destination is reachable on phones, and none appears twice there.
+
+### `MobileBottomNav` / `MoreSheet` (below 768px, `DEC-UI-006`)
+Paths: `src/components/layout/MobileBottomNav.jsx`, `MoreSheet.jsx`
+
+- Bottom bar, five slots: Home, Navigate, Facilities, Alerts, More. One `nav` landmark named "Primary"; the current destination carries `aria-current="page"`; More reads as the current section on a page behind it
+- More sheet: Emergency (first), Events, Dashboard, role-aware Admin, Appearance, and the account row (opens the account panel)
+- Hidden while the map is fullscreen; not rendered in the Admin shell
+
+CLARA must not appear in any navigation. Emergency is one tap away on the sidebar and from Home's quick access, and two taps away elsewhere on phones (More → Emergency).
+
+### `MobileBottomSheet` / `useResponsiveDialog`
+Paths: `src/components/layout/MobileBottomSheet.jsx`, `useResponsiveDialog.js`
+
+The shared phone bottom sheet (a modal Radix Dialog with a visible title and close button), used by More and by the Facilities Filters. `useResponsiveDialog` holds the behaviour it shares with the Admin drawer: closing past the breakpoint and returning focus to the opener. Never open a sheet from inside another sheet or dialog.
+
+### `MobileSidebarDrawer`
+Path: `src/components/layout/sidebar/MobileSidebarDrawer.jsx`
+
+The Admin menu drawer only (below 1024px). Public pages no longer use a drawer.
 
 ### `MobileTopBar`
 Path: `src/components/layout/MobileTopBar.jsx`
 
-A phone-only context bar (menu trigger, brand, search, notifications). It is not a navigation bar.
+A phone-only context bar: the brand and at most two utilities (search, notifications). No menu button, theme control, or navigation links. Home omits the search icon because its destination search leads the page.
+
+### Shell offsets
+`--app-bottom-nav-height` and `--app-bottom-safe` (`src/index.css`) are the only source of the bottom-bar clearance: zero on tablet, desktop, Admin, and in the fullscreen map. Page content, the Navigate sheet, the CLARA button, and the CLARA sheet offset by them; `--clara-lift` adds the height of an open Navigate sheet.
 
 ### `ClaraAssistant`
 Paths: `src/components/clara/*`, `src/services/claraService.js`
@@ -109,14 +130,14 @@ Paths: `src/lib/theme.js`, `src/contexts/ThemeContext.jsx`, `src/components/them
 Light / Dark / System with persisted preference (`campusnav-theme`). Tokens in `src/index.css`.
 
 ### Motion components
-Path: `src/components/motion/*`, plus `src/components/home/QuickActions.jsx` and `src/components/home/HowItWorks.jsx`
+Path: `src/components/motion/*`
 
-Page-independent motion primitives and the CampusNav motifs (route, graph, QR checkpoint). The former schematic floor stack and conceptual Campus Overview were replaced by the real map (section 6). `CampusGraphBackground` keeps only its full-field variant (Login); the decorative Home graph band and its scroll fade were removed in the owner visual refinement (DEC-UI-005).
+Page-independent motion primitives and the CampusNav motifs (route, graph). `QuickActions`, `QuickAccessCard`, `HowItWorks`, `InteractiveCard`, and `QRCheckpointMotif` were removed in `DEC-UI-006`; their destinations remain reachable (Home quick access, shortcuts, bottom navigation, CLARA). The former schematic floor stack and conceptual Campus Overview were replaced by the real map (section 6). `CampusGraphBackground` keeps only its full-field variant (Login); the decorative Home graph band and its scroll fade were removed in the owner visual refinement (DEC-UI-005).
 
 ### `SmartCampusStrip`
 Path: `src/components/home/SmartCampusStrip.jsx`
 
-The Home coverage strip. It shows four facts, each derived from the canonical data and each linking to the page that provides it:
+The Home coverage strip, shown from 1024px below the Home blocks (`DEC-UI-006`). It shows four facts, each derived from the canonical data and each linking to the page that provides it:
 - the mapped floor range, for example GF–5F, with the number of mapped floors
 - the count of facilities placed on the map
 - QR + manual indoor positioning
@@ -141,7 +162,7 @@ Search groups:
 Path: `src/components/layout/NotificationPanel.jsx`
 
 Purpose:
-- Compact notification preview only
+- Compact notification preview only: at most five items (`NOTIFICATION_PREVIEW_LIMIT`), most important first (`getNotificationPreview`), then "View all notifications"
 - Full notification feed belongs to Dashboard
 
 ### `ProfileMenu`
@@ -200,20 +221,18 @@ Current social preview asset:
 ### `FacilityCard`
 Path: `src/components/facilities/FacilityCard.jsx`
 
-Display:
+Display (`DEC-UI-006`):
 - Facility name
-- Floor
-- Category
-- Status
-- Short description
-- Optional image thumbnail
-- View/details affordance
+- Floor (full name)
+- One operational status, plus demo or pending markers when they apply
+- At most two actions: Navigate (primary, when the facility is navigable), then Details
+- From 640px also: category, a two-line description when one is published, and the photo band
 
 Layout:
-- On phones, the card is a compact row: an 80px category tile beside the details. The kind chip and arrow are hidden there.
-- On wider screens, it is a vertical card with a short photo band.
+- On phones, the card is a compact row: a 64px category tile beside the details.
+- From 640px it is a vertical card with a short photo band.
 - The Facilities grid auto-fills columns with a minimum width of 230px.
-- Content and states are identical in both layouts.
+- `FacilityPhoto` requests an image only when the facility record has an approved `photoSrc` (loaded lazily); otherwise it renders the category placeholder and makes no request. No facility has one yet. `placeholderClassName` lets a page hide the placeholder (never a real photo) where space is tight.
 
 ### `FacilityStatusBadge`
 Path: `src/components/facilities/FacilityStatusBadge.jsx`
@@ -262,8 +281,10 @@ Dashboard rules:
 
 ### Shared map presentation (one renderer, one dataset)
 - `src/components/map/CampusMapCanvas.jsx`: the only component that mounts the 2D renderer (`IndoorMap2D`) and the lazy 3D renderer (`Campus3D`); it imports the canonical floors, facilities, nodes/edges, QR checkpoints, and emergency records itself. Used by Navigate and `CampusMapPreview`
-- `src/components/map/CampusMapPreview.jsx`: Home and Dashboard preview variant (floor selector, 2D/3D, zoom, reset, facility card, "Open full map"; cooperative gestures; 3D mounted near the viewport and paused off screen)
-- `src/components/map/MapViewControls.jsx`: shared Zoom in / Zoom out / Fit / Reset / Center / Fullscreen control group for 2D and 3D (replaces `MapTools2D`)
+- `src/components/map/CampusMapPreview.jsx`: Home and Dashboard preview variant (floor selector, 2D/3D, facility card, "Open map"; zoom and reset on the Dashboard, gestures only on Home's `compact` variant; cooperative gestures; 3D mounted near the viewport and paused off screen)
+- `src/components/map/MapViewControls.jsx`: shared Zoom in / Zoom out / Fit / Reset / Center / My location / Fullscreen control group for 2D and 3D (replaces `MapTools2D`). Every tool is optional: phones show My location and Fullscreen only
+- `src/components/map/MobileRouteSheet.jsx`: the one Navigate bottom sheet below 1024px (destination and Start Navigation, or "Set your location to create a route." with Scan QR and Choose manually while no location is set → one current instruction and the next → arrival; "All steps" opens the list)
+- `src/components/map/FacilitySheet.jsx`: the facility panel on the map; two visible actions, the rest under More actions
 - `src/components/map/usePanZoom2D.js`: 2D pan, pinch, wheel zoom at the pointer, keyboard, resize, and view requests; math in `src/lib/mapViewport.js`
 - `src/components/map/useMapFullscreen.js` and `ImmersiveMapPanel.jsx`: immersive Navigate map (native Fullscreen API or fixed-overlay fallback); `src/lib/mapLinks.js` builds Navigate links from the existing `?floor=` / `?facility=` parameters
 - the Facility Detail page shows a static, non-interactive thumbnail of `IndoorMap2D` for the same canonical floor
@@ -518,7 +539,10 @@ Laptop application rules:
 - Facilities use a compact filter rail plus auto-fitting results grid when space permits. Admin uses its single Admin sidebar and wider tables/forms. Navigate uses a compact control rail with the 2D/3D map as the dominant surface.
 - Viewport-aware panels may use deliberate internal scrolling, but must not create unexplained nested or duplicate page scrollbars.
 
-Mobile rules:
+Mobile rules (`DEC-UI-006`; full rules in `06-ui-ux-guidelines.md`, "Mobile-first rules"):
+- Design and verify at 390px and 430px first.
+- Bottom navigation with at most five slots; no hamburger for common actions.
+- At most two visible actions per card; one contextual sheet per workflow.
 - Do not simply shrink desktop layout.
 - Map/navigation should use a bottom-sheet pattern.
 - Tables may become cards.

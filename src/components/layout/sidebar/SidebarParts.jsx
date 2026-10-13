@@ -1,4 +1,4 @@
-import { PanelLeftClose, PanelLeftOpen, Search, UserRound, X } from "lucide-react"
+import { PanelLeftClose, PanelLeftOpen, Search, UserRound } from "lucide-react"
 import { Link } from "react-router-dom"
 import SchoolLogo from "@/components/campus/SchoolLogo"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
@@ -26,10 +26,10 @@ const rowClass = (collapsed, active = false, indicator = false) => cn(
 
 /** @param {Record<string, any>} props */
 export function SidebarHeader(props) {
-  const { collapsed, onNavigate, onClose = null } = props
+  const { collapsed } = props
   return (
-    <div className={cn("flex h-16 shrink-0 items-center", collapsed ? "justify-center px-2" : "justify-between gap-2 pl-4 pr-3")}>
-      <Link to="/" onClick={onNavigate} aria-label="CampusNav home" className={cn("flex min-w-0 items-center gap-2.5 rounded-xl", collapsed && "h-11 w-11 justify-center", ring)}>
+    <div className={cn("flex h-16 shrink-0 items-center", collapsed ? "justify-center px-2" : "pl-4 pr-3")}>
+      <Link to="/" aria-label="CampusNav home" className={cn("flex min-w-0 items-center gap-2.5 rounded-xl", collapsed && "h-11 w-11 justify-center", ring)}>
         <SchoolLogo size="sm" />
         {!collapsed && (
           <span className="sidebar-label min-w-0 leading-tight">
@@ -38,11 +38,6 @@ export function SidebarHeader(props) {
           </span>
         )}
       </Link>
-      {onClose && (
-        <button type="button" onClick={onClose} aria-label="Close navigation menu" className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-ink-soft hover:bg-fill hover:text-ink", ring)}>
-          <X className="h-5 w-5" aria-hidden="true" />
-        </button>
-      )}
     </div>
   )
 }
@@ -90,14 +85,13 @@ export function SidebarSection(props) {
 
 /** @param {Record<string, any>} props */
 export function SidebarItem(props) {
-  const { item, active, collapsed, onNavigate, indicator = false } = props
+  const { item, active, collapsed, indicator = false } = props
   const Icon = item.icon
   return (
     <li>
       <CollapsedTooltip collapsed={collapsed} label={item.description || item.label}>
         <Link
           to={item.path}
-          onClick={onNavigate}
           aria-current={active ? "page" : undefined}
           aria-label={collapsed ? item.label : undefined}
           className={rowClass(collapsed, active, indicator)}

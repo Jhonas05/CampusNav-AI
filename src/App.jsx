@@ -34,16 +34,10 @@ const PageNotFound = lazy(() => import('./lib/PageNotFound'));
 const academicAdminRoles = [APP_ROLES.DEPARTMENT_ADMIN, APP_ROLES.SUPER_ADMIN]
 
 const RouteFallback = () => (
-  <main aria-label="Loading CampusNav" className="min-h-dvh bg-canvas px-4 py-10 sm:px-6">
+  <main aria-label="Loading CampusNav" className="min-h-dvh bg-canvas px-4 py-8 sm:px-6">
     <div className="mx-auto max-w-7xl">
-      <div className="h-4 w-40 animate-pulse rounded-full bg-fill-strong motion-reduce:animate-none" />
-      <div className="mt-5 h-11 w-[min(420px,80%)] animate-pulse rounded-2xl bg-fill-strong motion-reduce:animate-none" />
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {[0, 1, 2].map((item) => (
-          <div key={item} className="h-44 animate-pulse rounded-3xl bg-fill-strong motion-reduce:animate-none" />
-        ))}
-      </div>
-      <p className="mt-8 text-sm font-medium text-ink-soft">Loading CampusNav...</p>
+      <div className="h-9 w-[min(280px,70%)] animate-pulse rounded-xl bg-fill-strong motion-reduce:animate-none" />
+      <p className="mt-4 text-sm font-medium text-ink-soft">Loading CampusNav…</p>
     </div>
   </main>
 )

@@ -1,46 +1,53 @@
-import { AlertTriangle, Bell, Info } from "lucide-react"
-import { card, PageHeader, PriorityBadge } from "@/components/campus/ui"
+import { AlertTriangle, ArrowRight, Bell, ChevronDown } from "lucide-react"
+import { Link } from "react-router-dom"
+import { card, focusRing, PageHeader, PriorityBadge } from "@/components/campus/ui"
 import { announcements } from "@/data/announcements"
-import { FACILITY_DATA_NOTICE } from "@/data/facilities"
+import { cn } from "@/lib/utils"
 
+// Most important first; within a priority the published order is kept.
+const byPriority = [...announcements].sort((a, b) => Number(b.priority === "high") - Number(a.priority === "high"))
+
+/**
+ * Alerts: one scannable list, most important first. Each item shows its
+ * title, priority, and source; the full text opens on tap. Important items
+ * start open so nothing urgent sits behind a tap.
+ */
 export default function Alerts() {
   return (
-    <div className="min-h-[calc(100dvh-var(--app-header-height))] bg-canvas px-4 py-12 sm:px-6 sm:py-14">
-      <div className="mx-auto max-w-5xl">
-        <PageHeader
-          eyebrow="Notice center"
-          title="Alerts & Announcements"
-          lead="A single place for campus notices, event information, and urgent updates."
-        />
+    <div className="app-page bg-canvas">
+      <div className="app-container-readable max-w-3xl">
+        <PageHeader compact eyebrow="Notice center" title="Alerts" lead="Campus notices and announcements, most important first." />
 
-        <div className="mt-10 space-y-4">
-          {announcements.map((announcement) => {
+        <ul className="mt-4 space-y-2.5 sm:mt-6">
+          {byPriority.map((announcement) => {
             const high = announcement.priority === "high"
             const Icon = high ? AlertTriangle : Bell
             return (
-              <article key={announcement.id} className={`${card} ${high ? "border-[1.5px] border-ink" : ""} p-6 sm:p-8`}>
-                <div className="flex items-start gap-4">
-                  <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${high ? "bg-ink text-on-ink" : "border border-line bg-subtle"}`}>
-                    <Icon className="h-5 w-5" aria-hidden="true" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <h2 className="text-lg font-semibold tracking-tight">{announcement.title}</h2>
-                      <PriorityBadge priority={high ? "IMPORTANT" : "NORMAL"} />
-                    </div>
-                    <p className="mt-2 leading-relaxed text-ink-soft">{announcement.body}</p>
-                    <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-faint">Source: {announcement.source}</p>
-                  </div>
-                </div>
-              </article>
+              <li key={announcement.id}>
+                <details open={high || undefined} className={cn(card, "group/alert", high && "border-[1.5px] border-ink")}>
+                  <summary className={cn("flex min-h-14 cursor-pointer list-none items-center gap-3 rounded-[18px] px-4 py-3 [&::-webkit-details-marker]:hidden", focusRing)}>
+                    <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", high ? "bg-ink text-on-ink" : "border border-line bg-subtle text-ink-mid")}>
+                      <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[16px] font-semibold leading-snug tracking-tight text-ink">{announcement.title}</span>
+                      <span className="mt-1 flex flex-wrap items-center gap-2 text-[13px] text-ink-soft">
+                        {high && <PriorityBadge priority="IMPORTANT" className="min-h-6 py-0.5" />}
+                        {announcement.source}
+                      </span>
+                    </span>
+                    <ChevronDown className="h-4 w-4 shrink-0 text-ink-soft transition-transform duration-200 group-open/alert:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
+                  </summary>
+                  <p className="px-4 pb-4 text-[15px] leading-relaxed text-ink-mid">{announcement.body}</p>
+                </details>
+              </li>
             )
           })}
-        </div>
+        </ul>
 
-        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-dashed border-line-strong bg-surface p-5 text-sm text-ink-soft">
-          <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-          <p className="text-xs leading-relaxed">{FACILITY_DATA_NOTICE}</p>
-        </div>
+        <Link to="/dashboard" className={cn("mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm font-medium text-ink", focusRing)}>
+          All campus updates <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
       </div>
     </div>
   )

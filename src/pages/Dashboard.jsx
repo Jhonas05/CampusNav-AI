@@ -93,7 +93,7 @@ export default function Dashboard() {
             <div>
               <InkKicker>Central information view</InkKicker>
               <h1 className="mt-2 font-display text-[1.75rem] font-semibold leading-tight tracking-[-0.02em] text-ink sm:text-[2.125rem]">CampusNav Dashboard</h1>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">Campus information, schedules, availability, and official updates in one place.</p>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft max-sm:hidden">Schedules, availability, and official campus updates.</p>
             </div>
             <div className="grid gap-2.5 sm:grid-cols-2 lg:w-[450px]">
               <div className="rounded-2xl bg-fill p-3.5">
@@ -113,7 +113,7 @@ export default function Dashboard() {
           </div>
           <nav aria-label="Dashboard sections" className="mt-4 flex gap-1.5 overflow-x-auto border-t border-line pb-1 pt-3.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {sectionNav.map((section) => (
-              <a key={section.id} href={`#${section.id}`} className={`shrink-0 rounded-full border border-line bg-surface px-3 py-1.5 text-[11px] font-medium text-ink-soft transition-colors duration-200 hover:border-ink-faint hover:text-ink ${focusRing}`}>
+              <a key={section.id} href={`#${section.id}`} className={`inline-flex min-h-11 shrink-0 items-center rounded-full border border-line bg-surface px-3.5 text-[13px] font-medium text-ink-soft sm:min-h-8 sm:text-[11px] transition-colors duration-200 hover:border-ink-faint hover:text-ink ${focusRing}`}>
                 {section.label}
               </a>
             ))}

@@ -12,7 +12,7 @@ export default function ClaraSuggestionChips(props) {
           type="button"
           disabled={disabled}
           onClick={() => onSelect(prompt)}
-          className={cn("min-h-9 rounded-full border border-line-strong bg-surface px-3.5 py-1.5 text-left text-[13px] font-medium text-ink transition-colors duration-200 hover:border-ink hover:bg-fill disabled:opacity-40", focusRing)}
+          className={cn("min-h-11 rounded-full border border-line-strong bg-surface px-3.5 py-1.5 text-left text-[14px] font-medium text-ink transition-colors duration-200 hover:border-ink hover:bg-fill disabled:opacity-40", focusRing)}
         >
           {prompt}
         </button>

@@ -157,6 +157,46 @@ Approved changes after the freeze:
   - Defects fixed while doing this: two sections marked current on routes sharing a prefix, empty group headings for department administrators, the editor error rendered out of view, a save error left on the list after closing the editor, record actions with identical names, a second `main` landmark on the access-denied and session-check screens, an open drawer left locking the page when the window grows past its breakpoint, and the stale "authentication pending" label on QR Checkpoints.
   - This is a refinement within the frozen visual system. It changes no route, guard decision, role boundary, data rule, or dependency.
 
+## DEC-UI-006 — Mobile-first UX simplification and information architecture
+**Status:** OWNER APPROVED — `COMPLETE — ACCEPTED_WITH_ADVISORY` — 13 Oct 2026
+
+The owner directed a UX simplification pass with the phone (390–430px) as the primary design target. It is an information-architecture refinement, not a feature expansion and not a new visual system: the monochrome tokens, Light/Dark/System theme, motion system, and map semantic colors of `DEC-UI-003`/`DEC-UI-004` are unchanged.
+
+Relationship to earlier decisions (their history stands; nothing is erased):
+- `DEC-UI-003`: superseded **only in its mobile navigation provisions** ("a left slide-out drawer below 768px" and "no bottom tab bar"). Everything else in it stands, including the left sidebar and the floating CLARA assistant.
+- `DEC-UI-005`: this is an **approved, scoped exception** to the UI freeze. The freeze remains in force for everything outside this decision.
+- Desktop and tablet navigation remains sidebar-based.
+- Phone primary navigation is **Home / Navigate / Facilities / Alerts / More**.
+- CLARA remains a floating assistant and is not a navigation destination.
+
+Rules:
+- **Phone primary navigation is a bottom bar** with at most five slots: Home, Navigate, Facilities, Alerts, More. More opens a bottom sheet with Emergency, Events, Dashboard, role-aware Admin, Appearance, and the account. Common tasks need no hamburger. The left drawer remains only as the Admin menu.
+- **CLARA is never a navigation entry.** Its floating button sits above the bottom bar and above any page sheet; none of the three may overlap.
+- **Phone top bar** holds the brand and at most two utilities (search, notifications). Theme and account live under More.
+- **Progressive disclosure, three levels:** always visible (context, destination search, primary action, a priority alert, essential map controls); one tap away (filters, details, hours, route steps, extra map tools); deep detail (full descriptions, verification detail, data notes).
+- **Maximum visible actions:** one primary and one secondary per card or panel; further actions go under More/⋯ or a sheet. A facility card shows name, floor, one status, Navigate, and Details.
+- **Home and Dashboard stay separate (owner decision).** Home is the fast, at-a-glance, mobile-first entry point: destination search, fixed shortcuts, the real map preview, one Campus status module, four quick actions, and at most four Today items. The Dashboard is the deeper, contract-required campus status and information surface (`DEC-DASH-001` unchanged) at `/dashboard`. Home links to it and does not repeat its eight sections.
+- **Home never states an official status it does not hold.** With no published alert it says "No active alerts"; it does not say "Normal operations" or "No suspension".
+- **Navigate is map-first on phones and tablets:** one destination field, a compact "From" row (with Scan QR and Change), the map, and ONE contextual bottom sheet. Phone map controls are Floor, 2D/3D, my location, and fullscreen; zoom is by pinch and the full tool set is in fullscreen. The legend stays a button.
+- **CampusNav never infers the visitor's location.** A fresh Navigate session has no current location and no destination. The current location comes only from a QR checkpoint, a manual choice, or another legitimately implemented positioning source. The manual picker starts with no floor and no location chosen and never follows the viewed floor. The former Library → Virtual Laboratory start exists only behind an explicit, visibly labelled `?demo=1`.
+- **Links set the destination and the view, never the start.** `?facility=<id>` sets the destination and views its floor. `?floor=<id>` changes the viewed floor only, alone or beside a destination. Neither creates or moves the current location.
+- **No route without both ends.** With a destination but no current location, Navigate shows "Set your location to create a route." with Scan QR and Choose manually, and calculates nothing. Emergency Mode likewise will not search for an exit from an unset position.
+- **No request for a photo that does not exist.** A facility image is requested only when the facility record carries an approved `photoSrc`; otherwise a category placeholder renders. No facility has one yet; no photograph is invented.
+- **Bottom sheets** are used for contextual phone content (More, Filters, the Navigate sheet); a sheet is never opened from inside another sheet or dialog.
+- **Touch targets** are at least 44px for phone controls; safe-area insets are respected by the bottom bar, sheets, CLARA, and the fullscreen map.
+- **Nothing is removed that a user could do before.** Capabilities moved behind Details, More, Filters, "All steps", "Map data notes", or fullscreen. All routes are unchanged.
+- **Provenance and safety wording is not shortened.** Demo, pending, unknown, estimated-dimension, and emergency notices remain; some moved from always-visible to one tap away.
+
+Behaviour fixes recorded with this decision (A*, the graph, QR resolution, and emergency routing are untouched):
+- Navigate no longer assumes "Library, 3F" as the current location or preselects "Virtual Laboratory".
+- A `?facility=` link no longer moves the assumed current location onto the destination's floor (which could make the start the destination itself and produce a zero-length "arrived" route), and `?floor=` no longer places the visitor on that floor. A link to Library no longer answers "already there".
+
+Requirement-aligned test updates (not weakening): `test-map-experience.mjs` follows the "Open map" wording; `test-phase4-fs3c.mjs` validates the bottom navigation and More sheet for the public shell and that the Admin drawer is represented once; `test-route-render.mjs` asserts the fresh unset state and keeps its original Navigate assertions against the labelled demo start.
+
+Acceptance evidence includes all deterministic suites and headless Chromium across the required responsive matrix. Physical Android Chrome, iOS Safari, other non-Chromium browsers, and screen-reader testing were not performed and remain explicit advisories; browser emulation is not physical-device or assistive-technology certification. The owner approved completion without another visual-review checkpoint and authorized the normal automatic deployment path from `main`.
+
+Known boundary: destination search still covers mapped, navigable facilities by name, floor, and category. Service, alias, and personnel search remain the later Phase 4 discovery work and were not started here.
+
 ## DEC-TITLE-001 — Formal proposal title vs current responsive implementation
 **Status:** REQUIRES THESIS/ADVISER ALIGNMENT, NOT A CODE BLOCKER
 

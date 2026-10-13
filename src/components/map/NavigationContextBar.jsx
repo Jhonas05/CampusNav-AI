@@ -79,8 +79,8 @@ export default function NavigationContextBar(props) {
         <Endpoint
           icon={viaQr ? QrCode : LocateFixed}
           kicker="You are here"
-          title={currentLocation?.name || "Not selected"}
-          detail={`${currentFloor?.shortName || currentPosition.currentFloorId} · ${methodLabel}`}
+          title={currentLocation?.name || "Not set"}
+          detail={currentLocation ? `${currentFloor?.shortName || currentPosition.currentFloorId} · ${methodLabel}` : "Scan a QR checkpoint or choose manually"}
           empty={!currentLocation}
         />
         <ArrowRight className="h-4 w-4 shrink-0 text-ink-ghost" aria-hidden="true" />

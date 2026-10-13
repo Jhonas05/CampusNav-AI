@@ -175,7 +175,7 @@ try {
   assert.match(homeHtml, /source-aligned indoor navigation map/, "Home renders the real floor map")
   assert.match(homeHtml, /Library/)
   assert.match(homeHtml, /aria-label="Floor selector"/)
-  assert.match(homeHtml, /Open full map/)
+  assert.match(homeHtml, />Open map </, "the preview opens the full Navigate map (label shortened by DEC-UI-006)")
   assert.match(homeHtml, /href="\/map\?floor=3F"/, "Open full map carries the viewed floor")
   assert.doesNotMatch(homeHtml, /Five floors, one building|schematic, not to scale/)
   const mappedFacilityCount = facilities.filter((facility) => facility.kind !== "Construction" && facility.mapRoomId).length

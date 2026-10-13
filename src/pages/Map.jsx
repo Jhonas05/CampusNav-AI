@@ -1,7 +1,7 @@
 import { CircleAlert, Info, LocateFixed, Minimize, Navigation, QrCode, ShieldAlert } from "lucide-react"
 import { lazy, Suspense, useCallback, useMemo, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
-import { button, focusRing, InkKicker, InkSectionLabel } from "@/components/campus/ui"
+import { button, Disclosure, focusRing, InkKicker, InkSectionLabel } from "@/components/campus/ui"
 import useModalDialog from "@/components/campus/useModalDialog"
 import { useClara } from "@/components/clara/ClaraContext"
 import CampusMapCanvas from "@/components/map/CampusMapCanvas"
@@ -39,6 +39,7 @@ const normalize = (value) => value.trim().toLowerCase()
 // Canonical 3D fallback wording (21-error-state-contract).
 const MAP3D_FALLBACK_MESSAGE = "3D view unavailable; switched to 2D."
 const MAP2D_VIEW_NOTICE = "2D remains the default precision view and uses the same navigation state and route graph."
+const ACCESSIBILITY_NOTICE = "Accessibility information pending verification."
 
 const fieldLabelClass = "mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-soft"
 const fieldClass = "h-11 w-full rounded-xl border border-line-strong bg-surface px-3 text-sm font-medium text-ink outline-none transition-colors duration-150 focus:border-brand-700 focus:ring-2 focus:ring-brand-700/15"
@@ -65,6 +66,22 @@ const createCalibrationOptions = (floor) => ({
   show3DRoutePoints: false,
 })
 
+const SET_LOCATION_MESSAGE = "Set your location to create a route."
+const SET_LOCATION_EMERGENCY_MESSAGE = "Set your location to find the nearest verified exit."
+
+/**
+ * "No current location": nothing is positioned. `currentFloorId` is only the
+ * floor the visitor has chosen in the manual location picker (empty until they
+ * choose one); it is not a location and never follows the viewed floor.
+ */
+const createUnsetPosition = (pickerFloorId = "") => ({
+  currentNodeId: null,
+  currentFacilityId: "",
+  currentFloorId: pickerFloorId,
+  positioningMethod: null,
+  checkpointId: null,
+})
+
 export default function Navigate() {
   const [searchParams] = useSearchParams()
   const emergencyMode = searchParams.get("mode") === "emergency"
@@ -74,12 +91,20 @@ export default function Navigate() {
   const requestedFloor = getFloorById(searchParams.get("floor"))
   const initialFloorId = requestedFacility?.floorId || requestedFloor?.id || "3F"
   const requestedFacilityIsNavigable = requestedFacility && getFacilityEntranceNodes(requestedFacility.id, requestedFacility.floorId).length > 0
-  const initialDestination = requestedFacilityIsNavigable ? requestedFacility : getFacilityById("virtual-laboratory")
-  const initialCurrentFacilityId = initialFloorId === "3F" ? "library" : getFacilitiesByFloor(initialFloorId).find((facility) => facility.navigable !== false)?.id || ""
-  const initialPosition = resolveManualPosition({ floorId: initialFloorId, facilityId: initialCurrentFacilityId })
+  // A fresh session has no current location and no destination. CampusNav
+  // never infers where the visitor is: the location comes from a QR
+  // checkpoint or a manual choice. `?facility=` sets the destination and
+  // `?floor=` / the destination's floor set the VIEWED floor only. The former
+  // Library → Virtual Laboratory start is kept for demonstrations behind an
+  // explicit, labelled `?demo=1`.
+  const demoStart = searchParams.get("demo") === "1"
+  const initialDestination = requestedFacilityIsNavigable ? requestedFacility : demoStart ? getFacilityById("virtual-laboratory") : null
+  const initialPosition = demoStart
+    ? resolveManualPosition({ floorId: "3F", facilityId: "library" }).location
+    : createUnsetPosition()
 
   const [floorId, setFloorId] = useState(initialFloorId)
-  const [currentPosition, setCurrentPosition] = useState(initialPosition.location)
+  const [currentPosition, setCurrentPosition] = useState(initialPosition)
   const [destinationId, setDestinationId] = useState(initialDestination?.id || "")
   const [destinationQuery, setDestinationQuery] = useState(initialDestination?.name || "")
   const [route, setRoute] = useState(null)
@@ -88,7 +113,8 @@ export default function Navigate() {
   const [activeStep, setActiveStep] = useState(0)
   const [routeError, setRouteError] = useState("")
   const [calibrationOptions, setCalibrationOptions] = useState(() => createCalibrationOptions(getFloorById(initialFloorId)))
-  const [scannerOpen, setScannerOpen] = useState(false)
+  // `?scan=1` (Home quick access) opens Navigate with the QR scanner ready.
+  const [scannerOpen, setScannerOpen] = useState(() => searchParams.get("scan") === "1")
   const [scanError, setScanError] = useState("")
   const [locationConfirmation, setLocationConfirmation] = useState(null)
   const [emergencyResult, setEmergencyResult] = useState(null)
@@ -120,12 +146,13 @@ export default function Navigate() {
     []
   )
   const floorCheckpoints = useMemo(() => getCheckpointsByFloor(currentFloorId), [currentFloorId])
-  const currentLocation = getFacilityById(currentPosition.currentFacilityId)
+  const currentLocation = getFacilityById(currentPosition.currentFacilityId) || null
+  const hasLocation = Boolean(currentLocation && currentPosition.currentNodeId)
   const destination = getFacilityById(destinationId)
   const selectedFacility = getFacilityById(selectedFacilityId)
   const currentSelectorValue = currentPosition.checkpointId
     ? `checkpoint:${currentPosition.checkpointId}`
-    : `facility:${currentPosition.currentFacilityId}`
+    : currentPosition.currentFacilityId ? `facility:${currentPosition.currentFacilityId}` : ""
   const developerModeAvailable = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_VERIFICATION === "true"
   const developerMode = developerModeAvailable && searchParams.get("verify") === "1"
   const viewedFloorFacilities = useMemo(() => getFacilitiesByFloor(floorId), [floorId])
@@ -170,6 +197,13 @@ export default function Navigate() {
     }
   }
 
+  // Phone "my location" control: view the current floor, centered on the current position.
+  const showMyLocation = () => {
+    if (!currentPosition.currentFacilityId) return
+    if (floorId !== currentFloorId) viewRouteFloor(currentFloorId)
+    requestMapView("facility", currentPosition.currentFacilityId)
+  }
+
   const toggleFullscreen = () => {
     // CLARA is hidden while the map is immersive; its conversation is kept.
     if (!immersive && clara.open) clara.minimize()
@@ -181,13 +215,12 @@ export default function Navigate() {
     clara.openClara({ facilityId })
   }
 
+  // The manual picker's floor. Choosing a floor does not choose a location:
+  // the visitor still picks where they are on that floor.
   const changeFloor = (nextFloorId) => {
-    const nextFacilities = getFacilitiesByFloor(nextFloorId)
-    const defaultStart = nextFloorId === "3F" ? getFacilityById("library") : nextFacilities.find((facility) => facility.navigable !== false)
-    const positionResolution = resolveManualPosition({ floorId: nextFloorId, facilityId: defaultStart?.id || "" })
     setFloorId(nextFloorId)
     setCalibrationOptions(createCalibrationOptions(getFloorById(nextFloorId)))
-    setCurrentPosition((current) => applyLocationResolution(current, positionResolution))
+    setCurrentPosition(createUnsetPosition(nextFloorId))
     setScanError("")
     setLocationConfirmation(null)
     resetRoute()
@@ -195,6 +228,7 @@ export default function Navigate() {
   }
 
   const updateCurrentLocation = (selectionValue) => {
+    if (!selectionValue) return
     const separatorIndex = selectionValue.indexOf(":")
     const selectionType = selectionValue.slice(0, separatorIndex)
     const selectionId = selectionValue.slice(separatorIndex + 1)
@@ -253,8 +287,21 @@ export default function Navigate() {
 
   const useManualLocation = () => {
     setScannerOpen(false)
+    if (immersive) fullscreen.exit()
     setLocationEditorOpen(true)
-    window.requestAnimationFrame(() => document.getElementById("current-location-selector")?.focus())
+    window.requestAnimationFrame(() => {
+      // The floor comes first; the location list follows the chosen floor.
+      const selector = document.querySelector(
+        currentPosition.currentFloorId ? "#current-location-selector" : "#current-location-fields select",
+      )
+      selector?.scrollIntoView({ block: "center" })
+      if (selector instanceof HTMLElement) selector.focus({ preventScroll: true })
+    })
+  }
+
+  const openScanner = () => {
+    setScanError("")
+    setScannerOpen(true)
   }
 
   const viewRouteFloor = (nextFloorId) => {
@@ -342,6 +389,10 @@ export default function Navigate() {
       setRouteError("One of the selected floors is still pending a source-aligned navigation map.")
       return
     }
+    if (!hasLocation) {
+      setRouteError(SET_LOCATION_MESSAGE)
+      return
+    }
     if (!currentLocation || !destination) {
       setRouteError("Select a current location and a destination from the verified facility list.")
       return
@@ -385,6 +436,12 @@ export default function Navigate() {
   }
 
   const findEmergencyExit = () => {
+    // Emergency routing never starts from an assumed position.
+    if (!hasLocation) {
+      setRouteError(SET_LOCATION_EMERGENCY_MESSAGE)
+      return
+    }
+    setRouteError("")
     const result = findNearestVerifiedExit({
       currentNodeId: currentPosition.currentNodeId,
       currentFloorId: currentPosition.currentFloorId,
@@ -422,29 +479,55 @@ export default function Navigate() {
 
   const focusTarget = selectedFacility || (!emergencyMode ? destination : null)
   const focusTargetOnViewedFloor = focusTarget?.floorId === floorId ? focusTarget : null
-  const mobileRouteSheetVisible = !emergencyMode && route && instructions.length > 0
+  // Phones and tablets use ONE contextual bottom sheet: the chosen destination
+  // with Start Navigation before a route, then the route itself. A facility
+  // tapped on the map has its own panel, so the destination sheet steps aside.
+  const routeSheetActive = Boolean(!emergencyMode && route && instructions.length > 0)
+  const destinationSheetVisible = Boolean(!emergencyMode && !route && destination && !selectedFacility)
+  const mobileSheetVisible = routeSheetActive || destinationSheetVisible
+  const currentFloorLabel = getFloorById(currentFloorId)?.shortName || currentFloorId
+  const mapViewNotice = mapView === "3D" ? MAP3D_GEOMETRY_NOTICE : MAP2D_VIEW_NOTICE
+  const mobileSheet = (
+    <MobileRouteSheet
+      route={route}
+      instructions={instructions}
+      navigationStatus={navigationStatus}
+      activeStep={activeStep}
+      destination={destination}
+      viewingFloorId={floorId}
+      onAdvance={advanceNavigation}
+      onReset={resetRoute}
+      onStart={startNavigation}
+      canStart={canStart}
+      hasLocation={hasLocation}
+      onScan={openScanner}
+      onChooseManually={useManualLocation}
+      error={routeError}
+    />
+  )
 
   return (
-    <div className={cn("app-page bg-canvas", mobileRouteSheetVisible && "max-lg:pb-48")}>
+    <div className={cn("app-page bg-canvas", mobileSheetVisible && "max-lg:pb-48")}>
       <div className="app-container">
-        <header className="flex flex-wrap items-end justify-between gap-3">
+        <header className="flex flex-wrap items-center justify-between gap-3 sm:items-end">
           <div className="min-w-0">
-            <InkKicker className={cn("hidden sm:block", emergencyMode && "text-ink")}>{emergencyMode ? "Source-approved emergency reference" : "Indoor navigation · GF–5F"}</InkKicker>
-            <h1 className="mt-1 font-display text-[1.75rem] font-semibold leading-tight tracking-[-0.02em] sm:text-[2.125rem]">{emergencyMode ? "Emergency Mode" : "Navigate"}</h1>
-            <p className="mt-1 hidden max-w-2xl text-[13px] text-ink-soft sm:block">{emergencyMode ? "View source-supported emergency equipment and calculate only administrator/source-approved evacuation paths." : "Choose a verified floor assignment, calculate a walkable route, and follow each navigation step."}</p>
+            <InkKicker className={cn("hidden lg:block", emergencyMode && "text-ink")}>{emergencyMode ? "Source-approved emergency reference" : "Indoor navigation · GF–5F"}</InkKicker>
+            <h1 className="font-display text-[1.375rem] font-semibold leading-tight tracking-[-0.02em] sm:text-[2.125rem] lg:mt-1">{emergencyMode ? "Emergency Mode" : "Navigate"}</h1>
           </div>
           <nav aria-label="Map mode" className="flex shrink-0 rounded-xl border border-line-strong bg-surface p-1 font-heading text-xs font-semibold">
-            <Link to={developerMode ? "/map?verify=1" : "/map"} aria-current={!emergencyMode ? "page" : undefined} className={cn("inline-flex min-h-9 items-center rounded-lg px-3.5 transition-colors duration-200", !emergencyMode ? "bg-brand-700 text-on-ink" : "text-ink-soft hover:text-ink", focusRing)}>
+            <Link to={developerMode ? "/map?verify=1" : "/map"} aria-current={!emergencyMode ? "page" : undefined} className={cn("inline-flex min-h-11 items-center rounded-lg px-3.5 transition-colors duration-200 lg:min-h-9", !emergencyMode ? "bg-brand-700 text-on-ink" : "text-ink-soft hover:text-ink", focusRing)}>
               <Navigation className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />Navigate
             </Link>
-            <Link to={`/map?mode=emergency${developerMode ? "&verify=1" : ""}`} aria-current={emergencyMode ? "page" : undefined} className={cn("inline-flex min-h-9 items-center rounded-lg px-3.5 transition-colors duration-200", emergencyMode ? "bg-ink text-on-ink" : "text-ink-soft hover:text-ink", focusRing)}>
+            <Link to={`/map?mode=emergency${developerMode ? "&verify=1" : ""}`} aria-current={emergencyMode ? "page" : undefined} className={cn("inline-flex min-h-11 items-center rounded-lg px-3.5 transition-colors duration-200 lg:min-h-9", emergencyMode ? "bg-ink text-on-ink" : "text-ink-soft hover:text-ink", focusRing)}>
               <ShieldAlert className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />Emergency<span className="hidden sm:inline">&nbsp;Mode</span>
             </Link>
           </nav>
         </header>
 
+        {/* Phones and tablets show the same context in the compact From row and
+            the bottom sheet (Emergency Mode: the From row and the emergency panel). */}
         <NavigationContextBar
-          className="mt-3"
+          className="mt-3 max-lg:hidden"
           currentLocation={currentLocation}
           currentPosition={currentPosition}
           destination={destination}
@@ -459,31 +542,48 @@ export default function Navigate() {
         />
 
         <div className="mt-3 grid gap-3 lg:grid-cols-[var(--app-map-control-width)_minmax(0,1fr)] lg:grid-rows-[auto_1fr]">
-          <section aria-label="Route planning controls" className={cn("ink-blueprint p-3.5 lg:col-start-1 lg:row-start-1", emergencyMode && "border-2 border-ink", mobileRouteSheetVisible && "max-lg:hidden")}>
-            <div className="relative z-[1] grid gap-3">
+          <section aria-label="Route planning controls" className={cn("ink-blueprint p-3 lg:col-start-1 lg:row-start-1 lg:p-3.5", emergencyMode && "border-2 border-ink", routeSheetActive && "max-lg:hidden")}>
+            <div className="relative z-[1] grid gap-2 lg:gap-3">
               <div>
-                <div className="flex items-center justify-between gap-2 max-lg:min-h-9">
-                  <InkSectionLabel className="lg:mb-2.5"><LocateFixed className="h-3.5 w-3.5" aria-hidden="true" /> Current location</InkSectionLabel>
+                <InkSectionLabel className="mb-2.5 max-lg:hidden"><LocateFixed className="h-3.5 w-3.5" aria-hidden="true" /> Current location</InkSectionLabel>
+                {/* Phones and tablets: one compact "From" row instead of two form fields. */}
+                <div className="flex min-h-11 items-center gap-1 lg:hidden">
+                  <p className="min-w-0 flex-1 truncate text-sm text-ink">
+                    <LocateFixed className="mr-1.5 inline h-4 w-4 align-[-3px] text-ink-soft" aria-hidden="true" />
+                    <span className="text-ink-soft">From </span>
+                    {hasLocation ? (
+                      <>
+                        <span className="font-semibold">{currentLocation.name}</span>
+                        <span className="text-ink-soft"> · {currentFloorLabel}</span>
+                      </>
+                    ) : <span className="font-semibold">Not set</span>}
+                  </p>
+                  <button type="button" onClick={openScanner} className={cn("inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-[13px] font-semibold text-ink hover:bg-fill", focusRing)}>
+                    <QrCode className="h-4 w-4" aria-hidden="true" /> Scan QR
+                  </button>
                   <button
                     type="button"
                     aria-expanded={locationEditorOpen}
                     aria-controls="current-location-fields"
+                    aria-label={locationEditorOpen ? "Done changing current location" : "Change current location"}
                     onClick={() => setLocationEditorOpen((open) => !open)}
-                    className={cn("inline-flex min-h-9 items-center rounded-lg px-2 font-heading text-[12px] font-semibold text-brand-700 hover:bg-fill lg:hidden", focusRing)}
+                    className={cn("inline-flex min-h-11 shrink-0 items-center rounded-lg px-2.5 text-[13px] font-semibold text-ink hover:bg-fill", focusRing)}
                   >
                     {locationEditorOpen ? "Done" : "Change"}
                   </button>
                 </div>
-                <div id="current-location-fields" className={cn("grid grid-cols-[5.75rem_minmax(0,1fr)] gap-2 max-lg:mt-2", !locationEditorOpen && "max-lg:hidden")}>
+                <div id="current-location-fields" className={cn("grid grid-cols-[5.75rem_minmax(0,1fr)] gap-2 max-lg:mt-1", !locationEditorOpen && "max-lg:hidden")}>
                   <label className="block">
                     <span className={fieldLabelClass}>Floor</span>
                     <select value={currentFloorId} onChange={(event) => changeFloor(event.target.value)} className={fieldClass} aria-label="Floor of your current location">
+                      <option value="" disabled>Floor…</option>
                       {floors.map((item) => <option key={item.id} value={item.id}>{item.shortName}{item.map ? "" : " · map pending"}</option>)}
                     </select>
                   </label>
                   <label className="block min-w-0">
                     <span className={fieldLabelClass}>Location</span>
-                    <select id="current-location-selector" value={currentSelectorValue} onChange={(event) => updateCurrentLocation(event.target.value)} className={fieldClass}>
+                    <select id="current-location-selector" value={currentSelectorValue} disabled={!currentFloorId} onChange={(event) => updateCurrentLocation(event.target.value)} className={cn(fieldClass, "disabled:opacity-60")}>
+                      <option value="" disabled>{currentFloorId ? "Choose your location…" : "Choose a floor first"}</option>
                       <optgroup label="Facilities">
                       {navigableFacilities.map((facility) => <option key={facility.id} value={`facility:${facility.id}`}>{facility.name} — {facility.floorId}</option>)}
                       </optgroup>
@@ -504,12 +604,31 @@ export default function Navigate() {
                   destinationId={destinationId}
                   onQueryChange={updateDestinationQuery}
                   onSelect={chooseDestination}
+                  placeholder="Where do you want to go?"
+                  labelClassName="max-lg:sr-only"
+                  className="max-lg:order-first"
                 />
               )}
 
-              <div className="grid grid-cols-2 gap-2 lg:grid-cols-1">
+              {demoStart && (
+                <p role="status" className="rounded-lg border border-ink bg-ink px-3 py-2 text-[12px] font-medium leading-snug text-on-ink">
+                  Demo start — a sample location and destination, not your position.
+                </p>
+              )}
+              {/* No location yet: say what is needed. With a destination chosen, phones and
+                  tablets show this in the bottom sheet together with the two ways to set it. */}
+              {!hasLocation && (emergencyMode || destination) && (
+                <p role="status" className={cn("flex items-start gap-2 rounded-lg border border-dashed border-line-strong px-3 py-2 text-[13px] font-medium leading-snug text-ink", !emergencyMode && "max-lg:hidden")}>
+                  <LocateFixed className="mt-0.5 h-4 w-4 shrink-0 text-ink-soft" aria-hidden="true" />
+                  {emergencyMode ? SET_LOCATION_EMERGENCY_MESSAGE : SET_LOCATION_MESSAGE}
+                </p>
+              )}
+
+              {/* Desktop keeps both actions here. On phones and tablets Start
+                  Navigation is in the bottom sheet and Scan QR is in the From row. */}
+              <div className={cn("grid gap-2", !emergencyMode && "max-lg:hidden")}>
                 {emergencyMode ? (
-                  <button type="button" onClick={findEmergencyExit} disabled={!currentPosition.currentNodeId} className={cn(button.danger, "col-span-2 w-full px-3 lg:col-span-1")}>
+                  <button type="button" onClick={findEmergencyExit} disabled={!hasLocation} className={cn(button.danger, "w-full px-3")}>
                     <ShieldAlert className="h-4 w-4" aria-hidden="true" /> Find Nearest Verified Exit
                   </button>
                 ) : (
@@ -517,7 +636,7 @@ export default function Navigate() {
                     <Navigation className="h-4 w-4" aria-hidden="true" /> Start Navigation
                   </button>
                 )}
-                <button type="button" onClick={() => { setScanError(""); setScannerOpen(true) }} className={cn(button.outline, "w-full px-3", emergencyMode && "col-span-2 lg:col-span-1")}>
+                <button type="button" onClick={openScanner} className={cn(button.outline, "w-full px-3 max-lg:hidden")}>
                   <QrCode className="h-4 w-4" aria-hidden="true" /> Scan QR
                 </button>
               </div>
@@ -528,7 +647,8 @@ export default function Navigate() {
                 </p>
               )}
               {routeError && (
-                <p role="alert" className={alertClass}>
+                // The bottom sheet shows this message on phones while it is visible.
+                <p role="alert" className={cn(alertClass, mobileSheetVisible && "max-lg:hidden")}>
                   <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" /> {routeError}
                 </p>
               )}
@@ -551,7 +671,7 @@ export default function Navigate() {
                   route2D={displayedRoute}
                   route3D={activeRoute}
                   emergencyMode={emergencyMode}
-                  startFacilityId={currentPosition.currentFacilityId}
+                  startFacilityId={currentPosition.currentFacilityId || null}
                   currentNodeId={currentPosition.currentNodeId}
                   destinationFacilityId={destinationId}
                   destinationNodeId={destinationNodeId}
@@ -578,7 +698,7 @@ export default function Navigate() {
                 <FloorSelector
                   floors={floors}
                   viewingFloorId={floorId}
-                  currentFloorId={currentFloorId}
+                  currentFloorId={hasLocation ? currentFloorId : null}
                   destinationFloorId={emergencyMode ? null : destination?.floorId}
                   routeFloorIds={activeRoute?.routeFloorIds || []}
                   onSelect={viewRouteFloor}
@@ -588,12 +708,12 @@ export default function Navigate() {
                 <FloorSelector
                   floors={floors}
                   viewingFloorId={floorId}
-                  currentFloorId={currentFloorId}
+                  currentFloorId={hasLocation ? currentFloorId : null}
                   destinationFloorId={emergencyMode ? null : destination?.floorId}
                   routeFloorIds={activeRoute?.routeFloorIds || []}
                   onSelect={viewRouteFloor}
                   orientation="horizontal"
-                  className="absolute inset-x-2 top-[3.5rem] sm:hidden"
+                  className="absolute left-2 top-[4rem] max-w-[calc(100%-1rem)] sm:hidden"
                 />
 
                 {(mapView === "3D" || floor?.map) && (
@@ -606,18 +726,17 @@ export default function Navigate() {
                     focusLabel={(mapView === "3D" ? focusTarget : focusTargetOnViewedFloor)?.name || null}
                     onFocus={(mapView === "3D" ? focusTarget : focusTargetOnViewedFloor) ? () => requestMapView("facility", (mapView === "3D" ? focusTarget : focusTargetOnViewedFloor).id) : null}
                     fullscreen={{ active: immersive, onToggle: toggleFullscreen }}
-                    className={cn("absolute right-2 top-[6.25rem] sm:right-3 sm:top-3", !immersive && "max-sm:hidden")}
+                    className={cn("absolute right-2 top-[7.75rem] sm:right-3 sm:top-3", !immersive && "max-sm:hidden")}
                   />
                 )}
-                {/* Phones outside fullscreen: a compact top row, clear of the floating CLARA
-                    button. It stays mounted (hidden) while immersive so focus can return to it. */}
+                {/* Phones outside fullscreen: only "my location" and fullscreen, in a compact
+                    top row; zoom is by pinch, and the full tool set is in fullscreen. It stays
+                    mounted (hidden) while immersive so focus can return to it. */}
                 {(mapView === "3D" || floor?.map) && (
                   <MapViewControls
                     mapView={mapView}
                     orientation="horizontal"
-                    onZoomIn={() => requestMapView("zoom-in")}
-                    onZoomOut={() => requestMapView("zoom-out")}
-                    onReset={() => requestMapView("reset")}
+                    onLocate={showMyLocation}
                     fullscreen={{ active: immersive, onToggle: toggleFullscreen }}
                     className={cn("absolute right-2 top-2 sm:hidden", immersive && "hidden")}
                   />
@@ -632,7 +751,8 @@ export default function Navigate() {
                       "absolute left-2 sm:left-3",
                       // In desktop fullscreen the open legend must sit above the left route/emergency panel.
                       immersive && "lg:z-30",
-                      immersive && mobileRouteSheetVisible
+                      // The bottom sheet covers the lower edge of the map on phones and tablets.
+                      mobileSheetVisible
                         ? "bottom-[calc(var(--clara-lift,0px)+0.5rem)] lg:bottom-3"
                         : immersive && emergencyMode
                           ? "max-lg:bottom-[4.5rem] bottom-2 lg:bottom-3"
@@ -645,7 +765,7 @@ export default function Navigate() {
                   <button
                     type="button"
                     onClick={fullscreen.exit}
-                    className={cn("map-overlay-surface pointer-events-auto absolute right-2 top-2 inline-flex min-h-10 items-center gap-1.5 px-3 font-heading text-[13px] font-semibold text-ink hover:bg-fill sm:bottom-3 sm:right-3 sm:top-auto", focusRing)}
+                    className={cn("map-overlay-surface pointer-events-auto absolute right-2 top-2 inline-flex min-h-11 items-center gap-1.5 px-3 font-heading text-[13px] font-semibold text-ink hover:bg-fill sm:bottom-3 sm:right-3 sm:top-auto", focusRing)}
                   >
                     <Minimize className="h-4 w-4" aria-hidden="true" /> Exit fullscreen
                   </button>
@@ -676,28 +796,17 @@ export default function Navigate() {
                         result={emergencyResult}
                         instructions={emergencyInstructions}
                         currentLocation={currentLocation}
-                        currentFloorId={currentPosition.currentFloorId}
+                        currentFloorId={hasLocation ? currentPosition.currentFloorId : "location not set"}
                         onFindExit={findEmergencyExit}
                       />
                     </Suspense>
                   </ImmersiveMapPanel>
                 )}
 
-                {immersive && mobileRouteSheetVisible && (
+                {immersive && mobileSheetVisible && (
                   // The overlay layer ignores pointers so the map stays draggable;
-                  // the route sheet opts back in.
-                  <div className="pointer-events-auto">
-                    <MobileRouteSheet
-                      route={route}
-                      instructions={instructions}
-                      navigationStatus={navigationStatus}
-                      activeStep={activeStep}
-                      destination={destination}
-                      viewingFloorId={floorId}
-                      onAdvance={advanceNavigation}
-                      onReset={resetRoute}
-                    />
-                  </div>
+                  // the sheet opts back in.
+                  <div className="pointer-events-auto">{mobileSheet}</div>
                 )}
 
                 {selectedFacility && (
@@ -718,6 +827,8 @@ export default function Navigate() {
                     className={cn(
                       "absolute inset-x-2 bottom-2 max-h-[55%] sm:inset-x-auto sm:right-[5.5rem] sm:w-[22rem]",
                       immersive ? "sm:bottom-[4rem] sm:max-h-[calc(100%-8rem)]" : "sm:bottom-3 sm:max-h-[calc(100%-5.5rem)]",
+                      // During a route the bottom sheet covers the lower edge of the map.
+                      routeSheetActive && "max-lg:bottom-[calc(var(--clara-lift,0px)+0.5rem)]",
                     )}
                   />
                 )}
@@ -726,14 +837,22 @@ export default function Navigate() {
 
             {map3DMessage && <p role="status" className="mt-2 flex items-center gap-2 rounded-xl border border-ink bg-surface px-3 py-2 text-sm font-medium text-ink"><Info className="h-4 w-4 shrink-0" aria-hidden="true" /> {map3DMessage}</p>}
 
-            <div className="mt-2 flex flex-col gap-1 px-1 text-[11px] leading-relaxed text-ink-soft sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+            <div className="mt-2 flex flex-col gap-1 px-1 text-[12px] leading-relaxed text-ink-soft lg:flex-row lg:items-start lg:justify-between lg:gap-4">
               <p>
-                <span className="font-semibold uppercase tracking-[0.1em] text-ink-mid">Viewing {floor?.name || floorId}</span>
+                <span className="font-semibold text-ink-mid">Viewing {floor?.name || floorId}</span>
                 {" · "}
                 {floor?.map?.geometryNotice || `${floor?.name} map geometry is pending verification.`}
               </p>
-              <p className="sm:max-w-[45%] sm:text-right"><span className="sr-only">Map view: </span>{mapView === "3D" ? MAP3D_GEOMETRY_NOTICE : MAP2D_VIEW_NOTICE}</p>
+              <p className="max-lg:hidden lg:max-w-[45%] lg:text-right"><span className="sr-only">Map view: </span>{mapViewNotice}</p>
             </div>
+            {/* Phones and tablets: the remaining data notes are one tap away. */}
+            <Disclosure summary="Map data notes" className="mt-1 px-1 lg:hidden">
+              <div className="space-y-1.5 text-[13px] leading-relaxed text-ink-soft">
+                <p>{mapViewNotice}</p>
+                {!emergencyMode && <p>{FACILITY_DATA_NOTICE}</p>}
+                <p>{ACCESSIBILITY_NOTICE}</p>
+              </div>
+            </Disclosure>
           </div>
 
           <div className="min-w-0 space-y-3 lg:col-start-1 lg:row-start-2">
@@ -743,7 +862,7 @@ export default function Navigate() {
                   result={emergencyResult}
                   instructions={emergencyInstructions}
                   currentLocation={currentLocation}
-                  currentFloorId={currentPosition.currentFloorId}
+                  currentFloorId={hasLocation ? currentPosition.currentFloorId : "location not set"}
                   onFindExit={findEmergencyExit}
                 />
               </Suspense>
@@ -767,9 +886,9 @@ export default function Navigate() {
               </section>
             )}
 
-            <section aria-label="Data status" className="space-y-1.5 border-t border-line-strong pt-2.5 text-[11px] leading-relaxed text-ink-soft">
+            <section aria-label="Data status" className="space-y-1.5 border-t border-line-strong pt-2.5 text-[11px] leading-relaxed text-ink-soft max-lg:hidden">
               {!emergencyMode && <p>{FACILITY_DATA_NOTICE}</p>}
-              <p>Accessibility information pending verification.</p>
+              <p>{ACCESSIBILITY_NOTICE}</p>
             </section>
           </div>
         </div>
@@ -808,18 +927,7 @@ export default function Navigate() {
         </Suspense>
       )}
 
-      {mobileRouteSheetVisible && !immersive && (
-        <MobileRouteSheet
-          route={route}
-          instructions={instructions}
-          navigationStatus={navigationStatus}
-          activeStep={activeStep}
-          destination={destination}
-          viewingFloorId={floorId}
-          onAdvance={advanceNavigation}
-          onReset={resetRoute}
-        />
-      )}
+      {mobileSheetVisible && !immersive && mobileSheet}
     </div>
   )
 }

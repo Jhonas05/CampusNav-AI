@@ -35,6 +35,7 @@ npm run test:3d
 npm run test:dashboard
 npm run test:theme
 npm run test:map-experience
+npm run test:mobile-ux
 npm run test:phase8a
 npm run test:phase8a:cloud
 npm run test:phase8a:realtime
@@ -58,7 +59,7 @@ npm run test:render
 
 - `src/` contains the React application.
 - `src/components/` contains reusable interface and map components.
-- `src/components/layout/` holds the frozen UI shell (`DEC-UI-005`): `AppShell`, the left sidebar and mobile drawer, and the phone context bar (inside `/admin/*` an administrator gets the single Admin navigation from `src/components/admin/AdminNavigation.jsx` instead, never both); `src/components/clara/` holds the floating CLARA assistant; `src/lib/theme.js` and `src/contexts/ThemeContext.jsx` implement the Light/Dark/System theme, whose semantic color tokens live in `src/index.css` and `tailwind.config.js` (`npm run test:theme` rejects hex color classes in components).
+- `src/components/layout/` holds the UI shell (`DEC-UI-005`, phone navigation per `DEC-UI-006`): `AppShell`, the left sidebar, the phone bottom navigation with its More sheet, and the phone context bar (inside `/admin/*` an administrator gets the single Admin navigation from `src/components/admin/AdminNavigation.jsx` instead, never both); `src/components/clara/` holds the floating CLARA assistant; `src/lib/theme.js` and `src/contexts/ThemeContext.jsx` implement the Light/Dark/System theme, whose semantic color tokens live in `src/index.css` and `tailwind.config.js` (`npm run test:theme` rejects hex color classes in components).
 - `src/data/facilities.js` contains verified facility-to-floor assignments and pending-verification fields.
 - `src/data/floors.js` contains editable floor and room geometry.
 - `src/data/additionalFloorMaps.js` contains source-aligned GF, 2F, 4F, and 5F polygons, hallways, doors, and stair areas.

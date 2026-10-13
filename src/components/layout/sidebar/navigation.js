@@ -2,32 +2,30 @@ import { Bell, Building2, CalendarDays, House, LayoutDashboard, Navigation, QrCo
 import { APP_ROLES } from "@/lib/authorization"
 
 /**
- * Global navigation model for the left sidebar and the mobile drawer.
- * Paths are the existing application routes; only labels and grouping are
- * presentation. CLARA is intentionally absent: it is the floating assistant.
+ * Global navigation model for the left sidebar (tablet and desktop) and the
+ * phone bottom navigation with its More sheet. Paths are the existing
+ * application routes; only labels and grouping are presentation. CLARA is
+ * intentionally absent everywhere: it is the floating assistant.
  */
 
+const HOME = { label: "Home", path: "/", icon: House, exact: true, motion: "lift" }
+const NAVIGATE = { label: "Navigate", path: "/map", icon: Navigation, motion: "forward" }
+const FACILITIES = { label: "Facilities", path: "/facilities", icon: Building2, motion: "lift" }
+const DASHBOARD = { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard, description: "All campus updates", motion: "grow" }
+const EVENTS = { label: "Events", path: "/events", icon: CalendarDays, motion: "grow" }
+const ALERTS = { label: "Alerts", path: "/alerts", icon: Bell, description: "Alerts & Announcements", motion: "tilt" }
+const EMERGENCY = { label: "Emergency", path: "/emergency", icon: ShieldAlert, motion: "strong" }
+
 export const PRIMARY_NAV_SECTIONS = [
-  {
-    id: "main",
-    label: "Main",
-    items: [
-      { label: "Home", path: "/", icon: House, exact: true, motion: "lift" },
-      { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard, motion: "grow" },
-      { label: "Navigate", path: "/map", icon: Navigation, motion: "forward" },
-      { label: "Facilities", path: "/facilities", icon: Building2, motion: "lift" },
-    ],
-  },
-  {
-    id: "campus",
-    label: "Campus",
-    items: [
-      { label: "Events", path: "/events", icon: CalendarDays, motion: "grow" },
-      { label: "Alerts", path: "/alerts", icon: Bell, description: "Alerts & Announcements", motion: "tilt" },
-      { label: "Emergency", path: "/emergency", icon: ShieldAlert, motion: "strong" },
-    ],
-  },
+  { id: "main", label: "Main", items: [HOME, NAVIGATE, FACILITIES] },
+  { id: "campus", label: "Campus", items: [EVENTS, ALERTS, EMERGENCY, DASHBOARD] },
 ]
+
+/** Phone bottom navigation: four destinations plus the More button (five slots). */
+export const MOBILE_NAV_ITEMS = [HOME, NAVIGATE, FACILITIES, ALERTS]
+
+/** Destinations behind More on phones. Emergency leads so it stays two taps away. */
+export const MOBILE_MORE_ITEMS = [EMERGENCY, EVENTS, DASHBOARD]
 
 const ADMIN_ROLES = [APP_ROLES.SUPER_ADMIN, APP_ROLES.DEPARTMENT_ADMIN]
 

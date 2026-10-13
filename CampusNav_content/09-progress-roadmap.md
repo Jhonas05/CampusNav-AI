@@ -426,6 +426,21 @@ The owner also approves the proposed verified/demo/unavailable defense-data poli
 
 The prepared package remains pending external evidence and is not adviser-approved. Under `DEC-ROADMAP-002`, waiting for that evidence no longer controls safe owner-directed software-development sequencing. Final thesis/defense claims and any adviser-dependent feature requirement remain unresolved.
 
+## Mobile-first UX simplification checkpoint (`DEC-UI-006`) — 13 October 2026
+
+**Status:** `COMPLETE — ACCEPTED_WITH_ADVISORY`; owner approved with no further visual-review checkpoint. The implementation was completed and verified on the separate Mobile UX branch after the accepted FS-4 directory commit and is authorized for Git completion.
+
+This is a presentation and information-architecture checkpoint. It does not start, reorder, or complete any Phase 4 subphase, and it is not part of FS-4.
+
+- Phone primary navigation is a bottom bar (Home, Navigate, Facilities, Alerts, More) with a More sheet; desktop and tablet keep the left sidebar; CLARA stays a floating assistant.
+- Home is the fast at-a-glance entry point and the Dashboard stays the separate, deeper contract surface (owner decision).
+- Navigate is map-first on phones and tablets with one contextual sheet.
+- CampusNav no longer infers the visitor's location: a fresh Navigate session has no current location and no destination, links set the destination and the viewed floor only, and no route is calculated until both ends exist. The old demonstration start is behind a labelled `?demo=1`.
+- Facility images are requested only when an approved photo reference exists.
+- Verification: 26 local deterministic suites, ESLint, typecheck, production build, and a fresh headless-Chromium responsive matrix (128/128: eight routes at 360, 375, 390, 430, 768, 820, 1024, and 1440 pixels in Light and Dark) plus 18/18 interaction checks. Physical-device, non-Chromium, and screen-reader checks remain advisories and are not claimed.
+
+Details: `29-decision-log.md` (`DEC-UI-006`), `63-implementation-status-registry.md`, `CHANGELOG.md` v3.47.
+
 ## Phase 4 — Core Facility & Service Workflow Completion
 
 **Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL AND DIRECTORY IMPLEMENTED_VERIFIED / OWNER APPROVED`
@@ -494,7 +509,7 @@ The UI distinguishes spatial verification from operational status, preserves the
 
 **Status:** `IMPLEMENTED_VERIFIED — OWNER APPROVED`; overall FS-4 remains `IN_PROGRESS`.
 
-The canonical `/facilities` page retains all 95 local facilities, stable IDs and order, canonical-name/kind/floor search, category/floor filters, result count, Details links, and the existing Navigate handoff. One provider-neutral `getFacilitiesDirectory(dateTime?)` composition reads public operational profiles, weekly hours, current/previous Manila-date exceptions, and status advisories through a fixed four-query provider aggregate. `FacilityService` validates and groups those records by canonical facility ID and invokes the accepted FS-2 evaluator; React neither queries Supabase nor computes status.
+The canonical `/facilities` page retains all 95 local facilities, their stable IDs/order, canonical-name/kind/floor search, category/floor filters, result count, Details links, and existing Navigate handoff. One provider-neutral `getFacilitiesDirectory(dateTime?)` composition reads public operational profiles, weekly hours, current/previous Manila-date exceptions, and status advisories through a fixed four-query provider aggregate. `FacilityService` validates and groups those records by canonical facility ID and invokes the accepted FS-2 evaluator; React neither queries Supabase nor computes status.
 
 Cards add only a concise published description when available, the seven accepted operational statuses, and restrained demo/pending markers. Missing overlay data remains `UNKNOWN`, distinct from `PENDING_VERIFICATION`; closed or temporarily unavailable cards remain routable where canonical navigation permits. A provider or payload failure keeps every canonical card, exposes one safe retry notice, and leaks no provider detail. No service/alias discovery, fuzzy matching, ranking, recommendation, media, Dashboard/Realtime, schema, migration, RLS, remote Supabase mutation, dependency, or official institutional data was added. The complete 25-script deterministic matrix, lint, typecheck, production build, and diff checks pass. Intercepted browser QA passed 18/18 populated Light/Dark and provider-failure captures at the required responsive widths; search, category, floor, result-count, and action checks also passed without horizontal overflow, CLARA/action overlap, or console errors.
 

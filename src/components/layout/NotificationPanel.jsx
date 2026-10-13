@@ -1,7 +1,7 @@
 import { ArrowRight, BellRing, BookOpen, CalendarDays, Construction, Navigation } from "lucide-react"
 import { useEffect, useMemo, useRef } from "react"
 import { Link } from "react-router-dom"
-import { EmptyState, PriorityBadge, focusRing } from "@/components/campus/ui"
+import { PriorityBadge, focusRing } from "@/components/campus/ui"
 import { formatCampusShortTime } from "@/lib/campusTime"
 import { getDashboardSnapshot } from "@/services/dashboardService"
 
@@ -50,33 +50,37 @@ export const markNotificationsSeen = () => {
   writeSeenIds([...seen])
 }
 
-function PanelSection({ icon: Icon, title, tint = "text-ink-soft", children }) {
-  return (
-    <section aria-label={title}>
-      <div className="flex items-center gap-2 px-4 pb-2 pt-4">
-        <Icon className={`h-3.5 w-3.5 ${tint}`} aria-hidden="true" />
-        <h3 className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">{title}</h3>
-      </div>
-      <div className="space-y-1 px-2">{children}</div>
-    </section>
-  )
-}
+export const NOTIFICATION_PREVIEW_LIMIT = 5
 
-function PanelItem({ record, href = null, meta = null }) {
-  const body = (
-    <>
-      <div className="flex items-start justify-between gap-2">
-        <p className="text-[13px] font-semibold leading-snug text-ink">{record.title || record.subject || record.name}</p>
-        {record.priority && <PriorityBadge priority={record.priority} className="min-h-6 shrink-0 px-2 text-[8px]" />}
-      </div>
-      {record.message && <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-ink-soft">{record.message}</p>}
-      {meta && <p className="mt-1.5 text-[10px] font-medium uppercase tracking-wide text-ink-faint">{meta}</p>}
-    </>
+/**
+ * The few items worth previewing, most important first: priority alerts,
+ * facility advisories, navigation notices, today's classes, then events.
+ * The complete feed stays on the Dashboard.
+ */
+export const getNotificationPreview = (feed, limit = NOTIFICATION_PREVIEW_LIMIT) => [
+  ...feed.alerts.map((record) => ({ id: record.id, icon: BellRing, kind: "Alert", title: record.title, detail: record.message, priority: record.priority, href: record.emergencyHref || record.navigationHref || record.facilityHref || "/dashboard" })),
+  ...feed.advisories.map((record) => ({ id: record.id, icon: Construction, kind: "Facility", title: record.title, detail: record.message, priority: record.priority, href: record.facilityHref || "/dashboard" })),
+  ...feed.navigationNotices.map((record) => ({ id: record.id, icon: Navigation, kind: "Route", title: record.title, detail: record.message, priority: record.priority, href: record.navigationHref || "/map" })),
+  ...feed.classes.map((record) => ({ id: record.id, icon: BookOpen, kind: "Class", title: record.subject, detail: `${record.room} · ${formatCampusShortTime(record.startAt)}–${formatCampusShortTime(record.endAt)}`, priority: null, href: record.facilityHref || "/dashboard" })),
+  ...feed.events.map((record) => ({ id: record.id, icon: CalendarDays, kind: "Event", title: record.title, detail: record.location, priority: null, href: "/events" })),
+].slice(0, limit)
+
+function PanelItem({ item }) {
+  const Icon = item.icon
+  return (
+    <li>
+      <Link to={item.href} className={`flex min-h-12 items-start gap-3 rounded-xl px-2.5 py-2.5 transition-colors duration-150 hover:bg-fill ${focusRing}`}>
+        <Icon className="mt-0.5 h-4 w-4 shrink-0 text-ink-soft" aria-hidden="true" />
+        <span className="min-w-0 flex-1">
+          <span className="block text-[14px] font-semibold leading-snug text-ink">{item.title}</span>
+          {item.detail && <span className="mt-0.5 line-clamp-1 block text-xs text-ink-soft">{item.detail}</span>}
+        </span>
+        {item.priority && item.priority !== "NORMAL" && item.priority !== "INFORMATIONAL"
+          ? <PriorityBadge priority={item.priority} className="min-h-6 shrink-0 px-2 text-[9px]" />
+          : <span className="shrink-0 pt-0.5 text-[11px] font-medium text-ink-faint">{item.kind}</span>}
+      </Link>
+    </li>
   )
-  if (href) {
-    return <Link to={href} className={`block rounded-xl px-2.5 py-2.5 transition-colors duration-150 hover:bg-fill ${focusRing}`}>{body}</Link>
-  }
-  return <div className="rounded-xl px-2.5 py-2.5">{body}</div>
 }
 
 export default function NotificationPanel({ open, onClose }) {
@@ -107,7 +111,7 @@ export default function NotificationPanel({ open, onClose }) {
 
   if (!open || !feed) return null
 
-  const isEmpty = !feed.alerts.length && !feed.classes.length && !feed.advisories.length && !feed.events.length && !feed.navigationNotices.length
+  const items = getNotificationPreview(feed)
 
   return (
     <div
@@ -116,53 +120,22 @@ export default function NotificationPanel({ open, onClose }) {
       aria-label="Notifications"
       className="ink-blueprint fixed z-dropdown overflow-hidden rounded-[18px] shadow-[0_12px_36px_rgba(0,0,0,0.14)] max-md:inset-x-3 max-md:top-[calc(var(--app-header-height)+0.5rem)] md:bottom-3 md:left-[calc(var(--sidebar-width)+0.5rem)] flex max-h-[min(70dvh,560px)] flex-col md:w-[380px]"
     >
-      <header className="flex items-center justify-between border-b border-line px-4 py-3.5">
-        <h2 className="text-sm font-semibold text-ink">Notifications</h2>
-        <span className="text-[10px] font-medium uppercase tracking-wide text-ink-faint">Official campus updates</span>
+      <header className="border-b border-line px-4 py-3.5">
+        <h2 className="text-[15px] font-semibold text-ink">Notifications</h2>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-3">
-        {isEmpty ? (
-          <div className="p-4">
-            <EmptyState icon={BellRing} title="You're all caught up." message="Priority alerts, schedule updates, advisories, and events will appear here when published." className="min-h-32" />
-          </div>
-        ) : (
-          <>
-            {feed.alerts.length > 0 && (
-              <PanelSection icon={BellRing} title="Priority Alerts" tint="text-ink">
-                {feed.alerts.map((record) => <PanelItem key={record.id} record={record} href={record.emergencyHref || record.navigationHref || record.facilityHref || "/dashboard"} />)}
-              </PanelSection>
-            )}
-            {feed.classes.length > 0 && (
-              <PanelSection icon={BookOpen} title="Schedule Updates" tint="text-ink">
-                {feed.classes.map((record) => <PanelItem key={record.id} record={{ ...record, title: record.subject, message: `${record.room} · ${formatCampusShortTime(record.startAt)}–${formatCampusShortTime(record.endAt)}` }} href={record.facilityHref || "/dashboard"} />)}
-              </PanelSection>
-            )}
-            {feed.advisories.length > 0 && (
-              <PanelSection icon={Construction} title="Facility Advisories" tint="text-ink">
-                {feed.advisories.map((record) => <PanelItem key={record.id} record={record} href={record.facilityHref || "/dashboard"} />)}
-              </PanelSection>
-            )}
-            {feed.events.length > 0 && (
-              <PanelSection icon={CalendarDays} title="Events" tint="text-brand-700">
-                {feed.events.map((record) => <PanelItem key={record.id} record={{ ...record, message: record.location }} href="/events" />)}
-              </PanelSection>
-            )}
-            {feed.navigationNotices.length > 0 && (
-              <PanelSection icon={Navigation} title="Navigation Notices">
-                {feed.navigationNotices.map((record) => <PanelItem key={record.id} record={record} href={record.navigationHref || "/map"} />)}
-              </PanelSection>
-            )}
-          </>
-        )}
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+        {items.length === 0
+          ? <p role="status" className="px-4 py-6 text-center text-sm text-ink-soft">No new notifications.</p>
+          : <ul className="p-2">{items.map((item) => <PanelItem key={item.id} item={item} />)}</ul>}
       </div>
 
       <Link
         to="/dashboard"
         onClick={onClose}
-        className={`flex items-center justify-center gap-2 border-t border-line bg-subtle px-4 py-3.5 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-50 ${focusRing}`}
+        className={`flex min-h-12 items-center justify-center gap-2 border-t border-line bg-subtle px-4 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-50 ${focusRing}`}
       >
-        View All in Dashboard <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        View all notifications <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </Link>
     </div>
   )

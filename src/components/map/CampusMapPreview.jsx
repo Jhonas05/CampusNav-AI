@@ -56,7 +56,8 @@ const usePageVisible = () => {
  * @param {Record<string, any>} props
  */
 export default function CampusMapPreview(props) {
-  const { preferredView = "3D", initialFloorId = "3F", heightClass = "h-[26rem]", label = "Campus map preview", className } = props
+  // `compact` (Home) keeps only Floor, 2D/3D, and Open map over the map; zoom is by gesture.
+  const { preferredView = "3D", initialFloorId = "3F", heightClass = "h-[26rem]", label = "Campus map preview", compact = false, className } = props
   const [mapView, setMapView] = useState(() => (preferredView === "3D" && canPrefer3DPreview() ? "3D" : "2D"))
   const [floorId, setFloorId] = useState(getFloorById(initialFloorId) ? initialFloorId : floors[0].id)
   const [selectedFacilityId, setSelectedFacilityId] = useState(null)
@@ -150,14 +151,24 @@ export default function CampusMapPreview(props) {
           {/* Left-aligned so the page's floating CLARA button (bottom-right) never covers them. */}
           <div className="absolute left-2 top-2 flex flex-wrap items-start gap-2 sm:left-3 sm:top-3">
             <MapViewToggle mapView={mapView} onSelect2D={() => setMapView("2D")} onSelect3D={use3D} />
-            <MapViewControls
-              mapView={mapView}
-              orientation="horizontal"
-              onZoomIn={() => request("zoom-in")}
-              onZoomOut={() => request("zoom-out")}
-              onReset={() => request("reset")}
-            />
+            {!compact && (
+              <MapViewControls
+                mapView={mapView}
+                orientation="horizontal"
+                onZoomIn={() => request("zoom-in")}
+                onZoomOut={() => request("zoom-out")}
+                onReset={() => request("reset")}
+              />
+            )}
           </div>
+          {compact && (
+            <Link
+              to={getNavigateHref({ floorId, facilityId: selectedFacilityId })}
+              className={cn("map-overlay-surface group pointer-events-auto absolute right-2 top-2 inline-flex min-h-11 items-center gap-1.5 px-3.5 text-[13px] font-semibold text-ink hover:bg-fill sm:right-3 sm:top-3", focusRing)}
+            >
+              Open map <ArrowRight className="nav-icon h-3.5 w-3.5" data-motion="forward" aria-hidden="true" />
+            </Link>
+          )}
           <FloorSelector
             floors={floors}
             viewingFloorId={floorId}
@@ -178,7 +189,7 @@ export default function CampusMapPreview(props) {
                 </button>
               </div>
               <div className="mt-2 flex flex-wrap gap-1.5">
-                <Link to={getNavigateHref({ facilityId: selectedFacility.id })} className={button.smallPrimary}>Open in Navigate <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></Link>
+                <Link to={getNavigateHref({ facilityId: selectedFacility.id })} className={button.smallPrimary}>Navigate <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></Link>
                 <Link to={`/facilities/${selectedFacility.id}`} className={button.smallSecondary}><ExternalLink className="h-3.5 w-3.5" aria-hidden="true" /> Details</Link>
               </div>
             </div>
@@ -188,15 +199,19 @@ export default function CampusMapPreview(props) {
 
       {notice && <p role="status" className="mt-2 flex items-center gap-2 rounded-xl border border-ink bg-surface px-3 py-2 text-xs font-medium text-ink"><Info className="h-4 w-4 shrink-0" aria-hidden="true" /> {notice}</p>}
 
-      <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
-        <p className="text-[11px] leading-snug text-ink-faint">Same source-aligned GF–5F map{mapView === "3D" ? " and 3D model" : ""} used by Navigate · estimated dimensions</p>
-        <Link
-          to={getNavigateHref({ floorId, facilityId: selectedFacilityId })}
-          className={cn("group inline-flex min-h-9 items-center gap-1.5 rounded-md text-xs font-semibold text-ink hover:text-ink-mid", focusRing)}
-        >
-          Open full map <ArrowRight className="nav-icon h-3.5 w-3.5" data-motion="forward" aria-hidden="true" />
-        </Link>
-      </div>
+      {compact ? (
+        <p className="mt-2 text-[12px] leading-snug text-ink-faint">Source-aligned map · estimated dimensions</p>
+      ) : (
+        <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-[12px] leading-snug text-ink-faint">Same source-aligned GF–5F map{mapView === "3D" ? " and 3D model" : ""} used by Navigate · estimated dimensions</p>
+          <Link
+            to={getNavigateHref({ floorId, facilityId: selectedFacilityId })}
+            className={cn("group inline-flex min-h-11 items-center gap-1.5 rounded-md text-[13px] font-semibold text-ink hover:text-ink-mid", focusRing)}
+          >
+            Open map <ArrowRight className="nav-icon h-3.5 w-3.5" data-motion="forward" aria-hidden="true" />
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

@@ -36,6 +36,36 @@
 - public/Admin/Dashboard consumers reuse the provider-neutral FacilityService and centralized Realtime/provider pattern
 - navigation, QR/manual, Emergency, Dashboard, Admin, and schedule/personnel regressions pass before Phase 4 acceptance
 
+## Mobile-first UX simplification evidence (`DEC-UI-006`) — 13 October 2026
+
+- `COMPLETE — ACCEPTED_WITH_ADVISORY / OWNER APPROVED` — no further visual-review checkpoint is required; Git completion and the automatic deployment path from `main` are authorized
+
+- `PASS` — phone bottom navigation with five slots and a More sheet; every sidebar destination reachable once on phones; no CLARA navigation entry
+- `PASS` — Home hierarchy (search, shortcuts, one map, Campus status, four quick actions, Today); Home and Dashboard kept separate by owner decision
+- `PASS` — Navigate starts with no current location and no destination; `?facility=` and `?floor=` never set a location; no route or emergency search without a set location; the old start only under the labelled `?demo=1`; `?facility=library` regression covered
+- `PASS` — at most two visible actions per card; one contextual Navigate sheet; notification preview capped at five
+- `PASS` — facility images requested only with an approved `photoSrc`; zero image requests on the directory
+- `PASS` — 26 local test scripts, ESLint, typecheck, and production build; routing, QR, emergency, 3D, and theme suites unchanged and passing
+- `128/128 PASS + 18/18 INTERACTIONS PASS` — headless-Chromium responsive matrix: eight route states at 360, 375, 390, 430, 768, 820, 1024, and 1440 pixels in Light and Dark; no horizontal overflow, no bottom-navigation/CLARA overlap, no console error, and no non-local host contacted; interaction checks cover More/Filters focus and Escape, CLARA containment, destination/location setup, shell breakpoints, and Admin entry compatibility
+- `REQUIREMENT-ALIGNED TEST UPDATES` — `test-map-experience.mjs`, `test-phase4-fs3c.mjs`, and `test-route-render.mjs` follow the owner-approved contract; no assertion was removed to make a test pass
+- `NO DATABASE / REMOTE / DEPENDENCY CHANGE` — no schema, migration, RLS, remote Supabase mutation, package dependency, or lockfile change
+- `ADVISORY — NOT PERFORMED` — physical Android Chrome, iOS Safari/non-Chromium, and representative-device checks (one-handed reach, soft keyboard, map gestures, safe areas, orientation, native fullscreen, camera QR). Chromium emulation is not physical-device validation
+- `ADVISORY` — no screen-reader pass on the bottom navigation, sheets, or unset-location prompt
+
+## Phase 4-FS-4 directory/card implementation evidence — 6 October 2026
+
+- `PASS` — all 95 canonical facilities and IDs remain present and ordered; operational records are overlays only
+- `PASS` — `getFacilitiesDirectory` uses one provider aggregate and the accepted FS-2 evaluator; the Supabase provider performs exactly four public-view reads independent of card count, with no N+1 or direct React query
+- `PASS` — cards expose canonical name/floor/category, all seven status values, safe optional description, restrained demo/pending markers, Details, and optional canonical Navigate
+- `PASS` — `UNKNOWN` remains distinct from `PENDING_VERIFICATION`; `CLOSED` and `TEMPORARILY_UNAVAILABLE` remain visible and do not alter routing
+- `PASS` — provider/payload failure retains every canonical card, changes operational state to `UNKNOWN`, and shows one sanitized retry notice
+- `PASS` — canonical-name/kind/floor search, category/floor filters, announced result count, labelled actions, semantic status text/icons, theme tokens, and keyboard controls are preserved
+- `18/18 PASS` — intercepted headless-Chromium directory captures cover the populated directory in Light/Dark at 1440, 1366, 1280, 1024, 820, 768, 430, and 390 pixels plus provider failure at 1280 and 390; search, category, floor, result-count, and action checks pass without horizontal overflow, CLARA/action overlap, or console errors
+- `25/25 PASS + TOOLING PASS` — dedicated directory and retained Facility Detail suites, all current deterministic FS-1/FS-2/FS-3 and safety/regression suites, route rendering, ESLint, typecheck, production build, and diff checks
+- `NO DATABASE / REMOTE / DEPENDENCY CHANGE` — no schema, migration, RLS, fixture, official data, remote Supabase mutation, package dependency, or lockfile change
+- `OWNER APPROVED` — the Facilities directory/card slice is accepted and committed independently of the unfinished Mobile UX presentation work
+- `FS-4 IN_PROGRESS` — unified search/discovery, service/alias resolution, fuzzy matching, ranking/recommendation, GlobalSearch/DestinationSearch, media, Dashboard/Realtime, and later FS-4 work remain unstarted
+
 ## Phase 4-FS-4 first-slice implementation evidence — 6 October 2026
 
 - `PASS` — canonical Facility Detail identity and existing Navigate handoff remain local/spatially authoritative
@@ -48,20 +78,6 @@
 - `NO DATABASE / REMOTE / DEPENDENCY CHANGE` — no schema, migration, RLS, fixture, official data, remote Supabase mutation, package dependency, or lockfile change
 - `OWNER APPROVED` — the Facility Detail slice is the accepted public-detail baseline
 - `FS-4 IN_PROGRESS` — search/discovery/recommendation, GlobalSearch/DestinationSearch, media, Dashboard/Realtime, and later FS-4 work remain unstarted
-
-## Phase 4-FS-4 directory/card implementation evidence — 13 October 2026
-
-- `PASS` — all 95 canonical facilities and IDs remain present and ordered; operational records are overlays only
-- `PASS` — `getFacilitiesDirectory` uses one provider aggregate and the accepted FS-2 evaluator; the Supabase provider performs exactly four public-view reads independent of card count, with no N+1 or direct React query
-- `PASS` — cards expose canonical name/floor/category, all seven status values, safe optional description, restrained demo/pending markers, Details, and optional canonical Navigate
-- `PASS` — `UNKNOWN` remains distinct from `PENDING_VERIFICATION`; `CLOSED` and `TEMPORARILY_UNAVAILABLE` remain visible and do not alter routing
-- `PASS` — provider/payload failure retains every canonical card, changes operational state to `UNKNOWN`, and shows one sanitized retry notice
-- `PASS` — canonical-name/kind/floor search, category/floor filters, announced result count, labelled actions, semantic status text/icons, theme tokens, and keyboard controls are preserved
-- `18/18 PASS` — intercepted headless-Chromium directory captures cover the populated directory in Light/Dark at 1440, 1366, 1280, 1024, 820, 768, 430, and 390 pixels plus provider failure at 1280 and 390; search, category, floor, result-count, and action checks pass without horizontal overflow, CLARA/action overlap, or console errors
-- `25/25 PASS + TOOLING PASS` — dedicated directory and retained Facility Detail suites, all current deterministic FS-1/FS-2/FS-3 and safety/regression suites, route rendering, ESLint, typecheck, production build, and diff checks
-- `NO DATABASE / REMOTE / DEPENDENCY CHANGE` — no schema, migration, RLS, fixture, official data, remote Supabase mutation, package dependency, or lockfile change
-- `OWNER APPROVED` — the Facilities directory/card slice is accepted for Git completion
-- `FS-4 IN_PROGRESS` — unified search/discovery, service/alias resolution, fuzzy matching, ranking/recommendation, GlobalSearch/DestinationSearch, media, Dashboard/Realtime, and later FS-4 work remain unstarted
 
 ## Phase 4-FS-3 final acceptance evidence — 6 October 2026
 

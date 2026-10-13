@@ -45,7 +45,7 @@ export default function MapLegend(props) {
         >
           <div className="flex items-center justify-between gap-2">
             <p className="ink-section-label">Legend</p>
-            <button type="button" aria-label="Close legend" onClick={() => setOpen(false)} className={cn("inline-flex h-8 w-8 items-center justify-center rounded-lg text-ink-soft hover:bg-fill", focusRing)}>
+            <button type="button" aria-label="Close legend" onClick={() => setOpen(false)} className={cn("inline-flex h-11 w-11 items-center justify-center rounded-lg text-ink-soft hover:bg-fill", focusRing)}>
               <X className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
@@ -105,7 +105,7 @@ export default function MapLegend(props) {
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
         onClick={() => setOpen((value) => !value)}
-        className={cn("map-overlay-surface inline-flex h-10 items-center gap-1.5 px-3 font-heading text-[13px] font-semibold text-ink hover:text-brand-800", open && "border-ink", focusRing)}
+        className={cn("map-overlay-surface inline-flex h-11 items-center gap-1.5 px-3 font-heading text-[13px] font-semibold text-ink hover:text-brand-800", open && "border-ink", focusRing)}
       >
         <ListTree className="h-4 w-4" aria-hidden="true" /> Legend
       </button>

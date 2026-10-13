@@ -25,7 +25,8 @@ const ClaraFloatingButton = forwardRef(function ClaraFloatingButton(/** @type {R
         "fixed right-4 z-clara-button flex h-14 min-w-14 items-center justify-center gap-2.5 rounded-full bg-ink text-on-ink shadow-[0_2px_6px_rgba(0,0,0,0.16),0_10px_28px_rgba(0,0,0,0.2)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:scale-[1.03] hover:bg-ink-strong active:translate-y-0 active:scale-[0.97] motion-reduce:transform-none motion-reduce:transition-none sm:right-6 print:hidden",
         "clara-floating-button",
         !compact && "xl:pl-5 xl:pr-6",
-        "bottom-[calc(1rem+env(safe-area-inset-bottom)+var(--clara-lift,0px))] sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom)+var(--clara-lift,0px))]",
+        // Sits above the phone bottom navigation (and any page sheet that sets --clara-lift).
+        "bottom-[calc(1rem+var(--app-bottom-safe)+var(--app-bottom-nav-height)+var(--clara-lift,0px))] sm:bottom-[calc(1.5rem+var(--app-bottom-safe)+var(--app-bottom-nav-height)+var(--clara-lift,0px))]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2",
         open && "max-sm:hidden",
         className

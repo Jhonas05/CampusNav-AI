@@ -18,6 +18,7 @@
     "test:dashboard": "node scripts/test-dashboard.mjs",
     "test:theme": "node scripts/test-theme.mjs",
     "test:map-experience": "node scripts/test-map-experience.mjs",
+    "test:mobile-ux": "node scripts/test-mobile-ux.mjs",
     "test:phase8a": "node scripts/test-phase8a.mjs",
     "test:phase8a:cloud": "node --experimental-websocket scripts/test-phase8a-cloud.mjs",
     "test:phase8a:auth": "node --experimental-websocket scripts/test-phase8a-auth-cloud.mjs",

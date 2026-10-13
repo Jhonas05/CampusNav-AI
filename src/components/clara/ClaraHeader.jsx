@@ -3,7 +3,7 @@ import ClaraMark from "./ClaraMark"
 import { focusRing } from "@/components/campus/ui"
 import { cn } from "@/lib/utils"
 
-const controlClass = cn("flex h-9 w-9 items-center justify-center rounded-full text-ink-soft transition-colors duration-150 hover:bg-fill-strong hover:text-ink disabled:opacity-30 disabled:hover:bg-transparent", focusRing)
+const controlClass = cn("flex h-11 w-11 items-center justify-center rounded-full text-ink-soft transition-colors duration-150 hover:bg-fill-strong hover:text-ink disabled:opacity-30 disabled:hover:bg-transparent", focusRing)
 
 /** @param {Record<string, any>} props */
 export default function ClaraHeader(props) {

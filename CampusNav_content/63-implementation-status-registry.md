@@ -3,6 +3,57 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Mobile-first UX simplification and information architecture — 13 October 2026 (`DEC-UI-006`)
+
+**Status: `COMPLETE — ACCEPTED_WITH_ADVISORY`; owner approved with no further visual-review checkpoint.** Presentation and information architecture, plus the Navigate location and deep-link fixes and the facility-photo request fix recorded in `DEC-UI-006`. Git completion and the repository's automatic deployment path are owner-authorized; deployment equivalence must still be reported from observed evidence.
+
+The FS-4 directory section further below records that slice as committed. This pass afterwards simplified the directory page and card presentation (search and one chip row on phones, categories in a Filters sheet, name/floor/one status/Navigate/Details on each card); the FS-4 composition, statuses, and degraded mode are unchanged.
+
+| Area | Result | Evidence |
+|---|---|---|
+| Phone primary navigation | `PASS` | Bottom bar with five slots (Home, Navigate, Facilities, Alerts, More); More sheet holds Emergency, Events, Dashboard, role-aware Admin, Appearance, account. `test:mobile-ux` checks the model, the render, the current-page state, and that every sidebar destination is reachable once on phones. |
+| No CLARA navigation entry | `PASS` | No `/clara` item in the sidebar, bottom bar, or More; one `ClaraAssistant` in the shell (`test:mobile-ux`, `test:dashboard`). |
+| Home hierarchy | `PASS` | Search, shortcuts, one map, Campus status, four quick actions, Today (three `h2` sections). No Ask CLARA or Navigate tile, no marketing paragraph, no explainer. |
+| Home/Dashboard | `KEPT SEPARATE (OWNER DECISION)` | Home summarizes and links to the Dashboard; the Dashboard keeps the eight contract sections (`DEC-DASH-001`). `/dashboard` renders as before. |
+| Navigate default state | `PASS` | A fresh session shows "From Not set", an empty destination, an empty manual picker (no floor, location disabled), no sheet, and a disabled Start Navigation (`test:render`, `test:mobile-ux`, headless). The old start exists only under the labelled `?demo=1`. |
+| Deep links | `PASS` | `?facility=` sets the destination and viewed floor; `?floor=` sets the viewed floor; neither sets a location, alone or combined. `?facility=library` no longer answers "already there" (regression test). All public routes are still declared. `?scan=1` opens Navigate with the QR scanner. |
+| No route without both ends | `PASS` (headless) | Registrar shortcut → "Set your location to create a route." with Scan QR and Choose manually → floor 3F → Library → Start Navigation produced an 8-step, two-floor-change route at 390 and 430px. Emergency Mode keeps Find Nearest Verified Exit disabled with its own prompt until a location is set. |
+| Navigate map-first | `PASS` (headless) | Below 1024px: destination field, From row, map, one sheet. Phone controls: Floor, 2D/3D, my location, fullscreen. |
+| Facilities, Events, Alerts, Emergency, CLARA card | `PASS` | Two visible actions at most per card; Alerts ordered by priority with important items open; Emergency tools before guidance and one emergency-map action instead of three identical links. |
+| Facility photo requests | `PASS` | An image is requested only for a facility with an approved `photoSrc`; none has one, so the directory makes zero image requests (it made one failed request per card). Supplied photos load lazily (`test:mobile-ux`, headless request count 0). |
+| Responsive matrix | `128/128 PASS` (headless) | Home, Navigate, a Navigate destination link, Facilities, Alerts, Emergency, Dashboard, and unauthenticated Admin entry at 360, 375, 390, 430, 768, 820, 1024, and 1440 in Light and Dark: no horizontal overflow, no bottom-navigation/CLARA overlap, no console error, and no non-local request. Another 18/18 interaction checks cover More and Filters focus/Escape behavior, CLARA viewport containment, destination/location setup, shell breakpoints, and Admin entry compatibility. |
+| Routing, QR, emergency, 2D/3D, fullscreen, theme | `UNCHANGED / PASS` | `test:navigation`, `test:multi-floor`, `test:qr`, `test:emergency`, `test:3d`, `test:map-experience`, `test:theme`, `test:render` pass; no file under `src/lib` or the spatial, QR, or emergency data changed. |
+
+Implementation measures (source and headless measurements only; not user-study results):
+
+| Measure | Before | After |
+|---|---|---|
+| Home sections | 7 (hero, popular destinations, quick actions, how it works, campus status, events, announcements + CLARA) | 5 blocks (search + shortcuts, map, campus status, quick access, today) |
+| Home quick-action tiles | 6 + 8 destination cards | 4 + 5 shortcut chips |
+| Entry points to CLARA on Home | 4 (hero button, quick-action tile, CLARA panel, floating button) | 1 (floating button) |
+| Emergency page links to the same emergency map | 3 | 1 |
+| Phone: Home → Registrar set as destination | 2 (card → facility page → Navigate) | 1 (shortcut) |
+| Phone: destination set → route started | 1 tap, from an assumed start that could be the destination itself | Location first: Scan QR and scan, or Choose manually → floor → location; then Start Navigation |
+| Phone taps: Home → QR scanner | 2 | 1 |
+| Phone taps: any page → Alerts or Facilities | 2 (menu, item) | 1 |
+| Phone taps: any page → Emergency | 2 (menu, item) | 2 (More, Emergency); 1 from Home |
+| Phone taps: any page → CLARA | 1 | 1 |
+| Notification preview items | every active record | 5 at most |
+| Facility image requests on the directory | 95 (all failing) | 0 |
+| Components removed | — | `HowItWorks`, `QuickAccessCard`, `QuickActions`, `InteractiveCard`, `QRCheckpointMotif` |
+
+Starting a route now takes more steps than before because CampusNav no longer pretends to know where the visitor is; that is the intended, owner-directed behaviour.
+
+Requirement-aligned test updates (accepted by the owner; not weakening): `test:map-experience` (the preview link label "Open full map" → "Open map"); `test:phase4-fs3c` (the public shell asserts the bottom navigation and More sheet, and the left drawer exists once, as the Admin menu); `test:render` (asserts the fresh unset state and runs its original Navigate assertions against the labelled demo start). New: `npm run test:mobile-ux`.
+
+Advisories and limits:
+- No physical-device or non-Chromium browser testing was done. Android Chrome and, if available, iOS Safari should still be checked for one-handed reach, the soft keyboard, pinch/pan, notched safe areas, orientation change, native fullscreen, and camera QR. Headless Chromium emulation is not physical-device certification.
+- No screen-reader pass was run on the new bottom navigation, sheets, or the unset-location prompt; semantics are asserted by test and by inspection only.
+- Destination search still covers mapped, navigable facilities by name, floor, and category. Service, alias, and personnel search were not started.
+- No facility has an approved photo; every facility shows the category placeholder until photos are supplied and referenced by `photoSrc`.
+- The Home destination list still renders every destination in a hidden listbox; `test:render` depends on it, so it was left as is.
+- Admin screens were not simplified (management tools); they are unchanged apart from sharing the drawer behaviour hook.
+
 ## Frozen UI baseline integration onto Phase 4-FS-3B — 3 October 2026 (`DEC-UI-005`)
 
 **Classification:** `UI FROZEN — INTEGRATED — IMPLEMENTED_VERIFIED (automated, headless Chromium) / OWNER VISUAL REVIEW PENDING`. Branch `wip/ui-freeze-integration`, based on `c7037e3`; not merged, deployed, or pushed. Phase 4 status is unchanged.
@@ -94,7 +145,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Live authenticated mutation for every FS-3 resource and official institutional data remain outside the evidence. The public Facility Detail and Facilities directory/card slices are `IMPLEMENTED_VERIFIED / OWNER APPROVED`, making FS-4 `IN_PROGRESS`; all later FS-4 discovery/recommendation consumers remain unstarted.
+**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Live authenticated mutation for every FS-3 resource and official institutional data remain outside the evidence. The public Facility Detail and Facilities directory/card slices are `IMPLEMENTED_VERIFIED / OWNER APPROVED`; therefore FS-4 remains `IN_PROGRESS`. Unified search/discovery, service/alias resolution, fuzzy matching, ranking/recommendation, and later FS-4 consumers remain unstarted.
 
 ### Phase 4-FS-4 next implementation slice — public Facilities directory/card composition — 13 October 2026
 

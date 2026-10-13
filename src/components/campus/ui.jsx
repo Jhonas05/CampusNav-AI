@@ -1,4 +1,4 @@
-import { BadgeCheck, BookOpen, CalendarClock, CircleAlert, CircleDashed, CircleDot, Clock3, Inbox, MessagesSquare, MinusCircle, TriangleAlert } from "lucide-react"
+import { BadgeCheck, BookOpen, CalendarClock, ChevronDown, CircleAlert, CircleDashed, CircleDot, Clock3, Inbox, MessagesSquare, MinusCircle, TriangleAlert } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 /**
@@ -49,18 +49,40 @@ export function InkSectionLabel(props) {
   return <Element className={cn("ink-section-label", className)} {...rest}>{children}</Element>
 }
 
-/** @param {Record<string, any>} props */
+/**
+ * Page title block. `compact` (public pages) shows only the title on phones:
+ * the eyebrow and lead return from 640px, where there is room for them.
+ * @param {Record<string, any>} props
+ */
 export function PageHeader(props) {
-  const { eyebrow, title, lead = null, actions = null, className } = props
+  const { eyebrow = null, title, lead = null, actions = null, compact = false, className } = props
   return (
-    <header className={cn("flex flex-col justify-between gap-4 md:flex-row md:items-end", className)}>
+    <header className={cn("flex flex-col justify-between gap-3 md:flex-row md:items-end md:gap-4", className)}>
       <div className="max-w-3xl">
-        {eyebrow && <InkKicker>{eyebrow}</InkKicker>}
-        <h1 className="mt-1.5 font-display text-[1.75rem] font-semibold leading-tight tracking-[-0.02em] text-ink sm:text-[2.125rem]">{title}</h1>
-        {lead && <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-ink-soft sm:text-[15px]">{lead}</p>}
+        {eyebrow && <InkKicker className={cn(compact && "max-sm:hidden")}>{eyebrow}</InkKicker>}
+        <h1 className={cn("font-display text-[1.625rem] font-semibold leading-tight tracking-[-0.02em] text-ink sm:text-[2.125rem]", eyebrow && (compact ? "sm:mt-1.5" : "mt-1.5"))}>{title}</h1>
+        {lead && <p className={cn("mt-1.5 max-w-2xl text-sm leading-relaxed text-ink-soft sm:text-[15px]", compact && "max-sm:hidden")}>{lead}</p>}
       </div>
       {actions && <div className="shrink-0">{actions}</div>}
     </header>
+  )
+}
+
+/**
+ * Progressive disclosure for secondary detail: a native `details` element, so
+ * it works with the keyboard and assistive technology and needs no state.
+ * @param {Record<string, any>} props
+ */
+export function Disclosure(props) {
+  const { summary, children, defaultOpen = false, className } = props
+  return (
+    <details open={defaultOpen || undefined} className={cn("group/disclosure", className)}>
+      <summary className={cn("flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-lg text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden", focusRing)}>
+        <span className="min-w-0">{summary}</span>
+        <ChevronDown className="h-4 w-4 shrink-0 text-ink-soft transition-transform duration-200 group-open/disclosure:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
+      </summary>
+      <div className="pb-1 pt-1">{children}</div>
+    </details>
   )
 }
 

@@ -249,7 +249,12 @@ try {
 
   const appShellSource = await readProjectFile("src/components/layout/AppShell.jsx")
   assert.match(appShellSource, /\{shell === "app" && <Sidebar /, "the global sidebar renders only in the public shell")
-  assert.match(appShellSource, /\{shell === "app" && <MobileSidebarDrawer /, "the global drawer renders only in the public shell")
+  // DEC-UI-006: on phones the public shell uses a bottom navigation and a More sheet instead of
+  // the hamburger drawer; the left drawer remains only as the Admin menu.
+  assert.match(appShellSource, /\{shell === "app" && <MobileBottomNav /, "the phone bottom navigation renders only in the public shell")
+  assert.match(appShellSource, /\{shell === "app" && <MoreSheet /, "the phone More sheet renders only in the public shell")
+  assert.equal((appShellSource.match(/<MobileSidebarDrawer /g) || []).length, 1, "the left drawer is the Admin menu only")
+  assert.match(appShellSource, /\{shell === "admin" && \(\s*<MobileSidebarDrawer /, "the Admin menu drawer renders only in the Admin shell")
   assert.match(appShellSource, /\{shell === "app" && \(\s*<MobileTopBar/, "the global context bar renders only in the public shell")
   assert.match(appShellSource, /\{shell === "admin" && <AdminSidebar /, "the Admin sidebar takes the navigation slot inside Admin")
   assert.match(appShellSource, /\{shell === "admin" && <AdminTopBar /)

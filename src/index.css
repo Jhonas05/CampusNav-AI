@@ -88,6 +88,11 @@
     --ink-shadow-sm: var(--shadow-soft);
     --ink-shadow-lg: 0 12px 36px rgb(0 0 0 / 0.12);
     --app-header-height: 3.5rem;
+    /* Phone bottom navigation. Zero unless the public shell shows it (below).
+       `--app-bottom-safe` is the home-indicator inset for surfaces that sit at
+       the very bottom; it is zero while the bottom navigation already covers it. */
+    --app-bottom-nav-height: 0rem;
+    --app-bottom-safe: env(safe-area-inset-bottom, 0px);
     --sidebar-width-expanded: 16.5rem;
     --sidebar-width-collapsed: 4.75rem;
     --sidebar-width: 0rem;
@@ -258,8 +263,26 @@
   }
 
   .app-page {
-    min-height: calc(100dvh - var(--app-header-height));
+    min-height: calc(100dvh - var(--app-header-height) - var(--app-bottom-nav-height));
     padding: var(--app-page-space) var(--app-page-gutter) calc(var(--app-page-space) + 4.5rem);
+  }
+
+  /* Phones: the public shell has a bottom navigation, so pages start closer
+     to the top bar and fixed surfaces sit above the navigation. */
+  @media (max-width: 767px) {
+    :root {
+      --app-page-space: 1rem;
+    }
+
+    [data-shell="app"] {
+      --app-bottom-nav-height: calc(4rem + env(safe-area-inset-bottom, 0px));
+      --app-bottom-safe: 0px;
+    }
+
+    html[data-map-immersive] [data-shell="app"] {
+      --app-bottom-nav-height: 0rem;
+      --app-bottom-safe: env(safe-area-inset-bottom, 0px);
+    }
   }
 
   .app-container {
@@ -285,7 +308,7 @@
   /* Navigate workspace: the map viewport is the dominant surface. Mobile keeps
      room for the search/plan card above and the route sheet below. */
   .map-workspace {
-    height: clamp(26rem, 64dvh, 40rem);
+    height: clamp(22rem, calc(100dvh - var(--app-header-height) - var(--app-bottom-nav-height) - 14rem), 40rem);
   }
 
   @media (min-width: 1024px) {
@@ -400,11 +423,6 @@
   to { stroke-dashoffset: -64; }
 }
 
-@keyframes campus-draw {
-  from { stroke-dashoffset: var(--draw-length, 400); }
-  to { stroke-dashoffset: 0; }
-}
-
 @keyframes campus-pulse {
   0%, 100% { transform: scale(1); opacity: 0.55; }
   50% { transform: scale(1.9); opacity: 0; }
@@ -418,12 +436,6 @@
 @keyframes campus-float {
   0%, 100% { transform: translate3d(0, 0, 0); }
   50% { transform: translate3d(0, -2px, 0); }
-}
-
-@keyframes campus-scan {
-  0% { transform: translateY(0); opacity: 0; }
-  15%, 85% { opacity: 1; }
-  100% { transform: translateY(var(--scan-distance, 22px)); opacity: 0; }
 }
 
 @keyframes campus-emphasis {
@@ -501,20 +513,6 @@ html.motion-ok .group:hover .route-motif .route-motif-ring {
   animation: campus-pulse 1.6s var(--motion-ease) infinite;
 }
 
-/* Line that draws once when its section scrolls into view. */
-.route-draw {
-  stroke-dasharray: var(--draw-length, 400);
-}
-
-html.motion-ok .motion-reveal:not([data-inview]) .route-draw,
-html.motion-ok [data-draw]:not([data-inview]) .route-draw {
-  stroke-dashoffset: var(--draw-length, 400);
-}
-
-html.motion-ok [data-inview] .route-draw {
-  animation: campus-draw 1400ms var(--motion-ease) 150ms backwards;
-}
-
 /* Ambient layers: run only while on screen and while the tab is visible. */
 .ambient { animation-play-state: paused; }
 html.motion-ok [data-ambient="on"] .ambient { animation-play-state: running; }
@@ -532,14 +530,6 @@ html:not(.motion-ok) .ambient { animation: none !important; }
   will-change: transform;
 }
 
-
-/* QR checkpoint motif: brackets open and one scan line sweeps on hover. */
-.qr-bracket { transition: transform var(--motion-normal) var(--motion-ease); }
-html.motion-ok .group:hover .qr-motif .qr-bracket,
-html.motion-ok .qr-motif[data-play="true"] .qr-bracket { transform: scale(1.14); }
-.qr-scanline { opacity: 0; }
-html.motion-ok .group:hover .qr-motif .qr-scanline,
-html.motion-ok .qr-motif[data-play="true"] .qr-scanline { animation: campus-scan 900ms var(--motion-ease) 1; }
 
 /* Sidebar icon micro-interactions (hover only). */
 .nav-icon { transition: transform var(--motion-normal) var(--motion-ease); }

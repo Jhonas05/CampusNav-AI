@@ -30,7 +30,8 @@ const useKeyboardInset = (enabled) => {
 /**
  * Floating CLARA conversation. A non-modal dialog: the current CampusNav page
  * stays visible and usable behind it. Desktop/tablet: a popup above the
- * trigger. Phones: a near full-width bottom sheet.
+ * trigger. Phones: a near full-width bottom sheet above the bottom navigation
+ * (or above the software keyboard while it is open).
  */
 const ClaraChatPanel = forwardRef(function ClaraChatPanel(/** @type {Record<string, any>} */ props, composerRef) {
   const { messages, pending, hasConversation, onSend, onRetry, onReset, onMinimize, onClose, onNavigate } = props
@@ -50,7 +51,7 @@ const ClaraChatPanel = forwardRef(function ClaraChatPanel(/** @type {Record<stri
         }
       }}
       style={{ "--clara-keyboard": `${keyboardInset}px` }}
-      className="clara-panel-enter fixed z-clara-panel flex flex-col overflow-hidden rounded-[22px] border border-line-strong bg-surface shadow-[0_4px_12px_rgba(0,0,0,0.08),0_24px_60px_rgba(0,0,0,0.18)] max-sm:inset-x-3 max-sm:bottom-[calc(0.75rem+var(--clara-keyboard,0px))] max-sm:h-[min(42rem,calc(86dvh-var(--clara-keyboard,0px)))] sm:bottom-[calc(1.5rem+3.5rem+0.75rem+env(safe-area-inset-bottom)+var(--clara-lift,0px))] sm:right-6 sm:h-[min(38rem,calc(100dvh-7.5rem-var(--clara-lift,0px)))] sm:max-h-[80dvh] sm:w-[25rem] print:hidden"
+      className="clara-panel-enter fixed z-clara-panel flex flex-col overflow-hidden rounded-[22px] border border-line-strong bg-surface shadow-[0_4px_12px_rgba(0,0,0,0.08),0_24px_60px_rgba(0,0,0,0.18)] max-sm:inset-x-3 max-sm:bottom-[calc(0.75rem+max(var(--clara-keyboard,0px),var(--app-bottom-nav-height)))] max-sm:h-[min(42rem,calc(86dvh-max(var(--clara-keyboard,0px),var(--app-bottom-nav-height))))] sm:bottom-[calc(1.5rem+3.5rem+0.75rem+var(--app-bottom-safe)+var(--app-bottom-nav-height)+var(--clara-lift,0px))] sm:right-6 sm:h-[min(38rem,calc(100dvh-7.5rem-var(--clara-lift,0px)))] sm:max-h-[80dvh] sm:w-[25rem] print:hidden"
     >
       <ClaraHeader titleId="clara-title" descriptionId="clara-description" canReset={hasConversation} onReset={onReset} onMinimize={onMinimize} onClose={onClose} />
       <ClaraMessageList messages={messages} pending={pending} onNavigate={onNavigate} onRetry={onRetry}>

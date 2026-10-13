@@ -1,6 +1,43 @@
 # CampusNav Content Pack — Changelog
 
-## v3.46 — 13 October 2026
+## v3.47 — 13 October 2026
+
+**Mobile-first UX simplification and information architecture** (`DEC-UI-006`; owner approved, `COMPLETE — ACCEPTED_WITH_ADVISORY`; a scoped exception to the `DEC-UI-005` freeze that supersedes only the mobile navigation provisions of `DEC-UI-003`). Capabilities are progressively disclosed, not removed; the visual system, theme, motion tokens, and map semantic colors are unchanged. Completed separately after the accepted FS-4 directory slice (v3.46) and authorized for automatic Git completion without another visual-review checkpoint.
+
+### Changed
+- **Phone navigation:** bottom bar (Home, Navigate, Facilities, Alerts, More) and a More sheet (Emergency, Events, Dashboard, Admin, Appearance, account) replace the hamburger drawer below 768px. The phone top bar keeps the brand, search, and notifications. The sidebar groups are Main (Home, Navigate, Facilities) and Campus (Events, Alerts, Emergency, Dashboard).
+- **Home:** destination search first, five fixed shortcuts, the real map preview (Floor, 2D/3D, Open map), one Campus status module, four quick actions, and Today. Removed the marketing copy, the three hero buttons, popular-destination cards, the six quick-action cards, "How CampusNav works", the events grid, the announcements list, and the CLARA panel.
+- **Dashboard:** kept separate as the deeper, contract-required surface and linked from Home (owner decision); not merged.
+- **Navigate (below 1024px):** destination field, compact From row with Scan QR and Change, the map, and one bottom sheet. Phone map controls are Floor, 2D/3D, my location, and fullscreen. Data notes open under "Map data notes".
+- **Navigate default state:** a fresh session has no current location and no destination. The manual picker starts with no floor and no location. With a destination but no location, Navigate shows "Set your location to create a route." with Scan QR and Choose manually and calculates nothing. Emergency Mode will not search from an unset position. The former Library → Virtual Laboratory start is available only under the labelled `?demo=1`.
+- **Facilities:** one search field and one chip row on phones with categories in a Filters sheet; cards show name, floor, one status, Navigate, and Details.
+- **Facility detail:** Navigate, Ask CLARA, and a save toggle; location and accessibility detail collapses on phones; "description unavailable" is stated once.
+- **Events, Alerts, Emergency:** shorter cards with details one tap away; alerts ordered by priority; emergency tools before guidance, with one emergency-map action instead of three identical links.
+- **CLARA:** shorter facility reply and a two-action result card; the button and sheet sit above the bottom bar.
+- **Notifications:** preview capped at five, most important first.
+- **Map facility panel:** two visible actions, the rest under More actions.
+- Phone controls raised to at least 44px.
+
+### Fixed
+- Navigate no longer assumes the visitor is at Library, 3F, and no longer preselects Virtual Laboratory.
+- `?facility=` sets the destination and the viewed floor only, and `?floor=` sets the viewed floor only; neither creates or moves the current location. A link to a facility could previously make the start the destination itself (a zero-length route), and a link to Library answered "already there".
+- Facility images are requested only when a facility has an approved `photoSrc`. The directory previously made one failing image request per card (95); it now makes none. Supplied photos load lazily.
+- Routing, the graph, QR resolution, and emergency logic are unchanged.
+
+### Added
+- `MobileBottomNav`, `MoreSheet`, `MobileBottomSheet`, `useResponsiveDialog`, the `Disclosure` primitive, `?scan=1` and the labelled `?demo=1` start on Navigate, and `npm run test:mobile-ux`.
+
+### Removed
+- `HowItWorks`, `QuickAccessCard`, `QuickActions`, `InteractiveCard`, `QRCheckpointMotif`, and their unused styles.
+
+### Verification and boundary
+- 26 local test scripts (including `test:mobile-ux`), ESLint, typecheck, and the production build pass.
+- Requirement-aligned test updates accepted by the owner (not weakening): the preview link label in `test-map-experience.mjs`; the public-shell navigation assertions in `test-phase4-fs3c.mjs`; and `test-route-render.mjs`, which now asserts the fresh unset state and runs its original Navigate assertions against the labelled demo start.
+- Fresh headless-Chromium device-emulation QA: responsive matrix 128/128 (eight route states at 360, 375, 390, 430, 768, 820, 1024, and 1440px in Light and Dark) plus 18/18 interaction checks. No horizontal overflow, bottom-navigation/CLARA overlap, console error, or non-local request occurred; representative phone/tablet/desktop captures were also visually inspected.
+- **Advisories:** physical-device, non-Chromium, and screen-reader testing were not performed. Chromium emulation is not real-device or assistive-technology certification.
+- Changed no schema, migration, RLS, database row, dependency, lockfile, Admin workflow, spatial data, pathfinding, QR payload, or emergency rule. Git completion uses the owner's authorized feature-branch → fast-forward `main` workflow; Cloudflare deployment remains automatic from `main` with no manual deployment.
+
+## v3.46 — 6 October 2026
 
 Implemented, locally verified, and owner-approved the **next authorized Phase 4-FS-4 slice — Public Facilities Directory and Facility-Card Operational Composition** while preserving the approved Facility Detail slice.
 
@@ -16,7 +53,7 @@ Implemented, locally verified, and owner-approved the **next authorized Phase 4-
 - passed the complete 25-script deterministic matrix, ESLint, typecheck, production build, and diff checks
 - passed 18/18 intercepted headless-Chromium directory captures across populated Light/Dark responsive views and provider-failure states; search/category/floor/count interactions, bounded public-view reads, no overflow, no CLARA/action overlap, and no console errors also passed
 - recorded both Facility Detail and directory/card composition as `IMPLEMENTED_VERIFIED / OWNER APPROVED`; overall FS-4 remains `IN_PROGRESS`
-- changed no schema, migration, RLS, database row, official institutional data, remote Supabase project, dependency/lockfile, Admin, Dashboard/Realtime, media, spatial/routing/QR/Emergency behavior, search aliases/fuzzy matching, recommendation, or deployment
+- changed no schema, migration, RLS, database row, official institutional data, remote Supabase project, dependency/lockfile, Admin, Dashboard/Realtime, media, spatial/routing/QR/Emergency behavior, search aliases/fuzzy matching, recommendation, commit, merge, push, or deployment
 
 ## v3.45 — 6 October 2026
 

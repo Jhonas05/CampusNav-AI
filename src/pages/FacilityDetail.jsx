@@ -2,7 +2,7 @@ import { Accessibility, ArrowLeft, Bookmark, BookmarkCheck, Building2, Construct
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import FacilityPhoto from "@/components/campus/FacilityPhoto"
-import { button, card, EmptyState, focusRing, StatusBadge } from "@/components/campus/ui"
+import { button, card, Disclosure, EmptyState, focusRing, StatusBadge } from "@/components/campus/ui"
 import { useClara } from "@/components/clara/ClaraContext"
 import FacilityOperationalDetails from "@/components/facilities/FacilityOperationalDetails"
 import FacilityStatusBadge from "@/components/facilities/FacilityStatusBadge"
@@ -45,6 +45,7 @@ export default function FacilityDetail() {
   const floor = facility ? getFloorById(facility.floorId) : null
   const navigationHref = facility ? getFacilityNavigationHref(facility.id) : null
   const [saved, setSaved] = useState(() => (facility ? isLocationSaved(facility.id) : false))
+  const [wideAtMount] = useState(() => typeof window === "undefined" || window.matchMedia("(min-width: 640px)").matches)
   const [requestVersion, setRequestVersion] = useState(0)
   const [operationalState, setOperationalState] = useState({ loading: Boolean(facility), detail: null })
 
@@ -96,10 +97,6 @@ export default function FacilityDetail() {
     operationalDetail.hours,
     operationalDetail.status,
   ].some((section) => !section?.ok))
-  const operationalDescription = operationalState.loading
-    ? "Loading published operational information…"
-    : operationalProfile?.description
-      || (operationalDetail ? "Operational description unavailable." : "Facility information is temporarily unavailable.")
   const advisories = []
   if (underConstruction) advisories.push({ id: "construction", title: "Under construction", message: "This area is marked under construction in the source plan and is not navigable." })
   else if (facility.navigable === false) advisories.push({ id: "not-navigable", title: "Entrance pending verification", message: "This facility is source-confirmed, but its usable entrance is pending verification, so indoor routing is not available yet." })
@@ -109,14 +106,14 @@ export default function FacilityDetail() {
   return (
     <div className="app-page bg-canvas">
       <div className="app-container">
-        <Link to="/facilities" className={`inline-flex items-center gap-2 rounded-md text-sm font-medium text-ink-soft transition-colors hover:text-ink ${focusRing}`}>
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> All facilities
+        <Link to="/facilities" className={`inline-flex min-h-11 items-center gap-2 rounded-md text-sm font-medium text-ink-soft transition-colors hover:text-ink ${focusRing}`}>
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Facilities
         </Link>
 
-        <article className="ink-blueprint mt-4 overflow-hidden">
+        <article className="ink-blueprint mt-1 overflow-hidden sm:mt-3">
           <div className="border-b border-line lg:grid lg:grid-cols-[minmax(320px,0.8fr)_minmax(0,1.2fr)]">
-          <FacilityPhoto facility={facility} variant="banner" showHint className="border-b border-line lg:h-full lg:max-h-none lg:min-h-0 lg:aspect-auto lg:border-b-0 lg:border-r" />
-          <div className="p-6 sm:p-7">
+          <FacilityPhoto facility={facility} variant="banner" placeholderClassName="max-sm:hidden" className="border-b border-line max-sm:max-h-36 lg:h-full lg:max-h-none lg:min-h-0 lg:aspect-auto lg:border-b-0 lg:border-r" />
+          <div className="p-4 sm:p-7">
             <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
@@ -131,34 +128,29 @@ export default function FacilityDetail() {
                           ? "Unknown"
                           : null}
                   />
-                  <span className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em]", category.chip)}>
-                    <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full", category.dot)} /> {facility.kind}
-                  </span>
                 </div>
-                <h1 className="mt-4 font-display text-[1.75rem] font-semibold leading-tight tracking-[-0.02em] sm:text-[2.125rem]">{facility.name}</h1>
-                <p className="mt-3 flex items-center gap-2 text-base text-ink-soft sm:text-lg">
+                <h1 className="mt-3 font-display text-[1.625rem] font-semibold leading-tight tracking-[-0.02em] sm:text-[2.125rem]">{facility.name}</h1>
+                <p className="mt-2 flex items-center gap-2 text-base text-ink-soft sm:text-lg">
                   <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" /> {floor?.name || facility.floorId}
                   <span aria-hidden="true" className="text-ink-ghost">·</span> {category.label}
                 </p>
-                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ink-soft">{operationalDescription}</p>
-              </div>
-              <div className={cn("flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl", category.tile)}>
-                <Building2 className="h-7 w-7" aria-hidden="true" />
+                {/* Loading and unavailable states are stated once, in the details below. */}
+                {operationalProfile?.description && <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-soft">{operationalProfile.description}</p>}
               </div>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-2.5">
+            {/* One primary action, one secondary; saving is a single icon toggle. */}
+            <div className="mt-5 flex items-center gap-2.5">
               {navigationHref && (
-                <Link to={navigationHref} className={button.primary}>
+                <Link to={navigationHref} className={cn(button.primary, "min-h-12 flex-1 sm:flex-none")}>
                   <Navigation className="h-4 w-4" aria-hidden="true" /> Navigate
                 </Link>
               )}
-              <button type="button" onClick={() => openClara({ facilityId: facility.id })} className={button.secondary}>
+              <button type="button" onClick={() => openClara({ facilityId: facility.id })} className={cn(button.secondary, "min-h-12 shrink-0 whitespace-nowrap px-4", !navigationHref && "flex-1 sm:flex-none")}>
                 <MessageCircle className="h-4 w-4" aria-hidden="true" /> Ask CLARA
               </button>
-              <button type="button" onClick={onToggleSave} aria-pressed={saved} className={cn(saved ? button.outline : button.secondary)}>
-                {saved ? <BookmarkCheck className="h-4 w-4" aria-hidden="true" /> : <Bookmark className="h-4 w-4" aria-hidden="true" />}
-                {saved ? "Saved" : "Save Location"}
+              <button type="button" onClick={onToggleSave} aria-pressed={saved} aria-label={saved ? "Saved location. Remove from saved locations" : "Save location"} title={saved ? "Saved" : "Save location"} className={cn(saved ? button.outline : button.secondary, "min-h-12 w-12 shrink-0 px-0")}>
+                {saved ? <BookmarkCheck className="h-[18px] w-[18px]" aria-hidden="true" /> : <Bookmark className="h-[18px] w-[18px]" aria-hidden="true" />}
               </button>
             </div>
           </div>
@@ -176,13 +168,13 @@ export default function FacilityDetail() {
                 </button>
               )}
 
-              <h2 className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint">Location &amp; spatial information</h2>
-              <div className="mt-2">
+              {/* Secondary detail: open from 640px, one tap away on phones. */}
+              <Disclosure summary="Location & accessibility" defaultOpen={wideAtMount} className="mt-6 border-t border-line pt-2">
                 <InfoRow icon={MapPin} label="Floor assignment" value={floor?.name || facility.floorId} verification={facility.verification.floor} />
                 <InfoRow icon={Navigation} label="Exact room position" value={facility.mapRoomId ? "Source-aligned map estimate" : "Not mapped"} verification={facility.verification.exactLocation} />
                 <InfoRow icon={Building2} label="Room number" value={facility.roomNumber || "Not provided"} verification={facility.verification.roomNumber} />
                 <InfoRow icon={Accessibility} label="Accessibility" value={facility.accessibility || "Information pending verification"} />
-              </div>
+              </Disclosure>
             </section>
 
             <aside className="border-t border-line p-5 sm:p-7 lg:border-l lg:border-t-0">

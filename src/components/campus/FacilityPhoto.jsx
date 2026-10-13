@@ -5,9 +5,11 @@ import { cn } from "@/lib/utils"
 
 /**
  * Photo slot for offices, laboratories, classrooms, and clinics.
- * Looks for `public/images/facilities/<facility-id>.jpg`; until a photo is
- * added, a polished category-tinted placeholder renders instead, so future
- * image insertion needs no code changes.
+ * Renders an image only when the facility record carries an approved
+ * `photoSrc` (for example `/images/facilities/<facility-id>.jpg`); it is
+ * loaded lazily. Without one, a category-tinted placeholder with the
+ * category icon renders and no image request is made. No facility has an
+ * approved photo yet.
  */
 const VARIANTS = {
   banner: "aspect-[3/1] max-h-60 min-h-32 w-full",
@@ -17,16 +19,21 @@ const VARIANTS = {
 
 /** @param {Record<string, any>} props */
 export default function FacilityPhoto(props) {
-  const { facility, variant = "card", className, showHint = false } = props
+  // `placeholderClassName` lets a page drop the placeholder (never a real photo) where space is tight.
+  const { facility, variant = "card", className, placeholderClassName, showHint = false } = props
   const [missing, setMissing] = useState(false)
   const category = getFacilityCategory(facility)
   const Icon = category.icon
 
-  if (!missing) {
+  // No approved photo reference, no request: guessing a file name per facility
+  // produced one failed image request per card.
+  if (facility.photoSrc && !missing) {
     return (
       <img
-        src={`/images/facilities/${facility.id}.jpg`}
+        src={facility.photoSrc}
         alt={`${facility.name} photo`}
+        loading="lazy"
+        decoding="async"
         onError={() => setMissing(true)}
         className={cn(VARIANTS[variant], "shrink-0 object-cover", className)}
       />
@@ -41,7 +48,8 @@ export default function FacilityPhoto(props) {
         VARIANTS[variant],
         "relative flex shrink-0 flex-col items-center justify-center overflow-hidden",
         category.tile,
-        className
+        className,
+        placeholderClassName
       )}
     >
       <span

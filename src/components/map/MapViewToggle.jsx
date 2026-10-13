@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils"
 export default function MapViewToggle(props) {
   const { mapView, onSelect2D, onSelect3D, className } = props
   const option = (active) => cn(
-    "inline-flex h-10 items-center gap-1.5 rounded-lg px-3 font-heading text-[13px] font-semibold transition-colors duration-150 motion-reduce:transition-none",
+    "inline-flex h-11 items-center gap-1.5 rounded-lg px-3 font-heading text-[13px] font-semibold transition-colors duration-150 motion-reduce:transition-none",
     active ? "bg-ink text-on-ink" : "text-ink-mid hover:bg-fill hover:text-ink",
     focusRing,
   )

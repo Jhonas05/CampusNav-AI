@@ -37,12 +37,12 @@ const useActiveIndicator = (navRef, deps) => {
 }
 
 /**
- * Sidebar navigation content, shared by the desktop/tablet rail and the
- * mobile drawer. It renders no top bar and no CLARA entry.
+ * Sidebar navigation content for the desktop/tablet rail. It renders no top
+ * bar and no CLARA entry.
  * @param {Record<string, any>} props
  */
 export function SidebarNavigation(props) {
-  const { collapsed = false, onNavigate = noop, onSearch = noop, onToggleNotifications = noop, onToggleProfile = noop, onToggleCollapse = null, onClose = null, unread = 0, openPanel = null } = props
+  const { collapsed = false, onSearch = noop, onToggleNotifications = noop, onToggleProfile = noop, onToggleCollapse = null, unread = 0, openPanel = null } = props
   const location = useLocation()
   const auth = useAuth()
   const developerMode = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_VERIFICATION === "true"
@@ -55,7 +55,7 @@ export function SidebarNavigation(props) {
   return (
     <TooltipProvider delayDuration={150} skipDelayDuration={300}>
       <div className="flex h-full min-h-0 flex-col">
-        <SidebarHeader collapsed={collapsed} onNavigate={onNavigate} onClose={onClose} />
+        <SidebarHeader collapsed={collapsed} />
 
         <div className="shrink-0 px-3 pb-3">
           <SidebarSearchButton collapsed={collapsed} onClick={onSearch} />
@@ -72,7 +72,7 @@ export function SidebarNavigation(props) {
           {sections.map((section) => (
             <SidebarSection key={section.id} label={section.label} collapsed={collapsed}>
               {section.items.map((item) => (
-                <SidebarItem key={item.path} item={item} collapsed={collapsed} active={isNavItemActive(location.pathname, item)} indicator={Boolean(indicator)} onNavigate={onNavigate} />
+                <SidebarItem key={item.path} item={item} collapsed={collapsed} active={isNavItemActive(location.pathname, item)} indicator={Boolean(indicator)} />
               ))}
             </SidebarSection>
           ))}
@@ -103,7 +103,7 @@ export function SidebarNavigation(props) {
 
 /**
  * Desktop/tablet rail: sticky, full height, collapsible to icons.
- * Hidden below 768px, where MobileSidebarDrawer takes over.
+ * Hidden below 768px, where MobileBottomNav takes over.
  * @param {Record<string, any>} props
  */
 export default function Sidebar(props) {

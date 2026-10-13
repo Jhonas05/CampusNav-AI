@@ -49,7 +49,7 @@ const ClaraComposer = forwardRef(function ClaraComposer(/** @type {Record<string
           disabled={!value.trim() || pending}
           aria-label="Send message"
           className={cn(
-            "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink text-on-ink transition-[background-color,transform,opacity] duration-200 hover:bg-ink-strong active:scale-95 disabled:opacity-25 motion-reduce:transform-none",
+            "flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink text-on-ink transition-[background-color,transform,opacity] duration-200 hover:bg-ink-strong active:scale-95 disabled:opacity-25 motion-reduce:transform-none",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2"
           )}
         >

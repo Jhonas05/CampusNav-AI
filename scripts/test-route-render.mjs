@@ -48,7 +48,22 @@ try {
       React.createElement(Navigate)
     )
   )
-  const html = renderNavigate("/map")
+  // DEC-UI-006: a fresh Navigate session has no current location and no destination; CampusNav
+  // never infers where the visitor is. The former Library → Virtual Laboratory start now lives
+  // behind the explicit, labelled demo mode, which the original assertions below exercise.
+  const freshHtml = renderNavigate("/map")
+  assert.match(freshHtml, /From <\/span><span class="font-semibold">Not set<\/span>/, "no current location is assumed")
+  assert.match(freshHtml, /Choose a floor first/, "the manual picker starts with no floor and no location chosen")
+  assert.match(freshHtml, /aria-label="Floor of your current location"[^>]*>s*<option value="" disabled="" selected="">Floor…/, "the picker floor does not follow the viewed floor")
+  assert.match(freshHtml, /id="destination-input"[^>]*value=""/, "no destination is preselected")
+  assert.doesNotMatch(freshHtml, /Manual selection|QR confirmed/, "no positioning method is claimed")
+  assert.doesNotMatch(freshHtml, /aria-label="Selected destination"|Demo start/)
+  assert.match(freshHtml, /<button[^>]*disabled=""[^>]*>(?:<svg[\s\S]*?<\/svg>)?\s*(?:<!-- -->)?\s*Start Navigation/, "no route can start without a start and a destination")
+  assert.match(freshHtml, />Navigate</)
+  assert.match(freshHtml, /Scan QR/)
+
+  const html = renderNavigate("/map?demo=1")
+  assert.match(html, /Demo start — a sample location and destination, not your position/, "the demo start is visibly labelled")
 
   const loginHtml = renderToString(
     React.createElement(
@@ -126,6 +141,8 @@ try {
   assert.match(emergencyHtml, /Emergency Mode/)
   assert.match(emergencyHtml, /Current location/)
   assert.match(emergencyHtml, /Find Nearest Verified Exit/)
+  assert.match(emergencyHtml, /Set your location to find the nearest verified exit\./, "emergency routing never starts from an assumed position")
+  assert.match(emergencyHtml, /<button[^>]*disabled=""[^>]*>(?:<svg[\s\S]*?<\/svg>)?\s*(?:<!-- -->)?\s*Find Nearest Verified Exit/)
   assert.match(emergencyHtml, /emergency-map-overlay/)
   assert.match(emergencyHtml, /Loading emergency reference/)
   assert.doesNotMatch(emergencyHtml, /Start Navigation/)
