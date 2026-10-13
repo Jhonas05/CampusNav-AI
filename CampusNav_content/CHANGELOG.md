@@ -1,5 +1,15 @@
 # CampusNav Content Pack — Changelog
 
+## v3.49 — 14 October 2026
+
+Recorded `DEC-PWA-001` as an owner-authorized optional/cross-cutting engineering workstream while preserving every adviser/defense choice as unanswered.
+
+- authorized installability, a dedicated monochrome CampusNav icon, safe public-static caching, offline canonical 2D navigation, manual positioning, conservative operational degradation, user-controlled updates, mobile install/connectivity UX, and optional verified QR/3D cache-on-use work
+- kept the workstream outside Phase 4 and did not create a new canonical phase number
+- kept PWA thesis/defense classification `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION`
+- retained the manifest-only implementation status until code and acceptance evidence exist
+- kept offline Emergency routing, offline Admin mutations, authenticated-response caching, background sync, push, unverified accessibility routing, Supabase schema changes, and unrelated FS-4/FS-5/FS-6 work excluded
+
 ## v3.48 — 14 October 2026
 
 Prepared the documentation-only **PWA-0 canonical decision and adviser-confirmation package** after the owner-authorized PWA readiness audit.

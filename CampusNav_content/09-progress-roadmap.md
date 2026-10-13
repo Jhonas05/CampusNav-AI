@@ -441,6 +441,16 @@ This is a presentation and information-architecture checkpoint. It does not star
 
 Details: `29-decision-log.md` (`DEC-UI-006`), `63-implementation-status-registry.md`, `CHANGELOG.md` v3.47.
 
+## Owner-directed cross-cutting PWA workstream — 14 October 2026
+
+**Status:** `OWNER AUTHORIZED / NOT YET IMPLEMENTED / ADVISER DEFENSE CONFIRMATION PENDING`
+
+`DEC-PWA-001` authorizes an optional engineering workstream for installability, a dedicated CampusNav app icon, a safe public-static service worker, offline canonical 2D navigation, manual positioning, truthful operational-data degradation, user-controlled updates, mobile install/connectivity UX, and optional tested QR/3D cache-on-use behavior.
+
+This is not a Phase 4 facility-search/recommendation slice, does not start FS-5 or FS-6, and does not create a new canonical phase number. Adviser choices in `75-adviser-confirmation-package.md` remain unanswered and still control thesis/defense classification. Offline Emergency routing, offline Admin mutations, authenticated-response caching, push notifications, background sync, crowd tracking, unverified wheelchair routing, Supabase schema work, and unrelated product work are excluded.
+
+The workstream may proceed only through independently verifiable commits and must preserve the one spatial dataset, one graph, one A* engine, existing Auth/RLS boundaries, pending/demo provenance, and strict emergency-approved-only routing. `72-definition-of-ready.md` and `73-quality-gates-release-checklist.md` control each implementation slice.
+
 ## Phase 4 — Core Facility & Service Workflow Completion
 
 **Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL AND DIRECTORY IMPLEMENTED_VERIFIED / OWNER APPROVED`

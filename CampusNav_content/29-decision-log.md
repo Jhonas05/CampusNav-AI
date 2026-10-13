@@ -267,10 +267,10 @@ Defense-data policy:
 
 The formal tablet-based versus responsive-web title, final adviser scope confirmation, grounded CLARA/PWA requirement, defense-data-policy acceptance, and research/evaluation methodology remain `ADVISER_APPROVAL_REQUIRED`.
 
-## DEC-PWA-001 — Owner-proposed installability and offline 2D scope for adviser confirmation
-**Status:** OWNER-PROPOSED / ADVISER CONFIRMATION REQUIRED / IMPLEMENTATION NOT AUTHORIZED — 14 Oct 2026
+## DEC-PWA-001 — Owner-directed installability and offline 2D engineering scope
+**Status:** OWNER AUTHORIZED FOR ENGINEERING / ADVISER DEFENSE CONFIRMATION STILL REQUIRED — 14 Oct 2026
 
-The owner authorizes preparation of a detailed PWA decision package in section 4 of `75-adviser-confirmation-package.md`. This records a proposal for adviser review; it does not approve implementation, select an adviser answer, install a dependency, or change the current manifest-only implementation status.
+The owner authorizes a separate, optional, cross-cutting PWA engineering workstream. This authorization is independent of the unanswered adviser decision about whether PWA capability belongs in the final-defense scope. It does not select an adviser answer, claim adviser approval, or change implementation status before code and tests provide evidence. Section 4 of `75-adviser-confirmation-package.md` remains the unanswered academic decision form.
 
 Proposed first-release boundary:
 - complete manifest identity, approved app icons, Android installation, iPhone/iPad Add to Home Screen guidance, and standalone launch behavior
@@ -280,14 +280,14 @@ Proposed first-release boundary:
 - optional QR decoder and 3D bundles cached only after explicit use or approved opt-in
 - no offline Admin mutation, background write queue, authenticated-response/token cache, crowd inference, unverified accessible routing, or offline Emergency route claim
 
-Technical recommendation, still pending approval:
+Approved engineering direction, subject to dependency review and acceptance evidence:
 - use `vite-plugin-pwa` with Workbox `injectManifest` for a root-scoped custom worker, build-revisioned public-static caching, an explicit API/auth denylist, controlled old-cache cleanup, and user-controlled updates
 - retain a handwritten worker as the alternative, while recognizing that the repository's Vite-hashed lazy chunks would require custom build-manifest and lifecycle handling
-- prefer a dedicated, separately approved CampusNav app icon over automatically repurposing the SCC seal or cropping the social-sharing image; the adviser/owner choice remains unanswered
+- create a dedicated monochrome CampusNav app mark derived from approved CampusNav branding; do not distort the SCC seal or crop the social-sharing image
 
 Offline Emergency navigation remains `BLOCKED` and outside this proposal pending verified route coverage, approved cross-floor transitions, verified contacts, approved emergency-data versioning, and authorized safety release/invalidation ownership. Ordinary A* routes remain forbidden as emergency substitutes.
 
-The proposed work packages in `75` are planning labels, not new canonical phase numbers. Coding may begin only after returned adviser evidence is recorded, the owner authorizes a separate cross-cutting PWA workstream and exact first slice, and the selected slice satisfies `72-definition-of-ready.md`.
+The proposed work packages in `75` are planning labels, not new canonical phase numbers. Owner-controlled engineering may proceed through the authorized PWA workstream once each slice satisfies `72-definition-of-ready.md`; adviser confirmation still controls thesis/defense classification and claims, not this optional engineering authorization.
 
 ## DEC-ROADMAP-002 — Phase 4 product-completion reprioritization
 **Status:** OWNER APPROVED — 20 Sep 2026

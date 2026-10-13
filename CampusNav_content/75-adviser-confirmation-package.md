@@ -86,7 +86,9 @@ A `YES` or `CONDITIONAL` decision creates a separate future workstream. It does 
 
 ## 4. PWA installability and offline-navigation proposal
 
-**Proposal status:** `OWNER-PROPOSED / AWAITING_ADVISER_CONFIRMATION / NOT_IMPLEMENTED`
+**Proposal status:** `OWNER AUTHORIZED FOR OPTIONAL ENGINEERING / AWAITING_ADVISER DEFENSE CONFIRMATION / NOT YET IMPLEMENTED`
+
+On 14 October 2026, the owner separately authorized this optional cross-cutting engineering workstream under `DEC-PWA-001`. That decision does not select any checkbox below or claim that the adviser requires, accepts, or includes PWA capability in the thesis defense.
 
 Current evidence:
 

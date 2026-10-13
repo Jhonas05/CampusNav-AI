@@ -25,8 +25,8 @@ Only unresolved decisions belong here. Resolved decisions move to `29-decision-l
 - Does the installed application use the existing official SCC seal or a separately approved dedicated CampusNav app icon?
 - Is the approved initial cache scope limited to the public app shell and canonical 2D navigation, or is another scope required?
 - Which Android, iPhone/iPad, desktop, browser, and physical-device targets must pass before the approved PWA claim may be made?
-- May the implementation add reviewed development dependencies for `vite-plugin-pwa` and Workbox `injectManifest`, or must it use a handwritten service worker?
-- Does the adviser permit a separate cross-cutting PWA workstream after the owner records the returned decisions and authorizes an exact slice?
+- Does the adviser accept the owner-selected `vite-plugin-pwa` and Workbox `injectManifest` architecture for any thesis/defense PWA claim, or require another documented architecture?
+- Does the adviser include the independently owner-authorized cross-cutting PWA workstream in the thesis/defense scope?
 - Which PWA capabilities, including optional QR/3D caching, must remain deferred until after defense?
 - Offline Emergency navigation remains blocked pending safety/institutional authority. Is any separately approved offline Emergency reference scope required after those prerequisites are satisfied?
 - Does the adviser require any owner-deferred feature—reports/analytics, map editor/version rollback, expanded positioning, AR, push/SMS, hardware presence, or photorealistic 3D—for the final defense?
@@ -42,7 +42,7 @@ Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` and `75-advi
 
 Adviser confirmation remains a separate external action and still controls adviser/academic claims. Institutional questions above still control whether values may be presented as official; they do not authorize agents to invent those values.
 
-`DEC-PWA-001` and the expanded section 4 of `75-adviser-confirmation-package.md` prepare the PWA choices without answering them. PWA implementation remains unauthorized, manifest-only, and outside Phase 4 until completed adviser evidence is returned and the owner separately authorizes the selected workstream and first slice.
+`DEC-PWA-001` now authorizes optional owner-controlled PWA engineering as a separate cross-cutting workstream outside Phase 4. The adviser choices in section 4 of `75-adviser-confirmation-package.md` remain unanswered and continue to control academic/defense classification and claims. Until implementation and acceptance evidence exist, current PWA status remains manifest-only; offline Emergency remains blocked.
 
 ### AR-Assisted Camera Navigation planning
 - After current Phase 3 acceptance, when—if ever—may AR-0 be authorized on the roadmap?
