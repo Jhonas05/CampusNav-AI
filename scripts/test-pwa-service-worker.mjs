@@ -13,9 +13,10 @@ assert.match(config, /manifest:\s*false/, 'the canonical public manifest must re
 for (const excluded of ['*Admin*.js', 'Login-*.js', 'Emergency-*.js', 'QRCheckpoints-*.js', 'MapVerificationPanel-*.js', 'Campus3D-*.js', 'QRScanner-*.js', 'supabase-client-*.js']) {
   assert.ok(config.includes(excluded), `precache must exclude ${excluded}`)
 }
-for (const chunk of ['three-renderer', 'qr-decoder', 'supabase-client']) {
+for (const chunk of ['qr-decoder', 'supabase-client']) {
   assert.ok(config.includes(chunk), `build must isolate ${chunk}`)
 }
+assert.match(config, /onlyExplicitManualChunks:\s*true/, 'isolated chunks must not absorb shared entry dependencies')
 
 assert.match(worker, /precacheAndRoute\(self\.__WB_MANIFEST/, 'worker must use the injected revision manifest')
 assert.match(worker, /PUBLIC_OFFLINE_PATHS/, 'worker must allowlist offline navigations')

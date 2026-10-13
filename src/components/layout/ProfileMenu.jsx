@@ -1,4 +1,4 @@
-import { Accessibility, Bell, Bookmark, LayoutGrid, LogIn, LogOut, QrCode, UserRound } from "lucide-react"
+import { Accessibility, Bell, Bookmark, Download, LayoutGrid, LogIn, LogOut, QrCode, UserRound } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { focusRing } from "@/components/campus/ui"
@@ -8,6 +8,7 @@ import { getFacilityById } from "@/data/facilities"
 import { getFloorById } from "@/data/floors"
 import { APP_ROLES } from "@/lib/authorization"
 import { getSavedLocationIds, subscribeToSavedLocations } from "@/lib/savedLocations"
+import { usePwa } from "@/contexts/PwaContext"
 
 const plannedItems = [
   { label: "Profile", icon: UserRound },
@@ -17,6 +18,7 @@ const plannedItems = [
 
 export default function ProfileMenu({ open, onClose }) {
   const auth = useAuth()
+  const pwa = usePwa()
   const location = useLocation()
   // Inside the Admin shell the Admin navigation already lists these destinations.
   const insideAdmin = usesAdminShell(location.pathname, auth)
@@ -86,6 +88,11 @@ export default function ProfileMenu({ open, onClose }) {
       </section>
 
       <section aria-label="Preferences" className="border-b border-line px-2 py-2">
+        {!pwa.installed && (
+          <button type="button" onClick={() => { onClose(); pwa.canInstall ? pwa.requestInstall() : pwa.showInstallHelp() }} className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-ink transition-colors hover:bg-fill ${focusRing}`}>
+            <Download className="h-4 w-4" aria-hidden="true" /> Install CampusNav
+          </button>
+        )}
         {!insideAdmin && auth.hasAnyRole([APP_ROLES.SUPER_ADMIN, APP_ROLES.DEPARTMENT_ADMIN]) && (
           <Link to={auth.hasRole(APP_ROLES.SUPER_ADMIN) ? "/admin" : "/admin/personnel"} onClick={onClose} className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-ink transition-colors hover:bg-fill ${focusRing}`}>
             <LayoutGrid className="h-4 w-4" aria-hidden="true" /> Admin CMS

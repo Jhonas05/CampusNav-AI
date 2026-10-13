@@ -1,4 +1,4 @@
-import { CircleAlert, Info, LocateFixed, Minimize, Navigation, QrCode, ShieldAlert } from "lucide-react"
+import { CircleAlert, Info, LocateFixed, Minimize, Navigation, QrCode, ShieldAlert, WifiOff } from "lucide-react"
 import { lazy, Suspense, useCallback, useMemo, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { button, Disclosure, focusRing, InkKicker, InkSectionLabel } from "@/components/campus/ui"
@@ -29,6 +29,8 @@ import { advanceNavigationProgress, calculateFacilityRoute, generateNavigationIn
 import { buildEmergencyVerificationReport, findNearestVerifiedExit, generateEmergencyInstructions, getEmergencyRouteSegmentForFloor } from "@/lib/emergencyNavigation"
 import { supportsWebGL } from "@/lib/webgl"
 import { cn } from "@/lib/utils"
+import { useConnectivity } from "@/contexts/ConnectivityContext"
+import AsyncFeatureBoundary from "@/components/pwa/AsyncFeatureBoundary"
 
 const MapVerificationPanel = lazy(() => import("@/components/map/MapVerificationPanel"))
 const QRScanner = lazy(() => import("@/components/map/QRScanner"))
@@ -84,6 +86,29 @@ const createUnsetPosition = (pickerFloorId = "") => ({
 
 export default function Navigate() {
   const [searchParams] = useSearchParams()
+  const connectivity = useConnectivity()
+  if (connectivity.isOffline && searchParams.get("mode") === "emergency") {
+    return (
+      <div className="app-page bg-canvas">
+        <div className="app-container-readable">
+          <section role="alert" className="ink-blueprint p-5 sm:p-7">
+            <WifiOff className="h-6 w-6 text-ink" aria-hidden="true" />
+            <h1 className="mt-4 font-display text-2xl font-semibold tracking-tight text-ink">Emergency routing is unavailable offline</h1>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">CampusNav will not calculate or present an emergency route without a confirmed network connection. Follow posted signs and official on-site instructions.</p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <button type="button" onClick={connectivity.retryConnectivity} className={button.primary}>Check connection</button>
+              <Link to="/map" className={button.secondary}>Open standard 2D map</Link>
+            </div>
+          </section>
+        </div>
+      </div>
+    )
+  }
+  return <NavigateExperience searchParams={searchParams} />
+}
+
+function NavigateExperience({ searchParams }) {
+  const connectivity = useConnectivity()
   const emergencyMode = searchParams.get("mode") === "emergency"
   const requestedFacility = getFacilityById(searchParams.get("facility"))
   // `?floor=` opens Navigate on a known floor (Home floor stack). Unknown ids
@@ -369,7 +394,7 @@ export default function Navigate() {
   }
 
   const handle3DFailure = () => {
-    setMap3DMessage(MAP3D_FALLBACK_MESSAGE)
+    setMap3DMessage(connectivity.isOffline ? "3D was not cached on this device; switched to the offline 2D map." : MAP3D_FALLBACK_MESSAGE)
     setMapView("2D")
   }
 
@@ -922,9 +947,17 @@ export default function Navigate() {
       )}
 
       {scannerOpen && (
-        <Suspense fallback={<div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 text-sm font-medium text-white">Loading camera scanner...</div>}>
-          <QRScanner onDetected={handleCheckpointPayload} onClose={() => setScannerOpen(false)} onManual={useManualLocation} />
-        </Suspense>
+        <AsyncFeatureBoundary
+          resetKey={scannerOpen}
+          onFailure={() => {
+            setScannerOpen(false)
+            setScanError(connectivity.isOffline ? "QR scanning was not cached on this device. Set your location manually." : "QR scanning is unavailable. Set your location manually.")
+          }}
+        >
+          <Suspense fallback={<div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 text-sm font-medium text-white">Loading camera scanner...</div>}>
+            <QRScanner onDetected={handleCheckpointPayload} onClose={() => setScannerOpen(false)} onManual={useManualLocation} />
+          </Suspense>
+        </AsyncFeatureBoundary>
       )}
 
       {mobileSheetVisible && !immersive && mobileSheet}

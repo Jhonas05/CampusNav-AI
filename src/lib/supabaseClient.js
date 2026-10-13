@@ -77,7 +77,12 @@ export const createSupabaseClientLoader = ({
           detectSessionInUrl: true,
           persistSession: true,
         },
-      }))
+      })).catch((error) => {
+        // A first load can fail while the app is offline. Do not permanently
+        // memoize that rejection; the next read after reconnection may retry.
+        clientPromise = null
+        throw error
+      })
     }
     return clientPromise
   }

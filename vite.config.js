@@ -4,7 +4,6 @@ import { fileURLToPath, URL } from 'node:url'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const optionalBundleName = (id) => {
-  if (id.includes('/node_modules/three/') || id.includes('/node_modules/@react-three/')) return 'three-renderer'
   if (id.includes('/node_modules/@zxing/')) return 'qr-decoder'
   if (id.includes('/node_modules/@supabase/')) return 'supabase-client'
   return undefined
@@ -59,6 +58,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: optionalBundleName,
+        onlyExplicitManualChunks: true,
       },
     },
   },

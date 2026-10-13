@@ -44,6 +44,19 @@ assert.equal(await loadConfiguredClient(), configuredClient)
 assert.equal(importCount, 1)
 assert.equal(await createSupabaseClientLoader({ env: {}, importer: async () => assert.fail("Unconfigured mode must not import Supabase") })(), null)
 
+let reconnectImports = 0
+const loadAfterReconnect = createSupabaseClientLoader({
+  env: { VITE_SUPABASE_URL: "https://example.supabase.co", VITE_SUPABASE_ANON_KEY: "public-anon-key" },
+  importer: async () => {
+    reconnectImports += 1
+    if (reconnectImports === 1) throw new Error("offline")
+    return { createClient: () => ({ connected: true }) }
+  },
+})
+await assert.rejects(loadAfterReconnect(), /offline/)
+assert.equal((await loadAfterReconnect()).connected, true)
+assert.equal(reconnectImports, 2)
+
 const managerRoles = [{ code: APP_ROLES.FACILITY_MANAGER }]
 assert.equal(hasRole(managerRoles, APP_ROLES.FACILITY_MANAGER), true)
 assert.equal(hasAnyRole(managerRoles, [APP_ROLES.STAFF, APP_ROLES.FACILITY_MANAGER]), true)

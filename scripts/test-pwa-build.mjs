@@ -29,5 +29,6 @@ const forbidden = /(?:Admin|QRCheckpoints|MapVerificationPanel|Login-|Emergency-
 assert.deepEqual(precacheUrls.filter((url) => forbidden.test(url)), [], 'restricted and opt-in bundles must not be precached')
 assert.match(worker, /campusnav-optional-static-/, 'optional 3D and QR cache policy must be built')
 assert.match(index, /rel="manifest" href="\/manifest\.json"/, 'production HTML must reference the canonical manifest')
+assert.doesNotMatch(index, /(?:three-renderer|qr-decoder|supabase-client)-/, 'the HTML entry must not preload excluded or opt-in bundles')
 
 console.log(`PWA production build boundaries: PASS (${precacheUrls.length} precache entries)`)

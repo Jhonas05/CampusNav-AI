@@ -14,6 +14,7 @@ import { isLocationSaved, toggleSavedLocation } from "@/lib/savedLocations"
 import { getFacilityNavigationHref } from "@/services/dashboardService"
 import { getFacilityDetail } from "@/services/facilityService"
 import { cn } from "@/lib/utils"
+import { useConnectivity } from "@/contexts/ConnectivityContext"
 
 const VERIFICATION_BADGE = {
   VERIFIED: { label: "Verified", className: "border border-ink bg-ink text-on-ink" },
@@ -39,6 +40,7 @@ function InfoRow({ icon: Icon, label, value, verification = "PENDING_VERIFICATIO
 }
 
 export default function FacilityDetail() {
+  const connectivity = useConnectivity()
   const { id } = useParams()
   const { openClara } = useClara()
   const facility = getFacilityById(id)
@@ -52,6 +54,11 @@ export default function FacilityDetail() {
   useEffect(() => {
     let active = true
     if (!facility) {
+      setOperationalState({ loading: false, detail: null })
+      return () => { active = false }
+    }
+
+    if (!connectivity.isOnline) {
       setOperationalState({ loading: false, detail: null })
       return () => { active = false }
     }
@@ -70,7 +77,7 @@ export default function FacilityDetail() {
       })
 
     return () => { active = false }
-  }, [facility, requestVersion])
+  }, [connectivity.isOnline, connectivity.reconnectVersion, facility, requestVersion])
 
   if (!facility) {
     return (
@@ -163,8 +170,8 @@ export default function FacilityDetail() {
                 <FacilityOperationalDetails detail={operationalDetail} loading={operationalState.loading} />
               </div>
               {!operationalState.loading && (!operationalDetail || hasOperationalFailure) && (
-                <button type="button" onClick={() => setRequestVersion((value) => value + 1)} className={cn(button.smallSecondary, "mt-3")}>
-                  <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" /> Retry operational data
+                <button type="button" onClick={() => connectivity.isOffline ? connectivity.retryConnectivity() : setRequestVersion((value) => value + 1)} className={cn(button.smallSecondary, "mt-3")}>
+                  <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" /> {connectivity.isOffline ? "Check connection" : "Retry operational data"}
                 </button>
               )}
 

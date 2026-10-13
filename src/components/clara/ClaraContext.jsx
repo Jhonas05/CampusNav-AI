@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react"
 import { askClara, CLARA_WELCOME_MESSAGE, getClaraFacilityContextReply } from "@/services/claraService"
+import { useConnectivity } from "@/contexts/ConnectivityContext"
 
 /**
  * Global CLARA assistant state. One provider lives in the app shell so the
@@ -35,6 +36,7 @@ const ClaraContext = createContext(defaultValue)
 const welcomeMessage = () => ({ id: 0, role: /** @type {"assistant"} */ ("assistant"), text: CLARA_WELCOME_MESSAGE, facility: null, link: null, verified: true })
 
 export function ClaraProvider({ children }) {
+  const connectivity = useConnectivity()
   const [open, setOpen] = useState(false)
   const [pending, setPending] = useState(false)
   const [messages, setMessages] = useState(() => /** @type {ClaraMessage[]} */ ([welcomeMessage()]))
@@ -47,6 +49,10 @@ export function ClaraProvider({ children }) {
 
   const request = useCallback(async (text) => {
     const token = ++requestToken.current
+    if (!connectivity.isOnline) {
+      append({ role: "assistant", text: "CLARA is unavailable while CampusNav is offline. Cached 2D navigation and canonical locations remain available.", error: true, retryText: text })
+      return
+    }
     setPending(true)
     try {
       const reply = await askClara(text)
@@ -68,7 +74,7 @@ export function ClaraProvider({ children }) {
     } finally {
       if (token === requestToken.current) setPending(false)
     }
-  }, [append])
+  }, [append, connectivity.isOnline])
 
   const send = useCallback((value) => {
     const text = String(value || "").trim()

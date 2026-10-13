@@ -14,6 +14,7 @@ import ClaraAssistant from "@/components/clara/ClaraAssistant"
 import { ClaraProvider } from "@/components/clara/ClaraContext"
 import { useAuth } from "@/contexts/AuthContext"
 import { cn } from "@/lib/utils"
+import PwaStatus from "@/components/pwa/PwaStatus"
 
 const SIDEBAR_PREF_KEY = "campusnav.sidebar.v1"
 const WIDE_QUERY = "(min-width: 1280px)"
@@ -228,6 +229,7 @@ export default function AppShell() {
         <ProfileMenu open={openPanel === "profile"} onClose={closePanel} />
         <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
         <ClaraAssistant />
+        <PwaStatus />
       </div>
     </ClaraProvider>
   )

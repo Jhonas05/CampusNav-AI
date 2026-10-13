@@ -9,6 +9,7 @@ import { floors, getFloorById } from "@/data/floors"
 import { getCategoryByKey } from "@/lib/facilityCategories"
 import { cn } from "@/lib/utils"
 import { getFacilitiesDirectory } from "@/services/facilityService"
+import { useConnectivity } from "@/contexts/ConnectivityContext"
 
 /**
  * Presentation-only groupings over verified facility kinds.
@@ -61,6 +62,7 @@ function CategoryFilter({ category, onSelect, className }) {
 }
 
 export default function Facilities() {
+  const connectivity = useConnectivity()
   const [searchParams] = useSearchParams()
   const [query, setQuery] = useState(searchParams.get("q") || "")
   const [category, setCategory] = useState("All")
@@ -71,6 +73,10 @@ export default function Facilities() {
 
   useEffect(() => {
     let active = true
+    if (!connectivity.isOnline) {
+      setOperationalState({ loading: false, result: null })
+      return () => { active = false }
+    }
     setOperationalState((state) => ({ ...state, loading: true }))
     getFacilitiesDirectory()
       .then((result) => {
@@ -80,7 +86,7 @@ export default function Facilities() {
         if (active) setOperationalState({ loading: false, result: null })
       })
     return () => { active = false }
-  }, [requestVersion])
+  }, [connectivity.isOnline, connectivity.reconnectVersion, requestVersion])
 
   const directoryById = useMemo(() => new Map(
     (operationalState.result?.data?.facilities || []).map((entry) => [entry.facility.id, entry]),
@@ -165,8 +171,8 @@ export default function Facilities() {
             )}
             {overlayUnavailable && (
               <div role="alert" className="mt-2 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-dashed border-ink-faint bg-subtle px-4 py-3">
-                <p className="text-[13px] leading-relaxed text-ink">Facility information is temporarily unavailable. Canonical locations remain available.</p>
-                <button type="button" onClick={() => setRequestVersion((value) => value + 1)} className={cn(button.smallSecondary, "min-h-11")}>Retry</button>
+                <p className="text-[13px] leading-relaxed text-ink">{connectivity.isOffline ? "Offline: live facility status is unknown. Canonical locations remain available." : "Facility information is temporarily unavailable. Canonical locations remain available."}</p>
+                <button type="button" onClick={() => connectivity.isOffline ? connectivity.retryConnectivity() : setRequestVersion((value) => value + 1)} className={cn(button.smallSecondary, "min-h-11")}>{connectivity.isOffline ? "Check connection" : "Retry"}</button>
               </div>
             )}
 

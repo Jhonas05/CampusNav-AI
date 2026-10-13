@@ -6,6 +6,7 @@ import { EMERGENCY_DISCLAIMER, emergencyContacts, emergencyGuidance } from "@/da
 import { emergencyExits } from "@/data/emergencyExits"
 import { emergencyEquipment } from "@/data/emergencyEquipment"
 import { cn } from "@/lib/utils"
+import { useConnectivity } from "@/contexts/ConnectivityContext"
 
 const supportedFloors = (records) => [...new Set(records.map((record) => record.floorId))]
 
@@ -16,6 +17,7 @@ const supportedFloors = (records) => [...new Set(records.map((record) => record.
  * the canonical text and is not shortened.
  */
 export default function Emergency() {
+  const connectivity = useConnectivity()
   const exitFloors = supportedFloors(emergencyExits)
   const equipmentFloors = supportedFloors(emergencyEquipment)
   const contactsRef = useRef(/** @type {HTMLElement | null} */ (null))
@@ -32,13 +34,21 @@ export default function Emergency() {
         <PageHeader compact eyebrow="Verified safety information" title="Emergency Information" />
 
         <div className="mt-3 grid grid-cols-2 gap-2.5 sm:mt-5 sm:flex sm:flex-wrap">
-          <Link to="/map?mode=emergency" className={cn(button.danger, "min-h-12 px-3 sm:px-5")}>
-            <Map className="h-4 w-4 shrink-0" aria-hidden="true" /> Emergency Map
-          </Link>
+          {connectivity.isOffline ? (
+            <button type="button" disabled aria-describedby="offline-emergency-note" className={cn(button.danger, "min-h-12 px-3 sm:px-5")}>
+              <Map className="h-4 w-4 shrink-0" aria-hidden="true" /> Emergency Map
+            </button>
+          ) : (
+            <Link to="/map?mode=emergency" className={cn(button.danger, "min-h-12 px-3 sm:px-5")}>
+              <Map className="h-4 w-4 shrink-0" aria-hidden="true" /> Emergency Map
+            </Link>
+          )}
           <button type="button" onClick={showContacts} className={cn(button.dangerOutline, "min-h-12 px-3 sm:px-5")}>
             <Phone className="h-4 w-4 shrink-0" aria-hidden="true" /> Contacts
           </button>
         </div>
+
+        {connectivity.isOffline && <p id="offline-emergency-note" role="alert" className="mt-3 text-sm font-semibold text-ink">Emergency routing is unavailable offline. Follow posted signs and official on-site instructions.</p>}
 
         <div role="status" className="mt-4 flex items-start gap-3 rounded-2xl border-2 border-ink bg-surface p-4">
           <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-ink" aria-hidden="true" />

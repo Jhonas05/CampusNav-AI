@@ -5,6 +5,8 @@ import ScrollToTop from './components/ScrollToTop';
 import AppShell from '@/components/layout/AppShell';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ConnectivityProvider } from '@/contexts/ConnectivityContext';
+import { PwaProvider } from '@/contexts/PwaContext';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { APP_ROLES } from '@/lib/authorization';
 
@@ -45,6 +47,8 @@ const RouteFallback = () => (
 function App() {
   return (
     <ThemeProvider>
+    <ConnectivityProvider>
+    <PwaProvider>
     <AuthProvider>
       <Router>
         <ScrollToTop />
@@ -90,6 +94,8 @@ function App() {
         <Toaster />
       </Router>
     </AuthProvider>
+    </PwaProvider>
+    </ConnectivityProvider>
     </ThemeProvider>
   )
 }
