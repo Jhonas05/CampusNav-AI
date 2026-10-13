@@ -34,6 +34,8 @@ If incomplete, display:
 ## Route preference wording
 Do not show “Elevator Preferred” unless verified elevator data exists. “Fewer Stairs” may be used only if route metadata actually supports it.
 
+The `DEC-NAV-002` engine foundation supports `AVOID_STAIRS` only as a hard exclusion of verified stair edges and unknown cross-floor connectors. It must not be described as wheelchair-accessible, step-free, elevator-based, or a guarantee that every same-floor segment meets a person's mobility needs. `STEP_FREE` remains unavailable pending institutionally verified infrastructure and route data. No user-facing preference control is implemented by this engine-only slice.
+
 ## Map states
 Color can supplement meaning, but blocked/restricted/emergency/current/destination states must also use:
 - icons

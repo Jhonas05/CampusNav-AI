@@ -15,6 +15,20 @@
 - 2D/3D preserve same route/current/destination
 - QR/manual fallback passes
 
+## Mobility route-options foundation evidence (`DEC-NAV-002`) — 14 October 2026
+
+- `IMPLEMENTED_VERIFIED (ENGINE ONLY) / OWNER APPROVED` — adviser/defense classification remains unchanged
+- `17/17 PASS` — explicit route-option, eligibility, failure, immutability, consumer-isolation, offline, and scope-boundary checks
+- `PASS` — omitted preference retains the exact existing `STANDARD` route contract; explicit `STANDARD` produces the same route
+- `PASS — HARD CONSTRAINT` — `AVOID_STAIRS` rejects stair edges and unknown cross-floor connectors without graph mutation or cost penalties
+- `PASS — SAFE FAILURE` — current cross-floor avoid-stairs request returns the canonical no-route message plus no-substitution guidance; no silent stair fallback
+- `PASS` — same-floor eligible routing and deterministic entrance selection remain available; a stair landing node alone does not reject non-stair same-floor edges
+- `PASS` — blocked, restricted, construction, QR/manual, 2D/3D shared-route, and Emergency approved-edge-only behavior remain intact
+- `PASS` — bundled local implementation remains compatible with the accepted offline canonical 2D architecture; no worker/cache change
+- `NO ACCESSIBILITY OVERCLAIM` — no STEP_FREE/wheelchair, elevator/ramp, crowd-aware, accessible-Emergency, or mobile UI capability is implemented
+- `NO DATABASE / PROVIDER / DEPENDENCY CHANGE` — no schema, migration, remote data, provider, package dependency, or lockfile change
+- `FULL REGRESSION PASS` — all 31 deterministic test scripts, ESLint, typecheck, production build, and Git diff checks are required for release
+
 ## Emergency gate
 - approved emergency route test passes where data exists
 - no normal-route fallback is possible

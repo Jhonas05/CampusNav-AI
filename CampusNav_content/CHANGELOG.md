@@ -1,5 +1,26 @@
 # CampusNav Content Pack — Changelog
 
+## v3.52 — 14 October 2026
+
+Implemented and verified the owner-directed engine-only `STANDARD` + `AVOID_STAIRS` route-preference foundation under `DEC-NAV-002`.
+
+### Implemented
+- added a validated `ROUTE_PREFERENCE` contract with exactly `STANDARD` and `AVOID_STAIRS`
+- preserved the legacy `calculateFacilityRoute(...)` route/null API and added a structured `calculateFacilityRouteWithOptions(...)` result contract
+- added one optional edge-eligibility predicate to the existing A* engine, composed after all existing blocked/restricted/construction checks
+- made `AVOID_STAIRS` a hard constraint: stair edges and unknown/unverified non-stair cross-floor connectors are ineligible, with no cost penalty and no silent `STANDARD` retry
+- added the stable safe no-route message and explicit statement that CampusNav will not automatically substitute a stair route
+
+### Verified
+- `17/17` dedicated mobility checks: Standard parity, same-floor eligibility, current cross-floor failure, stair/unknown-connector rejection, retained restrictions, no fallback, invalid input, graph immutability, deterministic entrances, shared 2D/3D result, Emergency isolation, QR/manual semantics, offline compatibility, and excluded STEP_FREE/crowd/provider scope
+- all 31 current deterministic scripts pass, including PWA built-worker boundaries, Phase 8, every current FS-1–FS-4 suite, and route rendering
+- existing Standard multi-floor routes and Emergency approved-edge-only behavior remain unchanged
+
+### Boundaries
+- no mobile preference UI, wheelchair/step-free claim, elevator/ramp data, crowd inference, accessible Emergency behavior, schema/migration/provider/dependency/lockfile change, service-worker change, official institutional data, or FS-4 search/recommendation work
+- the current graph's only cross-floor connector is stairs, so `AVOID_STAIRS` cross-floor routing fails safely; institutionally verified non-stair connector/accessibility data remains pending
+- adviser/defense classification is unchanged
+
 ## v3.51 — 14 October 2026
 
 Replaced the initial generic PWA application mark with the owner-approved monochrome CampusNav campus-building/navigation artwork under `DEC-PWA-002`.

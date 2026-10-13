@@ -12,6 +12,17 @@ This file records deliberate project decisions so future coding agents do not re
 
 Normal route computation uses standard graph-based A* (or architecturally equivalent Dijkstra). CLARA is the intelligent component.
 
+## DEC-NAV-002 — Standard and Avoid Stairs route preferences
+**Status:** OWNER APPROVED / IMPLEMENTED_VERIFIED (ENGINE ONLY) — 14 Oct 2026; adviser/defense classification unchanged
+
+Normal CampusNav navigation may expose two route-session preferences through the existing A* engine:
+- `STANDARD` preserves the current eligible-edge behavior, route costs, and deterministic tie handling
+- `AVOID_STAIRS` is a hard constraint, not a penalty or best-effort preference
+
+Under `AVOID_STAIRS`, an edge marked `stairs: true` is ineligible. A cross-floor transition is also ineligible unless its canonical metadata explicitly verifies a non-stair connector; an unknown or incomplete connector must fail closed. CampusNav must not silently substitute a stair route when no eligible path exists and must state: `No route that avoids stairs is available in the verified campus map.` A same-floor route may remain available when its actual traversed edges do not require stairs; the presence of a stair landing node alone does not make an otherwise walkable same-floor approach ineligible.
+
+This preference is scoped to the active route request/session and is not persisted as an accessibility profile. `STEP_FREE`/wheelchair-accessible routing remains unavailable until the necessary infrastructure and route data are institutionally verified. Crowd-aware routing remains deferred. Emergency navigation remains independent, continues to use only its approved-edge contract, and does not consume or fall back through this normal-navigation preference. The implemented result is an engine/API foundation only; exposing the preference in the mobile route UI requires a separate owner-authorized task.
+
 ## DEC-3D-001 — 3D is a visualization layer
 **Status:** APPROVED
 

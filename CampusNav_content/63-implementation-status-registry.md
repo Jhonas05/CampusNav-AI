@@ -3,6 +3,24 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Mobility route-options engine foundation — 14 October 2026 (`DEC-NAV-002`)
+
+**Status: `IMPLEMENTED_VERIFIED (ENGINE ONLY) / OWNER APPROVED`; adviser/defense classification unchanged.** This is a cross-cutting normal-navigation enhancement, not FS-4 search/recommendation work and not a user-interface or verified-accessibility claim.
+
+| Area | Result | Evidence / boundary |
+|---|---|---|
+| Architecture | `PASS` | One canonical graph and the existing A* engine remain authoritative. A narrow optional edge-eligibility predicate is composed with every existing blocked/restricted/construction rule; no graph copy, mutation, alternate cost model, or second route engine exists. |
+| `STANDARD` | `PASS / COMPATIBLE` | Legacy callers still use `calculateFacilityRoute(...)` and receive the established route/null contract. Explicit `STANDARD` returns the identical node sequence, edges, cost, entrances, and route metadata in the deterministic regression. |
+| `AVOID_STAIRS` | `PASS — HARD CONSTRAINT` | `stairs: true` edges are ineligible. Unknown cross-floor transitions fail closed; no penalty, retry, or silent `STANDARD` fallback exists. Same-floor eligible routes remain possible, including a valid approach through a stair-labelled landing node when no traversed edge is marked as stairs. |
+| Current cross-floor behavior | `PASS — SAFE NO ROUTE` | The sole verified cross-floor stack is stair-based, so Library 3F → Registrar's Office 5F returns `NO_AVOID_STAIRS_ROUTE`, the canonical message, and explicit no-substitution guidance. Existing `STANDARD` cross-floor routing is unchanged. |
+| Validation/result contract | `PASS` | `ROUTE_PREFERENCE` exposes exactly `STANDARD` and `AVOID_STAIRS`; invalid route-option values fail with `INVALID_ROUTE_PREFERENCE` rather than defaulting. The new options API returns a stable success/failure envelope without changing existing consumers. |
+| Shared consumers | `PASS` | Facility entrance selection remains deterministic; 2D and 3D consume the same route result; QR and manual positioning semantics are unchanged. |
+| Emergency | `PASS — ISOLATED` | Emergency data, approved-edge filter, no-fallback policy, and offline restriction are unchanged and do not import or consume normal route preferences. |
+| PWA/offline | `PASS` | The route-options engine uses only bundled local graph/code and no network, storage, provider, database, or service-worker change. The accepted offline canonical 2D architecture remains intact. |
+| Dedicated test | `17/17 PASS` | Covers Standard compatibility, same/cross-floor behavior, stair and unknown-connector rejection, existing restrictions, no fallback, invalid input, graph immutability, entrances, shared 2D/3D route, Emergency isolation, QR/manual semantics, offline compatibility, and excluded STEP_FREE/crowd/provider scope. |
+| Full regression | `PASS` | 31 deterministic test scripts pass: data, navigation, mobility, multi-floor, QR, Emergency, 3D, Dashboard, theme, map experience, mobile UX, PWA including built-worker boundaries, Phase 8, every current FS-1–FS-4 suite, and route rendering. ESLint, typecheck, production build, and Git diff checks are release gates for the same revision. |
+| Remaining scope | `NOT IMPLEMENTED / NOT CLAIMED` | Mobile Route Preferences UI, wheelchair/step-free routing, elevator/ramp graph data, crowd-aware routing, accessible Emergency routing, institutional connector/accessibility verification, and adviser/defense classification. |
+
 ## Owner-directed PWA engineering acceptance — 14 October 2026 (`DEC-PWA-001`)
 
 **Status: `COMPLETE — ACCEPTED_WITH_ADVISORY`; adviser/defense classification remains pending.** This current section supersedes earlier manifest-only implementation snapshots without rewriting their historical evidence dates.

@@ -59,14 +59,15 @@ Start floor graph
 ```
 
 ## Route preferences
-Only expose a preference when its supporting data is verified. Source architecture allows concepts such as:
-- shortest route
-- fewer stairs
-- accessible route
-- covered route
-- less crowded route
+`DEC-NAV-002` authorizes an engine-only route-options foundation with exactly two values:
+- `STANDARD` preserves the established eligible-edge behavior, costs, deterministic entrance selection, and tie handling
+- `AVOID_STAIRS` is a hard edge constraint: reject `stairs: true` and fail closed for a cross-floor connector not explicitly verified as non-stair
 
-Do **not** show elevator-preferred routing unless elevator infrastructure is officially confirmed in the campus data.
+The existing `calculateFacilityRoute(...)` route/null contract remains the compatibility API for callers that omit preferences. `calculateFacilityRouteWithOptions(...)` validates the route-session option and returns an explicit success/failure envelope. Invalid values do not silently become `STANDARD`. When no eligible avoid-stairs route exists, return `No route that avoids stairs is available in the verified campus map.` and state that CampusNav will not automatically substitute a stair route.
+
+The constraint applies to traversed edges, not node labels. A stair landing node may be part of a same-floor approach when the traversed same-floor edges are otherwise eligible. The current verified graph has only stair-based cross-floor transitions, so same-floor `AVOID_STAIRS` may succeed while current cross-floor requests fail safely.
+
+This is not wheelchair/step-free routing. Do not expose `STEP_FREE`, elevator-preferred, ramp, accessible-route, covered-route, or crowd-aware options until their required canonical data and authorization exist. Mobile route-preference UI is not part of this foundation.
 
 ## Turn-by-turn directions
 Directions must be derived from graph geometry and floor transitions, not handwritten fake steps.

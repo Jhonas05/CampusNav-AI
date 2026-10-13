@@ -1,19 +1,24 @@
 const distanceBetween = (a, b) => Math.hypot(b.x - a.x, b.y - a.y)
 const FLOOR_LEVELS = { GF: 0, "2F": 1, "3F": 2, "4F": 3, "5F": 4 }
 
+const isNormallyEligible = (edge) =>
+  edge.walkable !== false &&
+  edge.blocked !== true &&
+  edge.restricted !== true &&
+  edge.nonNavigable !== true &&
+  edge.status !== "UNDER_CONSTRUCTION" &&
+  edge.status !== "RESTRICTED" &&
+  edge.status !== "NON_NAVIGABLE"
+
+const getEligibleEdges = (edges, edgeEligibility) => edges.filter((edge) =>
+  isNormallyEligible(edge) && (!edgeEligibility || edgeEligibility(edge))
+)
+
 const buildAdjacency = (nodes, edges) => {
   const nodeMap = new Map(nodes.map((node) => [node.id, node]))
   const adjacency = new Map(nodes.map((node) => [node.id, []]))
 
-  edges.filter((edge) =>
-    edge.walkable !== false &&
-    edge.blocked !== true &&
-    edge.restricted !== true &&
-    edge.nonNavigable !== true &&
-    edge.status !== "UNDER_CONSTRUCTION" &&
-    edge.status !== "RESTRICTED" &&
-    edge.status !== "NON_NAVIGABLE"
-  ).forEach((edge) => {
+  edges.forEach((edge) => {
     const from = nodeMap.get(edge.from)
     const to = nodeMap.get(edge.to)
     if (!from || !to) return
@@ -47,8 +52,13 @@ const reconstructPath = (cameFrom, currentId) => {
   return { nodeIds, edgeIds }
 }
 
-export function findShortestPath({ nodes, edges, startNodeId, destinationNodeId }) {
-  const { nodeMap, adjacency, edgeMap } = buildAdjacency(nodes, edges)
+export function findShortestPath({ nodes, edges, startNodeId, destinationNodeId, edgeEligibility = null }) {
+  if (edgeEligibility !== null && typeof edgeEligibility !== "function") {
+    throw new TypeError("edgeEligibility must be a function when provided.")
+  }
+
+  const eligibleEdges = getEligibleEdges(edges, edgeEligibility)
+  const { nodeMap, adjacency, edgeMap } = buildAdjacency(nodes, eligibleEdges)
   const startNode = nodeMap.get(startNodeId)
   const destinationNode = nodeMap.get(destinationNodeId)
 
@@ -56,8 +66,11 @@ export function findShortestPath({ nodes, edges, startNodeId, destinationNodeId 
     throw new Error("A valid start and destination node are required.")
   }
 
-  const transitionWeights = edges
-    .filter((edge) => edge.type === "FLOOR_TRANSITION" && edge.walkable !== false && edge.blocked !== true)
+  const transitionWeightEdges = edgeEligibility
+    ? eligibleEdges
+    : edges.filter((edge) => edge.walkable !== false && edge.blocked !== true)
+  const transitionWeights = transitionWeightEdges
+    .filter((edge) => edge.type === "FLOOR_TRANSITION")
     .map((edge) => Number(edge.weight))
     .filter((weight) => Number.isFinite(weight) && weight > 0)
   const minimumTransitionWeight = transitionWeights.length ? Math.min(...transitionWeights) : 0

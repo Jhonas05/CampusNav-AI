@@ -28,6 +28,7 @@ npm run lint
 npm run typecheck
 npm run test:data
 npm run test:navigation
+npm run test:mobility-routing
 npm run test:multi-floor
 npm run test:qr
 npm run test:emergency
@@ -85,6 +86,14 @@ All five floors use the supplied St. Clare College Emergency Evacuation plan as 
 The Fifth Floor construction polygons are marked `UNDER_CONSTRUCTION` and `navigable: false`. They have no entrance nodes and graph validation rejects any node or edge that enters them.
 
 Multi-floor routes can be viewed one floor at a time using the route-floor selector. The map renders only the selected floor segment while pathfinding operates on the complete GF–5F graph.
+
+The engine also exposes an owner-approved route-options foundation with `STANDARD` and `AVOID_STAIRS`. `STANDARD` preserves the existing A* behavior. `AVOID_STAIRS` is a hard edge constraint with no automatic stair-route fallback; same-floor requests may succeed, while current cross-floor requests fail safely because the verified graph's only floor transitions are stairs. This engine-only capability is not yet exposed in the mobile UI and is not a wheelchair/step-free accessibility claim.
+
+Run its deterministic contract suite with:
+
+```bash
+npm run test:mobility-routing
+```
 
 During local development, open `/map?verify=1` to use the developer-only calibration and graph-verification panel. Production builds hide this panel unless `VITE_ENABLE_MAP_VERIFICATION=true` is explicitly set.
 

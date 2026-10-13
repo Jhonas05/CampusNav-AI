@@ -10,6 +10,7 @@ Only unresolved decisions belong here. Resolved decisions move to `29-decision-l
 
 ## Institutional data
 - Which office is the final authorized owner of map/facility verification?
+- Which office verifies non-stair connector types and accessibility attributes before any future step-free/wheelchair routing claim may be implemented?
 - Which office approves facility operational profiles, service taxonomy/aliases, service mappings, hours/exceptions, public contacts, and media publication?
 - Which roles may manage facility records beyond the safe initial `SUPER_ADMIN` boundary, and what department/facility scope applies?
 - What institutional asset-usage, publication, and removal rules apply to facility photographs?

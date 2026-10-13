@@ -2,10 +2,27 @@ import { getFacilityEntranceNodes } from "../data/mapNodes.js"
 import { getFloorById } from "../data/floors.js"
 import { measureMapDistance } from "./distance.js"
 import { findShortestPath } from "./pathfinding.js"
+import {
+  AVOID_STAIRS_NO_FALLBACK_GUIDANCE,
+  AVOID_STAIRS_NO_ROUTE_MESSAGE,
+  createRouteEdgeEligibility,
+  resolveRouteOptions,
+  ROUTE_PREFERENCE,
+  ROUTE_PREFERENCE_FAILURE,
+} from "./routePreferences.js"
 
 const segmentDistance = (a, b) => Math.hypot(b.x - a.x, b.y - a.y)
 
-export function calculateFacilityRoute({ startFacility, destinationFacility, floor, nodes, edges, startNodeId = null, destinationNodeId = null }) {
+const calculateRoute = ({
+  startFacility,
+  destinationFacility,
+  floor,
+  nodes,
+  edges,
+  startNodeId = null,
+  destinationNodeId = null,
+  edgeEligibility = null,
+}) => {
   if (!startFacility || !destinationFacility || !floor?.map) return null
 
   const sameFloor = startFacility.floorId === destinationFacility.floorId
@@ -31,6 +48,7 @@ export function calculateFacilityRoute({ startFacility, destinationFacility, flo
         edges: floorEdges,
         startNodeId: startNode.id,
         destinationNodeId: destinationNode.id,
+        edgeEligibility,
       })
       if (!candidate) continue
       candidates.push({
@@ -54,6 +72,49 @@ export function calculateFacilityRoute({ startFacility, destinationFacility, flo
     }
   }
   return route
+}
+
+export function calculateFacilityRoute(routeInput) {
+  return calculateRoute(routeInput)
+}
+
+export function calculateFacilityRouteWithOptions(routeInput) {
+  const resolvedOptions = resolveRouteOptions(routeInput.routeOptions)
+  if (!resolvedOptions.ok) return { ...resolvedOptions, route: null }
+
+  const { preference } = resolvedOptions
+  const route = calculateRoute({
+    startFacility: routeInput.startFacility,
+    destinationFacility: routeInput.destinationFacility,
+    floor: routeInput.floor,
+    nodes: routeInput.nodes,
+    edges: routeInput.edges,
+    startNodeId: routeInput.startNodeId,
+    destinationNodeId: routeInput.destinationNodeId,
+    edgeEligibility: preference === ROUTE_PREFERENCE.STANDARD
+      ? null
+      : createRouteEdgeEligibility(preference),
+  })
+  if (route) return { ok: true, preference, route }
+
+  if (preference === ROUTE_PREFERENCE.AVOID_STAIRS) {
+    return {
+      ok: false,
+      code: ROUTE_PREFERENCE_FAILURE.NO_AVOID_STAIRS_ROUTE,
+      preference,
+      message: AVOID_STAIRS_NO_ROUTE_MESSAGE,
+      guidance: AVOID_STAIRS_NO_FALLBACK_GUIDANCE,
+      route: null,
+    }
+  }
+
+  return {
+    ok: false,
+    code: ROUTE_PREFERENCE_FAILURE.NO_ROUTE,
+    preference,
+    message: "No route is available in the verified campus map.",
+    route: null,
+  }
 }
 
 export function generateNavigationInstructions({ route, startFacility, destinationFacility, floor }) {
