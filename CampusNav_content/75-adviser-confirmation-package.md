@@ -86,18 +86,21 @@ A `YES` or `CONDITIONAL` decision creates a separate future workstream. It does 
 
 ## 4. PWA installability and offline-navigation proposal
 
-**Proposal status:** `OWNER AUTHORIZED FOR OPTIONAL ENGINEERING / AWAITING_ADVISER DEFENSE CONFIRMATION / NOT YET IMPLEMENTED`
+**Proposal status:** `OWNER-AUTHORIZED ENGINEERING COMPLETE — ACCEPTED_WITH_ADVISORY / AWAITING ADVISER DEFENSE CONFIRMATION`
 
 On 14 October 2026, the owner separately authorized this optional cross-cutting engineering workstream under `DEC-PWA-001`. That decision does not select any checkbox below or claim that the adviser requires, accepts, or includes PWA capability in the thesis defense.
 
-Current evidence:
+Current engineering evidence (this does not answer the adviser decisions below):
 
 - CampusNav is already a responsive mobile-first React/Vite application deployed over HTTPS through Cloudflare Workers Static Assets
-- a web app manifest exists and requests standalone display
-- the manifest does not yet have the complete approved raster/maskable icon set required for consistent installation presentation
-- no service worker, Cache Storage policy, offline SPA fallback, update lifecycle, or versioned offline content release is implemented
-- the canonical spatial graph, floor data, 2D renderer, A* pathfinding, QR checkpoint interpretation, and manual positioning logic are client-side, but they are not currently guaranteed to be available after connectivity loss
-- CampusNav must not currently be described as providing offline navigation or offline/PWA emergency support
+- the manifest has a stable application identity and scope, standalone display, approved monochrome CampusNav raster/SVG icons, a maskable icon, and an Apple touch icon
+- a root-scoped Workbox `injectManifest` worker provides a revisioned, bounded public-static precache, supported offline SPA/deep-link fallback, controlled cleanup, and explicit user-controlled updates
+- the existing canonical spatial graph, floor data, 2D renderer, A* pathfinding, facility identities, and manual positioning are available for the supported offline navigation routes after a successful initial online load
+- local production-build Chromium acceptance verified service-worker control, the canonical 95-facility fallback, offline multi-floor routing, optional 3D reuse after online loading, Emergency blocking, and fail-closed Admin behavior
+- operational/provider data remains network-only and presents `UNKNOWN` or unavailable when a real no-cache reachability check fails; Supabase/Auth/API responses and tokens are never runtime-cached
+- the initial precache contained 44 revisioned entries totaling 898.57 KiB; optional 3D, QR decoder, Supabase, Admin, Emergency, and social-preview assets were excluded
+- physical-device installation/camera, iOS/iPadOS, non-Chromium, screen-reader, low-end-device, and production-equivalence evidence remains pending and must not be inferred
+- CampusNav may be described at this evidence level as locally browser-verified for offline canonical 2D navigation, but not as providing offline Emergency routing or universal device/browser PWA support
 
 ### 4.1 Purpose and academic scope
 
@@ -107,7 +110,7 @@ The adviser must decide whether this enhancement is required for the thesis defe
 
 ### 4.2 Owner-proposed first-release scope
 
-The following scope is proposed by the owner and is **not yet adviser-approved or authorized for implementation**.
+The following scope was authorized and implemented by the owner as optional engineering. It remains **not adviser-approved for thesis/defense classification**.
 
 **Installability**
 
@@ -160,7 +163,7 @@ The audit recommends `vite-plugin-pwa` with Workbox `injectManifest`, subject to
 
 This approach is recommended because CampusNav uses many Vite-hashed lazy chunks and needs a safety-specific caching policy. A handwritten worker without PWA tooling remains possible, but it would require custom build-manifest integration, manual revision handling, cache cleanup, navigation fallback, and additional lifecycle tests. A hand-maintained list of hashed files is not proposed.
 
-Approval of this architecture would permit a later dependency review; it does not install or approve a package in this documentation step.
+The owner-authorized implementation uses this architecture with reviewed lockfile changes. Adviser acceptance of it for thesis/defense claims remains unanswered.
 
 ### 4.4 Security, privacy, and update boundaries
 

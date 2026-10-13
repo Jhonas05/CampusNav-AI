@@ -3,6 +3,28 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## Owner-directed PWA engineering acceptance — 14 October 2026 (`DEC-PWA-001`)
+
+**Status: `COMPLETE — ACCEPTED_WITH_ADVISORY`; adviser/defense classification remains pending.** This current section supersedes earlier manifest-only implementation snapshots without rewriting their historical evidence dates.
+
+| Area | Result | Evidence / boundary |
+|---|---|---|
+| Install identity | `PASS` | Stable manifest ID/start/scope; standalone/display override; theme/background colors; 192×192, 512×512, maskable, Apple touch, and SVG CampusNav icons; deterministic validation. The SCC seal and social-preview image are not repurposed. |
+| Worker architecture | `PASS` | `vite-plugin-pwa` + Workbox `injectManifest`; root-scoped manual registration; explicit waiting-worker update action; controlled versioned cache cleanup. |
+| Initial cache | `PASS` | Production build injected 44 revisioned entries totaling 898.57 KiB. Public shell and canonical 2D navigation dependencies are included; Admin, Emergency, Supabase, QR decoder, optional Campus3D/Three, and social-preview assets are excluded. |
+| Dynamic/security boundary | `PASS` | No API, Supabase, Auth, Realtime, Storage, cross-origin, non-GET, token, private, or role-sensitive response runtime caching; no background sync or offline mutation queue. Cache Storage inspection found only the expected public precache and optional-static caches. |
+| Offline canonical navigation | `PASS` (deterministic + local Chromium) | Worker-controlled production preview loaded supported offline SPA/deep links, all 95 canonical facility identities, manual location selection, and a multi-floor route rendered by the existing graph and A* engine. No second routing engine or spatial truth was added. |
+| Operational freshness | `PASS` | A real no-cache same-origin probe, not `navigator.onLine` alone, controls provider availability. Offline/failed operational reads show `UNKNOWN` or unavailable and reconnect triggers provider revalidation; no stale current-status claim. |
+| Install/update/mobile UX | `PASS_WITH_ADVISORY` | Non-forced Chromium install affordance, iOS Add to Home Screen guidance, standalone detection, offline/reconnected state, and explicit update action are implemented with safe-area, bottom-navigation, CLARA, focus, and keyboard boundaries. Physical install and screen-reader acceptance were not performed. |
+| Optional QR | `IMPLEMENTED_WITH_ADVISORY` | QR decoder scripts use narrow same-origin cache-on-use and remain out of the initial precache. Permission/camera/manual contracts remain; no physical-camera or offline scan claim was tested. |
+| Optional 3D | `PASS` (local Chromium) | Campus3D/Three remain lazy and outside the initial precache; after one online load, the optional-static cache supplied 3D offline. 2D remains the required fallback. Physical low-end/GPU performance is not certified. |
+| Emergency offline | `BLOCKED_AS_REQUIRED` | Emergency Map is unavailable offline with conservative posted-instructions/authorized-personnel guidance. No emergency route is precached and ordinary A* never substitutes for approved emergency routing. |
+| Admin offline | `PASS — FAIL CLOSED` | Offline Admin navigation is not a supported fallback; no authenticated response or mutation is cached or queued. |
+| Browser/device evidence | `LOCAL CHROMIUM PASS / BROADER QA PENDING` | Installed/activated service-worker behavior passed in local production-build Chrome. Physical Android/iOS, iOS/iPadOS Safari, Firefox, Edge-specific, screen-reader, low-end-device, and broad storage-eviction acceptance are not claimed. |
+| Production | `PENDING AUTOMATIC DEPLOYMENT VERIFICATION` | Repository policy deploys automatically from `main`; no manual deployment is authorized. Production manifest, worker MIME/scope/control, offline routes, and asset boundaries must be checked after integration. |
+
+The Phase 1/Phase 2 rows below remain dated snapshots. Their statements that no service worker existed were true for those audits and do not control current PWA implementation status.
+
 ## Mobile-first UX simplification and information architecture — 13 October 2026 (`DEC-UI-006`)
 
 **Status: `COMPLETE — ACCEPTED_WITH_ADVISORY`; owner approved with no further visual-review checkpoint.** Presentation and information architecture, plus the Navigate location and deep-link fixes and the facility-photo request fix recorded in `DEC-UI-006`. Git completion and the repository's automatic deployment path are owner-authorized; deployment equivalence must still be reported from observed evidence.

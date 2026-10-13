@@ -452,7 +452,7 @@ With the existing temporary development account credentials supplied only throug
 
 Open `/map?mode=emergency` to use the separate emergency overlay. Emergency routing is restricted to edges explicitly marked `emergencyApproved: true` with `VERIFIED` or `SOURCE_ALIGNED` status. It never falls back to the normal navigation graph. If a complete source-approved digital path is unavailable, the interface instructs users to follow posted signage and authorized emergency personnel.
 
-Emergency exits, equipment, approved paths, contacts, and pending items live in separate static modules under `src/data/`. This keeps the reference data deterministic and ready for a future versioned offline cache without introducing a service worker in this phase. The interface labels bundled emergency information as Offline Mode only after the browser reports that it is offline, and it does not claim live status.
+Emergency exits, equipment, approved paths, contacts, and pending items live in separate static modules under `src/data/`. The PWA service worker intentionally excludes Emergency navigation: while offline, Emergency Map is unavailable and the interface directs users to posted campus instructions and authorized personnel. Online Emergency routing still uses only explicitly approved/source-aligned edges and does not claim live status.
 
 The supplied evacuation plan visibly supports emergency exits and equipment on GF and 3F. No plotted exits, equipment, or approved path arrows are claimed for 2F, 4F, or 5F; those floors retain the exact no-verified-route safety fallback pending source or administrator verification. Cross-floor stair transitions are not emergency-approved yet.
 

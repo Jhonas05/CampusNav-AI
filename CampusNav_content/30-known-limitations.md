@@ -39,7 +39,7 @@ AI does not declare suspensions. Official status must come from authorized schoo
 CLARA should not be considered complete until it is connected to stable internal services, role-aware authorization, and verified source data.
 
 ## PWA/offline
-The master source requires PWA-capable offline emergency access, but implementation must be verified before claiming it in the thesis demo.
+The owner-authorized PWA supports installability and locally browser-verified offline canonical 2D navigation after an initial successful online load. Operational/provider data remains network-only and becomes `UNKNOWN` or unavailable when current data cannot be fetched. Offline Emergency routing is not implemented or authorized. Physical Android/iOS installation, physical camera/QR, iOS/iPadOS, non-Chromium, screen-reader, low-end-device, and broad storage-eviction behavior are not certified; adviser/defense classification remains pending.
 
 ## Advanced map administration
 A full visual floor-plan editor/version rollback is source-required/valuable but may remain a scoped roadmap item if not completed by final thesis, provided the implemented navigation remains accurate and maintainable.

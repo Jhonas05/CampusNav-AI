@@ -1,5 +1,29 @@
 # CampusNav Content Pack — Changelog
 
+## v3.50 — 14 October 2026
+
+Completed and locally accepted the owner-directed cross-cutting PWA workstream under `DEC-PWA-001` without changing its pending adviser/defense classification.
+
+### Implemented
+- complete manifest identity plus 192×192, 512×512, maskable, Apple touch, and SVG CampusNav app icons
+- Workbox `injectManifest` service worker with a revisioned public-static precache, supported offline SPA/deep links, controlled cleanup, and explicit user-controlled updates
+- offline canonical 2D navigation using the existing facility/spatial data, graph, renderer, manual positioning, and A* engine
+- real origin reachability checks, network-only operational data, `UNKNOWN`/unavailable degradation, reconnection revalidation, and install/offline/update UX
+- narrow same-origin cache-on-use for optional QR/3D scripts, with neither required for the initial install
+
+### Verified locally
+- deterministic manifest, worker, cache-boundary, PWA experience, production-build, Phase 8, Phase 4, navigation, QR, Emergency, 2D/3D, Dashboard, theme, mobile UX, map-experience, and route-rendering regressions
+- production-build Chromium service-worker control, offline Facilities/deep-link behavior with all 95 canonical entries, offline multi-floor A* routing, optional 3D reuse after online loading, offline Emergency blocking, fail-closed Admin behavior, and expected cache names
+- initial precache: 44 revisioned entries totaling 898.57 KiB; optional Campus3D, QR decoder, Supabase, Admin, Emergency, and social-preview assets excluded
+
+### Boundaries and advisories
+- operational/provider data remains network-only; no stale current facility status, personnel presence, suspension, or current advisory is claimed
+- no authenticated/API response cache, token cache, offline Admin mutation, background sync, push notification, new Supabase schema, or unrelated Phase 4 work
+- offline Emergency routing remains blocked and excluded; ordinary A* never substitutes for an emergency-approved route
+- physical-device installation/camera, iOS/iPadOS, non-Chromium, screen-reader, low-end-device, and broad storage-eviction evidence remains pending
+- adviser decisions remain unanswered; PWA remains `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION` for thesis/defense classification
+- production verification follows the repository's automatic Cloudflare deployment from `main`; no manual deployment is part of this workstream
+
 ## v3.49 — 14 October 2026
 
 Recorded `DEC-PWA-001` as an owner-authorized optional/cross-cutting engineering workstream while preserving every adviser/defense choice as unanswered.

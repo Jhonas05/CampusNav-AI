@@ -26,6 +26,9 @@ Code-level responsive behavior and automated route rendering are necessary evide
 ## QR/camera
 Camera permission failure or unavailable camera must not block navigation; manual current-location selection remains the fallback.
 
+## PWA/offline evidence
+The current production build has local Chrome evidence for manifest installability prerequisites, root service-worker control, supported offline SPA/deep links, offline canonical 2D routing, optional 3D cache-on-use, and safe offline Emergency/Admin boundaries. This is not physical-device or broad-browser certification. Android installation, iPhone/iPad Add to Home Screen and standalone behavior, Safari, Firefox, Edge-specific behavior, physical QR/camera behavior, low-end-device resource use, and storage eviction remain pending until directly tested.
+
 ## Accessibility
 Keyboard, screen-reader semantics, focus visibility, touch target size, and reduced motion must remain usable across responsive layouts.
 

@@ -42,7 +42,7 @@ Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` and `75-advi
 
 Adviser confirmation remains a separate external action and still controls adviser/academic claims. Institutional questions above still control whether values may be presented as official; they do not authorize agents to invent those values.
 
-`DEC-PWA-001` now authorizes optional owner-controlled PWA engineering as a separate cross-cutting workstream outside Phase 4. The adviser choices in section 4 of `75-adviser-confirmation-package.md` remain unanswered and continue to control academic/defense classification and claims. Until implementation and acceptance evidence exist, current PWA status remains manifest-only; offline Emergency remains blocked.
+`DEC-PWA-001` authorizes optional owner-controlled PWA engineering as a separate cross-cutting workstream outside Phase 4. That workstream is now `COMPLETE — ACCEPTED_WITH_ADVISORY` for installability, bounded public-static caching, offline canonical 2D navigation, conservative network-only operational data, explicit updates, and tested optional QR/3D cache-on-use boundaries. The adviser choices in section 4 of `75-adviser-confirmation-package.md` remain unanswered and continue to control academic/defense classification and claims. Physical-device, iOS/iPadOS, non-Chromium, screen-reader, and final production evidence remain open acceptance advisories; offline Emergency remains blocked.
 
 ### AR-Assisted Camera Navigation planning
 - After current Phase 3 acceptance, when—if ever—may AR-0 be authorized on the roadmap?

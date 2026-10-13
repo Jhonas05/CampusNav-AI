@@ -25,6 +25,22 @@
 - role-scoped action succeeds for permitted user
 - audit behavior checked for important actions
 
+## Owner-directed PWA acceptance evidence (`DEC-PWA-001`) — 14 October 2026
+
+- `COMPLETE — ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` — adviser/defense classification remains unanswered and is not inferred
+- `PASS` — manifest identity, scope, standalone behavior, raster/maskable/Apple/SVG icons, and deterministic manifest checks
+- `PASS` — Workbox `injectManifest`, root registration, revisioned public-static precache, controlled cleanup, and explicit waiting-worker activation
+- `PASS` — 44 initial precache entries totaling 898.57 KiB; Admin, Emergency, Supabase, QR decoder, optional Campus3D/Three, and social-preview assets excluded
+- `PASS` — no API/Auth/Supabase/cross-origin/non-GET/runtime data caching, token caching, background sync, or offline mutation queue
+- `PASS` — local production-build Chrome worker control, supported offline SPA/deep links, 95-entry facility fallback, manual positioning, and multi-floor route through the existing graph/A* engine
+- `PASS` — real no-cache origin probe, network-only operational records, offline `UNKNOWN`/unavailable states, and reconnect revalidation
+- `PASS` — non-forced install affordance, iOS guidance, offline/reconnected status, user-controlled update action, and mobile/focus/keyboard layout boundaries
+- `PASS_WITH_ADVISORY` — QR decoder cache-on-use implemented but physical offline camera/QR not exercised
+- `PASS_WITH_ADVISORY` — optional 3D cache-on-use verified in local Chrome; physical low-end/WebGL device behavior not certified
+- `PASS — REQUIRED SAFETY BOUNDARY` — offline Emergency route action blocked with conservative guidance; ordinary A* never substitutes for approved emergency routing
+- `PASS — FAIL CLOSED` — offline Admin unsupported; no authenticated response or write queued/cached
+- `PENDING` — physical Android/iOS install, iOS/iPadOS, non-Chromium, screen-reader, low-end-device, broad eviction/storage, and post-merge Cloudflare production verification
+
 ## Phase 4 facility/service gate
 - operational records use existing canonical facility IDs and introduce no competing spatial or routing truth
 - migrations, RLS, grants, trusted audit, and fixture cleanup pass locally/linked as applicable

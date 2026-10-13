@@ -13,7 +13,7 @@
 | Academic schedule/personnel engine and availability logic | `CORE_FOR_DEFENSE` | Official data remains institution-dependent; `SCHEDULED != CHECKED_IN` |
 | Strict Emergency Mode and safe no-route behavior | `CORE_FOR_DEFENSE` | Only verified/source-aligned data; no complete coverage or safety sign-off claim |
 | Grounded server-side CLARA/Groq | `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION` | Current local matcher is not grounded production AI or a completed AI assistant |
-| PWA/offline capability in the defense | `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION` | `DEC-PWA-001` separately authorizes optional owner-controlled engineering; it does not select the academic classification. Offline Emergency routing remains blocked and excluded |
+| PWA/offline capability in the defense | `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION` | Owner-authorized engineering is `COMPLETE — ACCEPTED_WITH_ADVISORY` under `DEC-PWA-001`; implementation does not select the academic classification. Offline Emergency routing remains blocked and excluded |
 | AR Guidance | `OPTIONAL / DEFERRED / NOT_IMPLEMENTED / NOT_READY` | Planning contract only; not required by the owner proposal |
 | Reports/analytics; advanced map editor/version rollback | `OPTIONAL / DEFERRED` | Reopen only if adviser-confirmed scope requires them |
 | GPS/BLE/Wi-Fi/UWB; hardware presence; native AR/SLAM/VPS; push/SMS; photorealistic 3D | `OPTIONAL / DEFERRED` | Not required by the owner proposal |

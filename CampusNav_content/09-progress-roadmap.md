@@ -443,13 +443,25 @@ Details: `29-decision-log.md` (`DEC-UI-006`), `63-implementation-status-registry
 
 ## Owner-directed cross-cutting PWA workstream — 14 October 2026
 
-**Status:** `OWNER AUTHORIZED / NOT YET IMPLEMENTED / ADVISER DEFENSE CONFIRMATION PENDING`
+**Status:** `COMPLETE — ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED / ADVISER DEFENSE CONFIRMATION PENDING`
 
 `DEC-PWA-001` authorizes an optional engineering workstream for installability, a dedicated CampusNav app icon, a safe public-static service worker, offline canonical 2D navigation, manual positioning, truthful operational-data degradation, user-controlled updates, mobile install/connectivity UX, and optional tested QR/3D cache-on-use behavior.
 
 This is not a Phase 4 facility-search/recommendation slice, does not start FS-5 or FS-6, and does not create a new canonical phase number. Adviser choices in `75-adviser-confirmation-package.md` remain unanswered and still control thesis/defense classification. Offline Emergency routing, offline Admin mutations, authenticated-response caching, push notifications, background sync, crowd tracking, unverified wheelchair routing, Supabase schema work, and unrelated product work are excluded.
 
 The workstream may proceed only through independently verifiable commits and must preserve the one spatial dataset, one graph, one A* engine, existing Auth/RLS boundaries, pending/demo provenance, and strict emergency-approved-only routing. `72-definition-of-ready.md` and `73-quality-gates-release-checklist.md` control each implementation slice.
+
+Implementation and acceptance evidence:
+- the manifest now has a stable identity/scope, standalone behavior, 192×192 and 512×512 raster icons, a maskable icon, an Apple touch icon, and deterministic validation
+- a Workbox `injectManifest` worker precaches the bounded public shell and canonical 2D navigation dependencies; Admin, Auth/provider data, Supabase responses, Emergency routes, the large optional 3D bundle, QR decoder, and social-preview media are excluded from initial precache
+- production-build Chromium acceptance verified worker control, supported offline SPA/deep-link loading, the 95-entry canonical facility fallback, manual positioning, and an offline multi-floor A* route using the existing graph and engine
+- operational data remains network-only; a real no-cache reachability probe controls revalidation, and failed/offline reads present `UNKNOWN` or unavailable rather than stale current status
+- installation guidance, offline/reconnected state, and explicit user-controlled worker updates preserve safe-area, bottom-navigation, CLARA, focus, and keyboard boundaries
+- QR and 3D scripts are cache-on-use only; Chromium verified 3D reuse after an online load, while physical camera/device behavior, iOS/iPadOS installation, non-Chromium behavior, screen-reader acceptance, and low-end-device performance remain unverified advisories
+- offline Emergency routing is blocked with conservative guidance; no ordinary A* route substitutes for an emergency-approved route
+- local acceptance measured 44 precache entries totaling 898.57 KiB; the optional Campus3D, QR decoder, and Supabase chunks remain outside the initial precache
+
+This acceptance is software engineering evidence, not adviser approval or a thesis-defense classification. Production asset verification follows automatic deployment from `main`; no manual deployment is authorized by this workstream.
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 

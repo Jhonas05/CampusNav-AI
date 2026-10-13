@@ -289,6 +289,8 @@ Offline Emergency navigation remains `BLOCKED` and outside this proposal pending
 
 The proposed work packages in `75` are planning labels, not new canonical phase numbers. Owner-controlled engineering may proceed through the authorized PWA workstream once each slice satisfies `72-definition-of-ready.md`; adviser confirmation still controls thesis/defense classification and claims, not this optional engineering authorization.
 
+**Engineering outcome — 14 Oct 2026:** The owner-authorized workstream is `COMPLETE — ACCEPTED_WITH_ADVISORY`. CampusNav now has complete install identity, a bounded Workbox `injectManifest` worker, offline canonical 2D navigation using the existing data/graph/A* engine, manual positioning, conservative network-only operational data, explicit update UX, and tested optional 3D/QR script cache-on-use boundaries. Local production-build Chromium verified service-worker control, offline facility/spatial fallback, offline multi-floor routing, optional 3D reuse, Emergency blocking, and fail-closed Admin behavior. Physical-device installation/camera tests, iOS/iPadOS, non-Chromium browsers, screen-reader acceptance, and production deployment equivalence remain separate evidence boundaries. Every adviser choice remains unanswered; this outcome does not make PWA thesis-core or adviser-approved.
+
 ## DEC-ROADMAP-002 — Phase 4 product-completion reprioritization
 **Status:** OWNER APPROVED — 20 Sep 2026
 
