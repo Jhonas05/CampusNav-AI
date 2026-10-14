@@ -15,7 +15,19 @@
 - 2D/3D preserve same route/current/destination
 - QR/manual fallback passes
 
-## Mobility route-options foundation evidence (`DEC-NAV-002`) — 14 October 2026
+## Mobile Route Preferences UI evidence (`DEC-NAV-002`) — 14 October 2026
+
+- `COMPLETE — ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` — phone/tablet dialog, desktop disclosure, same state in fullscreen; only Standard and Avoid Stairs selectable
+- `23/23 PASS` — dedicated UI/API/state/failure/position/overlay contracts; accepted mobility-engine suite and complete 32-suite regression matrix retained
+- `64/64 PASS` — four route states at all eight authorized widths in Light/Dark; no overflow, CLARA/route overlap, or console errors
+- `14/14 PASS` — focus entry/containment/Escape/return, resize, active preference change, safe failure, explicit recovery, manual/QR positioning, Next/End, shared 2D/3D/floor/fullscreen state, and Emergency separation in local Chrome
+- `7/7 PASS` — production-build worker control and offline Standard/Avoid Stairs routes, deep links/manual origin, safe failure/recovery, and blocked offline Emergency
+- `PASS` — old geometry/instructions/progress cleared before every new route request; only confirmed endpoints reach the accepted API; preference has no storage/profile persistence
+- `BUG FIXED` — destination results layer above the map; phone Scan QR remains reachable during navigation; offline notices clear the route sheet and yield to preference controls
+- `BLOCKED / NOT CLAIMED` — step-free/wheelchair, crowd-aware, accessible Emergency, inferred connectors, physical camera/device, broad browser, screen-reader, or WCAG certification
+- `PASS` — lint, typecheck, production build, built-worker boundaries, and Git diff checks; exact paths only and fast-forward-only owner-authorized Git completion
+
+## Mobility route-options foundation evidence (`DEC-NAV-002`) — 14 October 2026 (earlier engine checkpoint)
 
 - `IMPLEMENTED_VERIFIED (ENGINE ONLY) / OWNER APPROVED` — adviser/defense classification remains unchanged
 - `17/17 PASS` — explicit route-option, eligibility, failure, immutability, consumer-isolation, offline, and scope-boundary checks

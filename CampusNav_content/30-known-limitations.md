@@ -29,7 +29,7 @@ Do not claim real-time crowd information unless an actual verified data source e
 ## Accessibility
 Do not invent elevators, ramps, accessible entrances, or accessible restrooms. Unverified infrastructure remains pending/unavailable.
 
-The route-options engine can enforce `AVOID_STAIRS` against verified graph metadata. It is not a wheelchair/step-free accessibility claim. With the current sole cross-floor connector recorded as stairs, cross-floor `AVOID_STAIRS` fails safely and never substitutes a stair route. Institutionally verified non-stair connector/accessibility data and a separately authorized user interface remain pending.
+Navigate now exposes Standard and Avoid Stairs using the accepted engine. With the current sole cross-floor connector recorded as stairs, cross-floor `AVOID_STAIRS` fails safely and never substitutes a stair route. It is not a wheelchair/step-free accessibility claim. Institutionally verified non-stair connector/accessibility data remains pending; step-free/wheelchair, crowd-aware, and accessible Emergency routing remain BLOCKED. Preference changes restart route steps from the confirmed origin, not an inferred live position. Local Chrome and simulated QR-resolver evidence does not certify physical camera/device, iOS/Safari/Firefox, screen-reader, or WCAG behavior.
 
 ## Operating hours / schedules
 Facility hours, class schedules, and staff assignments are only as reliable as the approved school data supplied and maintained.

@@ -5,7 +5,7 @@ import { useConnectivity } from "@/contexts/ConnectivityContext"
 import { usePwa } from "@/contexts/PwaContext"
 import { cn } from "@/lib/utils"
 
-const panelClass = "fixed bottom-[calc(var(--app-bottom-nav-height)+env(safe-area-inset-bottom)+0.75rem)] left-3 right-[5rem] z-toast rounded-2xl border border-line-strong bg-surface p-3 shadow-[0_12px_36px_rgba(0,0,0,0.16)] md:bottom-4 md:left-auto md:right-[5.5rem] md:w-[min(26rem,calc(100vw-7rem))] print:hidden"
+const panelClass = "pwa-status-panel fixed bottom-[calc(var(--app-bottom-nav-height)+env(safe-area-inset-bottom)+var(--clara-lift,0px)+0.75rem)] left-3 right-[5rem] z-toast rounded-2xl border border-line-strong bg-surface p-3 shadow-[0_12px_36px_rgba(0,0,0,0.16)] md:bottom-[calc(1rem+var(--clara-lift,0px))] md:left-auto md:right-[5.5rem] md:w-[min(26rem,calc(100vw-7rem))] print:hidden"
 
 export default function PwaStatus() {
   const connectivity = useConnectivity()

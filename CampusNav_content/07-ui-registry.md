@@ -284,6 +284,7 @@ Dashboard rules:
 - `src/components/map/CampusMapPreview.jsx`: Home and Dashboard preview variant (floor selector, 2D/3D, facility card, "Open map"; zoom and reset on the Dashboard, gestures only on Home's `compact` variant; cooperative gestures; 3D mounted near the viewport and paused off screen)
 - `src/components/map/MapViewControls.jsx`: shared Zoom in / Zoom out / Fit / Reset / Center / My location / Fullscreen control group for 2D and 3D (replaces `MapTools2D`). Every tool is optional: phones show My location and Fullscreen only
 - `src/components/map/MobileRouteSheet.jsx`: the one Navigate bottom sheet below 1024px (destination and Start Navigation, or "Set your location to create a route." with Scan QR and Choose manually while no location is set → one current instruction and the next → arrival; "All steps" opens the list)
+- `src/components/map/RoutePreferences.jsx`: shared Standard/Avoid Stairs radio choices, compact mobile/fullscreen trigger, Radix preference dialog, and explicit no-route/Choose Standard Route feedback. Desktop choices use the existing route-panel disclosure. Step-free / Wheelchair is informational and pending. The preference dialog temporarily suppresses the contextual route sheet and returns focus to the opener or its visible desktop equivalent after resize.
 - `src/components/map/FacilitySheet.jsx`: the facility panel on the map; two visible actions, the rest under More actions
 - `src/components/map/usePanZoom2D.js`: 2D pan, pinch, wheel zoom at the pointer, keyboard, resize, and view requests; math in `src/lib/mapViewport.js`
 - `src/components/map/useMapFullscreen.js` and `ImmersiveMapPanel.jsx`: immersive Navigate map (native Fullscreen API or fixed-overlay fallback); `src/lib/mapLinks.js` builds Navigate links from the existing `?floor=` / `?facility=` parameters
@@ -301,6 +302,7 @@ Known components:
 - `src/components/map/MapVerificationPanel.jsx`
 
 Core controls:
+- Route Preferences: Standard / Avoid Stairs (`DEC-NAV-002`); session only; no automatic stair fallback
 - Current Location
 - Destination Search
 - Current Floor

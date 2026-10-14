@@ -1,9 +1,10 @@
-import { ArrowRight, ChevronDown, ChevronUp, CircleAlert, LocateFixed, Navigation, QrCode, RotateCcw } from "lucide-react"
+import { ArrowRight, ChevronDown, ChevronUp, LocateFixed, Navigation, QrCode, RotateCcw } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { RouteSteps } from "./RouteSummaryPanel"
 import { button } from "@/components/campus/ui"
 import { getFloorById } from "@/data/floors"
 import { cn } from "@/lib/utils"
+import { RouteFailureNotice } from "./RoutePreferences"
 
 /**
  * The one contextual sheet for Navigate on phones and tablets, fixed above
@@ -18,7 +19,7 @@ import { cn } from "@/lib/utils"
  * @param {Record<string, any>} props
  */
 export default function MobileRouteSheet(props) {
-  const { route, instructions, navigationStatus, activeStep, destination, viewingFloorId, onAdvance, onReset, onStart = null, canStart = false, hasLocation = true, onScan = null, onChooseManually = null, error = "" } = props
+  const { route, instructions, navigationStatus, activeStep, destination, viewingFloorId, onAdvance, onReset, onStart = null, canStart = false, hasLocation = true, onScan = null, onChooseManually = null, error = "", failure = null, onChooseStandard = null, preferenceLabel = "Standard", suppressed = false } = props
   const [expanded, setExpanded] = useState(false)
   const sheetRef = useRef(null)
   const hasRoute = Boolean(route && instructions.length)
@@ -49,7 +50,7 @@ export default function MobileRouteSheet(props) {
 
   if (!visible) return null
 
-  const sheetClass = "fixed inset-x-0 md:left-[var(--sidebar-width)] bottom-[var(--app-bottom-nav-height)] z-dropdown rounded-t-2xl border-t border-line-strong bg-surface pb-[var(--app-bottom-safe)] shadow-[0_-12px_36px_rgba(29,31,32,0.14)] lg:hidden"
+  const sheetClass = cn("fixed inset-x-0 md:left-[var(--sidebar-width)] bottom-[var(--app-bottom-nav-height)] z-dropdown max-h-[60dvh] overflow-y-auto overscroll-contain rounded-t-2xl border-t border-line-strong bg-surface pb-[var(--app-bottom-safe)] shadow-[0_-12px_36px_rgba(29,31,32,0.14)] lg:hidden", suppressed && "hidden")
 
   if (!hasRoute) {
     const floor = getFloorById(destination.floorId)
@@ -59,7 +60,7 @@ export default function MobileRouteSheet(props) {
           <div className="flex items-center gap-3 px-4 py-3">
             <div className="min-w-0 flex-1">
               <p className="truncate text-[16px] font-semibold leading-snug text-ink">{destination.name}</p>
-              <p className="truncate text-sm text-ink-soft">{floor?.name || destination.floorId}</p>
+              <p className="truncate text-sm text-ink-soft">{floor?.name || destination.floorId} · {preferenceLabel}</p>
             </div>
             <button type="button" onClick={onStart} disabled={!canStart} className={cn(button.primary, "min-h-12 shrink-0 px-4")}>
               <Navigation className="h-4 w-4" aria-hidden="true" /> Start Navigation
@@ -81,9 +82,7 @@ export default function MobileRouteSheet(props) {
           </div>
         )}
         {error && (
-          <p role="alert" className="flex items-start gap-2 border-t border-line px-4 py-2.5 text-sm font-medium text-ink">
-            <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" /> {error}
-          </p>
+          <RouteFailureNotice message={error} failure={failure} onChooseStandard={onChooseStandard} className="mx-3 mb-3" />
         )}
       </section>
     )
@@ -101,6 +100,7 @@ export default function MobileRouteSheet(props) {
       <div className="px-4 pt-3">
         <p className="truncate text-[12px] font-medium text-ink-soft">
           {arrived ? "Arrived" : `To ${destination?.name || "destination"}`}
+          {` · ${preferenceLabel}`}
           {route.floorChanges > 0 && ` · ${route.floorChanges} floor change${route.floorChanges === 1 ? "" : "s"}`}
         </p>
         <p aria-live="polite" className="mt-1 text-[17px] font-semibold leading-snug text-ink">{currentInstruction}</p>

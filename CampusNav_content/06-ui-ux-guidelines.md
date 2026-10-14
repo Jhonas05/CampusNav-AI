@@ -99,6 +99,14 @@ On phones and tablets (below 1024px) Navigate is map-first (`DEC-UI-006`): the d
 
 **Location is never inferred (`DEC-UI-006`).** A fresh Navigate session has no current location and no destination. The current location comes only from a QR checkpoint, a manual choice, or another legitimately implemented positioning source; the manual picker starts with no floor and no location and never follows the viewed floor. `?facility=` sets the destination and views its floor; `?floor=` changes the viewed floor only; neither sets a location. With a destination but no location the page shows "Set your location to create a route." with Scan QR and Choose manually and calculates no route; Emergency Mode will not search for an exit from an unset position. The Library → Virtual Laboratory demonstration start exists only under `?demo=1`, with a visible "Demo start" label.
 
+### Route Preferences (`DEC-NAV-002`, owner-authorized UI integration — 14 October 2026)
+
+Navigate exposes Standard and Avoid Stairs through the accepted preference-aware API. Below 1024px a compact Route Preferences control opens an accessible Radix bottom-sheet dialog. From 1024px the same two choices are disclosed in the existing route panel. Fullscreen uses the same state and a dialog hosted inside the fullscreen map. Step-free / Wheelchair is informational only with `Accessibility information pending verification.`
+
+Preference is held in the current Navigate session, defaults to Standard, and survives destination changes, QR/manual positioning, floor/view changes, resizing, and fullscreen. Applying a different preference during a route clears the previous geometry/instructions/progress and recalculates from the last confirmed origin; it does not infer progress or move the visitor. The new result is announced. Setup changes retain the preference until Start Navigation. No profile or browser-storage persistence is added.
+
+If Avoid Stairs has no eligible route, show the engine's exact no-route message, explain that CampusNav will not automatically switch to a stair route, and offer an explicit Choose Standard Route action. Never display the previous Standard geometry as an Avoid Stairs result. The phone From/Scan QR row remains reachable during navigation. The route sheet yields while the preference dialog is open, and PWA notices clear the route sheet and yield to the modal controls.
+
 ## Map presentation
 One map, one source of spatial truth, several presentations. Navigate, Home ("Campus at a glance"), and Dashboard ("Campus Overview") all render `CampusMapCanvas`, which draws the canonical floor maps, facility geometry, graph, QR checkpoints, and emergency records with the same 2D renderer (`IndoorMap2D`) and the same lazily loaded 3D model (`Campus3D`). No page keeps its own geometry, coordinates, or map image. The Facility Detail page keeps a static, non-interactive thumbnail of the same 2D renderer.
 

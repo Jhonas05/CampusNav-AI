@@ -12,6 +12,7 @@
     "test:data": "node scripts/test-facility-data.mjs",
     "test:navigation": "node scripts/test-navigation.mjs",
     "test:mobility-routing": "node scripts/test-mobility-routing.mjs",
+    "test:mobile-route-preferences": "node scripts/test-mobile-route-preferences.mjs",
     "test:multi-floor": "node scripts/test-multi-floor.mjs",
     "test:qr": "node scripts/test-qr-checkpoints.mjs",
     "test:emergency": "node scripts/test-emergency.mjs",

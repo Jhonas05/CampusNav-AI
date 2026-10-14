@@ -1,5 +1,18 @@
 # CampusNav Content Pack — Changelog
 
+## v3.53 — 14 October 2026
+
+Completed the owner-authorized Mobile Route Preferences UI under `DEC-NAV-002` as a scoped functional addition to the frozen mobile-first design.
+
+- connected Navigate to the accepted `calculateFacilityRouteWithOptions(...)` API; Standard remains the default and Avoid Stairs remains a hard, no-fallback constraint
+- added native labelled radios in a phone/tablet Radix dialog and desktop route-panel disclosure, plus informational Step-free / Wheelchair pending-verification wording
+- retained preference across the route session, location/destination/view/floor/fullscreen changes, and End Navigation without storage/profile persistence
+- clear old geometry/instructions/progress before new requests, announce replacement routes from confirmed endpoints, and offer Choose Standard Route only as an explicit recovery action
+- kept phone From/Scan QR reachable during routes, corrected destination-dropdown layering, and fixed offline notices covering route controls or preference dialogs; no service-worker/cache policy changed
+- verified 23 dedicated contracts, the accepted mobility-engine suite, all 32 deterministic suites, lint/typecheck/build/diff gates, 64 responsive Chrome cases in both themes, 14 interaction cases, and 7 production-build offline cases
+- retained screenshots and QA drivers/results outside the repository; physical camera/device, screen-reader, non-Chromium, low-end-device, and independent WCAG evidence remain pending
+- kept step-free/wheelchair, crowd-aware, and accessible Emergency routing BLOCKED; no spatial/connector/engine, database/provider/dependency/lockfile, branding, or FS-4 scope change
+
 ## v3.52 — 14 October 2026
 
 Implemented and verified the owner-directed engine-only `STANDARD` + `AVOID_STAIRS` route-preference foundation under `DEC-NAV-002`.

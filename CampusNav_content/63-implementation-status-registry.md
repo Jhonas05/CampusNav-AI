@@ -3,7 +3,22 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
-## Mobility route-options engine foundation — 14 October 2026 (`DEC-NAV-002`)
+## Mobile Route Preferences UI acceptance — 14 October 2026 (`DEC-NAV-002`)
+
+**Status: `COMPLETE — ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED`.** This cross-cutting Navigate integration leaves Phase 4-FS-4 and adviser/defense classification unchanged. The earlier engine acceptance below remains a historical checkpoint.
+
+| Area | Evidence / boundary |
+|---|---|
+| UI and engine | Standard and Avoid Stairs are the only selectable native-radio choices; phone/tablet bottom-sheet dialog and desktop route-panel disclosure reuse `calculateFacilityRouteWithOptions(...)`. Engine, graph, weights, entrance selection, instructions, and both renderers are unchanged. |
+| State and failure | Session preference defaults to Standard and persists across destination, QR/manual, floor, 2D/3D, resizing, fullscreen, and End Navigation. An applied active change clears old geometry/instructions/progress and replans from confirmed endpoints. No-route feedback includes the exact engine message and explicit Choose Standard Route action; no silent fallback or inferred location. |
+| Focus and overlays | Radix dialog contains focus, closes on Escape, focuses the selected radio, and returns focus to the opener or visible desktop equivalent after resize. Route sheet yields while it is open. The phone From/Scan QR row remains reachable during a route. Destination results render above the map. Offline PWA notices clear the route sheet and yield to the preference modal. |
+| Deterministic evidence | `23/23 PASS` in `test:mobile-route-preferences`, accepted `17/17` mobility-engine checks, and the complete 32-suite matrix including Phase 8, FS-1–FS-4, PWA, map/mobile, and route rendering. Lint, typecheck, production build, and Git diff checks pass; affected suites are rerun after the offline-notice correction. |
+| Browser matrix | `64/64 PASS` in local headless Chrome: Standard same/multi-floor, Avoid Stairs same-floor, and cross-floor failure/recovery at 360, 375, 390, 430, 768, 820, 1024, and 1440px in Light/Dark. No horizontal overflow, CLARA/route-control overlap, or console error. Representative screenshots retained outside the repository. |
+| Browser interactions | `14/14 PASS`: default/unset origin, destination-only link, dialog focus/Tab/Escape/return, Next/End, active constraint failure and explicit recovery, manual repositioning, 2D/3D/floor/fullscreen preservation, open-dialog viewport resize, valid/invalid simulated QR resolution and confirmation, and independent approved Emergency routing. QR evidence uses the existing developer simulator, not a physical camera. |
+| Offline production build | `7/7 PASS`: real worker control, cached deep link with unset origin, manual origin, Standard multi-floor route, Avoid Stairs failure without stale geometry, explicit Standard recovery, Avoid Stairs same-floor success, and blocked offline Emergency. Precache remains public-static: 44 entries / 1604.35 KiB; worker/cache policy is unchanged. |
+| Exclusions/advisories | Step-free/wheelchair, crowd-aware, and accessible Emergency routing remain BLOCKED; no elevator/ramp data, DB/provider/dependency/lockfile/branding changes. Physical devices/camera, non-Chromium browsers, screen readers, low-end performance, independent accessibility certification, and institutional connector verification remain pending. Existing lazy 3D chunk advisory remains. |
+
+## Mobility route-options engine foundation — 14 October 2026 (`DEC-NAV-002`, earlier engine checkpoint)
 
 **Status: `IMPLEMENTED_VERIFIED (ENGINE ONLY) / OWNER APPROVED`; adviser/defense classification unchanged.** This is a cross-cutting normal-navigation enhancement, not FS-4 search/recommendation work and not a user-interface or verified-accessibility claim.
 

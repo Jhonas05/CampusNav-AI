@@ -34,7 +34,9 @@ If incomplete, display:
 ## Route preference wording
 Do not show “Elevator Preferred” unless verified elevator data exists. “Fewer Stairs” may be used only if route metadata actually supports it.
 
-The `DEC-NAV-002` engine foundation supports `AVOID_STAIRS` only as a hard exclusion of verified stair edges and unknown cross-floor connectors. It must not be described as wheelchair-accessible, step-free, elevator-based, or a guarantee that every same-floor segment meets a person's mobility needs. `STEP_FREE` remains unavailable pending institutionally verified infrastructure and route data. No user-facing preference control is implemented by this engine-only slice.
+The `DEC-NAV-002` engine supports `AVOID_STAIRS` only as a hard exclusion of verified stair edges and unknown cross-floor connectors. It must not be described as wheelchair-accessible, step-free, elevator-based, or a guarantee that every same-floor segment meets a person's mobility needs. `STEP_FREE` remains BLOCKED pending institutionally verified infrastructure and route data. The Navigate UI exposes only Standard and Avoid Stairs; Step-free / Wheelchair is informational with the exact pending-verification wording.
+
+The mobile preference dialog uses native labelled radio inputs, focus entry/containment, Escape, focus return, 44px or larger label/button targets, safe-area clearance, and no decorative motion. Route success/recalculation is announced politely; failure is an atomic alert with a user-controlled Standard action. Local Chrome keyboard/resize and deterministic checks passed; physical-device, screen-reader, and independent WCAG certification are not claimed.
 
 ## Map states
 Color can supplement meaning, but blocked/restricted/emergency/current/destination states must also use:

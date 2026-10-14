@@ -59,7 +59,7 @@ Start floor graph
 ```
 
 ## Route preferences
-`DEC-NAV-002` authorizes an engine-only route-options foundation with exactly two values:
+`DEC-NAV-002` authorizes the accepted route-options engine and its mobile-first Navigate integration with exactly two selectable values:
 - `STANDARD` preserves the established eligible-edge behavior, costs, deterministic entrance selection, and tie handling
 - `AVOID_STAIRS` is a hard edge constraint: reject `stairs: true` and fail closed for a cross-floor connector not explicitly verified as non-stair
 
@@ -67,7 +67,9 @@ The existing `calculateFacilityRoute(...)` route/null contract remains the compa
 
 The constraint applies to traversed edges, not node labels. A stair landing node may be part of a same-floor approach when the traversed same-floor edges are otherwise eligible. The current verified graph has only stair-based cross-floor transitions, so same-floor `AVOID_STAIRS` may succeed while current cross-floor requests fail safely.
 
-This is not wheelchair/step-free routing. Do not expose `STEP_FREE`, elevator-preferred, ramp, accessible-route, covered-route, or crowd-aware options until their required canonical data and authorization exist. Mobile route-preference UI is not part of this foundation.
+The Navigate UI now consumes `calculateFacilityRouteWithOptions(...)` directly. Preference stays in React navigation-session state across destination, QR/manual, floor, 2D/3D, viewport, and fullscreen changes. A changed active preference invalidates the previous route and recalculates from confirmed endpoints with progress restarted and an announcement. Failure retains no old geometry. Choose Standard Route is an explicit user action, never an automatic retry.
+
+This is not wheelchair/step-free routing. `STEP_FREE`, elevator-preferred, ramp, accessible-route, covered-route, and crowd-aware routing remain unavailable until their required canonical data and authorization exist. Step-free / Wheelchair is displayed only as unavailable/pending information. Normal route preferences remain separate from Emergency.
 
 ## Turn-by-turn directions
 Directions must be derived from graph geometry and floor transitions, not handwritten fake steps.

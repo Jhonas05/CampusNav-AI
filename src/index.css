@@ -593,6 +593,9 @@ html[data-map-immersive="overlay"] [data-app-chrome] { visibility: hidden; }
 html[data-map-immersive] .clara-floating-button,
 html[data-map-immersive] #clara-chat-panel { display: none !important; }
 
+/* Background PWA notices must not cover the modal preference controls. */
+html[data-route-preferences-open] .pwa-status-panel { visibility: hidden; }
+
 /* Dark mode: the 2D map keeps its semantic hues; lightness is inverted so
    rooms, labels, route, and emergency marks stay legible on a dark surface. */
 .dark .map-semantic {

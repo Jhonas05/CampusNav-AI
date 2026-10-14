@@ -1,5 +1,5 @@
 import { CircleAlert, Info, LocateFixed, Minimize, Navigation, QrCode, ShieldAlert, WifiOff } from "lucide-react"
-import { lazy, Suspense, useCallback, useMemo, useState } from "react"
+import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { button, Disclosure, focusRing, InkKicker, InkSectionLabel } from "@/components/campus/ui"
 import useModalDialog from "@/components/campus/useModalDialog"
@@ -16,6 +16,7 @@ import MapViewToggle from "@/components/map/MapViewToggle"
 import MobileRouteSheet from "@/components/map/MobileRouteSheet"
 import NavigationContextBar from "@/components/map/NavigationContextBar"
 import RouteSummaryPanel from "@/components/map/RouteSummaryPanel"
+import { RouteFailureNotice, RoutePreferenceButton, RoutePreferenceOptions, RoutePreferencesDialog, routePreferenceLabel } from "@/components/map/RoutePreferences"
 import useMapFullscreen from "@/components/map/useMapFullscreen"
 import { FACILITY_DATA_NOTICE, facilities, getFacilitiesByFloor, getFacilityById } from "@/data/facilities"
 import { floors, getFloorById } from "@/data/floors"
@@ -25,7 +26,8 @@ import { getFacilityEntranceNode, getFacilityEntranceNodes, mapNodes } from "@/d
 import { getCheckpointsByFloor, qrCheckpoints } from "@/data/qrCheckpoints"
 import { applyLocationResolution, INVALID_CHECKPOINT_MESSAGE, resolveCheckpointPayload, resolveManualCheckpoint, resolveManualPosition } from "@/lib/checkpointPositioning"
 import { buildMapVerificationReport } from "@/lib/mapValidation"
-import { advanceNavigationProgress, calculateFacilityRoute, generateNavigationInstructions, getRouteSegmentForFloor } from "@/lib/navigation"
+import { advanceNavigationProgress, calculateFacilityRouteWithOptions, generateNavigationInstructions, getRouteSegmentForFloor } from "@/lib/navigation"
+import { resolveRouteOptions, ROUTE_PREFERENCE } from "@/lib/routePreferences"
 import { buildEmergencyVerificationReport, findNearestVerifiedExit, generateEmergencyInstructions, getEmergencyRouteSegmentForFloor } from "@/lib/emergencyNavigation"
 import { supportsWebGL } from "@/lib/webgl"
 import { cn } from "@/lib/utils"
@@ -137,6 +139,11 @@ function NavigateExperience({ searchParams }) {
   const [navigationStatus, setNavigationStatus] = useState("idle")
   const [activeStep, setActiveStep] = useState(0)
   const [routeError, setRouteError] = useState("")
+  const [routeFailure, setRouteFailure] = useState(null)
+  const [routePreference, setRoutePreference] = useState(ROUTE_PREFERENCE.STANDARD)
+  const [preferencesOpen, setPreferencesOpen] = useState(false)
+  const preferenceOpener = useRef(null)
+  const [routeAnnouncement, setRouteAnnouncement] = useState("")
   const [calibrationOptions, setCalibrationOptions] = useState(() => createCalibrationOptions(getFloorById(initialFloorId)))
   // `?scan=1` (Home quick access) opens Navigate with the QR scanner ready.
   const [scannerOpen, setScannerOpen] = useState(() => searchParams.get("scan") === "1")
@@ -157,7 +164,7 @@ function NavigateExperience({ searchParams }) {
   const fullscreen = useMapFullscreen()
   const immersive = fullscreen.active
   const clara = useClara()
-  const immersiveFocusRef = useModalDialog({ active: immersive, onClose: fullscreen.exit })
+  const immersiveFocusRef = useModalDialog({ active: immersive && !preferencesOpen && !scannerOpen && !locationConfirmation, onClose: fullscreen.exit })
 
   const floor = getFloorById(floorId)
   const currentFloorId = currentPosition.currentFloorId
@@ -204,6 +211,8 @@ function NavigateExperience({ searchParams }) {
     setNavigationStatus("idle")
     setActiveStep(0)
     setRouteError("")
+    setRouteFailure(null)
+    setRouteAnnouncement("")
   }, [])
 
   const resetEmergencyRoute = useCallback(() => {
@@ -406,16 +415,17 @@ function NavigateExperience({ searchParams }) {
     resetRoute()
   }
 
-  const startNavigation = () => {
-    setRouteError("")
+  const startNavigation = (preference = routePreference) => {
+    // Every request first invalidates geometry and progress from the old request.
+    resetRoute()
     const startFloor = getFloorById(currentPosition.currentFloorId)
     const destinationFloor = getFloorById(destination?.floorId)
-    if (!startFloor?.map || !destinationFloor?.map) {
-      setRouteError("One of the selected floors is still pending a source-aligned navigation map.")
+    if (!hasLocation || locationConfirmation) {
+      setRouteError(SET_LOCATION_MESSAGE)
       return
     }
-    if (!hasLocation) {
-      setRouteError(SET_LOCATION_MESSAGE)
+    if (!startFloor?.map || !destinationFloor?.map) {
+      setRouteError("One of the selected floors is still pending a source-aligned navigation map.")
       return
     }
     if (!currentLocation || !destination) {
@@ -423,20 +433,24 @@ function NavigateExperience({ searchParams }) {
       return
     }
 
-    const nextRoute = calculateFacilityRoute({
+    const result = calculateFacilityRouteWithOptions({
       startFacility: currentLocation,
       destinationFacility: destination,
       floor: startFloor,
       nodes: mapNodes,
       edges: mapEdges,
       startNodeId: currentPosition.currentNodeId,
+      routeOptions: { preference },
     })
 
-    if (!nextRoute) {
-      setRouteError("No valid walkable route is available for that selection.")
+    setSelectedFacilityId(null)
+    if (!result.ok) {
+      setRouteFailure(result)
+      setRouteError(result.message)
       return
     }
 
+    const nextRoute = result.route
     setRoute(nextRoute)
     setInstructions(generateNavigationInstructions({ route: nextRoute, startFacility: currentLocation, destinationFacility: destination, floor: startFloor }))
     setNavigationStatus(currentLocation.id === destination.id ? "arrived" : "active")
@@ -447,6 +461,24 @@ function NavigateExperience({ searchParams }) {
     // the 2D viewport scrolls to where the route begins.
     setSelectedFacilityId(null)
     requestMapFocus(currentLocation.id)
+    setRouteAnnouncement(`${routePreferenceLabel(preference)} route ready from ${currentLocation.name} to ${destination.name}. Steps restart from your confirmed location.`)
+  }
+
+  const changeRoutePreference = (preference) => {
+    const result = resolveRouteOptions({ preference })
+    if (!result.ok || emergencyMode) return
+    if (preference === routePreference) return
+    const recalculate = Boolean(route || routeFailure)
+    setRoutePreference(preference)
+    resetRoute()
+    if (recalculate && hasLocation && destination && !locationConfirmation) startNavigation(preference)
+    else setRouteAnnouncement(`${routePreferenceLabel(preference)} selected. ${hasLocation && destination ? "Select Start Navigation to calculate this route." : "Set your location and destination to create a route."}`)
+  }
+
+  const openPreferences = () => {
+    preferenceOpener.current = document.activeElement
+    if (clara.open) clara.minimize()
+    setPreferencesOpen(true)
   }
 
   const advanceNavigation = () => {
@@ -485,6 +517,7 @@ function NavigateExperience({ searchParams }) {
     currentLocation &&
     destination &&
     currentPosition.currentNodeId &&
+    !locationConfirmation &&
     getFacilityEntranceNodes(destination.id, destination.floorId).length
   )
   const destinationNodeId = emergencyMode
@@ -522,17 +555,22 @@ function NavigateExperience({ searchParams }) {
       viewingFloorId={floorId}
       onAdvance={advanceNavigation}
       onReset={resetRoute}
-      onStart={startNavigation}
+      onStart={() => startNavigation()}
       canStart={canStart}
       hasLocation={hasLocation}
       onScan={openScanner}
       onChooseManually={useManualLocation}
       error={routeError}
+      failure={routeFailure}
+      onChooseStandard={() => changeRoutePreference(ROUTE_PREFERENCE.STANDARD)}
+      preferenceLabel={routePreferenceLabel(routePreference)}
+      suppressed={preferencesOpen}
     />
   )
 
   return (
     <div className={cn("app-page bg-canvas", mobileSheetVisible && "max-lg:pb-48")}>
+      {!emergencyMode && <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">{routeAnnouncement}</p>}
       <div className="app-container">
         <header className="flex flex-wrap items-center justify-between gap-3 sm:items-end">
           <div className="min-w-0">
@@ -567,7 +605,7 @@ function NavigateExperience({ searchParams }) {
         />
 
         <div className="mt-3 grid gap-3 lg:grid-cols-[var(--app-map-control-width)_minmax(0,1fr)] lg:grid-rows-[auto_1fr]">
-          <section aria-label="Route planning controls" className={cn("ink-blueprint p-3 lg:col-start-1 lg:row-start-1 lg:p-3.5", emergencyMode && "border-2 border-ink", routeSheetActive && "max-lg:hidden")}>
+          <section aria-label="Route planning controls" className={cn("ink-blueprint z-dropdown p-3 lg:col-start-1 lg:row-start-1 lg:p-3.5", emergencyMode && "border-2 border-ink")}>
             <div className="relative z-[1] grid gap-2 lg:gap-3">
               <div>
                 <InkSectionLabel className="mb-2.5 max-lg:hidden"><LocateFixed className="h-3.5 w-3.5" aria-hidden="true" /> Current location</InkSectionLabel>
@@ -631,8 +669,19 @@ function NavigateExperience({ searchParams }) {
                   onSelect={chooseDestination}
                   placeholder="Where do you want to go?"
                   labelClassName="max-lg:sr-only"
-                  className="max-lg:order-first"
+                  className={cn("max-lg:order-first", routeSheetActive && "max-lg:hidden")}
                 />
+              )}
+
+              {!emergencyMode && (
+                <>
+                  <RoutePreferenceButton preference={routePreference} expanded={preferencesOpen} onClick={openPreferences} className="w-full justify-start lg:hidden" />
+                  <div data-route-preferences-desktop className="hidden lg:block">
+                    <Disclosure summary={`Route Preferences · ${routePreferenceLabel(routePreference)}`}>
+                      <div className="mt-2"><RoutePreferenceOptions preference={routePreference} onChange={changeRoutePreference} /></div>
+                    </Disclosure>
+                  </div>
+                </>
               )}
 
               {demoStart && (
@@ -657,7 +706,7 @@ function NavigateExperience({ searchParams }) {
                     <ShieldAlert className="h-4 w-4" aria-hidden="true" /> Find Nearest Verified Exit
                   </button>
                 ) : (
-                  <button type="button" onClick={startNavigation} disabled={!canStart} className={cn(button.primary, "w-full px-3")}>
+                  <button type="button" onClick={() => startNavigation()} disabled={!canStart} className={cn(button.primary, "w-full px-3")}>
                     <Navigation className="h-4 w-4" aria-hidden="true" /> Start Navigation
                   </button>
                 )}
@@ -671,11 +720,9 @@ function NavigateExperience({ searchParams }) {
                   <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" /> {scanError}
                 </p>
               )}
-              {routeError && (
+              {routeError && (!emergencyMode || !routeFailure) && (
                 // The bottom sheet shows this message on phones while it is visible.
-                <p role="alert" className={cn(alertClass, mobileSheetVisible && "max-lg:hidden")}>
-                  <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" /> {routeError}
-                </p>
+                <RouteFailureNotice message={routeError} failure={routeFailure} onChooseStandard={() => changeRoutePreference(ROUTE_PREFERENCE.STANDARD)} className={cn(mobileSheetVisible && "max-lg:hidden")} />
               )}
             </div>
           </section>
@@ -796,6 +843,16 @@ function NavigateExperience({ searchParams }) {
                   </button>
                 )}
 
+                {immersive && !emergencyMode && (
+                  <RoutePreferenceButton preference={routePreference} expanded={preferencesOpen} onClick={openPreferences}
+                    className="pointer-events-auto absolute left-2 top-[7.5rem] lg:left-auto lg:right-3 lg:top-[4rem]" />
+                )}
+
+                {immersive && !emergencyMode && routeError && (
+                  <RouteFailureNotice message={routeError} failure={routeFailure} onChooseStandard={() => changeRoutePreference(ROUTE_PREFERENCE.STANDARD)}
+                    className="pointer-events-auto absolute right-3 top-[8rem] hidden max-w-[21rem] lg:block" />
+                )}
+
                 {immersive && !emergencyMode && route && (
                   <div className="pointer-events-auto absolute left-[4.75rem] top-[4rem] hidden max-h-[calc(100%-8rem)] w-[21rem] overflow-y-auto overscroll-contain rounded-[18px] shadow-soft lg:block">
                     <RouteSummaryPanel
@@ -845,7 +902,7 @@ function NavigateExperience({ searchParams }) {
                     canStartNavigation={canStart}
                     routeActive={Boolean(route)}
                     onNavigateHere={navigateToSelectedFacility}
-                    onStartNavigation={startNavigation}
+                    onStartNavigation={() => startNavigation()}
                     onSetLocation={() => setLocationFromFacility(selectedFacility)}
                     onClose={() => setSelectedFacilityId(null)}
                     onAskClara={askClaraAboutFacility}
@@ -858,6 +915,10 @@ function NavigateExperience({ searchParams }) {
                   />
                 )}
               </div>
+              {preferencesOpen && !emergencyMode && (
+                <RoutePreferencesDialog open={preferencesOpen} onOpenChange={setPreferencesOpen} preference={routePreference}
+                  onApply={changeRoutePreference} returnFocus={preferenceOpener.current} container={immersive ? fullscreen.targetRef.current || undefined : undefined} />
+              )}
             </section>
 
             {map3DMessage && <p role="status" className="mt-2 flex items-center gap-2 rounded-xl border border-ink bg-surface px-3 py-2 text-sm font-medium text-ink"><Info className="h-4 w-4 shrink-0" aria-hidden="true" /> {map3DMessage}</p>}

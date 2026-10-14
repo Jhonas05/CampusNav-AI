@@ -5,6 +5,7 @@ CampusNav should fail safely and truthfully instead of filling missing informati
 
 ## Navigation
 - `No verified route available.`
+- `No route that avoids stairs is available in the verified campus map.` — clear old route geometry, explain `CampusNav will not automatically switch to a route that uses stairs.`, and offer Choose Standard Route only as an explicit user action
 - `Destination is temporarily unavailable.`
 - `Current location is required. Scan a QR checkpoint or choose your location.`
 - `This route is blocked. Recalculating…` (only when recalculation is actually occurring)
