@@ -43,5 +43,7 @@ The repository should maintain an `.env.example` containing variable names and s
 ## CLARA rule
 Any future Groq/LLM request must be made from a server/edge boundary. The browser may call a controlled CampusNav endpoint, but must not receive the provider secret.
 
+The implemented CLARA foundation needs no environment variable. External generation is hard-disabled and no Gemini/Groq key or endpoint exists. A future separately authorized server release must use server-only names (never `VITE_*`) for provider mode, explicit model, secret reference, request/token limits, timeout/retry limits, and quota policy. Missing or ineligible configuration must keep the provider disabled; it must never select a paid fallback.
+
 ## Failure behavior
 Missing optional configuration should disable the dependent feature cleanly. Missing required configuration should produce a clear startup/runtime error instead of silently using unsafe defaults.

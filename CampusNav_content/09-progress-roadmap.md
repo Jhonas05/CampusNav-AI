@@ -36,6 +36,7 @@ The following capabilities exist in the repository. Their exact evidence level i
 - academic/personnel schedule and availability engine
 - preserved Phase 8C.2 personnel and academic Admin WIP
 - Cloudflare Workers Static Assets deployment configuration
+- CLARA deterministic approved-FAQ/public-campus-tool grounding foundation; external provider disabled
 
 This list does not convert historical live or production claims into fresh verification.
 
@@ -63,7 +64,7 @@ Advisories and non-accepted claims:
 - the 3D chunk remains approximately 878 kB minified
 - dependency audit reports two low, three moderate, and one high advisory; Vite has a non-major remediation available, while the React Router and Quill dependency paths require deliberate major upgrades. No dependency change was made during acceptance
 - PWA manifest presence is not offline support
-- CLARA remains a conservative local facility matcher, not the final grounded Groq/tool integration
+- at the Phase 2 checkpoint, CLARA remained a conservative local facility matcher; the later 16 October 2026 grounded direct-answer foundation is recorded in `63`/`76` and does not enable a model
 
 See `63-implementation-status-registry.md` for the evidence matrix.
 

@@ -60,6 +60,15 @@ Feature pages may show local task status, but the main feed/priority information
 
 CLARA uses authorized tools/internal services and verified campus data. AI provider calls remain server-side.
 
+## DEC-AI-002 — Grounded direct answers first; external AI disabled
+**Status:** OWNER APPROVED / IMPLEMENTED_VERIFIED FOUNDATION — 16 Oct 2026
+
+CLARA answers directly from eligible approved FAQs and accepted CampusNav tools whenever verified evidence is sufficient. Deterministic retrieval is not represented as model generation. Every factual direct answer carries stable source context; ambiguous or missing evidence returns clarification/unavailable wording rather than an invented answer.
+
+The provider interface remains vendor-neutral and production-disabled. It contains no Gemini/Groq SDK, model endpoint, key, or browser secret. No paid tier, paid fallback, automatic upgrade, unbounded history, or raw-conversation telemetry is permitted. A future provider requires a separate compliant server/edge release and explicit model, audience, privacy, quota, billing-risk, and owner authorization.
+
+Google's Gemini API terms audited 16 October 2026 prohibit API clients directed toward or likely accessed by under-18s. Because CampusNav may serve under-18 students, Gemini public activation is `BLOCKED` under the current terms regardless of key/free-tier availability. `76` records the time-sensitive official-source audit.
+
 ## DEC-DATA-001 — Preserve proven local spatial data during backend expansion
 **Status:** CURRENT IMPLEMENTATION DECISION
 

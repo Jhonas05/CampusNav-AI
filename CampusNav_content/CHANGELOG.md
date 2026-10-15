@@ -1,5 +1,19 @@
 # CampusNav Content Pack — Changelog
 
+## v3.59 — 16 October 2026
+
+Implemented the owner-authorized CLARA grounded FAQ and campus-retrieval foundation without enabling an external AI provider.
+
+- added approved/public/effective/non-DEMO FAQ validation, pre-normalized deterministic English/Filipino/Taglish retrieval, ambiguity handling, bounded context and stable provenance
+- reused canonical facility lookup, accepted facility-status evaluation and configured public service mappings; retained one routing engine, explicit destination selection, no current-location inference, personnel privacy and strict Emergency isolation
+- preserved the floating/mobile-first CLARA UI and added visible source labels/IDs without representing direct retrieval as model generation
+- added a provider-neutral disabled adapter contract with explicit model capability, zero-paid policy, token/character/history/request ceilings, timeout, bounded retry, rate/quota errors, candidate source validation and content-free aggregate monitoring
+- retained memory-only conversations and added no key, SDK, model endpoint, `VITE_*` AI secret, paid fallback, storage, cache, schema, migration or official FAQ record
+- audited current official Gemini terms/pricing/rate-limit/key/model documentation; classified public activation as blocked because current terms prohibit API clients likely accessed by under-18s; recorded the current Gemini 3.1 model/free-tier matrix in `76`
+- added `npm run test:clara`; 32 focused checks pass, with final pre-regression local 500-record/1,000-query timing of P50 0.897 ms and P95 1.389 ms
+- passed all 34 top-level local deterministic regression commands / 36 underlying suites, lint, typecheck, production build, generated PWA artifact and diff checks; the Docker-backed RLS test remains unexecuted because Docker/local PostgreSQL is unavailable
+- Git and production outcomes remain evidence-driven and are not inferred from local validation
+
 ## v3.58 — 15 October 2026
 
 Implemented the owner-selected FS-4 Home/Navigate DestinationSearch service-resolution slice (`DEC-FAC-002`), without final FS-4 closure.

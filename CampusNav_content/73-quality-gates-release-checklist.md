@@ -8,6 +8,17 @@
 - new UI includes loading/empty/error/permission states
 - documentation/status is updated where changed
 
+## CLARA grounded foundation evidence — 16 October 2026
+
+- `READY_WITH_BOUNDARIES / IMPLEMENTED_VERIFIED / OWNER AUTHORIZED FOUNDATION` — deterministic FAQ/public-tool grounding only; no approved production FAQ content and no claim of completed generative CLARA
+- `32/32 PASS` — exact/alternative/Filipino/Taglish/multiple/ambiguous/no-result/unpublished/expired/effectivity-boundary/DEMO retrieval; facility/status/service/missing mapping; freshness, personnel privacy, Emergency isolation, provenance, injection resistance, canonical actions; disabled provider, rate/quota fallback, content-free usage monitoring, key/cache/privacy scans, mobile accessibility and existing conservative behavior
+- `ZERO EXTERNAL AI REQUESTS` — disabled policy rejects before provider invocation; no SDK, key, endpoint, paid tier/fallback, automatic upgrade, or raw conversation persistence
+- `LOCAL PERFORMANCE` — final pre-regression run over 500 synthetic eligible FAQ records and 1,000 queries: P50 0.897 ms / P95 1.389 ms under Node 22; no device/network guarantee
+- `GEMINI BLOCKED` — official sources checked 16 October 2026; current terms prohibit API clients likely accessed by under-18s. Free-tier availability does not remove the audience, privacy, quota, or billing gates. See `76`
+- `FULL LOCAL REGRESSION PASS` — all 34 top-level deterministic commands / 36 underlying suites passed, including retained FS-1–FS-4, search, navigation, mobility, QR, Emergency, 3D, Dashboard, theme, mobile, render, PWA and Phase 8 coverage; lint, typecheck, production build, generated PWA artifact and diff checks also passed
+- `RLS ENVIRONMENT BLOCKED` — `npm run test:rls` could not connect to the local PostgreSQL endpoint at `127.0.0.1:54322`; Docker is not installed in this environment. This is an environment limitation, not a passing database result
+- Git delivery, production deployment observation and cleanup are recorded only after their corresponding commands complete
+
 ## Git delivery and cleanup gate — owner-directed 15 October 2026
 
 Apply the single operational procedure in `53-git-workflow.md`: dedicated task branch, one authoritative worktree by default, verified clean/fetched baseline, required pre/post-merge tests and lint/typecheck/build/PWA/documentation checks, exact path staging/full staged review/cached whitespace check, fast-forward-only integration, verified main push/equality, then safe current-task cleanup. Do not bypass failed checks, required PR review/protection, unexpected divergence, or preservation safeguards. Confirm committed/pushed reachability, no unique commits/changes/ignored or untracked work, unused disposable temporary worktree, and task-owned process shutdown before non-force Git removal and safe branch deletion. Report clean synchronized authoritative main separately from preserved dirty legacy worktrees and exact cleanup blockers; legacy cleanup is separately authorized. This gate adds no product implementation or background cleanup job.

@@ -152,14 +152,21 @@ FS-3C adds the `SUPER_ADMIN` `/admin/service-aliases` and `/admin/facility-servi
 
 The unnumbered final FS-3 implementation capability adds `SUPER_ADMIN` `/admin/facility-hours` and `/admin/facility-hour-exceptions` consumers. They reuse the existing hours/exception list, create, update, publish, expire, and guarded-delete methods; allow only canonical facilities with operational profiles; preserve one database source row per interval or closed marker; and support split/overnight schedules plus strict Manila exception dates without duplicating status computation. Batch draft creation performs best-effort cleanup through the same guarded service if a later source-row creation fails. Original row `updated_at` values protect edits, lifecycle actions, and deletes. Components contain no direct Supabase, audit, public status, advisory, spatial, or routing mutation.
 
-## CLARAToolService (future)
-Thin authorized wrapper that exposes only safe internal functions to CLARA.
+## CLARAToolService
+
+The implemented foundation in `src/services/claraToolService.js` is a thin read-only wrapper over accepted public services. It exposes canonical facility lookup, current facility-status orchestration, and configured public service mapping without adding a database query, route engine, destination namespace, or emergency fallback.
+
+`src/services/claraKnowledge.js` validates and indexes approved public FAQ records. `src/services/claraIntents.js` supplies deterministic English/Filipino/Taglish intent and entity rules. `src/services/claraService.js` composes verified direct answers and stable sources for the existing floating assistant. Production FAQ data is empty pending institutional approval.
+
+`src/services/claraProvider.js` defines the future server/edge provider contract. Its production policy is disabled and zero-paid; no adapter, endpoint, SDK, key, or provider call is present. `76` records current provider eligibility.
 
 Rules:
 - no direct browser database mutation from CLARA
 - validate tool arguments
 - enforce user authorization
 - return structured provenance/status metadata
+- never calculate a route, infer current location, or turn a service string into a destination
+- do not invoke an external provider when the disabled policy is active
 
 ## Error contract
 Service functions should return/throw normalized errors that UI can convert into approved error states. Do not leak raw database details to users.

@@ -38,6 +38,18 @@ export function ClaraMessage(props) {
             </p>
           )}
           <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-ink"><span className="sr-only">CLARA said: </span>{message.text}</p>
+          {message.sources?.length > 0 && (
+            <div className="mt-2 border-t border-line pt-2" aria-label="Sources for this answer">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.06em] text-ink-soft">Sources</p>
+              <ul className="mt-1 space-y-1">
+                {message.sources.map((item) => (
+                  <li key={item.id} className="break-words text-[11px] leading-snug text-ink-soft">
+                    {item.label} <span className="font-mono text-[10px] text-ink-faint">({item.id})</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
         {message.facility && <ClaraResultCard facility={message.facility} onNavigate={onNavigate} />}
         {message.link && (

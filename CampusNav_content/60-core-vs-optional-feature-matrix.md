@@ -12,7 +12,7 @@
 | Auth/RBAC, Admin CMS, and accepted Supabase/Auth/RLS/Realtime foundation | `CORE_FOR_DEFENSE` | Retain accepted advisories and least-privilege claims boundaries |
 | Academic schedule/personnel engine and availability logic | `CORE_FOR_DEFENSE` | Official data remains institution-dependent; `SCHEDULED != CHECKED_IN` |
 | Strict Emergency Mode and safe no-route behavior | `CORE_FOR_DEFENSE` | Only verified/source-aligned data; no complete coverage or safety sign-off claim |
-| Grounded server-side CLARA/Groq | `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION` | Current local matcher is not grounded production AI or a completed AI assistant |
+| Grounded CLARA | `CONDITIONAL / FOUNDATION IMPLEMENTED; EXTERNAL PROVIDER DEFERRED` | Deterministic approved-FAQ/campus-tool grounding is implemented; production FAQ population and role-aware/live domains remain incomplete. External generation stays disabled, and Gemini public activation is blocked by the current under-18 audience terms |
 | PWA/offline capability in the defense | `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION` | Owner-authorized engineering is `COMPLETE — ACCEPTED_WITH_ADVISORY` under `DEC-PWA-001`; implementation does not select the academic classification. Offline Emergency routing remains blocked and excluded |
 | AR Guidance | `OPTIONAL / DEFERRED / NOT_IMPLEMENTED / NOT_READY` | Planning contract only; not required by the owner proposal |
 | Reports/analytics; advanced map editor/version rollback | `OPTIONAL / DEFERRED` | Reopen only if adviser-confirmed scope requires them |

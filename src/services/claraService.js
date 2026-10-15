@@ -1,18 +1,10 @@
-import { facilities } from "@/data/facilities"
-import { getFloorById } from "@/data/floors"
-
-/**
- * CLARA request service.
- *
- * This is the single entry point the CLARA assistant UI calls. Today it is the
- * conservative local matcher that previously lived in the `/clara` page: it
- * answers only from the verified facility list and never produces schedules,
- * hours, personnel presence, or emergency routes (17-clara-ai-contract).
- *
- * The call is asynchronous so that a future server-side/edge provider can be
- * substituted here without changing the assistant UI. No model, API key, or
- * network request exists in this module.
- */
+import { CLARA_APPROVED_FAQS } from "../data/claraFaqs.js"
+import { getFloorById } from "../data/floors.js"
+import { FACILITY_OPERATIONAL_STATUS } from "../data/facilityContracts.js"
+import { CLARA_INTENTS, recognizeClaraIntent } from "./claraIntents.js"
+import { createClaraFaqIndex, retrieveClaraFaqs } from "./claraKnowledge.js"
+import { createDisabledClaraProvider, getClaraProviderCapability } from "./claraProvider.js"
+import { createClaraToolService } from "./claraToolService.js"
 
 export const CLARA_SUGGESTED_PROMPTS = [
   "Where is the Registrar?",
@@ -23,120 +15,276 @@ export const CLARA_SUGGESTED_PROMPTS = [
 ]
 
 export const CLARA_WELCOME_MESSAGE =
-  "Hi! I'm CLARA. I answer from the verified facility-to-floor assignments — ask me where an office, room, or laboratory is and I can open it in Navigate."
+  "Hi! I'm CLARA. I answer with verified CampusNav records and approved FAQs. External generative AI is currently disabled."
 
-/** Short scope statement shown under the composer; mirrors FACILITY_DATA_NOTICE. */
-export const CLARA_SCOPE_NOTICE = "CLARA answers from verified floor assignments only. Operating hours, schedules, and exact distances remain unverified."
+export const CLARA_SCOPE_NOTICE =
+  "Verified CampusNav sources only. External AI is disabled; unavailable information is never guessed."
 
-const STOPWORDS = new Set(["where", "is", "the", "a", "an", "of", "to", "in", "on", "at", "how", "do", "i", "can", "get", "find", "my", "me", "open", "today", "now", "and", "for", "who", "what", "show", "take"])
-const GENERIC_TOKENS = new Set(["office", "room", "area", "hall"])
+export const CLARA_RESPONSE_MODES = Object.freeze({
+  VERIFIED_DIRECT: "VERIFIED_DIRECT",
+  UNAVAILABLE: "UNAVAILABLE",
+  AI_ASSISTED: "AI_ASSISTED",
+})
 
-const tokenize = (value) => value.toLowerCase().replace(/[^a-z0-9\s']/g, " ").split(/\s+/).filter(Boolean)
+const MAX_QUESTION_LENGTH = 500
+const unavailableText = "I couldn't find verified information for that request. Please contact the appropriate school office."
 
-/**
- * Local placeholder matcher — answers only from the verified facility list.
- * Full-name inclusion wins; otherwise facilities need at least one distinctive
- * token overlap so generic words alone ("office") never pick a random match.
- */
-const findMatch = (message) => {
-  const normalized = message.toLowerCase()
-  const messageTokens = tokenize(message).filter((token) => !STOPWORDS.has(token))
-  const best = { facility: /** @type {any} */ (null), score: 0 }
+const source = (id, label, verificationStatus = "VERIFIED") => ({ id, label, verificationStatus })
+const unavailable = (intent, overrides = {}) => ({
+  text: unavailableText,
+  facility: null,
+  link: { href: "/facilities", label: "Browse Facilities" },
+  verified: false,
+  mode: CLARA_RESPONSE_MODES.UNAVAILABLE,
+  intent,
+  sources: [],
+  ...overrides,
+})
 
-  facilities.forEach((facility) => {
-    if (facility.kind === "Construction") return
-    const name = facility.name.toLowerCase()
-    let score = 0
-    if (normalized.includes(name)) {
-      score = 100 + name.length
-    } else {
-      const nameTokens = tokenize(facility.name)
-      const matched = nameTokens.filter((nameToken) => messageTokens.some((messageToken) =>
-        nameToken === messageToken ||
-        (messageToken.length >= 4 && nameToken.startsWith(messageToken)) ||
-        (nameToken.length >= 4 && messageToken.startsWith(nameToken))
-      ))
-      const distinctive = matched.filter((token) => !GENERIC_TOKENS.has(token))
-      if (distinctive.length > 0) score = distinctive.length * 10 + matched.length
-    }
-    if (score > best.score) {
-      best.facility = facility
-      best.score = score
-    }
-  })
-
-  return best.facility
+const safeQuestion = (message) => {
+  const text = typeof message === "string" ? message.trim() : ""
+  if (!text || text.length > MAX_QUESTION_LENGTH || /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/u.test(text)) {
+    throw new Error("Invalid CLARA request.")
+  }
+  return text
 }
+
+const facilitySource = (facility) => source(`FACILITY:${facility.id}`, `Canonical facility registry — ${facility.name}`)
+const floorSource = (floor) => source(`FLOOR:${floor.id}`, `Canonical floor registry — ${floor.name}`)
 
 export const getClaraFacilityReply = (facility) => {
   const floor = getFloorById(facility.floorId)
-  // Short answer first; the result card carries Navigate and Details. The
-  // caveats stay: map positions are estimates and hours are not yet verified.
   const caveat = facility.mapRoomId
-    ? "Its map position is an estimate, and operating hours are pending verification."
+    ? "Its map position is estimated, and operating hours require a separately verified status source."
     : "Its exact room position and operating hours are pending verification."
   return `${facility.name} is on the ${floor?.name || facility.floorId}. ${caveat}`
 }
 
-/**
- * @returns {{ text: string, facility: any, link: { href: string, label: string } | null, verified: boolean }}
- */
-const buildReply = (message) => {
-  if (/emergency|evacuat|fire|earthquake|medical/i.test(message)) {
-    return {
-      text: "For emergencies, follow the posted evacuation plan and instructions from authorized campus personnel. The digital map is not a certified emergency-navigation system. Verified safety information is on the Emergency page.",
-      facility: null,
-      link: { href: "/emergency", label: "Emergency Information" },
-      verified: true,
-    }
-  }
-
-  const facility = findMatch(message)
-  if (facility) return { text: getClaraFacilityReply(facility), facility, link: null, verified: true }
-
-  if (/event|happening|activity|activities|calendar/i.test(message)) {
-    return {
-      text: "Published campus events appear on the Events page and the Dashboard. No official events source is connected yet, so no events are currently listed.",
-      facility: null,
-      link: { href: "/events", label: "View Events" },
-      verified: false,
-    }
-  }
-
-  if (/schedule|professor|prof\.?\b|teacher|instructor|faculty|personnel|available/i.test(message)) {
-    return {
-      text: "Personnel schedules and availability are pending an authorized schedule source. Once connected, CLARA can answer who is scheduled in a room — a schedule will never be presented as proof of physical presence.",
-      facility: null,
-      link: { href: "/dashboard#personnel-availability", label: "Personnel Availability" },
-      verified: false,
-    }
-  }
-
+const facilityReply = (intent, result) => {
+  const { facility, floor } = result.data
   return {
-    text: "I couldn't find verified information for that request. Try the exact name of an office, room, laboratory, or facility, or contact the appropriate school office.",
-    facility: null,
-    link: { href: "/facilities", label: "Browse Facilities" },
-    verified: false,
+    text: getClaraFacilityReply(facility),
+    facility,
+    link: null,
+    verified: true,
+    mode: CLARA_RESPONSE_MODES.VERIFIED_DIRECT,
+    intent,
+    sources: [facilitySource(facility), ...(floor ? [floorSource(floor)] : [])],
   }
 }
 
-/** Reply describing a facility the user opened CLARA from (facility CTA). */
+const faqReply = (intent, retrieval) => {
+  if (!retrieval.matches.length) return null
+  if (retrieval.ambiguous) {
+    const topics = retrieval.matches.map((faq) => faq.question).join("; ")
+    return unavailable(intent, {
+      text: `I found several verified FAQ topics: ${topics}. Please ask about one topic more specifically.`,
+      link: null,
+      sources: retrieval.matches.map((faq) => source(`FAQ:${faq.id}`, faq.source.label, faq.verificationStatus)),
+    })
+  }
+  const faq = retrieval.matches[0]
+  return {
+    text: faq.answer,
+    facility: null,
+    link: null,
+    verified: true,
+    mode: CLARA_RESPONSE_MODES.VERIFIED_DIRECT,
+    intent,
+    sources: [source(`FAQ:${faq.id}`, faq.source.label, faq.verificationStatus)],
+  }
+}
+
+const statusLabels = Object.freeze({
+  [FACILITY_OPERATIONAL_STATUS.OPEN_NOW]: "open now",
+  [FACILITY_OPERATIONAL_STATUS.CLOSING_SOON]: "closing soon",
+  [FACILITY_OPERATIONAL_STATUS.SCHEDULED_TO_OPEN]: "scheduled to open",
+  [FACILITY_OPERATIONAL_STATUS.CLOSED]: "closed",
+  [FACILITY_OPERATIONAL_STATUS.TEMPORARILY_UNAVAILABLE]: "temporarily unavailable",
+})
+
+const statusSources = (facility, result) => {
+  const records = result.data?.controllingRecords || []
+  const dynamic = records.map((record, index) => {
+    const provenance = record.provenance || record
+    return source(
+      provenance.sourceId ? `FACILITY_STATUS:${provenance.sourceId}` : `FACILITY_STATUS:${facility.id}:${index + 1}`,
+      provenance.sourceLabel || provenance.sourceType || "Approved facility status record",
+      provenance.verificationStatus || "VERIFIED",
+    )
+  })
+  return [facilitySource(facility), ...dynamic]
+}
+
+const statusReply = async (tools, intent, facilityResult) => {
+  const facility = facilityResult.data.facility
+  const result = await tools.getFacilityStatus(facility.id)
+  const status = result?.data?.status
+  if (!result?.ok || !statusLabels[status]) {
+    return unavailable(intent, {
+      text: `Verified current operating information is unavailable for ${facility.name}.`,
+      facility,
+      link: null,
+      sources: [facilitySource(facility)],
+    })
+  }
+  return {
+    text: `${facility.name} is ${statusLabels[status]} based on the current approved CampusNav status records.`,
+    facility,
+    link: null,
+    verified: true,
+    mode: CLARA_RESPONSE_MODES.VERIFIED_DIRECT,
+    intent,
+    sources: statusSources(facility, result),
+  }
+}
+
+const serviceReply = async (tools, intent, entityQuery) => {
+  if (!entityQuery) return unavailable(intent)
+  const result = await tools.findService(entityQuery)
+  if (!result?.ok || !result.data?.facilities?.length) {
+    const named = result?.data?.unmappedServices?.length
+      ? ` I found the service, but no verified facility mapping is published for ${result.data.unmappedServices.join(", ")}.`
+      : ""
+    return unavailable(intent, { text: `${unavailableText}${named}` })
+  }
+  if (result.data.facilities.length > 1) {
+    const names = result.data.facilities.map(({ facility }) => facility.name).join(", ")
+    return {
+      text: `Verified configured locations for that service are: ${names}. Choose a canonical facility in the Facilities directory before navigating.`,
+      facility: null,
+      link: { href: "/facilities", label: "Choose a Facility" },
+      verified: true,
+      mode: CLARA_RESPONSE_MODES.VERIFIED_DIRECT,
+      intent,
+      sources: result.data.facilities.flatMap(({ facility, matches }) => [
+        facilitySource(facility),
+        ...matches.map((match) => source(
+          `SERVICE_MAPPING:${match.serviceCode}:${facility.id}`,
+          match.mappingProvenance?.sourceLabel || match.serviceName,
+          match.mappingProvenance?.verificationStatus || "VERIFIED",
+        )),
+      ]),
+    }
+  }
+  const [{ facility, matches }] = result.data.facilities
+  return {
+    text: `${facility.name} is a verified configured location for ${matches.map(({ serviceName }) => serviceName).join(", ")}. Select Navigate only after confirming this canonical destination.`,
+    facility,
+    link: null,
+    verified: true,
+    mode: CLARA_RESPONSE_MODES.VERIFIED_DIRECT,
+    intent,
+    sources: [facilitySource(facility), ...matches.map((match) => source(
+      `SERVICE_MAPPING:${match.serviceCode}:${facility.id}`,
+      match.mappingProvenance?.sourceLabel || match.serviceName,
+      match.mappingProvenance?.verificationStatus || "VERIFIED",
+    ))],
+  }
+}
+
+export const createClaraService = (options = {}) => {
+  const {
+    faqs = CLARA_APPROVED_FAQS,
+    tools = createClaraToolService(),
+    provider = createDisabledClaraProvider(),
+    clock = () => new Date().toISOString(),
+  } = options
+  let evaluatedAt = options.evaluatedAt || clock()
+  let faqIndex = createClaraFaqIndex([...faqs], evaluatedAt)
+  const nextBoundaryAfter = (at) => {
+    const now = Date.parse(at)
+    const values = faqs.flatMap((faq) => [faq.publishedAt, faq.effectiveAt, faq.expiresAt])
+      .map((value) => typeof value === "string" ? Date.parse(value) : NaN)
+      .filter((value) => Number.isFinite(value) && value > now)
+    return values.length ? Math.min(...values) : null
+  }
+  let nextBoundary = nextBoundaryAfter(evaluatedAt)
+  const currentFaqIndex = () => {
+    const now = clock()
+    if (nextBoundary !== null && Date.parse(now) >= nextBoundary) {
+      evaluatedAt = now
+      faqIndex = createClaraFaqIndex([...faqs], evaluatedAt)
+      nextBoundary = nextBoundaryAfter(evaluatedAt)
+    }
+    return faqIndex
+  }
+  const providerCapability = getClaraProviderCapability(provider)
+
+  return Object.freeze({
+    capability: Object.freeze({
+      directAnswers: true,
+      faqCount: faqIndex.length,
+      provider: Object.freeze(providerCapability),
+    }),
+    async ask(message) {
+      const question = safeQuestion(message)
+      const recognized = recognizeClaraIntent(question)
+      const retrieval = retrieveClaraFaqs(currentFaqIndex(), question)
+      if (retrieval.exact) return faqReply(recognized.intent, retrieval)
+
+      if (recognized.intent === CLARA_INTENTS.EMERGENCY_INFORMATION) {
+        return {
+          text: "For emergencies, follow posted evacuation signage and instructions from authorized campus personnel. CampusNav can show only approved emergency information and never generates an evacuation route.",
+          facility: null,
+          link: { href: "/emergency", label: "Emergency Information" },
+          verified: true,
+          mode: CLARA_RESPONSE_MODES.VERIFIED_DIRECT,
+          intent: recognized.intent,
+          sources: [source("CONTRACT:EMERGENCY-SAFETY", "CampusNav Emergency Safety Contract", "SOURCE_ALIGNED")],
+        }
+      }
+
+      if (
+        recognized.intent === CLARA_INTENTS.FACILITY_SEARCH
+        || recognized.intent === CLARA_INTENTS.NAVIGATION_REQUEST
+        || recognized.intent === CLARA_INTENTS.FACILITY_STATUS
+      ) {
+        const facility = tools.findFacility(recognized.entityQuery || question)
+        if (!facility?.data) return unavailable(recognized.intent)
+        if (recognized.intent === CLARA_INTENTS.FACILITY_STATUS) return statusReply(tools, recognized.intent, facility)
+        return facilityReply(recognized.intent, facility)
+      }
+
+      if (recognized.intent === CLARA_INTENTS.OFFICE_SERVICE_INQUIRY) {
+        return serviceReply(tools, recognized.intent, recognized.entityQuery)
+      }
+
+      const retrieved = faqReply(recognized.intent, retrieval)
+      if (retrieved) return retrieved
+
+      if (recognized.intent === CLARA_INTENTS.EVENT_INQUIRY) {
+        return unavailable(recognized.intent, { text: "No verified current event information is available to CLARA.", link: { href: "/events", label: "View Events" } })
+      }
+      if (recognized.intent === CLARA_INTENTS.ANNOUNCEMENT_INQUIRY || recognized.intent === CLARA_INTENTS.SUSPENSION_INQUIRY) {
+        return unavailable(recognized.intent, { text: "No verified current announcement or suspension decision is available to CLARA.", link: { href: "/alerts", label: "View Official Alerts" } })
+      }
+      if (recognized.intent === CLARA_INTENTS.PERSONNEL_SCHEDULE) {
+        return unavailable(recognized.intent, {
+          text: "Verified personnel schedule information is unavailable. A schedule would describe an assignment only and would never be presented as proof of physical presence.",
+          link: { href: "/dashboard#personnel-availability", label: "Personnel Availability" },
+        })
+      }
+
+      return unavailable(recognized.intent)
+    },
+  })
+}
+
+const defaultClaraService = createClaraService()
+
 export const getClaraFacilityContextReply = (facilityId) => {
-  const facility = facilities.find((item) => item.id === facilityId)
+  const tools = createClaraToolService()
+  const facility = tools.getFacilityById(facilityId)
   if (!facility) return null
-  return { text: getClaraFacilityReply(facility), facility, link: null, verified: true }
+  const floor = getFloorById(facility.floorId)
+  return facilityReply(CLARA_INTENTS.FACILITY_SEARCH, { data: { facility, floor } })
 }
 
-/** Resolves the legacy `/clara?about=<facility name>` deep link to a facility id. */
-export const findClaraFacilityIdByName = (name) => facilities.find((facility) => facility.name === name)?.id || null
-
-/**
- * Ask CLARA a question.
- * @param {string} message
- * @returns {Promise<{ text: string, facility: any, link: { href: string, label: string } | null, verified: boolean }>}
- */
-export const askClara = async (message) => {
-  const trimmed = String(message || "").trim()
-  if (!trimmed) throw new Error("Empty CLARA request.")
-  return buildReply(trimmed)
+export const findClaraFacilityIdByName = (name) => {
+  const result = createClaraToolService().findFacility(name)
+  return result.data?.facility?.name === name ? result.data.facility.id : null
 }
+
+export const getClaraCapability = () => defaultClaraService.capability
+export const askClara = async (message) => defaultClaraService.ask(message)

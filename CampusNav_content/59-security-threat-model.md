@@ -19,6 +19,10 @@
 | IDOR/direct record access | RLS/authorization by entity/role |
 | Malicious map/emergency edit | restricted roles, audit/approval/version checks |
 | AI prompt asks for hidden/private data | CLARA tools enforce the same authorization/privacy rules |
+| FAQ/tool record contains prompt injection | Treat retrieved text as inert data; fixed system constraints and source allowlists outrank retrieved content |
+| Model invents or swaps source IDs | Reject candidate sources not present in the supplied verified context |
+| Provider unexpectedly incurs cost | Disabled-by-default server policy, no paid fallback/upgrade, provider-side quota and billing verification before release |
+| Provider key leaks from frontend | No provider key in React, `VITE_*`, assets, storage, logs, caches, or Git; future calls use a controlled server/edge secret |
 | QR contains invalid/malicious payload | strict parser/whitelist mapping to known checkpoint IDs |
 | Stale session retains admin UI | session lifecycle and permission refresh |
 

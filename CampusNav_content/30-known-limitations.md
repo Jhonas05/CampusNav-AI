@@ -45,7 +45,7 @@ Discovery reads three capped public projections once per load/revalidation, not 
 AI does not declare suspensions. Official status must come from authorized school administration.
 
 ## CLARA
-CLARA should not be considered complete until it is connected to stable internal services, role-aware authorization, and verified source data.
+CLARA now has a locally verified deterministic FAQ/campus-tool foundation with stable source display and an explicitly disabled provider interface. It is not a completed generative assistant: the production FAQ collection is empty pending institutional approval; role-aware private tools, current event/announcement/suspension/personnel integrations, and a live provider remain unavailable. Gemini public activation is blocked by the currently published under-18 audience terms. Offline CLARA remains unavailable and conversations/provider responses are not cached. See `76`.
 
 ## PWA/offline
 The owner-authorized PWA supports installability and locally browser-verified offline canonical 2D navigation after an initial successful online load. Operational/provider data remains network-only and becomes `UNKNOWN` or unavailable when current data cannot be fetched. Offline Emergency routing is not implemented or authorized. Physical Android/iOS installation, physical camera/QR, iOS/iPadOS, non-Chromium, screen-reader, low-end-device, and broad storage-eviction behavior are not certified; adviser/defense classification remains pending.

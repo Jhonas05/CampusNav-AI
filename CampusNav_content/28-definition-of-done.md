@@ -54,11 +54,12 @@ CampusNav is thesis-demo ready when all required core items below are either imp
 - [x] verify user-reporting workflow or explicitly scope as future — `DEFERRED`; owner proposal scopes reports/analytics as optional/future pending adviser confirmation and any required privacy decisions
 
 ### CLARA
-- [ ] connect only after internal APIs are stable — `DEFERRED`
-- [ ] tool-based verified data retrieval — `DEFERRED`
-- [ ] server-side AI provider secrets — `DEFERRED`
-- [ ] no hallucinated campus facts — `DEFERRED`; current conservative local matcher is not accepted as final grounded CLARA
-- [ ] role-aware data access — `DEFERRED`
+- [x] provider-neutral grounded foundation over accepted public services — `SATISFIED_WITH_ADVISORY`; canonical facility/status/service tools, approved-FAQ infrastructure, source display and safe unavailable states are locally verified, while the production FAQ corpus is empty
+- [x] deterministic no-hallucination boundary — `SATISFIED_WITH_ADVISORY`; in-scope direct answers require eligible evidence and external generation is disabled
+- [x] no frontend provider secret — `SATISFIED`; no provider SDK/key/endpoint or `VITE_*` AI secret exists
+- [ ] live server-side AI provider — `BLOCKED / DEFERRED`; Gemini public activation is blocked by current under-18 audience terms and no other provider is authorized
+- [ ] role-aware private tool access — `DEFERRED`; the current foundation exposes public read-only tools only
+- [ ] institutionally approved production FAQ corpus — `UNSATISFIED`; fixtures are synthetic and never official content
 
 ### PWA/offline
 - [ ] verify/implement offline emergency cache requirement — `DEFERRED`; manifest-only status is not offline support, and `DEC-DEFENSE-001` conditionally defers it pending adviser direction

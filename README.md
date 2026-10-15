@@ -55,6 +55,7 @@ npm run test:phase4-fs3b
 npm run test:phase4-fs3c
 npm run test:phase4-fs4-discovery
 npm run test:phase4-fs4-recommendations
+npm run test:clara
 node scripts/test-phase4-fs4-global-search.mjs
 node scripts/test-phase4-fs4-destination-search.mjs
 npm run test:rls
@@ -76,6 +77,7 @@ npm run test:render
 - `src/data/map3dConfig.js` contains schematic 3D heights and floor-spacing configuration; all vertical dimensions remain `ESTIMATED`.
 - `src/components/map3d/` lazily renders the existing floor polygons, graph routes, QR positions, and emergency data with React Three Fiber.
 - `src/services/dashboardService.js` is the provider-neutral Dashboard boundary for summaries, alerts, schedules, availability, advisories, events, announcements, and navigation notices.
+- `src/services/claraService.js`, `claraKnowledge.js`, `claraIntents.js`, `claraToolService.js`, and `claraProvider.js` implement CLARA's deterministic grounded foundation. The production FAQ collection is intentionally empty pending institutional approval, and external generation is disabled with zero provider calls and no frontend secret.
 - `src/providers/` contains the local and optional Supabase auth/Dashboard providers.
 - `supabase/migrations/` contains reproducible PostgreSQL, RLS, RBAC, and Realtime publication changes.
 - `src/lib/campusTime.js` centralizes Dashboard date and time calculations in `Asia/Manila`.

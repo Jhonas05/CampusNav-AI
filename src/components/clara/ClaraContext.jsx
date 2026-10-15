@@ -9,7 +9,7 @@ import { useConnectivity } from "@/contexts/ConnectivityContext"
  * but is never written to browser storage.
  */
 
-/** @typedef {{ id: number, role: "user" | "assistant", text: string, facility?: any, link?: { href: string, label: string } | null, verified?: boolean, error?: boolean, retryText?: string }} ClaraMessage */
+/** @typedef {{ id: number, role: "user" | "assistant", text: string, facility?: any, link?: { href: string, label: string } | null, sources?: Array<{ id: string, label: string, verificationStatus?: string }>, verified?: boolean, error?: boolean, retryText?: string }} ClaraMessage */
 
 const noop = () => {}
 

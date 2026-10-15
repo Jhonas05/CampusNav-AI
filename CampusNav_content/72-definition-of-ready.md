@@ -29,6 +29,10 @@ A feature/task is ready for implementation when the following are sufficiently c
 
 If these conditions are not met, move the missing item to `64-open-questions-decision-backlog.md` instead of guessing.
 
+## CLARA grounded foundation readiness — 16 October 2026
+
+**Result: `READY_WITH_BOUNDARIES`.** Accepted public facility/status/service tools exist; FAQ eligibility, ambiguity/unavailable behavior, provenance, privacy, security, UI, performance, and tests are defined. The lack of an approved FAQ collection is handled by an empty production dataset plus isolated fixtures, so it does not block infrastructure. External generation is not ready: Gemini is blocked for the public under-18-capable audience under current terms, no alternate provider is authorized, and no server endpoint/secret/retention release exists.
+
 ## Phase 4-FS-1 readiness assessment — 20 September 2026
 
 **Task:** Phase 4-FS-1 — Facility Operational Data and Service Foundation

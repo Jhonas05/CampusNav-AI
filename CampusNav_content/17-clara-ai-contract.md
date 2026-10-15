@@ -8,6 +8,20 @@ CLARA is not the navigation algorithm and not a general-purpose chatbot.
 ## Integration timing
 Connect CLARA only after internal services and data contracts are stable enough to answer with verified records.
 
+## Implemented grounded foundation — 16 October 2026
+
+The first provider-neutral foundation is implemented and locally verified. It preserves the floating assistant while replacing the former facility-only placeholder with validated deterministic orchestration:
+
+- pre-normalized approved FAQ indexing and bounded exact/phrase/keyword retrieval
+- public/effective/approved/non-DEMO FAQ eligibility and stable source IDs
+- English, Filipino, and Taglish rule-based intent/entity handling
+- accepted canonical facility lookup, facility-status, and configured service-mapping tools
+- verified direct answers, explicit ambiguity, and honest unavailable states
+- source context in the CLARA UI and canonical facility actions only
+- a disabled provider interface with request/response limits and structured provider errors
+
+No institutionally approved FAQ collection was supplied, so `src/data/claraFaqs.js` is intentionally empty. Synthetic fixtures are test-only and are not campus policy. External AI is disabled and no model call, provider key, provider SDK, or provider endpoint is present. See `76-clara-rag-provider-readiness.md`.
+
 ## Core architecture
 ```text
 User query
@@ -81,9 +95,11 @@ Wording may vary, but the truth boundary must not.
 ## Security
 - AI provider calls must be server-side/edge only
 - never expose `GROQ_API_KEY` to browser/Vite code
+- the same rule applies to Gemini and every future provider key; provider-specific browser keys are forbidden
 - CLARA must respect the requesting user’s authorization
 - do not bypass RLS using AI
 - avoid logging sensitive user content unnecessarily
+- treat retrieved FAQ/tool text as untrusted data, never as executable instructions
 
 ## Emergency boundary
 CLARA may explain approved emergency information, but it must never decide or generate an evacuation route. It may only surface the verified emergency route produced by the emergency routing layer.

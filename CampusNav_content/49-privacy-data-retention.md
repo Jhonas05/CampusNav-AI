@@ -29,5 +29,9 @@ The supplied sources do not define exact retention periods for:
 
 Until policy is approved, do not invent a school retention requirement. Prefer minimal retention and document the implemented setting.
 
+The implemented CLARA foundation keeps the conversation only in React memory and does not write it to local/session storage, IndexedDB, Cache Storage, analytics, or a backend. Reset, close, or reload discards it. No external provider receives questions. Future provider monitoring may contain aggregate request/result counts only until a conversation-retention policy is approved.
+
+Unpaid Gemini service terms audited 16 October 2026 state that submitted content and responses may be used to improve Google products and may be reviewed by humans, and direct users not to submit sensitive, confidential, or personal information. This is an additional privacy reason not to enable unpaid Gemini for CampusNav; the under-18 audience restriction independently blocks public activation. See `76`.
+
 ## Access control
 Detailed schedules, notes, private account links, and admin audit data remain role restricted.
