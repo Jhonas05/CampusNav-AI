@@ -80,6 +80,10 @@ Phase 4 rules:
 - public Facilities, search, Dashboard, Admin adapters, and future CLARA tools reuse this boundary instead of implementing separate matching/status logic
 - only configured facility-service mappings may produce a recommendation
 
+### Final FS-4 service-contract disposition — 16 October 2026
+
+`DEC-FAC-003` records `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` engineering acceptance; `63`/`73` contain evidence. All existing APIs, matching rules, eligibility/provenance, canonical identity, provider-query counts, status ownership and offline boundaries above remain unchanged. Broader unified cross-consumer ranking and partial/fuzzy aliases are now explicitly owner-deferred design work, not completed capabilities; accepted consumer-local composition and configured rank/facility-ID ordering remain controlling. Personnel GlobalSearch is separate and unimplemented. Official institutional coverage and device/accessibility/adviser claims remain outside this technical acceptance. Earlier unresolved/gated wording describes historical design/slice boundaries, not a new current FS-4 blocker.
+
 ## DashboardService
 Responsibilities:
 - audience-filtered centralized campus information
