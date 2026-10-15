@@ -19,7 +19,19 @@ Apply the single operational procedure in `53-git-workflow.md`: dedicated task b
 - 2D/3D preserve same route/current/destination
 - QR/manual fallback passes
 
-## FS-4 GlobalSearch Services evidence — 15 October 2026
+## FS-4 DestinationSearch service resolution evidence — 15 October 2026
+
+- `READY_WITH_BOUNDARIES / IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` — explicit owner implement-not-defer decision in `DEC-FAC-002`; Home/Navigate reuse accepted public matcher/snapshot and unchanged canonical selection callbacks; overall FS-4 remains `IN_PROGRESS`
+- `43/43 PASS` — exhaustive legacy direct ranking/browse compatibility, service tiers/exact aliases, zero/one/multiple/non-navigable mappings, canonical identity, deduplication/explanations/overflow, no configured-rank leakage, provenance/lifecycle, count/cap guards, snapshot coalescing/offline/late-response/retry/boundary/cleanup, source/render/accessibility/selection contracts
+- `FULL REGRESSION PASS` — 36 deterministic suites (previous 35 plus DestinationSearch), including retained GlobalSearch/discovery/recommendations, all FS-1–FS-4, navigation/mobility/preferences/multi-floor/QR/Emergency/3D, Dashboard/theme/mobile/render/PWA/Phase 8; lint/typecheck/build/PWA artifact/diff gates
+- `288/288 PASS` — Home/Navigate × eight widths × Light/Dark × nine responsive cases; service names/exact alias, canonical/overlap/extra choices, pending/DEMO/unmapped/non-navigable/zero catalog, three activation-only reads, zero typing reads, 44px controls/overflow/CLARA-button/bottom-nav clearance
+- `14/14 PASS` — deliberate Home keyboard handoff, grouped Arrow/Enter/Escape/Tab/Clear, GlobalSearch coalescing, normalized failure/retry, expiry, both session preferences at 390/1440, unchanged origin, obsolete route clearing, 2D/3D, simulated QR resolution/confirmation and task-modal isolation, System/reduced-motion/simulated keyboard viewport, Emergency exclusion
+- `6/6 PASS` — real built-worker control, immediate dynamic suppression, Home canonical selection, offline reload/manual positioning/Standard and Avoid Stairs routes, reconnect/explicit uncached-client reload recovery, no API/Auth cache, blocked offline Emergency
+- `ERROR ACCOUNTING` — zero unexpected browser errors; three deliberately induced HTTP-400 and seven offline transport errors separately recorded. Initial DOM iteration/type/static-query issues and focused Escape/reopen defect were corrected; lazy-route browser-driver readiness corrected, then passing reruns recorded in `63`
+- `PERFORMANCE/PRESERVATION` — zero picker startup reads, three successful public reads per activation, coalesced concurrent consumers, zero per-result/keystroke directory reads; unchanged 1,000-row/exact-count guards and snapshot lifecycle. Concrete local timing/bundle/cache observations in `63`; no formal low-end-device claim
+- `BOUNDARIES` — no remote mutation/seed, provider-query/private/schema/grant/RLS/Auth/audit/Admin, matching/recommendation algorithm, dependency, worker policy, spatial/engine/Emergency/CLARA business-logic change. Physical-device/camera/non-Chromium/screen-reader/WCAG/software-keyboard/institutional/adviser limits remain; no automatic FS-4 closure, Personnel/unified-ranking or FS-5/FS-6 implementation
+
+## FS-4 GlobalSearch Services evidence — 15 October 2026 (earlier slice checkpoint)
 
 - `READY_WITH_BOUNDARIES / IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` — accepted public matcher/projections, shared active snapshot and explicit canonical destination choices; overall FS-4 remains `IN_PROGRESS`
 - `42/42 PASS` — new GlobalSearch deterministic suite: names/exact aliases/multiple/unmapped/overlap/deduplication/provenance/eligibility/truncation/public boundary/coalescing/offline/late responses/retry/boundaries/compatibility/source/render checks; interactive assertions are separately browser-verified

@@ -138,7 +138,7 @@ export default function Home() {
             onQueryChange={setDestinationQuery}
             onSelect={(facility) => navigate(getNavigateHref({ facilityId: facility.id }))}
             label="Where do you want to go?"
-            placeholder="Search rooms, offices, labs…"
+            placeholder="Search rooms, offices, services…"
             prominent
           />
           <ul aria-label="Go to" className="mt-3 flex gap-2 pb-1 max-lg:-mx-[var(--app-page-gutter)] max-lg:overflow-x-auto max-lg:px-[var(--app-page-gutter)] max-lg:[-ms-overflow-style:none] max-lg:[scrollbar-width:none] lg:flex-wrap max-lg:[&::-webkit-scrollbar]:hidden">

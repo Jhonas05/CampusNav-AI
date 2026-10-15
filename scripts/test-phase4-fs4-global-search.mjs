@@ -215,9 +215,10 @@ await check("Mounted Map handles canonical repeat requests without resetting pos
   assert.doesNotMatch(choose, /setCurrentPosition|setRoutePreference|startNavigation\(/)
   assert.match(map, /!globalSearchOpen/)
 })
-await check("Emergency, PWA worker and DestinationSearch service exclusions remain intact", () => {
+await check("Emergency/PWA exclusions and separately authorized DestinationSearch boundary remain intact", () => {
   assert.doesNotMatch(worker, /facilityDiscovery|globalFacilitySearch|public_services/)
-  assert.doesNotMatch(destination, /FacilityDiscovery|serviceCode|serviceAlias/)
+  assert.match(destination, /useFacilityDiscovery\(open\)/)
+  assert.doesNotMatch(destination, /\.from\s*\(|getFacilityDiscoveryData\(|startNavigation\(/)
   assert.match(map, /calculateFacilityRouteWithOptions/)
   assert.match(map, /Emergency routing is unavailable offline/)
 })

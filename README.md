@@ -56,6 +56,7 @@ npm run test:phase4-fs3c
 npm run test:phase4-fs4-discovery
 npm run test:phase4-fs4-recommendations
 node scripts/test-phase4-fs4-global-search.mjs
+node scripts/test-phase4-fs4-destination-search.mjs
 npm run test:rls
 npm run test:render
 ```
@@ -425,7 +426,23 @@ The modal supports focus entry/containment/Escape/return, input-only Arrow/Enter
 node scripts/test-phase4-fs4-global-search.mjs
 ```
 
-This owner-authorized subset is `IMPLEMENTED_VERIFIED`; existing Detail/Directory/discovery/aliases/configured recommendations remain accepted. Overall FS-4 stays `IN_PROGRESS`. DestinationSearch service resolution, Personnel integration and broader unified ranking remain separately gated; earlier slice exclusions are historical. No provider query, database/security/Auth/Admin/worker policy, dependency, branding, spatial or routing-engine change is introduced. Browser evidence is local Chrome, not physical-device, Safari/Firefox, screen-reader or broad performance certification. See canonical `63`/`73` for exact evidence.
+This owner-authorized subset is `IMPLEMENTED_VERIFIED`; existing Detail/Directory/discovery/aliases/configured recommendations remain accepted. Overall FS-4 stays `IN_PROGRESS`. DestinationSearch has its separate owner authorization below; Personnel integration and broader unified ranking remain separately gated, and earlier slice exclusions are historical. No provider query, database/security/Auth/Admin/worker policy, dependency, branding, spatial or routing-engine change is introduced. Browser evidence is local Chrome, not physical-device, Safari/Firefox, screen-reader or broad performance certification. See canonical `63`/`73` for exact evidence.
+
+## Service-aware destination search (Phase 4-FS-4)
+
+Home and Navigate share `DestinationSearch` with the existing public discovery snapshot and matcher. Service names match exact/prefix/substring; approved aliases match exact normalized terms only. Only explicit eligible mappings to canonical navigable facilities with entrance nodes produce choices. One or multiple locations require deliberate selection; missing/non-navigable mappings never infer a destination.
+
+The legacy direct facility ranking (including word-prefix/category/floor behavior), alphabetic ties, eight-result preview and empty/selected-name browse mode remain compatible. Service-derived choices use a separate labelled group with accepted service-tier/code/canonical order, not administrator rank/status/distance relevance. Canonical overlaps retain explanations once; additional mapped locations remain scrollable. No unified ranking, fuzzy or AI matching is introduced.
+
+Discovery loads while the picker is activated, not at page startup or per keystroke, and coalesces with GlobalSearch/Facilities. Offline suppresses dynamic relationships while preserving canonical lookup, manual positioning and valid Standard/Avoid Stairs bundled-graph routes. Reconnect, expiry and retry revalidate; explicit uncached-client reload recovery remains. Loading/empty/error/pending/DEMO states are honest. Grouped combobox keyboard/focus behavior, 44px controls, visual-viewport/safe-area/chrome clearance and reduced motion are locally verified.
+
+Home retains `?facility=<id>` destination deep links. Navigate uses its unchanged destination-only callback: confirmed origin, session preference and pending QR/manual confirmation remain; obsolete route geometry/instructions/progress clear; navigation never starts automatically. Emergency does not use service destination resolution. Nothing persists route preferences across sessions.
+
+```bash
+node scripts/test-phase4-fs4-destination-search.mjs
+```
+
+`DEC-FAC-002` records owner approval; this subset is `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`, not final FS-4 acceptance. Existing accepted subsets remain intact and overall FS-4 remains `IN_PROGRESS`. Personnel, broader unified ranking and final reconciliation remain separate; no institutional data is seeded. No new dependency/environment variable, provider query, database/security/Auth/Admin/worker policy, spatial or routing-engine change is required. See `63`/`73` for exact evidence and physical-device/non-Chromium/screen-reader/camera/adviser limitations.
 
 ## Admin CMS foundation (Phase 8B.1)
 

@@ -148,6 +148,10 @@ It never shows live, usage, availability, or invented figures.
 ### Home destination search
 Home reuses `src/components/map/DestinationSearch.jsx`, the same combobox as Navigate, with the same navigable-destination rule. Choosing a destination opens Navigate with `?facility=<id>` (`getNavigateHref`). No second search implementation exists.
 
+**Owner-authorized service resolution — 15 October 2026 (`DEC-FAC-002`):** Home and Navigate reuse the active public discovery snapshot and accepted matcher. The direct facility ranker/browse behavior is unchanged; service-derived choices form a labelled Services group, with canonical overlap explanations retained once. Only explicit eligible mappings to canonical navigable facilities with entrance nodes can be selected. All additional mapped choices remain scrollable, bounded by the local dataset. One or multiple service locations still require explicit selection; no mapping produces an honest no-configured-navigable-destination state.
+
+The combobox loads discovery on activation, not page startup/typing. It shares/coalesces with GlobalSearch and Facilities, masks offline/obsolete snapshots, and supports reconnect/expiry/retry/reload. Grouped listbox semantics, active-descendant Arrow/Enter, Escape/reopen, Tab-to-retry, focus-preserving Clear, announcements, 44px actions, visual-viewport/chrome/safe-area clearance and reduced motion are verified locally. Existing Home deep links and Navigate destination-only callbacks preserve unset/confirmed origin, session preferences and QR/manual confirmation, clear obsolete route output, and never start a route automatically. Emergency does not mount this picker. Evidence/advisories are in `63`/`73`; overall FS-4 remains in progress.
+
 ### `GlobalSearch`
 Path: `src/components/layout/GlobalSearch.jsx`
 
@@ -158,7 +162,7 @@ Search groups:
 - Personnel
 - Events
 
-**Current FS-4 subset — 15 October 2026:** Services is implemented using the accepted public discovery matcher, explicit mappings, canonical names, independent match explanations, and deliberate Details/Navigate links. Facilities/Rooms previews remain separate; canonical overlaps appear once with their service context retained. Service-only choices include every matched canonical location, bounded by the local dataset. Quick access, Events, and Assistance remain. Personnel is a wider-contract target, not implemented by this subset; DestinationSearch service resolution and broader unified ranking remain separately gated.
+**GlobalSearch FS-4 subset — 15 October 2026:** Services is implemented using the accepted public discovery matcher, explicit mappings, canonical names, independent match explanations, and deliberate Details/Navigate links. Facilities/Rooms previews remain separate; canonical overlaps appear once with their service context retained. Service-only choices include every matched canonical location, bounded by the local dataset. Quick access, Events, and Assistance remain. Personnel is a wider-contract target, not implemented by this subset; DestinationSearch has its separate `DEC-FAC-002` authorization above. Broader unified ranking remains separately gated.
 
 GlobalSearch is loaded on activation. It shares `FacilityDiscoveryProvider` with Facilities: one memory-only active snapshot, coalesced reads, memoized indexes, offline masking, reconnect/known-boundary revalidation, explicit retry/reload, and inactive cleanup. Zero catalog and unmapped services never infer a destination. The modal uses shared focus entry/containment/Escape/return, input-only Arrow/Enter shortcuts, native link actions, polite announcements, 44px targets, visual-viewport/safe-area clearance, and a fullscreen-aware portal. Ctrl/Command K does not nest search inside task dialogs; existing More/Admin-drawer transitions remain supported.
 

@@ -28,10 +28,11 @@ const check = (label, test) => { test(); count++; console.log(`ok ${count} - ${l
 try {
   const { default: Navigate } = await vite.ssrLoadModule("/src/pages/Map.jsx")
   const { ConnectivityProvider } = await vite.ssrLoadModule("/src/contexts/ConnectivityContext.jsx")
+  const { FacilityDiscoveryProvider } = await vite.ssrLoadModule("/src/contexts/FacilityDiscoveryContext.jsx")
   const { RoutePreferenceOptions, RoutePreferenceButton, RouteFailureNotice } = await vite.ssrLoadModule("/src/components/map/RoutePreferences.jsx")
   const { default: MobileRouteSheet } = await vite.ssrLoadModule("/src/components/map/MobileRouteSheet.jsx")
   const render = (component) => renderToString(component)
-  const navigate = (entry) => render(React.createElement(MemoryRouter, { initialEntries: [entry] }, React.createElement(ConnectivityProvider, null, React.createElement(Navigate))))
+  const navigate = (entry) => render(React.createElement(MemoryRouter, { initialEntries: [entry] }, React.createElement(ConnectivityProvider, null, React.createElement(FacilityDiscoveryProvider, null, React.createElement(Navigate)))))
   const input = (destination, startNodeId = "entrance-library-west") => ({
     startFacility: getFacilityById("library"), destinationFacility: getFacilityById(destination),
     floor: getFloorById("3F"), nodes: mapNodes, edges: mapEdges, startNodeId,

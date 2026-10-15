@@ -167,13 +167,14 @@ const originalConsoleError = console.error
 console.error = (...args) => { if (!String(args[0]).includes("useLayoutEffect does nothing on the server")) originalConsoleError(...args) }
 try {
   const { ConnectivityProvider } = await vite.ssrLoadModule("/src/contexts/ConnectivityContext.jsx")
+  const { FacilityDiscoveryProvider } = await vite.ssrLoadModule("/src/contexts/FacilityDiscoveryContext.jsx")
   const render = async (modulePath, entry) => {
     const { default: Page } = await vite.ssrLoadModule(modulePath)
     return renderToString(
       React.createElement(
         MemoryRouter,
         { initialEntries: [entry] },
-        React.createElement(ConnectivityProvider, null, React.createElement(Page))
+        React.createElement(ConnectivityProvider, null, React.createElement(FacilityDiscoveryProvider, null, React.createElement(Page)))
       )
     )
   }

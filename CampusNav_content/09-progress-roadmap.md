@@ -466,7 +466,7 @@ This acceptance is software engineering evidence, not adviser approval or a thes
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1/FS-2/FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; DISCOVERY, CONFIGURED RECOMMENDATIONS AND GLOBALSEARCH SERVICES IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
+**Status:** `IN_PROGRESS — FS-1/FS-2/FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; DISCOVERY, CONFIGURED RECOMMENDATIONS AND GLOBALSEARCH/DESTINATIONSEARCH SERVICES IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -505,7 +505,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; DISCOVERY, CONFIGURED RECOMMENDATIONS AND GLOBALSEARCH SERVICES IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
+4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; DISCOVERY, CONFIGURED RECOMMENDATIONS AND GLOBALSEARCH/DESTINATIONSEARCH SERVICES IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
 7. **Phase 4-FS-7 — Final Acceptance and Evidence Reconciliation** — `NOT_STARTED`
@@ -518,9 +518,15 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`. Detail and Directory/Card remain `IMPLEMENTED_VERIFIED / OWNER APPROVED`; the `/facilities` discovery/approved-alias/configured-recommendation and GlobalSearch Services subsets are `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`. Overall FS-4 remains `IN_PROGRESS`: DestinationSearch service resolution, Personnel search, broader unified ranking, media, Dashboard/Realtime, and later consumers remain separately gated. Fuzzy/AI matching is not authorized.
+**Current Phase 4 boundary:** FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`. Detail and Directory/Card remain `IMPLEMENTED_VERIFIED / OWNER APPROVED`; the `/facilities` discovery/approved-alias/configured-recommendation and GlobalSearch/DestinationSearch Services subsets are `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`. Overall FS-4 remains `IN_PROGRESS`: final FS-4 acceptance, Personnel search, broader unified ranking, media, Dashboard/Realtime, and later consumers remain separately gated. Fuzzy/AI matching is not authorized.
 
-### Phase 4-FS-4 GlobalSearch public service discovery — 15 October 2026
+### Phase 4-FS-4 DestinationSearch service resolution — 15 October 2026
+
+`DEC-FAC-002` records the owner's explicit implement-not-defer decision. Readiness is `READY_WITH_BOUNDARIES`; the Home/Navigate subset is `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`. The accepted matcher/snapshot/public projections and existing selection callbacks are reused. Legacy facility ordering/browse remains compatible; separate deterministic service choices retain canonical overlap explanations and never conceal additional mappings. Only eligible navigable canonical locations can be explicitly selected. No current location, relationship, relevance score or automatic route is inferred.
+
+Evidence: 43 focused checks; complete 36-suite matrix and release/PWA gates; 288 responsive checks across both consumers/eight widths/Light-Dark; 14 interactions including preferences, shared requests, route clearing, 2D/3D and simulated QR confirmation; six built-worker offline checks. Zero unexpected errors; induced transport failures and corrected harness readiness are disclosed. Details and retained institutional/device/adviser/dependency limits are in `63`/`73`. No remote writes, worker/security/provider-query/engine changes or FS-5/FS-6 work. Final FS-4 acceptance is a separate reconciliation, not automatically complete.
+
+### Phase 4-FS-4 GlobalSearch public service discovery — 15 October 2026 (earlier slice checkpoint)
 
 The owner separately authorized Services integration, shared snapshot lifecycle, mobile/modal accessibility, mounted-Map handoff, full verification and automatic Git completion. The implementation reuses the existing matcher/public projections without new ranking, query, schema or dependency contracts. Canonical overlaps retain explanations; multiple mapped destinations require deliberate selection; empty/offline/error states retain local lookup. One active memory-only snapshot serves Facilities and GlobalSearch; known boundaries/reconnect/retry revalidate and obsolete responses cannot restore invalidated data. Navigation handoff preserves confirmed position, Standard/Avoid Stairs, pending confirmations and fullscreen state, and never starts navigation automatically.
 

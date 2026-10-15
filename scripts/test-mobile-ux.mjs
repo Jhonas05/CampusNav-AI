@@ -31,11 +31,12 @@ console.error = (...args) => { if (!String(args[0]).includes("useLayoutEffect do
 try {
   const load = async (path) => vite.ssrLoadModule(path)
   const { ConnectivityProvider } = await load("/src/contexts/ConnectivityContext.jsx")
+  const { FacilityDiscoveryProvider } = await load("/src/contexts/FacilityDiscoveryContext.jsx")
   const render = (entry, element) => renderToString(
     React.createElement(
       MemoryRouter,
       { initialEntries: [entry] },
-      React.createElement(ConnectivityProvider, null, element)
+      React.createElement(ConnectivityProvider, null, React.createElement(FacilityDiscoveryProvider, null, element))
     )
   )
 

@@ -1,5 +1,19 @@
 # CampusNav Content Pack — Changelog
 
+## v3.58 — 15 October 2026
+
+Implemented the owner-selected FS-4 Home/Navigate DestinationSearch service-resolution slice (`DEC-FAC-002`), without final FS-4 closure.
+
+- preserved the legacy direct facility ranker/browse semantics; reused accepted service-name tiers, exact normalized approved aliases, public mapping eligibility and shared memory-only discovery indexes without another matcher or unified relevance score
+- added explicit canonical navigable choices, independent service/alias explanations, deterministic deduplication/overflow and honest no-configured-navigable-destination states; no inferred relationship, first-result auto-selection, start location or configured-rank relevance
+- retained Home destination deep links and unchanged Navigate destination-only callbacks, confirmed origin/QR/manual confirmation, Standard/Avoid Stairs session preference, obsolete-route clearing and no automatic route start; graph/engine/Map source unchanged
+- activated discovery only while the picker is open, sharing/coalescing with GlobalSearch/Facilities; zero startup/typing/per-result directory queries, unchanged completeness guards, reconnect/retry/boundary/late-response/offline/idle lifecycle
+- verified grouped combobox/keyboard/focus/reopen/Clear/retry semantics, announcements, 44px targets, viewport/safe-area/chrome clearance, themes/reduced motion and no Emergency picker integration
+- passed 43 focused checks, all 36 deterministic suites, tooling/PWA gates, 288 responsive Chrome cases, 14 interactions and six built-worker offline cases; retained existing assertions with correct SSR provider composition and the newly authorized DestinationSearch security boundary
+- recorded local request/timing/bundle evidence, initial iteration/type/static-query corrections, the focused Escape/reopen fix, lazy-route harness readiness correction, expected transport failures and retained device/institutional/adviser/dependency limits in `63`/`73`
+- updated current UI/API/search/roadmap/status/backlog/limitations/quality/README; preserved prior acceptance and historical exclusions, Personnel/broader-ranking gaps, and FS-4 `IN_PROGRESS`
+- no remote data writes/seeds, schema/grants/RLS/Auth/audit/Admin/provider queries, worker policy, dependency/lockfile, branding, spatial/routing/Emergency/CLARA business logic, FS-5 or FS-6 changes; automatic verified Git delivery/current-task cleanup follows `53`, no manual deployment
+
 ## v3.57 — 15 October 2026
 
 Implemented the owner-authorized FS-4 GlobalSearch Services subset without completing overall FS-4.

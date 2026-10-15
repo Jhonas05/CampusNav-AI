@@ -340,6 +340,20 @@ Use only approved public/effective service and explicit mapping chains to existi
 
 The implementation reuses the existing seven public projection reads, snapshot completeness guards, discovery normalization/matcher, status evaluator, and card/actions. Dynamic recommendations remain network-only and disappear offline. Schema/RLS/grants/audit/Auth/Admin/provider queries, worker policy, spatial/navigation/Emergency/mobility, media, GlobalSearch/DestinationSearch, CLARA, FS-5/FS-6, and adviser/academic claims are unchanged. Broader unified ranking and later consumers remain separately gated. See `13`, `18`, `32`, `63`, and `73` for contract and implementation evidence.
 
+## DEC-FAC-002 — Service-aware destination selection for Home and Navigate
+
+**Status:** OWNER APPROVED — 15 October 2026
+
+The owner explicitly chooses to implement, rather than defer, FS-4 DestinationSearch service resolution on Home and Navigate. This is an approved functional addition within the frozen monochrome UI. It reuses the accepted public discovery matcher, explicit eligible service mappings, shared memory-only snapshot, canonical destination identities and existing selection callbacks. It does not supply official institutional data or complete overall FS-4.
+
+DestinationSearch preserves its existing direct-facility exact/prefix/word-prefix/substring/category/floor order and selected-name/empty browse mode. Service-derived choices remain distinguishable and use the accepted service-name exact/prefix/substring and exact normalized approved-alias tiers, stable service-code ties and canonical dataset order. Canonical overlaps appear once with service explanations retained; capped-out direct matches may appear in Services so no mapped choice is concealed. This is consumer-local composition, not unified cross-consumer ranking or administrator `recommendation_rank` relevance.
+
+Only canonical navigable facilities with existing entrance nodes are selectable. Zero eligible mappings produces an honest no-configured-navigable-destination state. One or multiple service locations still require deliberate selection; no service name becomes a destination or starting point. Existing direct exact-facility query compatibility remains. Home passes the established `?facility=<id>` destination deep link. Mounted Navigate preserves confirmed origin, QR/manual confirmation and session Standard/Avoid Stairs, clears obsolete route output and never starts navigation automatically.
+
+Dynamic service relationships remain network-only; offline retains local canonical lookup and valid bundled-graph navigation. No schema/provider query/security/Auth/Admin/worker-policy/dependency/spatial/engine/Emergency/CLARA change, seeding, Personnel, broader ranking, or FS-5/FS-6 work is authorized. Adviser/institutional/device acceptance remains separate. `07`, `18`, `32`, `63`, and `73` record implementation contracts/evidence; earlier slice exclusions remain historical.
+
+**Reason:** complete the remaining owner-selected destination consumer without duplicating discovery/routing truth or guessing service locations. Automatic verified Git delivery and safe current-task cleanup follow `53`.
+
 ## How to add a decision
 Use:
 - ID
