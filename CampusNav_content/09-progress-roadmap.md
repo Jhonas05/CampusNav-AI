@@ -467,7 +467,7 @@ This acceptance is software engineering evidence, not adviser approval or a thes
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1/FS-2/FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; DISCOVERY, CONFIGURED RECOMMENDATIONS AND GLOBALSEARCH/DESTINATIONSEARCH SERVICES IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
+**Status:** `IN_PROGRESS — FS-1/FS-2/FS-3/FS-4 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 OWNER AUTHORIZED; FS-5/FS-6/FS-7 NOT_STARTED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -506,7 +506,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; DISCOVERY, CONFIGURED RECOMMENDATIONS AND GLOBALSEARCH/DESTINATIONSEARCH SERVICES IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
+4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` — 16 October 2026 (`DEC-FAC-003`)
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
 7. **Phase 4-FS-7 — Final Acceptance and Evidence Reconciliation** — `NOT_STARTED`
@@ -519,9 +519,17 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`. Detail and Directory/Card remain `IMPLEMENTED_VERIFIED / OWNER APPROVED`; the `/facilities` discovery/approved-alias/configured-recommendation and GlobalSearch/DestinationSearch Services subsets are `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`. Overall FS-4 remains `IN_PROGRESS`: final FS-4 acceptance, Personnel search, broader unified ranking, media, Dashboard/Realtime, and later consumers remain separately gated. Fuzzy/AI matching is not authorized.
+**Current Phase 4 boundary:** FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`; FS-4 is `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED`. Detail/Directory, discovery/exact approved aliases, configured recommendations and both service-search consumers are accepted. Personnel GlobalSearch is a separate unimplemented personnel-domain integration. Broader unified ranking and partial/fuzzy aliases are deferred, not completed. Official catalog completeness, physical-device/independent accessibility and adviser claims remain explicit boundaries. Media, Dashboard/Realtime and final Phase 4 acceptance remain unstarted.
 
-### Phase 4-FS-4 DestinationSearch service resolution — 15 October 2026
+### Phase 4-FS-4 final acceptance reconciliation — 16 October 2026
+
+`DEC-FAC-003` records the real owner scope dispositions; `63` contains the seven-capability requirement/implementation/evidence matrix. All mandatory FS-4 engineering requirements pass without lowering public eligibility, canonical identity, provenance, security or safety contracts. Fresh verification passed 37 distinct deterministic suites including CLARA, lint/typecheck/build/PWA artifacts and whitespace checks. Local pgTAP is unavailable because Docker/local PostgreSQL is absent; no fresh RLS pass or remote mutation is claimed. Historical slice statuses below remain unchanged as dated checkpoints.
+
+Read-only production checks independently confirm the new grounded CLARA foundation is behaviorally live, external AI disabled, and existing public navigation usable. The served entry is `index-rYEQVvGN.js`, not the locally built `index-CI2O9ZNl.js`; exact byte equivalence is unproven, not silently accepted. `63`/`73` record the successful build check, 11 browser checks, public empty-data evidence and limits. CLARA's separate foundation status remains unchanged; no manual deploy occurred.
+
+**Recommended next Phase 4 task:** a separately authorized FS-5 Facility Media Management readiness/scope audit, not implementation. FS-5/FS-6/FS-7 remain `NOT_STARTED`. Separately, CLARA needs institutional FAQ ownership/publication approval before a reviewed corpus; no external-provider activation is authorized.
+
+### Phase 4-FS-4 DestinationSearch service resolution — 15 October 2026 (historical slice checkpoint)
 
 `DEC-FAC-002` records the owner's explicit implement-not-defer decision. Readiness is `READY_WITH_BOUNDARIES`; the Home/Navigate subset is `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`. The accepted matcher/snapshot/public projections and existing selection callbacks are reused. Legacy facility ordering/browse remains compatible; separate deterministic service choices retain canonical overlap explanations and never conceal additional mappings. Only eligible navigable canonical locations can be explicitly selected. No current location, relationship, relevance score or automatic route is inferred.
 

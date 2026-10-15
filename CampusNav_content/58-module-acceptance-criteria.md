@@ -31,6 +31,12 @@
 - public results preserve provenance and visibly label `DEMO` data
 - missing media has an accessible placeholder; unpublished or unauthorized media is not publicly exposed
 
+### FS-4 final engineering acceptance — 16 October 2026
+
+`COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` (`DEC-FAC-003`). The requirements above are met at the accepted engineering evidence level: canonical Detail/Directory/Cards, shared eligible service discovery/exact approved aliases, explicit configured recommendations, GlobalSearch Services and Home/Navigate DestinationSearch. Missing media retains the accessible category placeholder; media workflow remains FS-5, not completed here. FS-2 status semantics, public provenance/security, no inferred relationship/location, operational-vs-routing separation, mobile keyboard/focus/touch semantics and network-only/offline degradation remain mandatory and pass retained tests. The exact capability/evidence matrix is in `63` and quality gates in `73`.
+
+This does not waive official institutional coverage, certify physical devices/independent accessibility, implement Personnel GlobalSearch, or complete broader ranking/partial aliases. Their data/advisory/deferred dispositions are explicit in `29`/`30`/`64`; final-system DoD remains incomplete (`28`). No acceptance criterion was removed to force closure.
+
 ## Schedules/personnel
 - exceptions and status precedence work
 - schedule wording does not claim presence

@@ -2,6 +2,14 @@
 
 CampusNav AI is a React application for campus navigation and school information at St. Clare College.
 
+## Current FS-4 acceptance — 16 October 2026
+
+Phase 4 FS-4 is `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` (`DEC-FAC-003`). Facility Detail, Directory/Cards, shared service discovery, exact approved service aliases, configured recommendations, GlobalSearch Services and Home/Navigate DestinationSearch are accepted. Personnel GlobalSearch remains separate and unimplemented; broader unified ranking and partial/fuzzy aliases are deferred, not completed. Official catalog coverage, physical-device/independent accessibility and adviser/research approval remain unverified. Phase 4 and final-system DoD remain incomplete; FS-5/FS-6/FS-7 are not started.
+
+Fresh verification passed 37 distinct deterministic suites, lint, typecheck, build, PWA built artifacts and diff checks. Local RLS integration was unavailable (Docker/local PostgreSQL absent), not passed. Canonical `63-implementation-status-registry.md` and `73-quality-gates-release-checklist.md` contain the exact capability/evidence matrix and limits. Earlier slice descriptions below retain their dated implementation checkpoints; their `IN_PROGRESS` wording does not override this final reconciliation.
+
+Read-only production checks confirm CLARA's grounded deterministic foundation is behaviorally live, with stable sources, safe unavailable responses and external AI disabled. The actually served entry is `index-rYEQVvGN.js`, not expected/local `index-CI2O9ZNl.js`; byte-for-byte build equivalence is unproven. No manual deploy, provider activation or configuration change was performed. This does not make CLARA a fully generative AI assistant.
+
 ## Local development
 
 Requirements:

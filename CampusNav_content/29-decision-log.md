@@ -363,6 +363,18 @@ Dynamic service relationships remain network-only; offline retains local canonic
 
 **Reason:** complete the remaining owner-selected destination consumer without duplicating discovery/routing truth or guessing service locations. Automatic verified Git delivery and safe current-task cleanup follow `53`.
 
+## DEC-FAC-003 — Final FS-4 engineering acceptance and remaining-domain disposition
+
+**Status:** OWNER AUTHORIZED — 16 October 2026
+
+The owner authorizes evidence-driven final FS-4 reconciliation, with closure only if every binding engineering requirement passes. The audit in `63`/`73` concludes `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` for Facility Detail, Directory/Cards, service discovery, approved exact service aliases, configured recommendations, GlobalSearch Services and Home/Navigate DestinationSearch service resolution. This is engineering acceptance, not final-system, adviser, research, institutional-data, or accessibility certification.
+
+Personnel GlobalSearch belongs to the separate academic/personnel domain (`38`, `49`), not FS-4 service discovery; it remains unimplemented in GlobalSearch. Broader unified cross-consumer ranking and partial/fuzzy aliases are explicitly `DEFERRED`, not completed. Accepted consumer-local deterministic matching/grouping and separate administrator rank/facility-ID configured ordering remain unchanged. No original cross-domain search requirement is deleted; reopening deferred work requires separate authorization/readiness.
+
+Official catalog/hours/alias/mapping completeness and physical-device/independent accessibility acceptance remain explicit advisories. Missing data stays unavailable/pending; synthetic fixtures are not institutional approval. Existing public eligibility, canonical identity, provenance, RLS, network-only operational data, explicit destination choice, one spatial/routing truth, and safety/privacy requirements are not relaxed. Earlier dated slice exclusions/statuses remain historical checkpoints superseded only for current FS-4 status.
+
+**Reason:** all seven authorized engineering capabilities have implementation and passing evidence; separate domains, broader matching policy, institutional population, and certification must not be conflated with their acceptance. A read-only CLARA deployment check does not expand CLARA status or enable external AI. FS-5/FS-6/FS-7 remain unstarted; this decision authorizes no next implementation.
+
 ## How to add a decision
 Use:
 - ID

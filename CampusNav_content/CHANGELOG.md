@@ -1,5 +1,17 @@
 # CampusNav Content Pack — Changelog
 
+## v3.60 — 16 October 2026
+
+Reconciled final FS-4 engineering acceptance with no implementation or institutional-data change.
+
+- recorded `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` for the seven delivered facility/service/search capabilities, with the requirement/implementation/evidence matrix in `63`
+- recorded genuine owner dispositions in `DEC-FAC-003`: Personnel GlobalSearch separate and unimplemented; unified cross-consumer ranking and partial/fuzzy aliases deferred, not completed; exact aliases and accepted deterministic policies unchanged
+- retained official catalog completeness, physical-device/independent accessibility, adviser/research and final-system DoD boundaries; FS-5/FS-6/FS-7 remain unstarted
+- passed 37 freshly enumerated deterministic suites, lint/typecheck/build/PWA built artifacts (after build) and diff checks; local pgTAP could not connect to PostgreSQL and is not reported passed
+- independently verified live grounded CLARA behavior at 390/1440: 11 checks, 24 empty public GETs, zero unexpected console/page errors or external AI calls, disabled provider capability and no detected privileged/provider key in loaded first-party scripts
+- recorded production entry `index-rYEQVvGN.js` versus expected/local `index-CI2O9ZNl.js`; new foundation is behaviorally live, exact byte equivalence/cause of build variation unproven. No manual deploy, environment or Gemini-policy change
+- preserved dated slice evidence, tests, source, schema/RLS/grants, worker/cache, routing/Emergency/preferences, Admin, legacy worktrees and protected stash; automatic documentation-only Git delivery follows `53`
+
 ## v3.59 — 16 October 2026
 
 Implemented the owner-authorized CLARA grounded FAQ and campus-retrieval foundation without enabling an external AI provider.

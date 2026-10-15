@@ -75,5 +75,9 @@ Only canonical navigable facilities with existing entrance nodes qualify. Zero e
 
 The picker retains the existing shared memory-only snapshot only while activated. No startup/per-keystroke/per-facility directory/provider fan-out is added. Offline masks dynamic choices and retains local canonical lookup/manual positioning/valid bundled-graph routing; reconnect, retry and known boundaries revalidate. Errors/empty/pending/DEMO states are explicit. No worker, provider query, discovery/recommendation algorithm, schema/security or routing truth changes. Broader unified ranking, partial aliases, Personnel and final FS-4 acceptance remain separately gated. Earlier slice exclusions above remain historical.
 
+## Final FS-4 disposition — 16 October 2026
+
+`DEC-FAC-003` accepts the seven implemented FS-4 engineering capabilities with explicit advisories; `63`/`73` supply evidence. The searchable-domain goals above remain system-wide requirements, not proof of every domain's implementation. Personnel GlobalSearch remains unimplemented in the separate personnel/schedule domain. Broader unified cross-consumer ranking and partial/fuzzy service aliases are owner-deferred, not completed; accepted consumer-local deterministic matching/grouping and configured rank/facility-ID ordering remain unchanged. Official institutional catalog coverage remains unverified. Earlier slice exclusions and statuses are historical, not current blockers or permission to invent data.
+
 ## Privacy
 Personnel search exposes only approved public fields and schedule/availability wording permitted by the privacy contract.
