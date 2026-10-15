@@ -201,10 +201,13 @@ const [page, card, provider, discoverySource, worker] = await Promise.all([
   read("src/pages/Facilities.jsx"), read("src/components/facilities/FacilityCard.jsx"),
   read("src/providers/facility/supabaseFacilityProvider.js"), read("src/services/facilityDiscovery.js"), read("src/service-worker.js"),
 ])
+const snapshotSource = await read("src/services/facilityDiscoverySnapshot.js")
+const discoveryContext = await read("src/contexts/FacilityDiscoveryContext.jsx")
 await check("React uses shared APIs, memoized index and no per-query provider calls", () => {
-  assert.match(page, /useMemo\(\(\) => createFacilityDiscoveryIndex/)
+  assert.match(page, /useFacilityDiscovery\(\)/)
+  assert.match(snapshotSource, /createFacilityDiscoveryIndex\(result.data\)/)
   assert.match(page, /searchFacilities\(query/)
-  assert.match(page, /getFacilityDiscoveryData\(undefined, \{ includeConfiguredMappings: true \}\)/)
+  assert.match(snapshotSource, /getFacilityDiscoveryData\(undefined, \{ includeConfiguredMappings: true \}\)/)
   assert.doesNotMatch(page, /\}, \[[^\]]*query[^\]]*\]\)\s*\n\s*(?:const directoryById|useEffect)/)
   assert.doesNotMatch(page + card, /\.from\s*\(|supabase/i)
   assert.doesNotMatch(provider, /\.(insert|upsert|update|delete)\s*\(/)
@@ -212,11 +215,13 @@ await check("React uses shared APIs, memoized index and no per-query provider ca
 await check("Offline and reconnect mask old operational snapshots and revalidate", () => {
   assert.match(page, /connectivity\.isOnline && !discoveryState\.loading/)
   assert.match(page, /connectivity\.reconnectVersion/)
-  assert.match(page, /setDiscoveryState\(\{ loading: connectivity\.isOnline, result: null \}\)/)
+  assert.match(discoveryContext, /usable = enabled && connectivity\.isOnline/)
+  assert.match(snapshotSource, /invalidate\(\)/)
   assert.match(page, /Service search requires a connection/)
-  assert.match(page, /nextRefreshAt/)
+  assert.match(snapshotSource, /nextRefreshAt/)
   assert.match(page, /window\.location\.reload\(\)/, "Uncached client-module recovery stays explicit and does not alter PWA policy")
   assert.doesNotMatch(discoverySource, /localStorage|sessionStorage|fetch\(|recommendationRank/)
+  assert.doesNotMatch(snapshotSource + discoveryContext, /localStorage|sessionStorage|fetch\(/)
   assert.doesNotMatch(worker, /facilityDiscovery|public_service_aliases/)
 })
 await check("Accessible mobile controls, domain headings, count and safe empty states", () => {

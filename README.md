@@ -55,6 +55,7 @@ npm run test:phase4-fs3b
 npm run test:phase4-fs3c
 npm run test:phase4-fs4-discovery
 npm run test:phase4-fs4-recommendations
+node scripts/test-phase4-fs4-global-search.mjs
 npm run test:rls
 npm run test:render
 ```
@@ -411,6 +412,20 @@ npm run test:phase4-fs4-recommendations
 ```
 
 This subset is `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` under `DEC-FAC-001`. Detail/Directory remain owner-approved, discovery remains accepted, overall FS-4 remains `IN_PROGRESS`, and earlier slice exclusions are historical. GlobalSearch/DestinationSearch, broader ranking, fuzzy/AI, media, Dashboard/Realtime, database/security, worker/Auth changes, institutional population, and FS-5/FS-6 remain excluded. No new environment variable/dependency is needed. Canonical `63`/`73` record evidence/advisories.
+
+## GlobalSearch Services (Phase 4-FS-4)
+
+The existing search trigger and Ctrl/Command K open a lazily loaded modal with Facilities, Rooms, Services, Events, Assistance and empty-query Quick access. Service names and exact normalized approved service aliases reuse the accepted discovery matcher. Only explicit eligible public mappings produce canonical locations; multiple locations require deliberate selection. Canonical overlaps appear once with their matching-service explanation. Details/Navigate links retain canonical identity; no service name becomes a map destination and no configured rank becomes search relevance.
+
+`FacilityDiscoveryProvider` shares one active memory-only snapshot with `/facilities`, coalesces overlapping loads, memoizes the accepted indexes, revalidates reconnect/known boundaries/retry, and rejects obsolete responses. Last-consumer release clears data/indexes/timers. Successful standalone search loads three bounded public projections; sharing with Facilities retains seven total reads and zero typing/filter reads. Loading/failure/offline/zero/unmapped states preserve canonical lookup, with safe retry and explicit page-reload recovery. No API data is added to offline storage.
+
+The modal supports focus entry/containment/Escape/return, input-only Arrow/Enter behavior, native action links, announcements, 44px targets and visual-viewport/safe-area clearance. It works inside native/fallback map fullscreen and does not nest inside task dialogs. Navigate handles mounted and repeated same-URL destination handoffs without resetting confirmed position or Standard/Avoid Stairs, bypassing a pending confirmation, or starting a route automatically.
+
+```bash
+node scripts/test-phase4-fs4-global-search.mjs
+```
+
+This owner-authorized subset is `IMPLEMENTED_VERIFIED`; existing Detail/Directory/discovery/aliases/configured recommendations remain accepted. Overall FS-4 stays `IN_PROGRESS`. DestinationSearch service resolution, Personnel integration and broader unified ranking remain separately gated; earlier slice exclusions are historical. No provider query, database/security/Auth/Admin/worker policy, dependency, branding, spatial or routing-engine change is introduced. Browser evidence is local Chrome, not physical-device, Safari/Firefox, screen-reader or broad performance certification. See canonical `63`/`73` for exact evidence.
 
 ## Admin CMS foundation (Phase 8B.1)
 

@@ -155,8 +155,10 @@ await check("Configured snapshot reuses exactly three bounded complete public pr
 })
 
 const [page, component, algorithm, worker] = await Promise.all([read("src/pages/Facilities.jsx"), read("src/components/facilities/ConfiguredServiceLocations.jsx"), read("src/services/facilityRecommendations.js"), read("src/service-worker.js")])
+const snapshotSource = await read("src/services/facilityDiscoverySnapshot.js")
 await check("React memoizes composition, masks offline/loading and performs no private query", () => {
-  assert.match(page, /useMemo\(\(\) => createConfiguredServiceRecommendationIndex/)
+  assert.match(page, /useFacilityDiscovery\(\)/)
+  assert.match(snapshotSource, /createConfiguredServiceRecommendationIndex\(result.data\)/)
   assert.match(page, /connectivity\.isOnline && !discoveryState\.loading/)
   assert.match(page, /connectivity\.reconnectVersion/)
   assert.doesNotMatch(page + component, /\.from\s*\(|supabase|recommendationRank/)

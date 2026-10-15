@@ -1,6 +1,6 @@
 import { CircleAlert, Info, LocateFixed, Minimize, Navigation, QrCode, ShieldAlert, WifiOff } from "lucide-react"
-import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Link, useLocation, useOutletContext, useSearchParams } from "react-router-dom"
 import { button, Disclosure, focusRing, InkKicker, InkSectionLabel } from "@/components/campus/ui"
 import useModalDialog from "@/components/campus/useModalDialog"
 import { useClara } from "@/components/clara/ClaraContext"
@@ -110,6 +110,9 @@ export default function Navigate() {
 }
 
 function NavigateExperience({ searchParams }) {
+  const shellContext = /** @type {{ globalSearchOpen?: boolean } | null} */ (useOutletContext())
+  const globalSearchOpen = shellContext?.globalSearchOpen || false
+  const location = useLocation()
   const connectivity = useConnectivity()
   const emergencyMode = searchParams.get("mode") === "emergency"
   const requestedFacility = getFacilityById(searchParams.get("facility"))
@@ -164,7 +167,7 @@ function NavigateExperience({ searchParams }) {
   const fullscreen = useMapFullscreen()
   const immersive = fullscreen.active
   const clara = useClara()
-  const immersiveFocusRef = useModalDialog({ active: immersive && !preferencesOpen && !scannerOpen && !locationConfirmation, onClose: fullscreen.exit })
+  const immersiveFocusRef = useModalDialog({ active: immersive && !preferencesOpen && !scannerOpen && !locationConfirmation && !globalSearchOpen, onClose: fullscreen.exit })
 
   const floor = getFloorById(floorId)
   const currentFloorId = currentPosition.currentFloorId
@@ -365,6 +368,19 @@ function NavigateExperience({ searchParams }) {
     resetRoute()
     requestMapFocus(facility.id)
   }
+
+  const requestedDestinationId = searchParams.get("facility")
+  const destinationRequest = location.state?.facilityDestinationRequest === requestedDestinationId ? location.key : requestedDestinationId
+  const previousDestinationRequest = useRef(destinationRequest)
+  useEffect(() => {
+    if (previousDestinationRequest.current === destinationRequest) return
+    previousDestinationRequest.current = destinationRequest
+    if (emergencyMode) return
+    const facility = getFacilityById(requestedDestinationId)
+    if (!facility || facility.navigable === false || !getFacilityEntranceNodes(facility.id, facility.floorId).length) return
+    // Destination-only handoff: keep origin, QR/manual confirmation and preference.
+    chooseDestination(facility)
+  }, [destinationRequest, requestedDestinationId, emergencyMode]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectMapRoom = (facilityId) => {
     const facility = getFacilityById(facilityId)

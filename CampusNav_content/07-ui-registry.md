@@ -158,6 +158,12 @@ Search groups:
 - Personnel
 - Events
 
+**Current FS-4 subset — 15 October 2026:** Services is implemented using the accepted public discovery matcher, explicit mappings, canonical names, independent match explanations, and deliberate Details/Navigate links. Facilities/Rooms previews remain separate; canonical overlaps appear once with their service context retained. Service-only choices include every matched canonical location, bounded by the local dataset. Quick access, Events, and Assistance remain. Personnel is a wider-contract target, not implemented by this subset; DestinationSearch service resolution and broader unified ranking remain separately gated.
+
+GlobalSearch is loaded on activation. It shares `FacilityDiscoveryProvider` with Facilities: one memory-only active snapshot, coalesced reads, memoized indexes, offline masking, reconnect/known-boundary revalidation, explicit retry/reload, and inactive cleanup. Zero catalog and unmapped services never infer a destination. The modal uses shared focus entry/containment/Escape/return, input-only Arrow/Enter shortcuts, native link actions, polite announcements, 44px targets, visual-viewport/safe-area clearance, and a fullscreen-aware portal. Ctrl/Command K does not nest search inside task dialogs; existing More/Admin-drawer transitions remain supported.
+
+Navigate accepts a canonical destination handoff while mounted, including repeated same-URL requests, without remounting, moving the confirmed origin, changing the session preference, bypassing QR/manual confirmation, or starting a route. Search Escape yields correctly inside native/fallback fullscreen. Local Chrome evidence and limits are in `63`/`73`; this does not complete all GlobalSearch domains or FS-4.
+
 ### `NotificationPanel`
 Path: `src/components/layout/NotificationPanel.jsx`
 

@@ -19,7 +19,19 @@ Apply the single operational procedure in `53-git-workflow.md`: dedicated task b
 - 2D/3D preserve same route/current/destination
 - QR/manual fallback passes
 
-## FS-4 configured service recommendation evidence — 15 October 2026
+## FS-4 GlobalSearch Services evidence — 15 October 2026
+
+- `READY_WITH_BOUNDARIES / IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` — accepted public matcher/projections, shared active snapshot and explicit canonical destination choices; overall FS-4 remains `IN_PROGRESS`
+- `42/42 PASS` — new GlobalSearch deterministic suite: names/exact aliases/multiple/unmapped/overlap/deduplication/provenance/eligibility/truncation/public boundary/coalescing/offline/late responses/retry/boundaries/compatibility/source/render checks; interactive assertions are separately browser-verified
+- `FULL REGRESSION PASS` — 35 suites (previous 34 plus new GlobalSearch), including FS-1–FS-4, mobility/preferences, navigation/QR/Emergency/3D, Phase 8, Dashboard/theme/mobile/render/PWA; lint/typecheck/build/built-worker/diff gates
+- `192/192 PASS` — eight widths × Light/Dark × twelve responsive cases; canonical/service/alias/overlap/one/multiple/unmapped/pending/DEMO/non-navigable/zero states, labels/actions/44px/overflow/CLARA clearance
+- `15/15 PASS` — shared/in-flight read counts, focus/Tab/Escape/return, Arrow/Enter Details, native Navigate link Enter, failure/retry, expiry, simulated keyboard viewport, both route preferences and repeated URL handoffs, task-dialog/More activation, native/fallback fullscreen, resize and memory observation
+- `6/6 PASS` — built-worker control, immediate dynamic suppression/canonical fallback, offline reload/Navigate, reconnect with explicit uncached-client recovery, no operational/API/Auth cache, offline Emergency block; seven expected offline transport errors separately recorded
+- `PERFORMANCE` — three standalone discovery reads, seven total when Facilities shares the snapshot, zero typing/filter requests; unchanged exact-count/1,000-row guards; lazy GlobalSearch/processing; inactive snapshot/index/timer release; concrete bundle/load/memory limits in `63`
+- `PRESERVATION` — no remote writes/seeds, provider queries, schema/RLS/grants/audit/Auth/Admin/worker/dependency/lockfile/branding/spatial/routing-engine changes; protected legacy work/stash untouched
+- `ADVISORIES` — synthetic populated evidence is not official catalog coverage; no full GlobalSearch/FS-4, unified ranking, physical-device/non-Chromium/screen-reader/WCAG, real keyboard or broad performance claim. DestinationSearch/Personnel remain separately gated. Browser harness corrections and resolved modal-guard issue are disclosed in `63`
+
+## FS-4 configured service recommendation evidence — 15 October 2026 (earlier slice checkpoint)
 
 - `READY_WITH_BOUNDARIES` — FS-4 scope, accepted public rank/parent availability, existing FS-1B rank/ID ordering, existing discovery foundation, and explicit owner authorization satisfy readiness; no migration or institutional-data fabrication
 - `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` — separate configured-location lists on `/facilities`; accepted Detail/Directory/discovery preserved; overall FS-4 `IN_PROGRESS`

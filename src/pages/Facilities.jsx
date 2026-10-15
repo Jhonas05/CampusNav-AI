@@ -10,14 +10,12 @@ import { floors } from "@/data/floors"
 import { getCategoryByKey } from "@/lib/facilityCategories"
 import { cn } from "@/lib/utils"
 import {
-  createFacilityDiscoveryIndex,
-  createConfiguredServiceRecommendationIndex,
   getFacilitiesDirectory,
-  getFacilityDiscoveryData,
   getConfiguredServiceRecommendations,
   searchFacilities,
 } from "@/services/facilityService"
 import { useConnectivity } from "@/contexts/ConnectivityContext"
+import { useFacilityDiscovery } from "@/contexts/FacilityDiscoveryContext"
 
 /**
  * Presentation-only groupings over verified facility kinds.
@@ -78,8 +76,8 @@ export default function Facilities() {
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [requestVersion, setRequestVersion] = useState(0)
   const [operationalState, setOperationalState] = useState({ loading: true, result: null })
-  const [discoveryState, setDiscoveryState] = useState({ loading: true, result: null })
-  const [discoveryVersion, setDiscoveryVersion] = useState(0)
+  const discoveryState = useFacilityDiscovery()
+  const { discoveryIndex, recommendationIndex } = discoveryState
 
   useEffect(() => {
     let active = true
@@ -98,38 +96,9 @@ export default function Facilities() {
     return () => { active = false }
   }, [connectivity.isOnline, connectivity.reconnectVersion, requestVersion])
 
-  useEffect(() => {
-    let active = true
-    setDiscoveryState({ loading: connectivity.isOnline, result: null })
-    if (connectivity.isOnline) {
-      getFacilityDiscoveryData(undefined, { includeConfiguredMappings: true })
-        .then((result) => { if (active) setDiscoveryState({ loading: false, result }) })
-        .catch(() => { if (active) setDiscoveryState({ loading: false, result: null }) })
-    }
-    return () => { active = false }
-  }, [connectivity.isOnline, connectivity.reconnectVersion, requestVersion, discoveryVersion])
-
-  useEffect(() => {
-    const boundary = discoveryState.result?.data?.nextRefreshAt
-    if (!connectivity.isOnline || !boundary) return
-    const delay = Math.max(1, Math.min(2_147_483_647, Date.parse(boundary) - Date.now() + 1))
-    const timeout = window.setTimeout(() => setDiscoveryVersion((value) => value + 1), delay)
-    return () => window.clearTimeout(timeout)
-  }, [connectivity.isOnline, discoveryState.result])
-
   const directoryById = useMemo(() => new Map(
     (connectivity.isOnline ? operationalState.result?.data?.facilities || [] : []).map((entry) => [entry.facility.id, entry]),
   ), [connectivity.isOnline, operationalState.result])
-
-  const discoveryIndex = useMemo(() => createFacilityDiscoveryIndex(
-    connectivity.isOnline && !discoveryState.loading && discoveryState.result?.ok
-      ? discoveryState.result.data : null,
-  ), [connectivity.isOnline, discoveryState.loading, discoveryState.result])
-
-  const recommendationIndex = useMemo(() => createConfiguredServiceRecommendationIndex(
-    connectivity.isOnline && !discoveryState.loading && discoveryState.result?.ok
-      ? discoveryState.result.data : null,
-  ), [connectivity.isOnline, discoveryState.loading, discoveryState.result])
 
   const eligibleFacilityIds = useMemo(() => {
     const activeCategory = CATEGORY_FILTERS.find((filter) => filter.label === category) || CATEGORY_FILTERS[0]
@@ -228,7 +197,7 @@ export default function Facilities() {
                   : "Service search is temporarily unavailable. Canonical facility search remains available."}</p>
                 {connectivity.isOnline && (
                   <div className="flex flex-wrap gap-2">
-                    <button type="button" onClick={() => setDiscoveryVersion((value) => value + 1)} className={cn(button.smallSecondary, "min-h-11")}>Retry service search</button>
+                    <button type="button" onClick={discoveryState.retry} className={cn(button.smallSecondary, "min-h-11")}>Retry service search</button>
                     <button type="button" onClick={() => window.location.reload()} className={cn(button.smallSecondary, "min-h-11")}>Reload page</button>
                   </div>
                 )}

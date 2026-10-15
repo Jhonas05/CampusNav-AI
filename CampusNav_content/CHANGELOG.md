@@ -1,5 +1,19 @@
 # CampusNav Content Pack — Changelog
 
+## v3.57 — 15 October 2026
+
+Implemented the owner-authorized FS-4 GlobalSearch Services subset without completing overall FS-4.
+
+- reused accepted canonical/service-name/exact approved-alias matching and explicit public mappings; retained separate Facilities/Rooms/Services/Events/Assistance/Quick access, canonical overlap explanations, deliberate multiple-location choices and eligible Details/Navigate links
+- shared an on-demand active memory-only snapshot with Facilities, coalesced overlapping reads, memoized accepted indexes and rejected obsolete responses after offline/retry/replacement/idle invalidation; reconnect/known-boundary revalidation and explicit retry/reload remain network-only
+- preserved seven total Facilities reads and three standalone search reads, zero typing/filter reads, projection completeness guards and separate unchanged configured recommendation ordering; no directory/status reads solely for destination resolution
+- added focus/keyboard/native-link/announcement/44px/visual-viewport/safe-area behavior, native/fallback fullscreen integration and task-dialog guards while retaining More/Admin-drawer activation
+- fixed mounted and repeated same-URL destination handoffs without remounting, changing confirmed position/preferences/pending confirmation, automatic navigation, or engine/graph changes
+- verified 42 targeted checks, the complete 35-suite matrix and tooling/PWA gates, 192 responsive Chrome cases, 15 interactions and 6 built-worker offline cases; recorded expected failures separately and reran corrected browser harness/modal-guard cases
+- measured request coalescing, local composition/load/memory behavior and bundle redistribution; main entry remains below 500 kB and GlobalSearch loads on activation; broad performance/device certification is not claimed
+- reconciled UI/API/search/current roadmap/status/quality/limitations/backlog/README while preserving earlier acceptance and historical exclusions; DestinationSearch service resolution, Personnel and broader unified ranking remain separately gated
+- no schema/migration/RLS/grant/Auth/audit/Admin/provider-query/remote data/seed, dependency/lockfile, worker policy, branding, spatial/routing-engine/QR/Emergency/CLARA change; protected stash/legacy/recovery work preserved; automatic Git delivery/current-task cleanup follows `53`, with no manual deployment
+
 ## v3.56 — 15 October 2026
 
 Documented the owner's permanent Git branch/worktree lifecycle and automatic safe completion policy.

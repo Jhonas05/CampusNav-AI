@@ -55,5 +55,15 @@ Configured order is ascending `recommendation_rank`, then stable canonical facil
 
 No mapping means no recommendation. Zero projections show `No configured service locations are available yet.` Offline/loading/failed snapshots produce no dynamic list; canonical search remains usable and reconnect/expiry revalidates. No API-response persistence, extra provider request, institutional seed, inferred relationship, AI score, or routing mutation is introduced. `18` defines the opt-in safe snapshot metadata and pure result-envelope API.
 
+## Owner-authorized GlobalSearch Services subset — 15 October 2026
+
+GlobalSearch reuses `normalizeDiscoveryQuery`, `searchFacilities` and the accepted discovery index, not a second matcher. Canonical/service-name exact/prefix/substring and exact approved-alias rules remain unchanged. Facilities and Rooms keep separate previews (six/four); Services lists the remaining unique service-mapped canonical facilities. Canonical overlaps stay in their existing domain with service/alias explanations; capped-out overlaps are included in Services so no explicit mapped choice is lost. All choices are bounded by the canonical facility dataset. Events, Assistance and empty-query Quick access remain separate; this defines no unified cross-domain relevance score.
+
+Services always has a labelled state. Multiple configured facilities require deliberate canonical Details/Navigate selection. An eligible service without mappings is named with no inferred destination. Zero catalog, pending/DEMO exclusion, loading, normalized failure, offline and retry/reload states preserve local canonical lookup. GlobalSearch does not consume configured rank, compute operational status, or request directory projections for destination resolution.
+
+Facilities and GlobalSearch use one active, memory-only `FacilityDiscoveryProvider` snapshot. Requests coalesce; accepted indexes are created once per successful snapshot; offline/replacement/idle invalidation rejects obsolete completions; reconnect, explicit retry and known effective/expiry boundaries revalidate. No consumer/keystroke fan-out, permanent cache, new provider query or worker policy is introduced.
+
+Navigate accepts validated destination requests while mounted, including a repeated request for the same `?facility=` URL. Existing confirmed position, session Standard/Avoid Stairs preference, QR/manual confirmation and fullscreen state remain intact; obsolete routes clear and navigation never starts automatically. Modal focus/keyboard/touch behavior follows `06`/`26`; task dialogs must be closed before opening GlobalSearch. DestinationSearch service resolution, Personnel search, partial aliases and broader unified ranking remain separately gated. Earlier exclusions above are historical slice boundaries.
+
 ## Privacy
 Personnel search exposes only approved public fields and schedule/availability wording permitted by the privacy contract.

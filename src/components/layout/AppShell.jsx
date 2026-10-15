@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react"
 import { Outlet, useLocation } from "react-router-dom"
-import GlobalSearch from "./GlobalSearch"
 import MobileBottomNav from "./MobileBottomNav"
 import MobileTopBar from "./MobileTopBar"
 import MoreSheet from "./MoreSheet"
@@ -15,6 +14,9 @@ import { ClaraProvider } from "@/components/clara/ClaraContext"
 import { useAuth } from "@/contexts/AuthContext"
 import { cn } from "@/lib/utils"
 import PwaStatus from "@/components/pwa/PwaStatus"
+import { FacilityDiscoveryProvider } from "@/contexts/FacilityDiscoveryContext"
+
+const GlobalSearch = lazy(() => import("./GlobalSearch"))
 
 const SIDEBAR_PREF_KEY = "campusnav.sidebar.v1"
 const WIDE_QUERY = "(min-width: 1280px)"
@@ -143,6 +145,10 @@ export default function AppShell() {
     const onKeyDown = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault()
+        const anotherModal = Array.from(document.querySelectorAll('[role="dialog"]:not([aria-modal="false"]):not([data-immersive]):not([data-global-search-dialog])'))
+          .some((element) => element.getClientRects().length > 0)
+        // Finish/close task dialogs first; never bypass QR confirmation or nest modals.
+        if (anotherModal && !moreOpen && !drawerOpen) return
         setOpenPanel(null)
         setDrawerOpen(false)
         setMoreOpen(false)
@@ -151,7 +157,7 @@ export default function AppShell() {
     }
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [])
+  }, [moreOpen, drawerOpen])
 
   const closePanel = useCallback(() => setOpenPanel(null), [])
   const togglePanel = (panel) => setOpenPanel((current) => (current === panel ? null : panel))
@@ -168,6 +174,7 @@ export default function AppShell() {
   }
 
   return (
+    <FacilityDiscoveryProvider>
     <ClaraProvider>
       <div
         className={cn(
@@ -217,7 +224,7 @@ export default function AppShell() {
           {shell === "admin" && <AdminTopBar menuOpen={drawerOpen} onOpenMenu={openDrawer} />}
           <main id="campusnav-main" tabIndex={-1} className="min-w-0 flex-1 outline-none">
             <div ref={pageRef} className="page-enter">
-              <Outlet />
+              <Outlet context={{ globalSearchOpen: searchOpen }} />
             </div>
           </main>
           <footer className="border-t border-line px-[var(--app-page-gutter)] py-4 pr-24 text-xs text-ink-faint max-md:hidden print:hidden">
@@ -227,10 +234,13 @@ export default function AppShell() {
 
         <NotificationPanel open={openPanel === "notifications"} onClose={closePanel} />
         <ProfileMenu open={openPanel === "profile"} onClose={closePanel} />
-        <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
+        <Suspense fallback={<p role="status" className="fixed left-4 top-4 z-modal rounded-xl border border-line bg-surface p-3 text-sm text-ink">Loading search…</p>}>
+          {searchOpen && <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />}
+        </Suspense>
         <ClaraAssistant />
         <PwaStatus />
       </div>
     </ClaraProvider>
+    </FacilityDiscoveryProvider>
   )
 }
