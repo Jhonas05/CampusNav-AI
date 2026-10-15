@@ -26,6 +26,8 @@ Responsibilities:
 
 Expected operations:
 - `searchFacilities(query, filters?)`
+- `getFacilityDiscoveryData(dateTime?)`
+- `createFacilityDiscoveryIndex(discoveryData)`
 - `getFacilityById(facilityId)`
 - `getFacilityDetail(facilityId, dateTime?)`
 - `getFacilitiesDirectory(dateTime?)`
@@ -43,6 +45,12 @@ FS-2B must not expand weekly occurrences, interpret overnight carry, replace wee
 `getFacilityDetail(facilityId, dateTime?)` is the first FS-4 public composition surface for one canonical Facility Detail page. It preserves canonical local identity and returns independent result envelopes for the public operational profile, configured public services, weekly hours/current dated exceptions, and FS-2-computed status. It performs one bounded hours read for the previous/current Manila dates and passes those normalized source records to the existing pure evaluator, avoiding a duplicate status fetch or a second evaluator. A failed overlay section does not erase canonical identity or other successful sections; failed hours/status return a safe unavailable/`UNKNOWN` section. The method adds no provider query, private-table access, mutation path, search, alias matching, ranking, or recommendation behavior.
 
 `getFacilitiesDirectory(dateTime?)` is the bounded FS-4 public composition surface for all canonical Facilities cards. Its provider aggregate performs exactly four accepted public-projection reads—operational profiles, weekly hours, previous/current Manila-date exceptions, and status advisories—independent of facility count. The service validates and groups the overlay by existing canonical facility ID, preserves canonical ordering and identity, and invokes the accepted pure FS-2 evaluator for each facility. Missing records produce explicit unavailable/`UNKNOWN` results; a provider or payload failure returns every canonical facility with safe `UNKNOWN` status and a sanitized retryable error. It adds no per-card query, service/alias discovery, fuzzy matching, ranking, recommendation, mutation, or private-table access.
+
+`getFacilityDiscoveryData(dateTime?)` is the independently failing FS-4 public search snapshot. It uses the existing envelope and clock/timestamp validation, one provider aggregate, and exactly three bounded reads of `public_services`, `public_service_aliases`, and `public_facility_service_mappings`. Each read requests an exact public count and is capped at 1,000 rows; saturation, failure, a missing count, or a count/row mismatch fails closed instead of claiming a complete catalog. This also detects a smaller server-side row cap without adding requests. The accepted public mapping view already requires public/effective parent service and operational profile. No private/Admin projection is used.
+
+The discovery layer additionally requires published/effective `VERIFIED` or `SOURCE_ALIGNED`, non-DEMO `ACTIVE` service, alias, and mapping records with safe source metadata. Pending/DEMO records produce generic notices, not matches. Aliases and mappings require an eligible parent service; mappings must reference canonical local facility IDs. Results retain independent service/alias/mapping provenance and do not expose administrative fields or configured recommendation ranks.
+
+`createFacilityDiscoveryIndex(data)` builds one local index per successful snapshot. Synchronous `searchFacilities(query, { discoveryIndex?, facilityIds?, dateTime? }?)` performs no provider request: it returns canonical facility results, labelled match-domain groups, independent match explanations, a unique count, and unmatched service names when no eligible mapping exists. Case/whitespace normalization and exact/prefix/substring canonical and service-name matching are deterministic; aliases use exact normalized matching only. `facilityIds` applies the existing floor/category candidate filter. `32` documents ordering and its intentionally unresolved broader ranking boundary. Loaded records are checked again at search time; snapshot effectivity/expiry boundaries trigger revalidation. Offline/loading consumers must pass no dynamic index. No persistence, API-response cache, recommendation algorithm, or routing change is added.
 
 Phase 4 rules:
 - every result is keyed by an existing canonical local facility ID

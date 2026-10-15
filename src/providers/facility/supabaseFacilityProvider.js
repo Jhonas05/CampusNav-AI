@@ -145,6 +145,23 @@ const PUBLIC_FACILITY_STATUS_ADVISORY_COLUMNS = [
 
 export const createSupabaseFacilityProvider = (client) => ({
   mode: BACKEND_MODES.SUPABASE,
+  async getFacilityDiscoveryData() {
+    // Fixed public reads, not one request per facility/service or search keystroke.
+    // A saturated projection fails closed rather than silently omitting mappings.
+    const results = await Promise.all([
+      client.from(PUBLIC_SERVICES_VIEW).select(PUBLIC_SERVICE_COLUMNS, { count: "exact" }).order("code", { ascending: true }).limit(1000),
+      client.from(PUBLIC_SERVICE_ALIASES_VIEW).select(PUBLIC_SERVICE_ALIAS_COLUMNS, { count: "exact" }).order("service_code", { ascending: true }).order("alias", { ascending: true }).limit(1000),
+      client.from(PUBLIC_FACILITY_SERVICE_MAPPINGS_VIEW).select(PUBLIC_FACILITY_SERVICE_MAPPING_COLUMNS, { count: "exact" }).order("service_code", { ascending: true }).order("facility_id", { ascending: true }).limit(1000),
+    ])
+    if (results.some(({ error, data, count }) => error || !Array.isArray(data) || data.length >= 1000 || count !== data.length)) {
+      throw new Error("Public service discovery unavailable.")
+    }
+    return {
+      services: results[0].data.map(normalizeService),
+      aliases: results[1].data.map(normalizeServiceAlias),
+      mappings: results[2].data.map(normalizeFacilityServiceMapping),
+    }
+  },
   async getFacilitiesDirectoryOperationalData(dateRange) {
     const operationalProfilesQuery = client
       .from(PUBLIC_FACILITY_PROFILE_VIEW)

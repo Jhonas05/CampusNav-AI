@@ -53,6 +53,7 @@ npm run test:phase4-fs2c
 npm run test:phase4-fs3a
 npm run test:phase4-fs3b
 npm run test:phase4-fs3c
+npm run test:phase4-fs4-discovery
 npm run test:rls
 npm run test:render
 ```
@@ -381,6 +382,20 @@ npm run test:phase4-fs4-directory
 ```
 
 This directory/card slice is `IMPLEMENTED_VERIFIED / OWNER APPROVED`; overall FS-4 remains `IN_PROGRESS`. No schema, migration, remote Supabase mutation, dependency, or official institutional data was added.
+
+## Public service and approved service-alias discovery (Phase 4-FS-4)
+
+The existing `/facilities` search also matches approved published/effective service names and exact normalized approved service aliases. Results reach facilities only through explicitly configured eligible public mappings. Cards keep canonical names, floors, Details/Navigate links, and status composition; match explanations never rename facilities. Existing floor/category filters and announced unique counts apply to both matching domains.
+
+`getFacilityDiscoveryData(dateTime?)` independently loads three bounded public projections alongside the directory's existing four reads. `createFacilityDiscoveryIndex(...)` is memoized per snapshot; `searchFacilities(...)` matches locally with no keystroke/filter requests. Canonical exact/prefix/substring matches precede service-domain results; service names match exact/prefix/substring and aliases match exact normalized terms only. Stable service-code/canonical-facility ordering does not consume `recommendation_rank`.
+
+Pending/DEMO records are excluded with notices. Missing mappings never infer a destination. Provider failures preserve canonical search and offer safe retry/reload. Offline removes dynamic matches and retains local canonical facilities; reconnect revalidates. An uncached client-script failure after offline reload may require the explicit Reload page action, without caching backend/API data. Projections reaching the 1,000-row safety cap fail closed.
+
+```bash
+npm run test:phase4-fs4-discovery
+```
+
+This slice is `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`; Detail and Directory remain owner-approved and overall FS-4 remains `IN_PROGRESS`. Configured recommendations, GlobalSearch/DestinationSearch integration, fuzzy/AI matching, media, Dashboard/Realtime, official-data seeding, and database/security changes are excluded.
 
 ## Admin CMS foundation (Phase 8B.1)
 

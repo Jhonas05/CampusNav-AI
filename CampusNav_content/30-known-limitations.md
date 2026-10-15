@@ -34,6 +34,11 @@ Navigate now exposes Standard and Avoid Stairs using the accepted engine. With t
 ## Operating hours / schedules
 Facility hours, class schedules, and staff assignments are only as reliable as the approved school data supplied and maintained.
 
+## Public service discovery
+The `/facilities` service/alias slice is implemented and verified with isolated synthetic public-projection fixtures; it does not establish official service/mapping completeness. Only approved public/effective non-DEMO services, exact approved aliases, and explicit eligible mappings participate. Pending/DEMO records do not influence ordinary discovery. Overall FS-4 remains `IN_PROGRESS`; configured recommendations, GlobalSearch/DestinationSearch integration, broader ranking, fuzzy matching, media, and Dashboard/Realtime work are not completed.
+
+Discovery reads three capped public projections once per load/revalidation, not per keystroke. A projection reaching 1,000 rows fails closed and requires a separately authorized pagination extension. Operational records are network-only. An uncached backend-client script failing during offline reload may need the explicit Reload page recovery after reconnection; it is not added to the service-worker cache. Normal reconnect without reload revalidates automatically. Browser evidence is local headless Chrome, not physical-device, Safari/Firefox, screen-reader, broad performance, or WCAG certification. Intentionally induced transport failures are recorded separately from unexpected console/page errors.
+
 ## Class suspensions
 AI does not declare suspensions. Official status must come from authorized school administration.
 

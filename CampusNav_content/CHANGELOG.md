@@ -1,5 +1,20 @@
 # CampusNav Content Pack — Changelog
 
+## v3.54 — 15 October 2026
+
+Implemented the owner-authorized FS-4 public service discovery and approved service-alias matching slice at `/facilities`, within the frozen mobile-first UI.
+
+- reused canonical facility IDs/cards/Details/Navigate and independent existing directory/status composition; added one three-public-projection discovery snapshot and memoized provider-neutral local matching
+- retained canonical exact/prefix/substring and kind/floor compatibility; grouped/deduplicated service matches; matched approved aliases by exact case/whitespace-normalized term only; no fuzzy/AI or configured recommendation rank scoring
+- required approved published/effective non-DEMO service/alias/mapping chains and explicit canonical mappings; preserved independent provenance and safe pending/DEMO/unmapped/empty/error states
+- removed dynamic matches offline, revalidated on reconnect and effectivity/expiry boundaries, and added explicit page-reload recovery for uncached client-module failure after offline reload; no Auth or service-worker/cache policy change
+- fixed a browser-proven narrow-phone CLARA/card-action overlap by reserving directory clearance; preserved themes, card patterns, accessible filters/counts, and minimum 44px actions
+- verified 53 dedicated checks, the complete 33-suite matrix, lint/typecheck/build/diff gates, 160 responsive Light/Dark cases, 9 interaction cases, and 7 production-worker offline cases; expected induced transport failures remain separate from unexpected errors
+- documented seven initial public reads and zero keystroke/filter requests, observed local processing/load measurements, bundle changes, the fail-closed 1,000-row projection cap with exact-count truncation detection, and unresolved broader ranking
+- reconciled current API/UI/search/status/roadmap/quality/limitations/backlog records without rewriting acceptance history; earlier static test scope assertions now validate the newly authorized ownership boundary while retaining canonical/security checks
+- kept overall FS-4 `IN_PROGRESS`; Detail and Directory/Card owner-approved; discovery `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`; configured recommendations, GlobalSearch/DestinationSearch, media, Dashboard/Realtime, FS-5/FS-6, official data, and other exclusions remain unimplemented by this task
+- no database/security/remote mutation, spatial/routing/QR/Emergency/mobility, dependency/lockfile, branding, or manual deployment change; physical-device/non-Chromium/screen-reader and existing dependency advisories remain
+
 ## v3.53 — 14 October 2026
 
 Completed the owner-authorized Mobile Route Preferences UI under `DEC-NAV-002` as a scoped functional addition to the frozen mobile-first design.

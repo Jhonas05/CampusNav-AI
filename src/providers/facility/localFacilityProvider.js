@@ -2,6 +2,7 @@ import { BACKEND_MODES } from "../../lib/supabaseClient.js"
 
 export const createLocalFacilityProvider = () => ({
   mode: BACKEND_MODES.LOCAL,
+  getFacilityDiscoveryData: async () => ({ services: [], aliases: [], mappings: [] }),
   getFacilitiesDirectoryOperationalData: async () => ({
     operationalProfiles: [],
     weeklyHours: [],

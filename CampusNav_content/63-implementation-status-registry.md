@@ -3,6 +3,22 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## FS-4 public service discovery / approved service aliases — 15 October 2026
+
+**Status: `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`.** Facility Detail and Directory/Card remain completed/verified/owner-approved. Overall FS-4 remains `IN_PROGRESS`; this evidence supersedes only the earlier unstarted service-discovery subset, not historical acceptance records or adviser claims.
+
+| Area | Evidence / boundary |
+|---|---|
+| Public APIs | `getFacilityDiscoveryData(dateTime?)` uses the accepted result envelope and independent three-projection provider aggregate. `createFacilityDiscoveryIndex(...)` and pure `searchFacilities(...)` centralize local matching without per-card/service/keystroke reads. |
+| Identity and mapping | All 95 canonical facilities remain authoritative. A service result requires approved public/effective non-DEMO parent service and explicit eligible public mapping. Alias provenance is checked independently; unknown IDs, pending, DEMO, expired/future/unpublished records, and invalid sources do not produce matches. No facility alias or inferred relationship exists. |
+| Ordering and UI | Existing canonical name/kind/floor compatibility; canonical exact/prefix/substring tiers and domain grouping; service exact/prefix/substring, alias exact normalization only; stable service-code/canonical-order ties. Unique counts, combined explanations, canonical titles/Details/Navigate, filters, existing themes/card patterns, and 44px actions retained. No recommendation rank is used. |
+| Degradation and PWA | Directory and discovery fail independently. Offline removes dynamic matches and retains local search; reconnect/retry/expiry revalidate. Empty/unmapped/pending/DEMO states are explicit. An uncached client-module failure after offline reload has an explicit Reload page recovery; no Auth or worker/cache policy changes. |
+| Deterministic gates | `53/53 PASS` dedicated tests; complete 33-suite matrix including PWA artifact checks, retained FS-1–FS-4/Phase 8/navigation/mobility/mobile/Dashboard/theme/render suites, lint/typecheck/build/diff checks. Affected suites rerun after recovery/count-boundary changes. Earlier FS-1B/directory static assertions are updated to the newly authorized ownership boundary without removing their canonical/security checks. |
+| Browser QA | Local headless Chrome: `160/160` responsive checks (8 widths × Light/Dark × 10 states/contracts), `9/9` interactions, `7/7` production-worker offline/reconnect checks. No unexpected console/page errors, critical horizontal overflow, or CLARA/card-action overlap. Deliberately aborted network and offline cache-miss transport errors are captured separately. Screenshots/drivers/results remain outside Git. |
+| Performance | Seven public projection queries per successful initial configured load: existing four directory + three discovery, independent of 95 cards. Exact public counts detect truncation; failed transports may use the SDK's existing bounded retries (up to four attempts per projection in the failure fixture). Zero requests on typing/filter changes. Final local dev fixture readiness 673–2,086 ms (mean 1,186 ms); 1,000 local searches approximately 41–61 ms, informational only. Shell remains 499.37 kB; Facilities 10.30 → 13.65 kB; facility service 29.29 → 34.69 kB; CSS +26 bytes; lazy 3D unchanged at 879.73 kB. Default release precache: 44 entries / 1612.91 KiB. |
+| Security and exclusions | Only accepted public projections; normalized independent provenance; no private table, direct React query/write, remote mutation, RLS/grant/view/migration/Auth/audit change, official seed, dependency/lockfile change, or service-worker change. Configured recommendations, GlobalSearch/DestinationSearch, fuzzy/AI, media, Dashboard/Realtime, mobility/Emergency, FS-5/FS-6 remain excluded. |
+| Advisories | Official service/alias/mapping completeness is not established by synthetic fixtures. Each discovery projection is capped at 1,000 rows and saturation fails closed; pagination is later work. Physical devices, Safari/Firefox, screen-reader/WCAG certification, broad device performance, existing dependency advisories, and adviser classification remain open. |
+
 ## Mobile Route Preferences UI acceptance — 14 October 2026 (`DEC-NAV-002`)
 
 **Status: `COMPLETE — ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED`.** This cross-cutting Navigate integration leaves Phase 4-FS-4 and adviser/defense classification unchanged. The earlier engine acceptance below remains a historical checkpoint.
@@ -173,7 +189,7 @@ The owner-approved frozen interface (`DEC-UI-003` shell and floating CLARA, `DEC
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Phase classification:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL AND DIRECTORY IMPLEMENTED_VERIFIED / OWNER APPROVED`
+**Phase classification:** `IN_PROGRESS — FS-1/FS-2/FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; SERVICE DISCOVERY IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -192,7 +208,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 | Facility-status engine | `ACCEPTED_WITH_ADVISORY — FS-2C` | Pure Manila-time evaluator and public FacilityService orchestration pass final reconciliation; no live official-hours/status evidence is claimed |
 | Facility Admin workflows beyond advisories | `COMPLETE — ACCEPTED_WITH_ADVISORY` | Dedicated mutation service plus `SUPER_ADMIN` profile/service/alias/mapping/hours/exception routes, lists, schedule-aware editors, explicit lifecycle actions, stale handling, guarded deletion, safe errors, deterministic regressions, owner sign-offs at the recorded level, and fixture-backed browser QA pass; live authenticated Supabase mutation remains unclaimed |
 | Facility media lifecycle/storage | `NOT_IMPLEMENTED` | No approved photographs or upload workflow are claimed |
-| Public search/recommendation enrichment | `NOT_IMPLEMENTED` | Existing name/kind/floor search is only the baseline |
+| Public search/recommendation enrichment | `PARTIAL — SERVICE DISCOVERY IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` | `/facilities` approved public service/alias matching is implemented; configured recommendations, GlobalSearch/DestinationSearch, and broader ranking remain unstarted |
 | Dashboard operational availability | `PARTIAL` | Pending/unknown local states and advisories exist; connected computed office availability is not implemented |
 | Adviser package | `PREPARED / AWAITING_ADVISER_CONFIRMATION` | Preserved external-decision material; no adviser approval claimed |
 
@@ -200,7 +216,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Live authenticated mutation for every FS-3 resource and official institutional data remain outside the evidence. The public Facility Detail and Facilities directory/card slices are `IMPLEMENTED_VERIFIED / OWNER APPROVED`; therefore FS-4 remains `IN_PROGRESS`. Unified search/discovery, service/alias resolution, fuzzy matching, ranking/recommendation, and later FS-4 consumers remain unstarted.
+**Current Phase 4 boundary:** FS-1, FS-2, and FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`, with no further currently defined FS-3 implementation capability. Live authenticated mutation for every FS-3 resource and official institutional data remain outside the evidence. Public Facility Detail and Directory/Card remain `IMPLEMENTED_VERIFIED / OWNER APPROVED`; the `/facilities` service-discovery/approved-alias subset is `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` as recorded above. Overall FS-4 stays `IN_PROGRESS`; configured recommendations, GlobalSearch/DestinationSearch, broader ranking and later consumers remain unstarted. Earlier dated slice exclusions below describe their historical checkpoints, not the current discovery implementation.
 
 ### Phase 4-FS-4 next implementation slice — public Facilities directory/card composition — 13 October 2026
 

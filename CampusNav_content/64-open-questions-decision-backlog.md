@@ -21,6 +21,7 @@ Only unresolved decisions belong here. Resolved decisions move to `29-decision-l
 - Is the current source-aligned emergency coverage sufficient for the thesis demonstration, or is a new formal safety-authority sign-off required?
 
 ## Product/implementation
+- What broader unified ranking across canonical names, service names, and aliases should later consumers use? The implemented Facilities subset groups canonical results first, uses exact/prefix/substring tiers with stable ties, and permits exact normalized approved service aliases only. Partial alias matching, cross-consumer ranking, and configured recommendation presentation are not selected by this slice; `recommendation_rank` remains separate from search relevance.
 - Does the adviser classify the owner-proposed PWA as required for final defense, optional before defense, conditional, or deferred until after defense?
 - Is the approved PWA capability limited to installability, or does it include offline canonical 2D navigation?
 - Does the installed application use the existing official SCC seal or a separately approved dedicated CampusNav app icon?
@@ -39,7 +40,7 @@ The former strict-grayscale question is resolved by `DEC-UI-002` in `29-decision
 
 Phase 3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. `DEC-DEFENSE-001` and `75-adviser-confirmation-package.md` remain preserved; the package is `PREPARED / AWAITING_ADVISER_CONFIRMATION` and no adviser approval is claimed.
 
-`DEC-ROADMAP-002` makes **Phase 4 — Core Facility & Service Workflow Completion** the active owner-controlled software-development phase. Missing official data does not block generic workflows that preserve unavailable/pending states or use isolated visibly labeled fixtures. Phase 4-FS-1, Phase 4-FS-2, and Phase 4-FS-3 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. Phase 4-FS-4 is `IN_PROGRESS`: the public Facility Detail and Facilities directory/card slices are `IMPLEMENTED_VERIFIED / OWNER APPROVED`. Unified search/discovery, service and alias resolution, ranking/recommendation, and the remaining FS-4 work are unstarted and each requires a separately authorized owner task.
+`DEC-ROADMAP-002` makes **Phase 4 — Core Facility & Service Workflow Completion** the active owner-controlled software-development phase. Missing official data does not block generic workflows that preserve unavailable/pending states or use isolated visibly labeled fixtures. FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`, with no further currently defined FS-3 capability. FS-4 remains `IN_PROGRESS`: Detail and Directory/Card are `IMPLEMENTED_VERIFIED / OWNER APPROVED`; the separately authorized `/facilities` public service/approved-alias discovery subset is `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`. Configured recommendations, GlobalSearch/DestinationSearch, broader unified ranking, and remaining FS-4 work require their own owner authorization.
 
 Adviser confirmation remains a separate external action and still controls adviser/academic claims. Institutional questions above still control whether values may be presented as official; they do not authorize agents to invent those values.
 

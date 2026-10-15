@@ -15,7 +15,7 @@ import { getFacilityNavigationHref } from "@/services/dashboardService"
  * a two-line description under a short photo band. Everything else is on the
  * facility page.
  */
-export default function FacilityCard({ facility, operational = null, operationalLoading = false }) {
+export default function FacilityCard({ facility, operational = null, operationalLoading = false, discoveryMatches = [] }) {
   const floor = getFloorById(facility.floorId)
   const category = getFacilityCategory(facility)
   const underConstruction = facility.status === "UNDER_CONSTRUCTION"
@@ -56,7 +56,14 @@ export default function FacilityCard({ facility, operational = null, operational
             <StatusBadge status="PENDING_VERIFICATION" label="Pending verification" className="min-h-6 px-2.5 text-[10px]" />
           )}
         </div>
-        {operationalProfile?.description && (
+        {discoveryMatches.length > 0 && (
+          <p className="mt-2 break-words text-[13px] leading-relaxed text-ink-soft">
+            Matches service: {discoveryMatches[0].serviceName}
+            {discoveryMatches[0].alias && <> (approved alias: {discoveryMatches[0].alias})</>}
+            {discoveryMatches.length > 1 && <> · +{discoveryMatches.length - 1} service match{discoveryMatches.length === 2 ? "" : "es"}</>}
+          </p>
+        )}
+        {!discoveryMatches.length && operationalProfile?.description && (
           <p className="mt-2 line-clamp-2 text-[13px] leading-relaxed text-ink-soft max-sm:hidden">{operationalProfile.description}</p>
         )}
 

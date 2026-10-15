@@ -466,7 +466,7 @@ This acceptance is software engineering evidence, not adviser approval or a thes
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-2 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL AND DIRECTORY IMPLEMENTED_VERIFIED / OWNER APPROVED`
+**Status:** `IN_PROGRESS — FS-1/FS-2/FS-3 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; SERVICE DISCOVERY IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -505,7 +505,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `IN_PROGRESS — DETAIL AND DIRECTORY IMPLEMENTED_VERIFIED / OWNER APPROVED`
+4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; SERVICE DISCOVERY IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
 7. **Phase 4-FS-7 — Final Acceptance and Evidence Reconciliation** — `NOT_STARTED`
@@ -518,7 +518,15 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1 and FS-2 are `COMPLETE — ACCEPTED_WITH_ADVISORY`. FS-3A, FS-3B, FS-3C, and the unnumbered final weekly-hours/dated-exception Admin UI capability have passed final reconciliation, so Phase 4-FS-3 is `COMPLETE — ACCEPTED_WITH_ADVISORY`. No further FS-3 implementation capability is currently defined. The public Facility Detail and Facilities directory/card slices are `IMPLEMENTED_VERIFIED / OWNER APPROVED`; therefore FS-4 remains `IN_PROGRESS`. Unified search/discovery, service/alias resolution, fuzzy matching, recommendations, media, Dashboard/Realtime, and later FS-4 consumers remain unstarted and separately gated.
+**Current Phase 4 boundary:** FS-1, FS-2, and FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`, with no further currently defined FS-3 implementation capability. Public Facility Detail and Directory/Card remain `IMPLEMENTED_VERIFIED / OWNER APPROVED`. The separately owner-authorized `/facilities` service-discovery/approved-alias slice is now `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`. Overall FS-4 remains `IN_PROGRESS`: configured recommendations, GlobalSearch/DestinationSearch, broader unified ranking, media, Dashboard/Realtime, and later consumers are unstarted and separately gated. Fuzzy/AI matching is not authorized by this slice.
+
+### Phase 4-FS-4 public service discovery and approved alias matching — 15 October 2026
+
+**Status:** `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`; overall FS-4 remains `IN_PROGRESS`.
+
+The existing Facilities search reuses canonical identities, cards, links, floor/category filters, and status composition. A separate three-public-projection snapshot supplies approved non-DEMO services, aliases, and explicit mappings; the existing directory retains its four aggregate status reads. Matching is local, deterministic, case/whitespace normalized, grouped, and deduplicated. Canonical exact/prefix/substring compatibility is retained; aliases match exact approved terms only. No relationship or recommendation relevance is inferred.
+
+Evidence: 53 dedicated deterministic checks; complete 33-suite regression matrix including built-worker checks; lint/typecheck/build/diff gates; 160 responsive Light/Dark cases at 360/375/390/430/768/820/1024/1440; 9 interaction cases including expiry, partial failures, keyboard filters, and actions; 7 production-worker offline/reconnect cases. Expected induced transport errors are recorded separately; no unexpected console/page error or critical overflow remains. Physical devices, non-Chromium, screen readers, official catalog completeness, and expanded ranking remain advisories. See `63` and `73`; earlier dated slice records below remain historical checkpoints.
 
 ### Phase 4-FS-4 first implementation slice — public Facility Detail composition — 6 October 2026
 

@@ -15,6 +15,20 @@
 - 2D/3D preserve same route/current/destination
 - QR/manual fallback passes
 
+## FS-4 public service discovery / approved alias evidence — 15 October 2026
+
+- `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` — existing `/facilities` only; Detail and Directory/Card remain owner-approved; overall FS-4 remains `IN_PROGRESS`
+- `53/53 PASS` — canonical compatibility/priority, approved exact aliases, public/effective parent/mapping checks, independent provenance, DEMO/pending exclusion, no inference, deterministic deduplication, filters/counts, failure/expiry/offline fallback, bounded public reads with exact-count truncation detection, rendering/security, and local processing
+- `FULL REGRESSION PASS` — complete 33-suite matrix including all accepted safety/domain/UI suites and PWA built-worker checks; affected suites rerun after scoped recovery changes
+- `160/160 PASS` — eight requested widths in Light/Dark, canonical/service/alias, multiple mappings, unmapped/pending/DEMO/provider-failure states, floor/category filters, announcements, 44px actions, CLARA clearance, no critical overflow, and zero unexpected console/page errors
+- `9/9 PASS` — deep links/actions, keyboard filter dialog and resize, service-provider failure/retry, independent status-provider failure, empty catalog, and automatic loaded-alias expiry revalidation
+- `7/7 PASS` — real production-worker control, offline dynamic removal/local search/deep links, ordinary reconnect revalidation, no API responses in Cache Storage, and explicit reload recovery for an uncached backend-client module after offline reload
+- `EXPECTED TRANSPORT FAILURES` — intentionally induced network aborts and offline static/client cache misses recorded separately; no unexpected application error
+- `BOUNDED PERFORMANCE` — seven successful initial public queries (4 existing + 3 discovery), exact-count truncation checks, zero keystroke/filter requests; existing SDK failure retries remain bounded (up to four attempts/projection in fixtures). Memoized index; approximately 41–61 ms per 1,000 local searches; 673–2,086 ms local fixture readiness is observational, not a real-device budget claim
+- `PASS` — lint/typecheck/production build, 44 public-static precache entries / 1612.91 KiB, and Git diff checks; 3D remains lazy and unchanged in size
+- `BOUNDARIES` — no database/RLS/grant/view/Auth/audit or remote mutation; no dependency/lockfile/worker-policy changes; no inferred services, recommendation rank scoring, configured recommendations, GlobalSearch/DestinationSearch, fuzzy/AI, media, Dashboard/Realtime, mobility/Emergency changes, FS-5/FS-6, or official seeding
+- `ADVISORIES` — official catalog completeness; 1,000-row fail-closed projection cap; broader ranking; physical devices/non-Chromium/screen readers; unchanged dependency and lazy-3D advisories
+
 ## Mobile Route Preferences UI evidence (`DEC-NAV-002`) — 14 October 2026
 
 - `COMPLETE — ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` — phone/tablet dialog, desktop disclosure, same state in fullscreen; only Standard and Avoid Stairs selectable

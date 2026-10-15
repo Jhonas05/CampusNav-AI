@@ -757,7 +757,15 @@ assert.doesNotMatch(supabaseProviderSource, /\.from\(["']services["']\)/)
 assert.doesNotMatch(supabaseProviderSource, /\.from\(["']service_aliases["']\)/)
 assert.doesNotMatch(supabaseProviderSource, /\.from\(["']facility_service_mappings["']\)/)
 assert.doesNotMatch(supabaseProviderSource, /\.(ilike|textSearch|or)\s*\(/)
-assert.doesNotMatch(facilityServiceSource, /searchFacilities|fuzzy|textSearch|rankingAlgorithm/i)
+// FS-4 now authorizes the separate public matcher, not search in the accepted FS-1 reads.
+const readFoundationSource = facilityServiceSource.slice(
+  facilityServiceSource.indexOf("const createFacilityReadService"),
+  facilityServiceSource.indexOf("export const createFacilityService"),
+)
+assert.ok(readFoundationSource.length > 0)
+assert.doesNotMatch(readFoundationSource, /searchFacilities/i)
+assert.doesNotMatch(facilityServiceSource, /fuzzy|textSearch|rankingAlgorithm/i)
+assert.match(facilityServiceSource, /export \{ createFacilityDiscoveryIndex, searchFacilities \} from "\.\/facilityDiscovery\.js"/)
 
 configuredResult.data.facility.floorId = "5F"
 configuredResult.data.facility.verification.floor = "DEMO_ONLY"
