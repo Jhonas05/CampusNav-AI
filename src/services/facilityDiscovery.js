@@ -47,6 +47,7 @@ const validSource = (provenance) => (
   && Number.isFinite(timestamp(provenance.updatedAt))
 )
 const eligible = (record, now) => publicAt(record.provenance, now) && approved(record.provenance) && validSource(record.provenance)
+export const isEligibleFacilityDiscoveryRecord = eligible
 const safeProvenance = (record) => normalizeFacilityProvenance(record)
 const cloneFacility = (facility) => ({ ...facility, verification: facility.verification ? { ...facility.verification } : null })
 
@@ -170,5 +171,6 @@ export const searchFacilities = (query, {
     results: groups.flatMap(({ results }) => results),
     count: byFacility.size,
     unmappedServices,
+    matchedServices: serviceMatches.map(({ service }) => ({ code: service.code, name: service.name })),
   }
 }

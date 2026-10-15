@@ -15,7 +15,8 @@ import { getFacilityNavigationHref } from "@/services/dashboardService"
  * a two-line description under a short photo band. Everything else is on the
  * facility page.
  */
-export default function FacilityCard({ facility, operational = null, operationalLoading = false, discoveryMatches = [] }) {
+export default function FacilityCard({ facility, operational = null, operationalLoading = false, discoveryMatches = [], headingLevel = 3 }) {
+  const Heading = headingLevel === 4 ? "h4" : "h3"
   const floor = getFloorById(facility.floorId)
   const category = getFacilityCategory(facility)
   const underConstruction = facility.status === "UNDER_CONSTRUCTION"
@@ -42,7 +43,7 @@ export default function FacilityCard({ facility, operational = null, operational
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-4">
-        <h3 className="text-[16px] font-semibold leading-snug tracking-tight text-ink">{facility.name}</h3>
+        <Heading className="text-[16px] font-semibold leading-snug tracking-tight text-ink">{facility.name}</Heading>
         <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-ink-soft">
           <span className="whitespace-nowrap">{floor?.name || facility.floorId}</span>
           <span className="hidden items-center gap-1.5 whitespace-nowrap sm:inline-flex"><span aria-hidden="true" className={cn("h-2 w-2 rounded-full", category.dot)} />{category.label}</span>

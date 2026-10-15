@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { BlueprintPanel, button, focusRing, PageHeader } from "@/components/campus/ui"
 import FacilityCard from "@/components/facilities/FacilityCard"
+import ConfiguredServiceLocations from "@/components/facilities/ConfiguredServiceLocations"
 import MobileBottomSheet from "@/components/layout/MobileBottomSheet"
 import { FACILITY_DATA_NOTICE, facilities } from "@/data/facilities"
 import { floors } from "@/data/floors"
@@ -10,8 +11,10 @@ import { getCategoryByKey } from "@/lib/facilityCategories"
 import { cn } from "@/lib/utils"
 import {
   createFacilityDiscoveryIndex,
+  createConfiguredServiceRecommendationIndex,
   getFacilitiesDirectory,
   getFacilityDiscoveryData,
+  getConfiguredServiceRecommendations,
   searchFacilities,
 } from "@/services/facilityService"
 import { useConnectivity } from "@/contexts/ConnectivityContext"
@@ -99,7 +102,7 @@ export default function Facilities() {
     let active = true
     setDiscoveryState({ loading: connectivity.isOnline, result: null })
     if (connectivity.isOnline) {
-      getFacilityDiscoveryData()
+      getFacilityDiscoveryData(undefined, { includeConfiguredMappings: true })
         .then((result) => { if (active) setDiscoveryState({ loading: false, result }) })
         .catch(() => { if (active) setDiscoveryState({ loading: false, result: null }) })
     }
@@ -123,6 +126,11 @@ export default function Facilities() {
       ? discoveryState.result.data : null,
   ), [connectivity.isOnline, discoveryState.loading, discoveryState.result])
 
+  const recommendationIndex = useMemo(() => createConfiguredServiceRecommendationIndex(
+    connectivity.isOnline && !discoveryState.loading && discoveryState.result?.ok
+      ? discoveryState.result.data : null,
+  ), [connectivity.isOnline, discoveryState.loading, discoveryState.result])
+
   const eligibleFacilityIds = useMemo(() => {
     const activeCategory = CATEGORY_FILTERS.find((filter) => filter.label === category) || CATEGORY_FILTERS[0]
     return facilities.filter((facility) => {
@@ -136,6 +144,12 @@ export default function Facilities() {
     discoveryIndex,
   }), [query, eligibleFacilityIds, discoveryIndex])
   const filtered = discovery.results
+  const configuredServices = useMemo(() => discovery.matchedServices.map(({ code, name }) => ({
+    code, name,
+    result: getConfiguredServiceRecommendations(code, {
+      recommendationIndex, facilityIds: eligibleFacilityIds, isOnline: connectivity.isOnline,
+    }),
+  })), [discovery.matchedServices, recommendationIndex, eligibleFacilityIds, connectivity.isOnline])
   const serviceSearchUnavailable = !connectivity.isOnline || (!discoveryState.loading && !discoveryState.result?.ok)
 
   const overlayUnavailable = !operationalState.loading && (
@@ -239,6 +253,10 @@ export default function Facilities() {
               </div>
             )}
 
+            {connectivity.isOnline && !discoveryState.loading && discoveryState.result?.ok && (
+              <ConfiguredServiceLocations services={configuredServices} hasConfiguredMappings={discoveryState.result.data.configuredMappings.length > 0} directoryById={directoryById} operationalLoading={operationalState.loading} />
+            )}
+            {query.trim() && <h2 className="mt-4 text-base font-semibold text-ink">Search results</h2>}
             {filtered.length > 0 ? (
               discovery.groups.filter(({ results }) => results.length > 0).map((group) => (
                 <section key={group.id} aria-label={group.label} className="mt-3">

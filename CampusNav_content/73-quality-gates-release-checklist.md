@@ -15,7 +15,20 @@
 - 2D/3D preserve same route/current/destination
 - QR/manual fallback passes
 
-## FS-4 public service discovery / approved alias evidence — 15 October 2026
+## FS-4 configured service recommendation evidence — 15 October 2026
+
+- `READY_WITH_BOUNDARIES` — FS-4 scope, accepted public rank/parent availability, existing FS-1B rank/ID ordering, existing discovery foundation, and explicit owner authorization satisfy readiness; no migration or institutional-data fabrication
+- `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` — separate configured-location lists on `/facilities`; accepted Detail/Directory/discovery preserved; overall FS-4 `IN_PROGRESS`
+- `45/45 PASS` — configured eligibility/order/ties/deduplication/lifecycle/parents/provenance/pending/DEMO/no inference/status-distance independence/invalid rank/failure/offline/canonical actions/search preservation/rendering/bounded public reads/950-mapping scale
+- `FULL REGRESSION PASS` — complete 34-suite deterministic matrix including retained discovery 53/53, all FS-1–FS-4/Phase 8/navigation/mobility/mobile/QR/Emergency/3D/Dashboard/theme/render/PWA suites and built-worker checks; lint/typecheck/build/diff gates
+- `160/160 PASS` — eight requested widths in Light/Dark; one/multiple locations, rank/ties, service/alias/unmapped/excluded/zero-data/failure states, CLOSED/UNKNOWN and operational pending/DEMO labels, filters/counts/actions/44px/CLARA/overflow
+- `8/8 PASS` — canonical Navigate/Details, keyboard filters/focus, mapping/alias expiry, provider retry, System theme/reduced motion
+- `7/7 PASS` — production worker, immediate offline suppression, canonical lookup/deep link/actions, reconnect revalidation, no API/Auth cache, explicit uncached-client reload recovery
+- `PERFORMANCE` — seven successful initial public reads, zero typing/filter reads; memoized indexes; local 950-mapping sort 1.69 ms; fixture ready 706–1,597 ms; Facilities +2,393 bytes, service +2,156 bytes, shell/CSS/lazy-3D unchanged; see `63` for measurement boundaries
+- `SECURITY/PRESERVATION` — no remote writes/seeds, private/React query, schema/RLS/grants/audit/Auth/Admin/provider-query/worker/lockfile/dependency/branding/spatial/route change; protected stash/unrelated worktrees preserved
+- `ADVISORIES` — zero-data production remains valid; official completeness, 1,000-row cap, physical devices/non-Chromium/screen readers/WCAG, broad performance, existing dependency/lazy-3D and adviser limits remain; no full-FS-4 or AI claim
+
+## FS-4 public service discovery / approved alias evidence — 15 October 2026 (earlier slice checkpoint)
 
 - `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` — existing `/facilities` only; Detail and Directory/Card remain owner-approved; overall FS-4 remains `IN_PROGRESS`
 - `53/53 PASS` — canonical compatibility/priority, approved exact aliases, public/effective parent/mapping checks, independent provenance, DEMO/pending exclusion, no inference, deterministic deduplication, filters/counts, failure/expiry/offline fallback, bounded public reads with exact-count truncation detection, rendering/security, and local processing

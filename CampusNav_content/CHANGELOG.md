@@ -1,5 +1,19 @@
 # CampusNav Content Pack — Changelog
 
+## v3.55 — 15 October 2026
+
+Implemented and verified the separately owner-authorized FS-4 configured service-to-facility recommendation subset under `DEC-FAC-001`.
+
+- passed readiness using existing FS-4 scope, public mappings/rank/parent availability, accepted FS-1B ordering, and the discovery foundation; no migration or extra approval required
+- reused the same seven bounded public reads; opted into allowlisted configured metadata while default/search payloads remain rank-free; separate memoized pure composition uses rank ascending then canonical facility ID
+- retained unchanged canonical/service/approved-alias matching, search relevance/counts, filters, independent provenance/status/demo/pending, canonical Details/Navigate, mobile themes/keyboard/44px/CLARA clearance
+- excluded unapproved/nonpublic/future/expired/DEMO relationships, invented locations, AI/distance/status/crowd/accessibility reranking; deduplicated identical mappings and failed closed on conflicts
+- retained network-only dynamic data, honest zero-data states, offline suppression/canonical lookup, reconnect/expiry revalidation, and explicit uncached-client reload recovery without worker/Auth/cache changes
+- verified 45 targeted checks, retained discovery 53/53, complete 34-suite matrix, lint/typecheck/build/diff/PWA gates, 160 responsive cases, 8 interactions, and 7 production-worker offline cases with zero unexpected errors
+- measured seven initial reads and zero typing/filter reads, local 950-mapping sort 1.69 ms, and bundle deltas (+2,393 Facilities / +2,156 service bytes; shell/CSS/3D unchanged); broader device/performance certification remains unclaimed
+- reconciled contracts, decision/backlog, UI/API, roadmap/status/quality/limitations/DoD/README while preserving historical acceptance; overall FS-4 remains `IN_PROGRESS`
+- no official data, remote mutation, database/security/provider-query/Admin/Auth/worker/dependency/lockfile/branding/spatial/navigation/QR/Emergency/mobility change; other worktrees/protected stash preserved; no manual deployment
+
 ## v3.54 — 15 October 2026
 
 Implemented the owner-authorized FS-4 public service discovery and approved service-alias matching slice at `/facilities`, within the frozen mobile-first UI.

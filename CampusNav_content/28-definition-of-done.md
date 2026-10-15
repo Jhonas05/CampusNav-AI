@@ -30,7 +30,7 @@ CampusNav is thesis-demo ready when all required core items below are either imp
 - [x] facility operational schema/service/status foundation — `SATISFIED_WITH_ADVISORY`; FS-1 and FS-2 are complete and accepted with retained live-data and institutional-data advisories
 - [x] facility/service Admin workflows — `SATISFIED_WITH_ADVISORY`; operational profiles, services, aliases, mappings, weekly hours, dated exceptions, reused advisories, single `SUPER_ADMIN` shell, lifecycle, provenance, stale-write, guarded-delete, RLS, and trusted-audit boundaries passed FS-3 final reconciliation
 - [ ] verify official hours/services completeness — `UNSATISFIED`; authorized institutional data is missing
-- [ ] verify public service→facility recommendation coverage — `UNSATISFIED`; the Admin mapping workflow exists, but approved institutional mappings and the FS-4 public recommendation consumer remain pending
+- [ ] verify public service→facility recommendation coverage — `UNSATISFIED`; Admin mapping and the owner-authorized FS-4 configured public consumer are implemented/verified, but institutional mapping completeness remains unverified; synthetic fixtures do not supply official coverage
 - [ ] verify facility media workflow and approved assets — `UNSATISFIED`; Phase 4-FS-5 remains `NOT_STARTED`
 
 ### Identity/security

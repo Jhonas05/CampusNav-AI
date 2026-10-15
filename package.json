@@ -56,6 +56,7 @@
     "test:phase4-fs4-detail": "node scripts/test-phase4-fs4-detail.mjs",
     "test:phase4-fs4-directory": "node scripts/test-phase4-fs4-directory.mjs",
     "test:phase4-fs4-discovery": "node scripts/test-phase4-fs4-discovery.mjs",
+    "test:phase4-fs4-recommendations": "node scripts/test-phase4-fs4-recommendations.mjs",
     "test:rls": "npx --yes supabase@2.79.0 test db",
     "test:render": "node scripts/test-route-render.mjs",
     "preview": "vite preview"

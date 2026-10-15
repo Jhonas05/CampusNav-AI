@@ -37,7 +37,9 @@ import {
   normalizeFacilityStatusTimestamp,
 } from "./facilityStatusEvaluator.js"
 import { normalizeFacilityDiscoveryData } from "./facilityDiscovery.js"
+import { withConfiguredServiceMappings } from "./facilityRecommendations.js"
 export { createFacilityDiscoveryIndex, searchFacilities } from "./facilityDiscovery.js"
+export { createConfiguredServiceRecommendationIndex, getConfiguredServiceRecommendations } from "./facilityRecommendations.js"
 
 const cloneCanonicalFacility = (facility) => ({
   ...facility,
@@ -668,12 +670,16 @@ export const createFacilityService = ({
 } = {}) => {
   const service = createFacilityReadService({ provider, providerLoader })
 
-  service.getFacilityDiscoveryData = async (dateTime) => {
+  service.getFacilityDiscoveryData = async (dateTime, { includeConfiguredMappings = false } = {}) => {
     const evaluatedAt = resolveFacilityStatusTimestamp(dateTime, clock)
     if (!evaluatedAt) return invalidDateTimeResult()
     try {
       const activeProvider = provider || await providerLoader()
-      const data = normalizeFacilityDiscoveryData(await activeProvider.getFacilityDiscoveryData(), evaluatedAt)
+      const records = await activeProvider.getFacilityDiscoveryData()
+      const discoveryData = normalizeFacilityDiscoveryData(records, evaluatedAt)
+      const data = includeConfiguredMappings
+        ? withConfiguredServiceMappings(discoveryData, records)
+        : discoveryData
       return data.services.length ? configuredResult(data) : unavailableResult(data)
     } catch {
       return providerUnavailableResult(null)
@@ -878,7 +884,7 @@ const defaultFacilityService = createFacilityService()
 
 export const getFacilityById = (facilityId) => defaultFacilityService.getFacilityById(facilityId)
 export const getFacilitiesDirectory = async (dateTime) => defaultFacilityService.getFacilitiesDirectory(dateTime)
-export const getFacilityDiscoveryData = async (dateTime) => defaultFacilityService.getFacilityDiscoveryData(dateTime)
+export const getFacilityDiscoveryData = async (dateTime, options) => defaultFacilityService.getFacilityDiscoveryData(dateTime, options)
 export const getServices = (filters) => defaultFacilityService.getServices(filters)
 export const getServiceByCode = (serviceCode) => defaultFacilityService.getServiceByCode(serviceCode)
 export const getServiceAliases = (serviceCode) => defaultFacilityService.getServiceAliases(serviceCode)

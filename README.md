@@ -54,6 +54,7 @@ npm run test:phase4-fs3a
 npm run test:phase4-fs3b
 npm run test:phase4-fs3c
 npm run test:phase4-fs4-discovery
+npm run test:phase4-fs4-recommendations
 npm run test:rls
 npm run test:render
 ```
@@ -396,6 +397,20 @@ npm run test:phase4-fs4-discovery
 ```
 
 This slice is `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`; Detail and Directory remain owner-approved and overall FS-4 remains `IN_PROGRESS`. Configured recommendations, GlobalSearch/DestinationSearch integration, fuzzy/AI matching, media, Dashboard/Realtime, official-data seeding, and database/security changes are excluded.
+
+## Configured service locations (Phase 4-FS-4)
+
+`/facilities` shows separate administrator-ordered locations for matched services/approved aliases. Only approved public/effective service → explicit mapping → canonical facility chains participate. Order is ascending `recommendation_rank`, then canonical facility ID, not AI, search relevance, distance, status, crowd, or accessibility scoring. Search order/counts remain unchanged; existing filters restrict both presentations.
+
+`getFacilityDiscoveryData(undefined, { includeConfiguredMappings: true })` opts into safe rank/provenance metadata from the same aggregate; default discovery callers retain the rank-free payload. `createConfiguredServiceRecommendationIndex(...)` is memoized per snapshot. Pure `getConfiguredServiceRecommendations(serviceCode, { recommendationIndex, facilityIds?, dateTime?, isOnline? })` returns the accepted envelope with canonical locations and independent provenance. Identical duplicates collapse; conflicting duplicates fail closed.
+
+Successful initial loads retain seven bounded public reads and zero typing/filter requests. Offline/loading/failure suppress dynamic lists; canonical search remains, reconnect/expiry revalidates, and API responses are not cached. Empty projections show `No configured service locations are available yet.` No official data is seeded. CLOSED/temporary-unavailable locations keep their status/actions; operational status never changes configured order or routing eligibility.
+
+```bash
+npm run test:phase4-fs4-recommendations
+```
+
+This subset is `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED` under `DEC-FAC-001`. Detail/Directory remain owner-approved, discovery remains accepted, overall FS-4 remains `IN_PROGRESS`, and earlier slice exclusions are historical. GlobalSearch/DestinationSearch, broader ranking, fuzzy/AI, media, Dashboard/Realtime, database/security, worker/Auth changes, institutional population, and FS-5/FS-6 remain excluded. No new environment variable/dependency is needed. Canonical `63`/`73` record evidence/advisories.
 
 ## Admin CMS foundation (Phase 8B.1)
 

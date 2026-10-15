@@ -330,6 +330,16 @@ Decision boundaries:
 
 Only **Phase 4-FS-1 — Facility Operational Data and Service Foundation** is the exact next implementation subphase. This decision adopts and sequences the phase; it does not implement FS-1 or claim adviser, institutional, safety-authority, or academic approval.
 
+## DEC-FAC-001 — Public configured service locations, separate from search relevance
+
+**Status:** OWNER AUTHORIZED — 15 October 2026
+
+The owner authorizes deterministic configured service-to-facility recommendations on the existing `/facilities` discovery surface, with automatic Git completion after passing readiness and quality gates. This scoped functional addition is permitted under the existing UI freeze; it does not authorize a redesign or require another routine visual approval.
+
+Use only approved public/effective service and explicit mapping chains to existing canonical facility IDs. Reuse the accepted FS-1B ordering contract: ascending `recommendation_rank`, then stable facility-ID ties. Present “Configured locations for this service” and administrator-defined order separately from unchanged search matching/relevance. No relationship inference, AI/ML, popularity/distance/crowd/accessibility/status reranking, or live-availability claim is authorized. Missing/DEMO/pending data remains unavailable/excluded; no institutional data is seeded. Operational labels and canonical routing truth remain independent.
+
+The implementation reuses the existing seven public projection reads, snapshot completeness guards, discovery normalization/matcher, status evaluator, and card/actions. Dynamic recommendations remain network-only and disappear offline. Schema/RLS/grants/audit/Auth/Admin/provider queries, worker policy, spatial/navigation/Emergency/mobility, media, GlobalSearch/DestinationSearch, CLARA, FS-5/FS-6, and adviser/academic claims are unchanged. Broader unified ranking and later consumers remain separately gated. See `13`, `18`, `32`, `63`, and `73` for contract and implementation evidence.
+
 ## How to add a decision
 Use:
 - ID

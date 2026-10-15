@@ -505,7 +505,7 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 1. **Phase 4-FS-1 — Facility Operational Data and Service Foundation** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
-4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; SERVICE DISCOVERY IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
+4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `IN_PROGRESS — DETAIL/DIRECTORY OWNER APPROVED; DISCOVERY AND CONFIGURED RECOMMENDATIONS IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`
 5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
 7. **Phase 4-FS-7 — Final Acceptance and Evidence Reconciliation** — `NOT_STARTED`
@@ -518,7 +518,17 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1, FS-2, and FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`, with no further currently defined FS-3 implementation capability. Public Facility Detail and Directory/Card remain `IMPLEMENTED_VERIFIED / OWNER APPROVED`. The separately owner-authorized `/facilities` service-discovery/approved-alias slice is now `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`. Overall FS-4 remains `IN_PROGRESS`: configured recommendations, GlobalSearch/DestinationSearch, broader unified ranking, media, Dashboard/Realtime, and later consumers are unstarted and separately gated. Fuzzy/AI matching is not authorized by this slice.
+**Current Phase 4 boundary:** FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`. Detail and Directory/Card remain `IMPLEMENTED_VERIFIED / OWNER APPROVED`; the `/facilities` discovery/approved-alias and configured-recommendation subsets are `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`. Overall FS-4 remains `IN_PROGRESS`: GlobalSearch/DestinationSearch, broader unified ranking, media, Dashboard/Realtime, and later consumers remain separately gated. Fuzzy/AI matching is not authorized.
+
+### Phase 4-FS-4 configured service recommendations — 15 October 2026
+
+**Readiness:** `READY_WITH_BOUNDARIES`. FS-4 owns recommendations; accepted public views expose rank and enforce parent service/profile publication/effectivity; FS-1B already defines configured rank/facility-ID ordering. `DEC-FAC-001` records owner authorization without selecting broader search ranking or supplying institutional data.
+
+**Status:** `IMPLEMENTED_VERIFIED / OWNER AUTHORIZED`; overall FS-4 remains `IN_PROGRESS`.
+
+The discovery snapshot opts into safe mapping metadata without another query. Separate memoized indexes preserve search relevance while pure recommendation composition validates service/eligibility/provenance, deduplicates, and orders explicit canonical locations by rank then facility ID. Existing filters/statuses/demo/pending/actions/themes and network-only/offline boundaries remain. Empty data is honest; no official record is seeded.
+
+Evidence: 45 dedicated checks; complete 34-suite matrix including PWA artifacts; lint/typecheck/build/diff gates; 160 responsive Light/Dark checks at 360/375/390/430/768/820/1024/1440; 8 interactions; 7 production-worker offline checks. Seven initial public reads, zero typing/filter requests; 950-mapping local sort approximately 1.7 ms. Deliberate transport failures are recorded separately; zero unexpected errors/critical overflow/CLARA action overlap. Device/non-Chromium/screen-reader, institutional-data, dependency/lazy-3D, and adviser advisories remain. Earlier slice exclusions below are historical.
 
 ### Phase 4-FS-4 public service discovery and approved alias matching — 15 October 2026
 

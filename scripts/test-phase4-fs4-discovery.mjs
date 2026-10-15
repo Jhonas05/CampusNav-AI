@@ -204,7 +204,7 @@ const [page, card, provider, discoverySource, worker] = await Promise.all([
 await check("React uses shared APIs, memoized index and no per-query provider calls", () => {
   assert.match(page, /useMemo\(\(\) => createFacilityDiscoveryIndex/)
   assert.match(page, /searchFacilities\(query/)
-  assert.match(page, /getFacilityDiscoveryData\(\)/)
+  assert.match(page, /getFacilityDiscoveryData\(undefined, \{ includeConfiguredMappings: true \}\)/)
   assert.doesNotMatch(page, /\}, \[[^\]]*query[^\]]*\]\)\s*\n\s*(?:const directoryById|useEffect)/)
   assert.doesNotMatch(page + card, /\.from\s*\(|supabase/i)
   assert.doesNotMatch(provider, /\.(insert|upsert|update|delete)\s*\(/)

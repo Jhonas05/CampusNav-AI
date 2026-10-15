@@ -90,7 +90,16 @@ A service lookup should return:
 - Navigate
 - Ask CLARA
 
+## Owner-authorized FS-4 configured recommendations — 15 October 2026
+
+At `/facilities`, a matched public service or approved alias may show a separate configured-location list. Only eligible public service → published/effective explicit mapping → canonical facility relationships participate. The accepted public mapping view also requires public/effective parent service and operational profile. Services and mappings additionally follow the discovery approval/provenance boundary: `VERIFIED` or `SOURCE_ALIGNED`, `ACTIVE`, non-DEMO, with safe source metadata. No mapping means no recommendation.
+
+Ordering is ascending administrator-maintained `recommendation_rank` (integer 1–1,000), then stable canonical facility ID. This is deterministic configured ordering, not AI, search relevance, popularity, distance, accessibility, crowd prediction, or status-based scoring. Identical duplicates collapse; conflicting duplicate mappings fail closed rather than selecting a rank/provenance arbitrarily. Existing floor/category filters restrict the list without reordering it. Operational `CLOSED`/`TEMPORARILY_UNAVAILABLE` do not remove a location or change routing eligibility.
+
+Configured lists retain independent service/mapping provenance, canonical Details/Navigate handoffs, and existing operational demo/pending labels. Dynamic records remain network-only; offline removes recommendations while canonical lookup remains available. Empty public projections are valid and must never be populated with invented institutional data. `DEC-FAC-001` records the owner-selected presentation boundary.
+
 ## Facility directory
+
 Filters may include:
 - floor
 - department
