@@ -354,6 +354,8 @@ Use:
 
 Repository `AGENTS.md` should point to `CampusNav_content/00-agent-entrypoint.md`. The agent entrypoint then selects baseline + task-specific contracts. This prevents copying a large, drifting architecture block into multiple agent files.
 
+**Owner-directed Git lifecycle extension — 15 October 2026:** The owner establishes mandatory task branches and a one-active-authoritative-worktree default, with isolation only when genuinely needed. After successful required verification, agents automatically complete exact staging, commit, fast-forward-only integration, post-merge checks, push, and safe cleanup of the current task's merged local branch/disposable temporary worktree, then return to clean synchronized main. Existing review/protection, task restrictions, secret safety, protected stashes, and unrelated/unique work take precedence over cleanup. Legacy cleanup requires separate audit/authorization. `AGENTS.md` carries only the mandatory summary; `53-git-workflow.md` is the single complete operational procedure. This is owner-authorized repository governance, not a new product decision/phase or a background cleanup implementation; no new decision ID is introduced.
+
 ## DEC-DOC-002 — Separate requirement truth from implementation truth
 **Status:** APPROVED DOCUMENTATION CONVENTION — 15 Sep 2026
 

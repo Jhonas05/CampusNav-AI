@@ -1,5 +1,17 @@
 # CampusNav Content Pack — Changelog
 
+## v3.56 — 15 October 2026
+
+Documented the owner's permanent Git branch/worktree lifecycle and automatic safe completion policy.
+
+- added the mandatory concise `AGENTS.md` summary and entrypoint Git-task routing to the single complete `53-git-workflow.md` procedure
+- required a dedicated task branch, clean/fetched/synchronized main baseline, one-worktree sequential default, and genuinely necessary isolation only
+- documented exact staging/full staged review, required pre/post-merge verification, fast-forward-only integration, protected PR review/branch protection, main push/equality, safe task branch deletion and optional temporary-worktree removal
+- required ancestry/no-unique-work checks, ignored/untracked-file preservation, exact path/process ownership, non-force Git cleanup, honest blockers, and clean authoritative main; kept all legacy worktrees/branches and protected stashes outside automatic task cleanup
+- recorded owner direction as a dated extension of existing `DEC-DOC-001`, without a new decision ID; reconciled governance status and release gates without changing product/phase/acceptance claims
+- validated seven authorized documentation paths, cross-references/fences, lifecycle safeguards, unchanged decision IDs/product status/stash, lint/typecheck/build/PWA artifacts, and whitespace; no application test was modified or weakened
+- this task uses one existing authoritative workspace and a documentation branch; no application, package, schema/data, credential, protected stash, legacy worktree, background hook/daemon, or new product development change is authorized
+
 ## v3.55 — 15 October 2026
 
 Implemented and verified the separately owner-authorized FS-4 configured service-to-facility recommendation subset under `DEC-FAC-001`.

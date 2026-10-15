@@ -8,6 +8,10 @@
 - new UI includes loading/empty/error/permission states
 - documentation/status is updated where changed
 
+## Git delivery and cleanup gate — owner-directed 15 October 2026
+
+Apply the single operational procedure in `53-git-workflow.md`: dedicated task branch, one authoritative worktree by default, verified clean/fetched baseline, required pre/post-merge tests and lint/typecheck/build/PWA/documentation checks, exact path staging/full staged review/cached whitespace check, fast-forward-only integration, verified main push/equality, then safe current-task cleanup. Do not bypass failed checks, required PR review/protection, unexpected divergence, or preservation safeguards. Confirm committed/pushed reachability, no unique commits/changes/ignored or untracked work, unused disposable temporary worktree, and task-owned process shutdown before non-force Git removal and safe branch deletion. Report clean synchronized authoritative main separately from preserved dirty legacy worktrees and exact cleanup blockers; legacy cleanup is separately authorized. This gate adds no product implementation or background cleanup job.
+
 ## Navigation/map gate
 - same-floor + multi-floor smoke routes pass
 - no wall crossing
