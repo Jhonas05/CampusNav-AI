@@ -1,5 +1,19 @@
 # CampusNav Content Pack — Changelog
 
+## v3.61 — 16 October 2026
+
+Started the owner-authorized sequential FS-5 mission and completed independently verifiable local validation groundwork; full media management remains `IN_PROGRESS / PARTIALLY VERIFIED`.
+
+- added `77` readiness/inventory/requirement/security/cleanup/resumption contract and `DEC-FAC-004` owner technical envelope, without inventing institutional photo rights or waiving upload/security gates
+- added bounded JPEG/PNG/WebP signature/container checks, 5 MiB and dimension/pixel limits, unsupported metadata/animation/trailing-data rejection, actual browser decode with timeout/bitmap cleanup, and canonical private/pending draft input validation
+- added 103 focused deterministic checks; local Chrome passed 40 native-decoder/rejection/private-draft and existing responsive zero-photo checks with no unexpected browser errors or production mutation
+- verified browser-generated JPEG/WebP ICC rejection; metadata-free synthetic fixture preparation remains outside Git and is not a production sanitizer or EXIF-removal claim
+- passed the complete 37-suite baseline plus the new FS-5 suite, release/PWA-after-build gates and dedicated module checks; no existing test was weakened. Runtime asset hashes are byte-identical to the accepted baseline
+- passed six built-worker offline preservation scenarios; an initial unconfigured-build fixture-prerequisite failure was corrected only in external synthetic QA setup, without application/production configuration changes
+- recorded local PostgreSQL/RLS unavailability, denied connected-account remote inspection and unlinked CLI fallback honestly; actual remote storage/media inventory remains unknown
+- implemented no schema/migration/bucket/RLS/audit/provider/CRUD/upload/publication/archive/replacement/cleanup/public-gallery/thumbnail/server-secret change; no photograph was seeded or made public
+- preserved FS-1–FS-4 acceptance, existing implementation/worker/routing/security, protected legacy work and stash; FS-6/FS-7 remain unstarted. Only verified non-activated groundwork is eligible for automatic Git delivery
+
 ## v3.60 — 16 October 2026
 
 Reconciled final FS-4 engineering acceptance with no implementation or institutional-data change.

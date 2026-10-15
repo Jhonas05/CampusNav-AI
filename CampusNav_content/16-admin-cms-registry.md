@@ -40,6 +40,10 @@ Admin records must reference the existing canonical facility IDs and must not ed
 
 FS-1 supplies schema, RLS, trusted-audit, provenance/lifecycle, and service foundations only. It does not add the Phase 4 Admin UI or seed official records. Phase 4-FS-3 owns the Admin workflows after the foundation is accepted.
 
+### FS-5 media checkpoint — 16 October 2026
+
+Media upload/CRUD/publication is not implemented in the existing Admin Facilities workflow. Independent local candidate/private-draft validation is verified groundwork only; storage/RLS/audit/rights-review/delivery gates remain blocked (`77`, `DEC-FAC-004`). No successful Save/Upload/Publish action, new role or fictional institutional approver is exposed. Later media integration must reuse this Admin shell and accepted authorization/stale-write/error/focus conventions after the trusted backend passes its gates. Accepted FS-3 workflows remain unchanged.
+
 ## Suggested data owners
 From the approved architecture:
 - **Facilities/map:** designated campus/facility administrator

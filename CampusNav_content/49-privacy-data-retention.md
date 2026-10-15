@@ -33,5 +33,9 @@ The implemented CLARA foundation keeps the conversation only in React memory and
 
 Unpaid Gemini service terms audited 16 October 2026 state that submitted content and responses may be used to improve Google products and may be reviewed by humans, and direct users not to submit sensitive, confidential, or personal information. This is an additional privacy reason not to enable unpaid Gemini for CampusNav; the under-18 audience restriction independently blocks public activation. See `76`.
 
+## FS-5 media privacy boundary
+
+The independent local validation checkpoint (`77`) reads bounded candidate bytes only in memory, rejects unsupported embedded metadata and creates no object URL, upload, storage entry or conversation/analytics log. It does not remove EXIF/GPS, certify all embedded information, review identifiable people/documents/pixels or confer publication rights. Evidence references in a draft remain unverified private input, not institutional approval. Future trusted sanitization, rights/consent/review, original/quarantine retention, authorized cleanup and public projection minimization remain release gates; no institutional retention period or owner assignment is invented.
+
 ## Access control
 Detailed schedules, notes, private account links, and admin audit data remain role restricted.

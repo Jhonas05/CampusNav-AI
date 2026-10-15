@@ -37,6 +37,10 @@
 
 This does not waive official institutional coverage, certify physical devices/independent accessibility, implement Personnel GlobalSearch, or complete broader ranking/partial aliases. Their data/advisory/deferred dispositions are explicit in `29`/`30`/`64`; final-system DoD remains incomplete (`28`). No acceptance criterion was removed to force closure.
 
+### FS-5 partial checkpoint — 16 October 2026
+
+`IN_PROGRESS / PARTIALLY VERIFIED`, not accepted complete. Independent local candidate/private-draft validation has deterministic and native-browser evidence (`63`, `77`). Mandatory storage/RLS/authorization/audit, trusted decode/sanitization, rights/review publication, replacement/cleanup, public delivery and populated Admin/gallery gates remain blocked/unimplemented. Existing zero-photo placeholders remain available. Mocked or local input checks do not satisfy these backend acceptance requirements. No criterion above is waived and final-system DoD stays incomplete.
+
 ## Schedules/personnel
 - exceptions and status precedence work
 - schedule wording does not claim presence

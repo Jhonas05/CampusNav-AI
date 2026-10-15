@@ -3,6 +3,23 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## FS-5 readiness and independent local validation — 16 October 2026
+
+**Status: `IN_PROGRESS / PARTIALLY VERIFIED`; production media activation `BLOCKED`.** `DEC-FAC-004` records the owner-authorized sequential mission and conservative envelope. `77-facility-media-readiness-and-contract.md` contains the complete inventory, ten separate readiness verdicts, requirement/data/permission/test mapping, target delivery/cleanup design and exact resumption gate. This checkpoint does not accept a media backend, upload or gallery.
+
+| Area | Implementation/evidence boundary |
+|---|---|
+| Completed independent groundwork | New `src/services/facilityMediaValidation.js`: JPEG/PNG/WebP signatures/structural boundaries, 5 MiB, 4096-side/12-million-pixel bounds, restricted embedded-metadata/animation/trailing-data rejection; actual browser decode with matched dimensions, five-second timeout and bitmap cleanup; canonical private/pending draft DTO with alt text, bounded plain metadata and opaque unverified evidence references. No persistence, generated stored identity, actor/approval, provider request, upload or publication. |
+| Focused deterministic evidence | `node scripts/test-phase4-fs5-validation.mjs`: 103 checks, including checksum/container corruption, spoofing, metadata after JPEG scan, malformed dimensions, exact byte boundary, decoder failures/timeout/late cleanup, forged draft authority, opaque references and bounded fuzz/mutations. Injected decoder fixtures are explicitly not trusted-server or RLS evidence. |
+| Browser evidence | Local isolated Chrome: 40 checks — eight real native decode/rejection/private-draft checks and 32 existing Directory/Detail zero-photo checks across 360/375/390/430/768/820/1024/1440 in Light/Dark/reduced motion. Synthetic-only images; provider traffic intercepted with empty public fixtures, no production mutation, no unexpected console/page errors. Populated Admin/gallery, real upload/publication, physical devices and screen readers are not tested/implemented. |
+| Regression/offline evidence | All 38 distinct deterministic suites and lint/typecheck/build/PWA artifacts-after-build/whitespace checks passed. Emitted default runtime assets are byte-identical to the accepted baseline. Six built-worker offline preservation scenarios passed with isolated synthetic provider configuration/intercepted reads and no unexpected errors. The first offline harness run used an unconfigured build and failed its populated-fixture prerequisite; only external test setup was corrected, not application code or canonical tests. |
+| Privacy limit | Unsupported EXIF/XMP/IPTC/comment/ICC/text/unknown container metadata is rejected, not removed. Chrome-generated JPEG/WebP ICC rejection was verified before external synthetic-fixture preparation. No shipped sanitizer, private-pixel/rights/consent approval or universal metadata-cleanliness claim. |
+| Backend blockers | Connected-account read-only remote inventory denied; CLI fallback reports this worktree is not linked. Actual remote buckets/policies/media tables/functions remain UNKNOWN. Docker/PostgreSQL/Storage are unavailable; `npm run test:rls` refused `127.0.0.1:54322`, not a pass. The static host has no trusted media decode/ingestion/eligibility/delivery endpoint. No schema/migration/bucket/policy/object mutation or credential/configuration change. |
+| Not implemented / not accepted | Persistent media model, Storage/RLS/audit, provider/service CRUD, upload/save/publish/archive/replace/cleanup, public eligible gallery/thumbnails, compression/derivatives and production activation. Their acceptance/security tests are blocked, not silently passed by mocks. Existing placeholders and navigation remain unchanged. |
+| Preservation/release boundary | Existing source/tests/packages/worker/spatial/A*/preferences/QR/Emergency/status/CLARA/Auth/Admin/providers remain unchanged. The new module has no production UI importer; independently verified groundwork only may integrate, not an incomplete production workflow. Full regression/build/PWA/documentation/Git results are recorded in `73` and final delivery evidence after execution. |
+
+External artifacts: `C:/Users/St.Clare/Documents/CampusNav-AI-fs5-qa/2026-10-16`. FS-1–FS-4 remain accepted; Phase 4 remains `IN_PROGRESS`; FS-6/FS-7 remain `NOT_STARTED`. Historical dated FS-4 records below retain their then-unstarted FS-5 status; this current checkpoint supersedes only that sequencing status. No adviser or institutional approval is invented.
+
 ## FS-4 final engineering acceptance — 16 October 2026
 
 **Verdict: `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` under `DEC-FAC-003`.** No unresolved mandatory FS-4 engineering defect was found. Phase 4 remains `IN_PROGRESS`; FS-5/FS-6/FS-7 are `NOT_STARTED`. This is not final-system/thesis acceptance or adviser approval. Earlier dated slice statuses below are historical checkpoints.
@@ -295,7 +312,7 @@ The owner-approved frozen interface (`DEC-UI-003` shell and floating CLARA, `DEC
 
 ## Phase 4 adoption — Core Facility & Service Workflow Completion — 20 September 2026
 
-**Current phase classification (16 October 2026):** `IN_PROGRESS — FS-1/FS-2/FS-3/FS-4 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 OWNER AUTHORIZED; FS-5/FS-6/FS-7 NOT_STARTED`. Adoption and slice records below retain their original dates; the final FS-4 evidence above controls current acceptance.
+**Current phase classification (16 October 2026):** `IN_PROGRESS — FS-1/FS-2/FS-3/FS-4 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-5 IN_PROGRESS / PARTIALLY VERIFIED; FS-6/FS-7 NOT_STARTED`. Adoption and slice records below retain their original dates; the FS-4 final acceptance and FS-5 gated checkpoint above control current status.
 
 **Owner decision:** `DEC-ROADMAP-002`
 
@@ -322,7 +339,7 @@ Phase 4 is the active software-development workstream. The owner decision itself
 
 **Toolchain result:** FS-1A acceptance and FS-1B final reconciliation used Node 22.22.0. No dependency/package change was authorized or made by acceptance.
 
-**Current Phase 4 boundary:** FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`; FS-4 is `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED`. Live mutation and official institutional completeness remain outside this evidence. Personnel GlobalSearch stays a separate unimplemented integration; broader unified ranking/partial aliases are deferred. FS-5/FS-6/FS-7 remain `NOT_STARTED`. Earlier dated exclusions describe historical slice checkpoints, not current accepted subsets or final-system acceptance.
+**Current Phase 4 boundary:** FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`; FS-4 is `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED`. Live mutation and official institutional completeness remain outside this evidence. Personnel GlobalSearch stays a separate unimplemented integration; broader unified ranking/partial aliases are deferred. FS-5 is `IN_PROGRESS / PARTIALLY VERIFIED` at its independent validation boundary with production media blocked; FS-6/FS-7 remain `NOT_STARTED`. Earlier dated exclusions describe historical slice checkpoints, not current accepted subsets or final-system acceptance.
 
 ### Phase 4-FS-4 next implementation slice — public Facilities directory/card composition — 13 October 2026
 

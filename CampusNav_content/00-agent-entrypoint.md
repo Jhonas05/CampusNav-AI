@@ -19,6 +19,7 @@ Then read the task-specific files from the map below.
 | 2D/3D map, route, QR | `10`, `11`, `25`, `26`, `46`, `58` |
 | Emergency | `12`, `20`, `45`, `59`, `68`, `69` |
 | Facilities/services/search | `13`, `18`, `32`, `41`, `42` |
+| Facility media / FS-5 | `05`, `13`, `16`, `19`, `20`, `26`, `44`, `45`, `48`, `49`, `58`, `68`, `72`, `77` |
 | Class schedules/personnel | `14`, `20`, `42`, `49`, `56`, `68` |
 | Dashboard/notifications | `15`, `22`, `47`, `49`, `68` |
 | Admin CMS | `05`, `16`, `45`, `48`, `68` |

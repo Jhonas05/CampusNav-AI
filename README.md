@@ -2,6 +2,12 @@
 
 CampusNav AI is a React application for campus navigation and school information at St. Clare College.
 
+## Current FS-5 engineering checkpoint — 16 October 2026
+
+FS-5 is `IN_PROGRESS / PARTIALLY VERIFIED`. Independent local JPEG/PNG/WebP candidate and private-draft validation is implemented; it does not upload, store, approve or publish media. Maximum candidate size is 5 MiB, with 4096-pixel sides / 12-million-pixel bounds and real browser decoding. Unsupported embedded metadata is rejected, not removed. No official photograph, media provider/backend, schema, bucket, policy, secret, Admin upload or public gallery was added; existing placeholders/navigation remain unchanged.
+
+Run `node scripts/test-phase4-fs5-validation.mjs` for focused coverage. Canonical `77-facility-media-readiness-and-contract.md` records the readiness matrix, exact local validation contract and blocked resumption gate: an authorized isolated PostgreSQL + Storage/server environment, readable inventory and verified trusted ingestion/delivery/cleanup/RLS/audit are required before upload/publication work. Production mutations remain unauthorized; FS-6/FS-7 are not started. The earlier FS-4 checkpoint below preserves its historical then-unstarted FS-5 status, not current sequencing.
+
 ## Current FS-4 acceptance — 16 October 2026
 
 Phase 4 FS-4 is `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` (`DEC-FAC-003`). Facility Detail, Directory/Cards, shared service discovery, exact approved service aliases, configured recommendations, GlobalSearch Services and Home/Navigate DestinationSearch are accepted. Personnel GlobalSearch remains separate and unimplemented; broader unified ranking and partial/fuzzy aliases are deferred, not completed. Official catalog coverage, physical-device/independent accessibility and adviser/research approval remain unverified. Phase 4 and final-system DoD remain incomplete; FS-5/FS-6/FS-7 are not started.

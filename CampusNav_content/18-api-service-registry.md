@@ -84,6 +84,10 @@ Phase 4 rules:
 
 `DEC-FAC-003` records `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` engineering acceptance; `63`/`73` contain evidence. All existing APIs, matching rules, eligibility/provenance, canonical identity, provider-query counts, status ownership and offline boundaries above remain unchanged. Broader unified cross-consumer ranking and partial/fuzzy aliases are now explicitly owner-deferred design work, not completed capabilities; accepted consumer-local composition and configured rank/facility-ID ordering remain controlling. Personnel GlobalSearch is separate and unimplemented. Official institutional coverage and device/accessibility/adviser claims remain outside this technical acceptance. Earlier unresolved/gated wording describes historical design/slice boundaries, not a new current FS-4 blocker.
 
+### FS-5 independent media validation — 16 October 2026
+
+`src/services/facilityMediaValidation.js` exposes structural `inspectFacilityMediaBytes`, native-browser `validateFacilityMediaFile` and private/pending input-only `validateFacilityMediaDraft`. They reuse canonical facility IDs and the existing result/provenance envelope; successful candidate results remain `UNAVAILABLE / LOCAL_CANDIDATE_ONLY`, not configured public media or upload authorization. There is no media provider, stored record, actor/approval, network/mutation/signing API, or production UI integration. `77` defines exact restrictions and the blocked trusted storage/delivery/RLS/audit foundation. Do not add a successful media CRUD facade over absent infrastructure or duplicate accepted FacilityService/status/search logic.
+
 ## DashboardService
 Responsibilities:
 - audience-filtered centralized campus information

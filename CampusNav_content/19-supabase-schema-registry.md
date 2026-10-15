@@ -71,6 +71,10 @@ FS-1 scope is limited to operational profiles, services, aliases where approved,
 
 No migration may seed official institutional facility/service records. Isolated synthetic `DEVELOPMENT` and visibly labeled `DEMO` fixtures must use recognizable identifiers and be removable.
 
+### FS-5 current schema boundary — 16 October 2026
+
+No facility-media table, migration, Storage policy/bucket, public media view or media audit trigger was added. Version-controlled inventory has none; remote inventory is unverified because the connected account denied inspection and this worktree is not CLI-linked. Local Docker/PostgreSQL is unavailable. `77` records the prospective metadata/security requirements, not a created schema. Independent JavaScript private-draft/candidate validation does not establish database RLS, object access or trusted audit. Never report remote absence or successful policy execution from this evidence.
+
 ## F. Emergency
 Expected/approved concepts:
 - emergency_exits

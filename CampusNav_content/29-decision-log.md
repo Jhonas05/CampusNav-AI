@@ -375,6 +375,18 @@ Official catalog/hours/alias/mapping completeness and physical-device/independen
 
 **Reason:** all seven authorized engineering capabilities have implementation and passing evidence; separate domains, broader matching policy, institutional population, and certification must not be conflated with their acceptance. A read-only CLARA deployment check does not expand CLARA status or enable external AI. FS-5/FS-6/FS-7 remain unstarted; this decision authorizes no next implementation.
 
+## DEC-FAC-004 — FS-5 conservative media envelope and gated sequential engineering
+
+**Status:** OWNER AUTHORIZED — 16 October 2026; upload/publication release remains BLOCKED
+
+The owner authorizes FS-5 readiness followed by every independently safe verified milestone, without routine approval checkpoints or production database/storage mutations. Adopt JPEG/PNG/WebP only, at most 5 MiB per original, canonical facility identity, generated storage authority, initial `SUPER_ADMIN` writes and private/unapproved-by-default media. Upload is not verification/publication; rights, consent and required authorized review must be enforced before public delivery. Prefer auditable archival/replacement and quarantined cleanup over destructive removal. No institutional owner, photograph, license or approval is invented.
+
+The compatible first independent milestone is local candidate/draft validation: 4096-pixel side / 12-million-pixel limits, required alt text, bounded plain metadata, native decode and cleanup, rejected unsupported embedded metadata, and private/pending DTO defaults. It does not implement storage, removal/sanitization, authorization, persistence or public delivery. `77` records existing inventory, evidence, the exact ten-area readiness matrix and resumption gates.
+
+Private storage with an eligibility-checking non-cacheable server delivery boundary is a target requiring verification, not a selected deployed system. Public buckets/direct signed URLs must not substitute for draft/publication protections; short token expiry alone is not immediate CDN revocation. Current remote inventory and local database execution are unavailable, so storage/RLS/upload/Admin/publication/gallery activation remains blocked. Complete independent tests/docs/Git delivery only; do not merge a fake successful or unverified production workflow. FS-1–FS-4, CLARA/PWA/routing and pending institutional/adviser decisions remain unchanged; FS-6/FS-7 are not authorized.
+
+**Reason:** preserve substantial reusable engineering progress while obeying mandatory media/security/readiness gates. This records the owner's technical envelope and mission, not a waiver of those gates or complete FS-5 acceptance.
+
 ## How to add a decision
 Use:
 - ID

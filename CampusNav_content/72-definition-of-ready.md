@@ -29,6 +29,12 @@ A feature/task is ready for implementation when the following are sufficiently c
 
 If these conditions are not met, move the missing item to `64-open-questions-decision-backlog.md` instead of guessing.
 
+## FS-5 media readiness — 16 October 2026
+
+**Result: `READY_WITH_BOUNDARIES` for independent local candidate/draft validation; storage/upload/publication and dependent Admin/gallery work `BLOCKED`.** Owner technical defaults are compatible with `44`, but required delivery/cleanup/server-security gates are not yet verifiable. The static repository has no media backend; remote inventory is unreadable with the connected account, this worktree is not CLI-linked, and local Docker/PostgreSQL is absent. These are not passing RLS/storage results.
+
+`77` contains all ten separate readiness verdicts, requirement-to-implementation/data/permission/test mappings, the target private delivery and recoverable cleanup model, and the precise resumption gate. Independently verified validation/docs may integrate because they activate no workflow or remote access; do not start uploads merely to avoid stopping at an audit. No institutional publication rights or office assignment is inferred. `DEC-FAC-004` records owner authorization, not a security-gate waiver.
+
 ## CLARA grounded foundation readiness — 16 October 2026
 
 **Result: `READY_WITH_BOUNDARIES`.** Accepted public facility/status/service tools exist; FAQ eligibility, ambiguity/unavailable behavior, provenance, privacy, security, UI, performance, and tests are defined. The lack of an approved FAQ collection is handled by an empty production dataset plus isolated fixtures, so it does not block infrastructure. External generation is not ready: Gemini is blocked for the public under-18-capable audience under current terms, no alternate provider is authorized, and no server endpoint/secret/retention release exists.

@@ -467,7 +467,7 @@ This acceptance is software engineering evidence, not adviser approval or a thes
 
 ## Phase 4 — Core Facility & Service Workflow Completion
 
-**Status:** `IN_PROGRESS — FS-1/FS-2/FS-3/FS-4 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-4 OWNER AUTHORIZED; FS-5/FS-6/FS-7 NOT_STARTED`
+**Status:** `IN_PROGRESS — FS-1/FS-2/FS-3/FS-4 COMPLETE — ACCEPTED_WITH_ADVISORY; FS-5 IN_PROGRESS / PARTIALLY VERIFIED; FS-6/FS-7 NOT_STARTED`
 
 **Owner authorization:** `DEC-ROADMAP-002 — OWNER APPROVED 20 September 2026`
 
@@ -507,9 +507,15 @@ Supabase facility operational records are an **operational overlay** keyed by ex
 2. **Phase 4-FS-2 — Operating Hours and Facility Status Engine** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 3. **Phase 4-FS-3 — Facility and Service Admin Workflows** — `COMPLETE — ACCEPTED_WITH_ADVISORY`
 4. **Phase 4-FS-4 — Public Facilities, Search and Recommendation** — `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED` — 16 October 2026 (`DEC-FAC-003`)
-5. **Phase 4-FS-5 — Facility Media Management** — `NOT_STARTED`
+5. **Phase 4-FS-5 — Facility Media Management** — `IN_PROGRESS / PARTIALLY VERIFIED` — independent validation only; storage/upload/publication blocked (`77`)
 6. **Phase 4-FS-6 — Dashboard and Realtime Integration** — `NOT_STARTED`
 7. **Phase 4-FS-7 — Final Acceptance and Evidence Reconciliation** — `NOT_STARTED`
+
+### Phase 4-FS-5 gated engineering checkpoint — 16 October 2026
+
+The owner's sequential mission (`DEC-FAC-004`) proceeds beyond readiness through independent local candidate/draft validation and its deterministic/native-browser/regression evidence. `77` records the full inventory/readiness matrix. No media backend/storage/RLS/audit/upload/CRUD/publication/gallery is implemented or activated. Required server delivery/cleanup/security gates cannot be verified with unreadable remote inventory and absent local PostgreSQL/Storage, so those dependent milestones remain blocked. Missing institutional rights/consent/review evidence is never fabricated.
+
+Current next safe FS-5 milestone: restore/provide an authorized isolated database + Storage/server test environment, verify inventory and trusted decoding/delivery/cleanup, then implement and directly test the minimal forward schema/RLS/audit/storage foundation. No production mutation or FS-6/FS-7 work is authorized. Earlier FS-4 acceptance snapshots remain historical and unchanged; their then-unstarted FS-5 status is superseded only for current sequencing.
 
 ### Phase 4-FS-1 Definition of Ready
 
@@ -519,7 +525,7 @@ FS-1 is limited to a version-controlled Supabase schema/migration; operational f
 
 Unknown institutional owners/data do not block the generic foundation because the schema and services explicitly preserve unavailable/pending states and allow isolated labeled fixtures. FS-1A acceptance ran under supported Node 22; dependency/package changes remain outside Phase 4 adoption unless separately authorized.
 
-**Current Phase 4 boundary:** FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`; FS-4 is `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED`. Detail/Directory, discovery/exact approved aliases, configured recommendations and both service-search consumers are accepted. Personnel GlobalSearch is a separate unimplemented personnel-domain integration. Broader unified ranking and partial/fuzzy aliases are deferred, not completed. Official catalog completeness, physical-device/independent accessibility and adviser claims remain explicit boundaries. Media, Dashboard/Realtime and final Phase 4 acceptance remain unstarted.
+**Current Phase 4 boundary:** FS-1/FS-2/FS-3 remain `COMPLETE — ACCEPTED_WITH_ADVISORY`; FS-4 is `COMPLETE / ACCEPTED_WITH_ADVISORY / OWNER AUTHORIZED`. Detail/Directory, discovery/exact approved aliases, configured recommendations and both service-search consumers are accepted. Personnel GlobalSearch is a separate unimplemented personnel-domain integration. Broader unified ranking and partial/fuzzy aliases are deferred, not completed. Official catalog completeness, physical-device/independent accessibility and adviser claims remain explicit boundaries. FS-5 is `IN_PROGRESS / PARTIALLY VERIFIED` at the independent local validation boundary; production media is blocked. Dashboard/Realtime and final Phase 4 acceptance remain unstarted.
 
 ### Phase 4-FS-4 final acceptance reconciliation — 16 October 2026
 

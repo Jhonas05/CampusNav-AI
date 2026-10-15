@@ -34,7 +34,7 @@ CampusNav is thesis-demo ready when all required core items below are either imp
 - [x] FS-4 public facility/service discovery and configured recommendation engineering — `SATISFIED_WITH_ADVISORY`; Detail, Directory/Cards, shared public discovery, exact approved aliases, configured ordering, GlobalSearch Services and DestinationSearch resolution pass final reconciliation; not full cross-domain search or institutional coverage
 - [ ] verify official hours/services completeness — `UNSATISFIED`; authorized institutional data is missing
 - [ ] verify public service→facility recommendation coverage — `UNSATISFIED`; Admin mapping and the owner-authorized FS-4 configured public consumer are implemented/verified, but institutional mapping completeness remains unverified; synthetic fixtures do not supply official coverage
-- [ ] verify facility media workflow and approved assets — `UNSATISFIED`; Phase 4-FS-5 remains `NOT_STARTED`
+- [ ] verify facility media workflow and approved assets — `UNSATISFIED`; FS-5 is `IN_PROGRESS / PARTIALLY VERIFIED` for independent local validation only; storage/RLS/upload/Admin/publication/gallery remain blocked/unimplemented (`77`), and no approved photograph is supplied
 
 ### Identity/security
 - [x] Supabase Auth — `SATISFIED`
