@@ -3,6 +3,16 @@
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 
+## FS-5 backend-unblocking follow-up — 16 October 2026
+
+**Still `IN_PROGRESS / PARTIALLY VERIFIED`; backend/upload/publication `BLOCKED`.** From clean synchronized `f37d9d0`, the owner-authorized follow-up verified the unchanged 103-check foundation and bounded local/connected-account readiness. Docker/PostgreSQL/WSL remain unavailable; neither connected account lists CampusNav, and other applications were not used. Native Supabase is not supported on this Windows host. No privileged installation, credential escalation, production mutation or new backend is claimed.
+
+Completed independent tooling: `scripts/prepare-fs5-local-backend.mjs` creates fresh external seed/credential/link-free snapshots with generated identities, exact accepted migration/rollback-only-pgTAP hashes and strict fresh-snapshot inspection; its focused test verifies target/inventory/drift/overwrite/symlink/path and no-execution boundaries. This is file preparation, not database or Storage readiness. CLI config parsing selected the unique prepared project; `status` failed on the missing Docker engine and actual local pgTAP connection refused `127.0.0.1:55322` before assertions. No migration, bucket, object or fixture was created.
+
+Fresh local verification: 23/23 preparation checks and unchanged 103/103 candidate checks; all 39 distinct deterministic suites (previous 38 plus preparation), lint/typecheck/build/PWA artifacts-after-build/whitespace and focused script syntax/lint passed. Default runtime assets remain byte-identical to `f37d9d0`; zero new runtime/provider/media requests. No new browser UI or upload/gallery test is claimed. Database/Storage/security integration remains blocked, not passed through these checks.
+
+`77` contains the current inventory classifications, exact owner action/minimum permissions, guarded local resume commands, loopback-binding verification gate and trusted-processor decision. All previously accepted source/security/tests/worker and placeholder behavior are unchanged. No schema/provider/Admin/gallery integration or FS-6/FS-7 was started. Fresh regression/tooling evidence is recorded in `73` after execution; QA artifacts stay outside Git at `C:/Users/St.Clare/Documents/CampusNav-AI-fs5-backend-qa/2026-10-16`.
+
 ## FS-5 readiness and independent local validation — 16 October 2026
 
 **Status: `IN_PROGRESS / PARTIALLY VERIFIED`; production media activation `BLOCKED`.** `DEC-FAC-004` records the owner-authorized sequential mission and conservative envelope. `77-facility-media-readiness-and-contract.md` contains the complete inventory, ten separate readiness verdicts, requirement/data/permission/test mapping, target delivery/cleanup design and exact resumption gate. This checkpoint does not accept a media backend, upload or gallery.

@@ -8,6 +8,14 @@
 - new UI includes loading/empty/error/permission states
 - documentation/status is updated where changed
 
+## FS-5 backend preparation gates — 16 October 2026
+
+- `INDEPENDENT FILE PREPARATION ONLY` — `scripts/prepare-fs5-local-backend.mjs` creates new external snapshots, not a Git worktree or backend. No CLI/network/env-credential import/deletion/production importer. `77` defines exact owner action and resumption checks; the prior candidate-validation/security gates remain intact.
+- `23/23 TARGETED PREPARATION CHECKS PASS` — fresh unique targets, exact migration/six rollback-only-pgTAP bytes, no seed/link/secret copy, immutable separate ports, invalid/Git/network parent rejection, config/content/hash/path/extra-file/stale identity rejection, symlink/junction rejection, exclusive-write/no-execution guards and actual CLI argument/error/redaction/creation/inspection checks. These tests are file-system checks, not RLS/Storage proof.
+- `FULL LOCAL VERIFICATION PASS` — all 39 distinct deterministic suites (previous 38 plus preparation), unchanged 103/103 candidate checks, lint/typecheck/build/PWA artifacts-after-build/whitespace and focused script syntax/lint passed. Runtime asset hashes are byte-identical to `f37d9d0`; no new UI or media/provider read. Required post-merge checks must pass again before push. Structured evidence stays outside Git in the FS-5 backend QA directory referenced by `77`.
+- `BLOCKED_BY_ENVIRONMENT / NOT PASS` — prepared config parsed successfully, but actual CLI `status` failed on the missing Docker engine pipe and explicit local pgTAP refused `127.0.0.1:55322` before assertions. WSL/PostgreSQL/Docker unavailable; newer native Supabase does not support Windows. Account project lists are readable but no CampusNav target is visible. Other application resources are not inspected or mutated.
+- `NO BACKEND ACTIVATION` — no media schema/RLS/audit/provider/endpoint/Images binding/Admin/gallery/dependency or production configuration change. Trusted processing/storage/current-eligibility delivery/cleanup tests must pass before dependent implementation. Full current deterministic/tooling/build/PWA/whitespace and preservation checks must pass before automatic delivery; exact final results belong in the delivery report/external evidence.
+
 ## FS-5 independent groundwork gates — 16 October 2026
 
 - `IN_PROGRESS / PARTIALLY VERIFIED` — `DEC-FAC-004`; `77` records exact inventory/readiness/dependencies. Only independent candidate/private-draft validation is implemented; storage/RLS/audit/upload/Admin/publication/gallery acceptance remains blocked/unimplemented. Do not report overall FS-5 complete.

@@ -89,3 +89,78 @@ Backend unauthorized upload/update/archive, cross-facility modification, draft/r
 ## Exact resumption gate
 
 Provide an authorized isolated PostgreSQL + Supabase Storage/test-server environment and readable existing project inventory; establish a verifiable trusted decoder, private delivery/cleanup model and necessary server configuration without production mutation. Then implement the minimal forward-only schema/storage/RLS/audit foundation and execute direct role/storage/privacy/concurrency/cleanup tests before provider/Admin/public integration. Production deployment requires separate backend mutation/configuration authorization and institutionally approved assets/rights/review evidence. FS-6/FS-7 remain outside scope.
+
+## Backend-unblocking follow-up — 16 October 2026
+
+Starting main was clean/fetched/synchronized at `f37d9d0685e9b7523d169c69274ade440438c18d`; task branch `feat/fs5-secure-media-backend`. The owner additionally authorizes safe local preparation, not privileged installation, production mutation or another application's database. The earlier 103-check validation module/tests, placeholders and accepted implementation remain unchanged.
+
+| Resource / check | Current evidence |
+|---|---|
+| Node/npm/CLI | Node 22.22.0, npm 10.9.4; already-cached pinned Supabase CLI 2.79.0. No tool/dependency upgrade or system installation. |
+| Docker/Podman/PostgreSQL | Commands/common installation paths and relevant services unavailable. Docker engine pipe is absent. |
+| WSL / non-privileged alternative | `wsl.exe` exists but reports WSL itself not installed. Current experimental Supabase native runtime supports Linux/macOS, not Windows. No arbitrary binary, embedded DB substitute or shared-cloud fallback was downloaded/used. |
+| Ports | No listeners observed on canonical 54320–54324 or proposed 55320–55324 at inspection. This is not a reservation or future readiness guarantee. |
+| Remote project visibility | Both connected account project lists were readable, but neither listed CampusNav. Other applications' development/production projects were not queried or selected. CampusNav development inventory is `UNKNOWN / NOT INSPECTED`; prior direct CampusNav project access denial remains historical evidence, not absence. |
+| Repository resources | Six accepted migrations and six rollback-only pgTAP suites exist; no media table/bucket/policy/trigger/server implementation. Auth/role/profile/public-view/trusted-audit patterns exist only for accepted domains. |
+| Prepared isolated target | New external file-only sandbox `campusnav-fs5-k2GdgR`, project `campusnav_fs5_aac6dd1bbe22`, API 55321 / PostgreSQL 55322 / shadow 55320. Snapshot identity and exact hashes passed before CLI diagnostics. |
+| Real backend attempts | CLI parsed the generated config and selected its unique local project, but `status` failed on the missing Docker engine pipe. Explicit `test db --local --workdir <sandbox>` refused `127.0.0.1:55322`, exit 1, before assertions. No SQL, migration, bucket, fixture or object was created. |
+
+### Completed independent preparation
+
+`scripts/prepare-fs5-local-backend.mjs` creates only a fresh external directory using exclusive writes and a generated project/network identity. It copies all accepted migration SQL and all six recognized rollback-only `*_test.sql` suites byte-for-byte, records SHA-256 hashes and generates a minimal seed-disabled, no-remote-link configuration. It does not copy `.env`, `.temp`, `.branches`, seed data, institution photos or non-pgTAP Realtime setup/cleanup/fixture-audit helpers. Those separate manual scripts are not claimed executed or accepted by this preparation.
+
+`--inspect` verifies a **fresh file snapshot only**, including current canonical hashes, exact config/inventory, target identity, no extra/link/seed state, and no symlink/junction authority. It fails on changed/stale content without restoring, deleting or overwriting it. After any CLI/runtime command creates internal state, do not treat that directory as a pristine snapshot; create a new snapshot or explicitly audit runtime state instead. SHA hashes detect drift, not a malicious administrator's tamper-proof attestation.
+
+Preparation performs no network call, process execution, environment-credential import, package installation, service startup, migration application or deletion. `scripts/test-phase4-fs5-backend-preparation.mjs` verifies these file/target boundaries with synthetic temporary snapshots; none of its checks is PostgreSQL/Storage/RLS proof. No production importer/configuration/dependency was added.
+
+### Owner action and minimum permissions
+
+Preferred Windows path: the owner/IT installs and starts a supported Docker Desktop **Linux-container** environment using the [official Windows installation guide](https://docs.docker.com/desktop/setup/install/windows-install/), with applicable licensing checked. Its per-user installer can avoid administrator rights, but enabling missing WSL/virtualization/Windows features may require owner/IT administrator action and a restart. This agent did not run any installer or change those settings. Alternatively provide an explicitly designated disposable CampusNav development environment; do not select another application merely because its account is readable.
+
+Minimum ongoing local permissions: write access to the external sandbox, access to the running local Docker engine and outbound access for official Supabase container images. No production account, production service-role key or Supabase project link is needed for local replay. Keep development credentials in local secure tooling, not chat, source, screenshots or reports. Restoring read-only CampusNav inventory access is a separate owner-controlled connection/account action, not permission escalation by the agent.
+
+Current [Supabase runtime documentation](https://supabase.com/docs/guides/local-development/docker-and-native-runtimes) explicitly excludes native Windows. The newer experimental native runtime is not a reason to upgrade the pinned CLI blindly. Relevant changelog notices for TLS and PostgreSQL extensions were inspected; no remote maintenance or dependency change was performed.
+
+### Exact safe resume commands — after owner/runtime readiness
+
+Run from the authoritative repository. This prepares files only; do not run database commands against the original `CampusNav_AI` project or a remote link.
+
+```powershell
+$fs5Snapshot = node scripts/prepare-fs5-local-backend.mjs --parent 'C:\Users\St.Clare\Documents' | ConvertFrom-Json
+if ($LASTEXITCODE -ne 0) { throw 'Snapshot preparation failed' }
+node scripts/prepare-fs5-local-backend.mjs --inspect $fs5Snapshot.directory
+if ($LASTEXITCODE -ne 0) { throw 'Fresh snapshot verification failed' }
+docker version
+```
+
+Require a responding local Linux-container engine and recheck API 55321 / DB 55322 / shadow 55320 are unused. Before startup, create only this task's generated Docker network with loopback-default publishing:
+
+```powershell
+docker network create --driver bridge --opt 'com.docker.network.bridge.host_binding_ipv4=127.0.0.1' $fs5Snapshot.network
+if ($LASTEXITCODE -ne 0) { throw 'Isolated network creation failed' }
+docker network inspect $fs5Snapshot.network --format '{{json .Options}}'
+npx --offline --yes supabase@2.79.0 start --workdir $fs5Snapshot.directory --network-id $fs5Snapshot.network
+```
+
+Network options are a target, **not verified runtime isolation**. Require the option to equal `127.0.0.1` before start; after start inspect actual task-owned container port bindings and local listeners. Docker may override default bindings; if any owned service is publicly bound, stop only that exact project and resolve isolation before tests. Never use `--ignore-health-check`, expose Docker's daemon remotely, disable security controls, or modify global daemon settings to force progress. See [Docker port publishing](https://docs.docker.com/engine/network/port-publishing/).
+
+`start` normally applies the snapshot migrations in timestamp order; seeds are disabled. These startup/application commands remain **NOT EXECUTED here** because the runtime is absent. Once actual isolation/health is verified:
+
+```powershell
+npx --offline --yes supabase@2.79.0 migration list --local --workdir $fs5Snapshot.directory
+npx --offline --yes supabase@2.79.0 test db --local --workdir $fs5Snapshot.directory
+```
+
+Require all six migration versions, all six real pgTAP suites, correct Auth/RLS roles and post-rollback fixture checks. Verify Storage container health and actual local Storage API access/negative policies with locally generated test credentials; an empty list or health status alone is not security proof. Any replay/schema mismatch is a blocker to diagnose, not permission to edit accepted migration history or grant bypass privileges. No reset is required by this handoff. After reviewed use, preserve data and stop only the generated project:
+
+```powershell
+npx --offline --yes supabase@2.79.0 stop --workdir $fs5Snapshot.directory --project-id $fs5Snapshot.projectId
+```
+
+Do not add `--all`, `--no-backup`, `--linked`, remote `--db-url`, login/link/push/reset, or recursive cleanup. No task-created Git worktree is needed. Prepared files/QA evidence remain outside Git at `C:/Users/St.Clare/Documents/CampusNav-AI-fs5-backend-qa/2026-10-16`.
+
+### Trusted image-processing decision — still blocked
+
+The deployed topology is static assets, with no accepted trusted ingestion endpoint or Images binding. Installed `sharp@0.35.4` is transitive **local Wrangler/Miniflare tooling**, not a declared deployed image-processing dependency or trusted-server proof. Do not import it into React or assume it runs in production Workers.
+
+Cloudflare's [Images binding](https://developers.cloudflare.com/images/optimization/binding/) can transform raw bytes, but needs a configured Worker binding and reviewed usage/billing. Its offline local implementation is documented as lower-fidelity than production. Neither a browser decode nor an offline simulator proves deployed sanitization or EXIF/GPS removal. No binding/resource, paid feature, secret, server endpoint, remote test or sanitizer was activated. After database/storage readiness, select a reviewed deployable trusted processor and directly verify full decoding, size/pixel/resource bounds, metadata removal and derivative-only delivery before uploads. File preparation does not waive this independent gate.

@@ -1,5 +1,17 @@
 # CampusNav Content Pack — Changelog
 
+## v3.62 — 16 October 2026
+
+Completed independent file-only FS-5 local-backend preparation and an actionable owner setup handoff; FS-5 remains `IN_PROGRESS / PARTIALLY VERIFIED`, not backend-ready.
+
+- added fresh external sandbox preparation/strict inspection with generated identity, seed-disabled minimal config, exact accepted migration/rollback-only-pgTAP hashes and no credential/link/network/process/deletion authority
+- passed 23 focused deterministic preparation/security/CLI checks without changing the retained 103 candidate-validation checks or accepted source/migrations/tests
+- passed all 39 distinct deterministic suites and lint/typecheck/build/PWA-after-build/whitespace gates; runtime assets remain byte-identical to the starting accepted checkpoint, with no new application reads or UI
+- verified Windows lacks Docker/PostgreSQL/WSL runtime; current Supabase native alternative excludes Windows. Both connected account lists were readable but neither exposed CampusNav; other application projects were not used
+- recorded actual prepared-target CLI status and pgTAP failures honestly: absent Docker engine and refused loopback 55322, before assertions; no SQL/schema/bucket/object/fixture was created
+- expanded `77` with owner/IT prerequisites, minimum permissions, safe local commands, actual loopback-binding/health/role/storage acceptance gates and trusted-processor dependency decision; no system install, paid binding, remote mutation or fake backend
+- retained existing Admin/public/PWA/navigation/CLARA/security and FS-1–FS-4 acceptance; upload/publication/gallery remain blocked and FS-6/FS-7 unstarted
+
 ## v3.61 — 16 October 2026
 
 Started the owner-authorized sequential FS-5 mission and completed independently verifiable local validation groundwork; full media management remains `IN_PROGRESS / PARTIALLY VERIFIED`.
