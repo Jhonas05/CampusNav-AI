@@ -2,6 +2,12 @@
 
 CampusNav AI is a React application for campus navigation and school information at St. Clare College.
 
+## Try the local voice and camera previews
+
+Run `npm ci` and `npm run dev`. Open CLARA and choose **Speak to CLARA**. An installed local recognizer is required for microphone input. To try **Camera directions**, select a canonical destination in Navigate, confirm a QR or manual origin, and start an ordinary route. The guide shows the selected instruction and the planned floor route.
+
+Run `npm run test:media-preview` for the adapter tests. Default production builds omit the preview controls. For the loopback browser QA procedure, see the [QA record](CampusNav_content/73-quality-gates-release-checklist.md). The engineering boundaries are in [CLARA voice](CampusNav_content/78-clara-voice-accessibility.md) and [Camera Directions Lite](CampusNav_content/74-ar-assisted-navigation-contract.md).
+
 ## Current FS-5 engineering checkpoint — 16 October 2026
 
 FS-5 is `IN_PROGRESS / PARTIALLY VERIFIED`. Independent local JPEG/PNG/WebP candidate and private-draft validation is implemented; it does not upload, store, approve or publish media. Maximum candidate size is 5 MiB, with 4096-pixel sides / 12-million-pixel bounds and real browser decoding. Unsupported embedded metadata is rejected, not removed. No official photograph, media provider/backend, schema, bucket, policy, secret, Admin upload or public gallery was added; existing placeholders/navigation remain unchanged.

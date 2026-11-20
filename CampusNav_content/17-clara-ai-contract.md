@@ -1,5 +1,9 @@
 # CampusNav AI — CLARA AI Contract
 
+## Voice input and playback
+
+[78](78-clara-voice-accessibility.md) governs the local accessibility preview. Reviewed transcripts enter the same question service, tools and permissions as typed questions. Speech eligibility is explicitly granted by a public answer builder and checked again at playback. Result-card navigation still requires the ordinary user action. [76](76-clara-rag-provider-readiness.md) governs external answer generation.
+
 ## Identity
 **CLARA — Campus Learning Alerts & Response Assistant** is the intelligent digital concierge inside CampusNav.
 

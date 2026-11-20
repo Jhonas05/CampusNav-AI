@@ -1,5 +1,20 @@
 # CampusNav AI — Architecture
 
+## CLARA conversation and local voice
+
+```text
+Typed question ───────────────────────────────┐
+On-device recognition → edit → explicit Send ─┴─→ ClaraContext → askClara → verified tools
+                                                          ↓
+                                      Visible answer and existing facility actions
+                                                          ↓
+                            Public allowlist + current voice request or Read Aloud
+                                                          ↓
+                                            Local speech synthesis
+```
+
+The result card opens the ordinary Map destination flow. Both preview adapters operate in the browser under DEC-MEDIA-001. See [voice](78-clara-voice-accessibility.md) and [camera](74-ar-assisted-navigation-contract.md).
+
 ## Architectural principle
 CampusNav separates **source-of-truth data**, **routing/schedule logic**, **presentation**, **positioning providers**, and **CLARA**.
 
@@ -10,7 +25,7 @@ Routing + schedule/availability logic
         ↓
 2D UI / 3D UI / Dashboard / Admin
         ↓
-CLARA uses the same internal services later
+CLARA resolves approved questions through the existing tools
 ```
 
 ## Frontend
@@ -34,7 +49,9 @@ Campus spatial data
 Existing A* pathfinding
       │
       ├── 2D renderer
-      └── 3D renderer
+      ├── 3D renderer
+      └── Confirmed ordinary route + selected instruction
+                └── Camera Directions Lite + canonical floor mini-map (local preview)
 ```
 
 ## Positioning architecture

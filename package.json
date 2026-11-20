@@ -58,6 +58,8 @@
     "test:phase4-fs4-discovery": "node scripts/test-phase4-fs4-discovery.mjs",
     "test:phase4-fs4-recommendations": "node scripts/test-phase4-fs4-recommendations.mjs",
     "test:clara": "node scripts/test-clara-foundation.mjs",
+    "test:media-preview": "node scripts/test-media-preview.mjs",
+    "qa:media-preview": "node scripts/qa-media-preview.mjs",
     "test:rls": "npx --yes supabase@2.79.0 test db",
     "test:render": "node scripts/test-route-render.mjs",
     "preview": "vite preview"

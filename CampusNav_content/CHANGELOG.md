@@ -1,5 +1,9 @@
 # CampusNav Content Pack — Changelog
 
+## v3.63 — 20 November 2026
+
+Added an optional local CLARA voice layer and ordinary-route Camera Directions Lite, the source proposals, DEC-MEDIA-001 and canonical contracts 74/78. Public answers can play after transcript confirmation. The camera uses the current route instruction and canonical mini-map. Hosted speech, a directional ribbon and public rollout remain gated. See [73](73-quality-gates-release-checklist.md) for evidence and [09](09-progress-roadmap.md) for FS sequencing.
+
 ## v3.62 — 16 October 2026
 
 Completed independent file-only FS-5 local-backend preparation and an actionable owner setup handoff; FS-5 remains `IN_PROGRESS / PARTIALLY VERIFIED`, not backend-ready.

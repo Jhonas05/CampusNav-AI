@@ -1,5 +1,9 @@
 # CampusNav AI — Documentation Governance
 
+## Traceability for the November media proposals
+
+The original PDFs are registered in [35](35-source-asset-registry.md). DEC-MEDIA-001 records the owner engineering scope. [74](74-ar-assisted-navigation-contract.md) governs Lite and retains the historical full AR plan. [78](78-clara-voice-accessibility.md) extends the existing CLARA contract. Status, release evidence and outstanding decisions belong in 63, 73 and 64 respectively. Historical FS acceptance and institutional approval require their own evidence.
+
 ## Goal
 This folder should remain useful to both humans and coding agents instead of becoming stale duplicate prose.
 

@@ -22,7 +22,7 @@ const defaultValue = {
   hasConversation: false,
   /** @type {(request?: { question?: string | null, facilityId?: string | null }) => void} */
   openClara: noop,
-  /** @type {(text: string) => void} */
+  /** @type {(text: string, voiceRequest?: symbol) => void} */
   send: noop,
   minimize: noop,
   close: noop,
@@ -47,7 +47,7 @@ export function ClaraProvider({ children }) {
     setMessages((current) => [...current, { ...message, id: nextId.current++ }])
   }, [])
 
-  const request = useCallback(async (text) => {
+  const request = useCallback(async (text, voiceRequest = undefined) => {
     const token = ++requestToken.current
     if (!connectivity.isOnline) {
       append({ role: "assistant", text: "CLARA is unavailable while CampusNav is offline. Cached 2D navigation and canonical locations remain available.", error: true, retryText: text })
@@ -60,7 +60,7 @@ export function ClaraProvider({ children }) {
       if (!reply?.text) {
         append({ role: "assistant", text: "CLARA returned no response for that request.", error: true, retryText: text })
       } else {
-        append({ role: "assistant", ...reply })
+        append({ role: "assistant", ...reply, voiceRequest })
       }
     } catch {
       if (token !== requestToken.current) return
@@ -76,11 +76,11 @@ export function ClaraProvider({ children }) {
     }
   }, [append, connectivity.isOnline])
 
-  const send = useCallback((value) => {
+  const send = useCallback((value, voiceRequest = undefined) => {
     const text = String(value || "").trim()
     if (!text) return
     append({ role: "user", text })
-    request(text)
+    request(text, voiceRequest)
   }, [append, request])
 
   const retry = useCallback((text) => {

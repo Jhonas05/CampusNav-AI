@@ -1,5 +1,30 @@
 # CampusNav AI — Quality Gates and Release Checklist
 
+## Local CLARA voice and Camera Directions Lite — 20 November 2026
+
+| Evidence | Scope |
+| --- | --- |
+| IMPLEMENTED | Optional local speech UI/adapters, explicit public-answer policy and camera instructions under DEC-MEDIA-001. See [78](78-clara-voice-accessibility.md) and [74](74-ar-assisted-navigation-contract.md). |
+| DETERMINISTIC_VERIFIED | Existing 38 local regression scripts cover facility lookup, grounded CLARA, QR, A*, mobility preferences, floors, map rendering, Emergency, Dashboard, PWA, role/auth fixtures and accepted FS slices. Six focused media cases in one additional script cover public-only exact speech, stale callbacks, recognition availability/denial/cancel and camera eligibility, denial, revocation and late-grant cleanup. The build-artifact script runs separately after each build. |
+| BROWSER_VERIFIED | Windows Chrome 157.0.8103.51, guest session, 1366×900 and 390×844 viewports, reduced motion, loopback preview. Injected speech adapters exercised typed/manual, reviewed voice/automatic, muted, cancel/discard and playback controls. The spoken string matched the displayed grounded answer. A CLARA result card opened the canonical Registrar destination. A confirmed Library origin produced ordinary multi-floor steps on the shared map. |
+| BROWSER_VERIFIED | A synthetic camera exercised explicit video-only acquisition, denial, Escape/focus return, facing reset, manual step selection through the final instruction, narrow layout, track release and a simulated visibility interruption. A worker-controlled offline reload reopened the guide, followed by manual reconfirmation. The Emergency screen had no guide entry. The harness observed only loopback GETs and cached static assets with zero unexpected page errors. |
+| Release checks | Lint, typecheck, production builds and PWA artifact checks passed. The opt-in build has 48 precache entries. The default build has 47 and omits the camera guide chunk. A separate default-build browser check opened the typed composer and Navigate and verified the preview controls were absent. Vite retains its mixed facility-service import and large-chunk advisories. |
+| BLOCKED / PROPOSED | A blue floor ribbon requires verified maneuver and heading evidence. Remote transcription requires institutional and account controls. Production rollout requires owner authorization. |
+| PHYSICAL_DEVICE_VERIFIED / PRODUCTION_VERIFIED | No new evidence in either category. Native language recognition, audible speech, English/Filipino/Taglish accuracy, installed Android/iOS PWAs, physical QR/camera handoff, screen readers, real-device lifecycle and campus calibration are NOT_TESTED. Live production auth/database/Storage and FS-5 pgTAP were outside this verification. |
+
+To reproduce the browser checks, use two local terminals from the repository. In the first, run the following PowerShell commands with an isolated QA build and no provider credentials.
+
+```powershell
+$env:VITE_ENABLE_MEDIA_PREVIEW = 'true'
+npm run build
+npm run test:pwa:build
+npm run preview -- --host 127.0.0.1 --port 4197 --strictPort
+```
+
+In the second, run `npm run test:media-preview` and `npm run qa:media-preview`. The latter uses an existing Playwright installation and its Chromium browser. Optional `CAMPUSNAV_PLAYWRIGHT` points to its module entry and `CAMPUSNAV_QA_CHROME` to a Chrome executable. For the default-build check, stop preview, clear the build flag in the build terminal, repeat build/artifact/preview and run `npm run qa:media-preview -- --default-build` in the second terminal. This setup adds zero application dependencies.
+
+During QA the harness was corrected to match the actual East Stair instruction, scope its link to the CLARA result and wait for the new muted answer. Reduced-motion emulation stabilizes the existing animated launcher in automation. Keyboard testing identified a focus-return issue. The guide now explicitly restores focus to its trigger on Escape or Return to 2D.
+
 ## Baseline gates
 - production build succeeds
 - no secret is committed/exposed in client output

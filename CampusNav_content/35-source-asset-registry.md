@@ -1,5 +1,9 @@
 # CampusNav AI — Source and Asset Registry
 
+## Owner-supplied media architecture proposals — 20 November 2026
+
+The original [voice v1.1](../docs/architecture/references/CampusNav_CLARA_Voice_Commands_Text_to_Speech_Architecture_v1.1_2026-11-20.pdf) and [AR Lite v1.0](../docs/architecture/references/CampusNav_AR_Camera_Directions_Lite_Architecture_v1_2026-11-20.pdf) PDFs are repository references outside public assets. Their adoption is bounded by DEC-MEDIA-001 and contracts 74 and 78. The illustration supplies design intent only.
+
 ## Authoritative architecture sources
 ### A. CampusNav AI Final Expanded Architecture Source
 - date: 14 September 2026

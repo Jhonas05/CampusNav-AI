@@ -64,6 +64,7 @@ const facilityReply = (intent, result) => {
   const { facility, floor } = result.data
   return {
     text: getClaraFacilityReply(facility),
+    speechScope: "PUBLIC",
     facility,
     link: null,
     verified: true,
@@ -130,6 +131,7 @@ const statusReply = async (tools, intent, facilityResult) => {
   }
   return {
     text: `${facility.name} is ${statusLabels[status]} based on the current approved CampusNav status records.`,
+    speechScope: "PUBLIC",
     facility,
     link: null,
     verified: true,
@@ -152,6 +154,7 @@ const serviceReply = async (tools, intent, entityQuery) => {
     const names = result.data.facilities.map(({ facility }) => facility.name).join(", ")
     return {
       text: `Verified configured locations for that service are: ${names}. Choose a canonical facility in the Facilities directory before navigating.`,
+      speechScope: "PUBLIC",
       facility: null,
       link: { href: "/facilities", label: "Choose a Facility" },
       verified: true,
@@ -170,6 +173,7 @@ const serviceReply = async (tools, intent, entityQuery) => {
   const [{ facility, matches }] = result.data.facilities
   return {
     text: `${facility.name} is a verified configured location for ${matches.map(({ serviceName }) => serviceName).join(", ")}. Select Navigate only after confirming this canonical destination.`,
+    speechScope: "PUBLIC",
     facility,
     link: null,
     verified: true,

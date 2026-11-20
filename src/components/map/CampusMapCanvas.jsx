@@ -55,6 +55,7 @@ export default function CampusMapCanvas(props) {
     view2DRequest = null,
     view2DDefault = "fit",
     cooperativeGestures = false,
+    interactive2D = true,
     camera3DCommand = null,
     active3D = true,
     show3DToolbar = true,
@@ -142,6 +143,7 @@ export default function CampusMapCanvas(props) {
       viewRequest={view2DRequest}
       defaultView={view2DDefault}
       cooperativeGestures={cooperativeGestures}
+      interactive={interactive2D}
     />
   )
 }

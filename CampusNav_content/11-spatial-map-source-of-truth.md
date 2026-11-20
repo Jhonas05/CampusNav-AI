@@ -1,5 +1,9 @@
 # CampusNav AI — Spatial Map Source of Truth
 
+## Camera orientation evidence
+
+QR/manual confirmation establishes the route origin. Facing confirmation in the camera guide is a visitor assertion scoped to the selected instruction. A route line on the floor plan supplies no camera calibration. The Lite preview renders its path on the canonical mini-map. See [74](74-ar-assisted-navigation-contract.md).
+
 ## Purpose
 Protects CampusNav from coordinate drift, invented rooms, and a separate 3D map that no longer matches navigation.
 

@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react"
+import { useCallback, useId, useMemo } from "react"
 import { MAP_NODE_TYPES } from "@/data/mapNodes"
 import { getFloorById } from "@/data/floors"
 import EmergencyMapOverlay from "@/components/map/EmergencyMapOverlay"
@@ -103,6 +103,7 @@ export default function IndoorMap2D({
   cooperativeGestures = false,
   interactive = true,
 }) {
+  const svgId = useId()
   const facilityMap = useMemo(() => new Map(facilities.map((facility) => [facility.id, facility])), [facilities])
   const nodeMap = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes])
   const entranceNodes = nodes.filter((node) => node.type === MAP_NODE_TYPES.ROOM_ENTRANCE)
@@ -168,15 +169,15 @@ export default function IndoorMap2D({
       >
         <g ref={viewport.layerRef} transform={viewport.transform} data-map-layer="2d">
         <defs>
-          <pattern id="stair-lines" width="8" height="8" patternUnits="userSpaceOnUse">
+          <pattern id={`${svgId}-stair-lines`} width="8" height="8" patternUnits="userSpaceOnUse">
             <rect width="8" height="8" fill="#F4F4F3" />
             <path d="M0 2h8M0 6h8" stroke={MAP_COLORS.stairs} strokeWidth="0.9" />
           </pattern>
-          <pattern id="construction-lines" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <pattern id={`${svgId}-construction-lines`} width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <rect width="12" height="12" fill="#F2F2F1" />
             <path d="M0 0V12" stroke="#A3A3A6" strokeWidth="3" />
           </pattern>
-          <filter id="reference-grayscale">
+          <filter id={`${svgId}-reference-grayscale`}>
             <feColorMatrix type="saturate" values="0" />
           </filter>
         </defs>
@@ -193,7 +194,7 @@ export default function IndoorMap2D({
               height={floor.map.height}
               opacity={debugOptions.opacity}
               preserveAspectRatio="none"
-              filter="url(#reference-grayscale)"
+              filter={`url(#${svgId}-reference-grayscale)`}
             />
           </g>
         )}
@@ -211,7 +212,7 @@ export default function IndoorMap2D({
 
         {floor.map.stairways.map((stairway) => (
           <g key={stairway.id}>
-            <polygon points={polygonPoints(stairway.polygon)} fill="url(#stair-lines)" fillOpacity={isDebugMode && debugOptions.showOverlay ? 0.5 : 1} stroke={MAP_COLORS.stairs} strokeWidth="1.2" />
+            <polygon points={polygonPoints(stairway.polygon)} fill={`url(#${svgId}-stair-lines)`} fillOpacity={isDebugMode && debugOptions.showOverlay ? 0.5 : 1} stroke={MAP_COLORS.stairs} strokeWidth="1.2" />
             <text x={stairway.labelPoint.x} y={stairway.labelPoint.y + 4} textAnchor="middle" fontSize="9" fontWeight="700" fontFamily={HEADING_FONT} letterSpacing="1" fill="#2B2B2D" paintOrder="stroke" stroke="#F4F4F3" strokeWidth="3">
               STAIRS
             </text>
@@ -231,11 +232,11 @@ export default function IndoorMap2D({
           const { width } = polygonBounds(room.polygon)
           const lines = splitLabel(facility.name, width < 120 ? 12 : 22)
           const navigable = room.navigable !== false && room.entranceNodeIds.length > 0
-          const interactive = navigable && !emergencyMode
+          const selectable = interactive && navigable && !emergencyMode
           const fill = isArrived
             ? MAP_COLORS.arrivedFill
             : underConstruction
-              ? "url(#construction-lines)"
+              ? `url(#${svgId}-construction-lines)`
               : isDestination
                 ? MAP_COLORS.destinationTint
                 : isStart
@@ -247,17 +248,17 @@ export default function IndoorMap2D({
             <g
               key={room.id}
               data-facility-id={facility.id}
-              onClick={interactive ? () => onRoomSelect?.(facility.id) : undefined}
-              onKeyDown={interactive ? (event) => {
+              onClick={selectable ? () => onRoomSelect?.(facility.id) : undefined}
+              onKeyDown={selectable ? (event) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault()
                   onRoomSelect?.(facility.id)
                 }
               } : undefined}
-              className={interactive ? "map-room cursor-pointer" : "map-room"}
-              tabIndex={interactive ? 0 : undefined}
-              role={interactive ? "button" : "group"}
-              aria-label={interactive ? `Select ${facility.name}` : underConstruction ? `${facility.name}; under construction; not navigable` : facility.name}
+              className={selectable ? "map-room cursor-pointer" : "map-room"}
+              tabIndex={selectable ? 0 : undefined}
+              role={selectable ? "button" : "group"}
+              aria-label={selectable ? `Select ${facility.name}` : underConstruction ? `${facility.name}; under construction; not navigable` : facility.name}
             >
               <polygon
                 className="map-room-shape"

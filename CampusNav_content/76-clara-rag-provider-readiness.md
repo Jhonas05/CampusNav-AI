@@ -1,5 +1,9 @@
 # CampusNav AI — CLARA RAG and Provider Readiness
 
+## Speech provider boundary — 20 November 2026
+
+Recognition is an input adapter. Reviewed text proceeds through the established CLARA service. The hosted transcription candidate, its eligibility and cost gates are documented under [78](78-clara-voice-accessibility.md). The local preview supplies no external generation or hosted transcription transport.
+
 ## Status
 
 **Foundation:** `IMPLEMENTED_VERIFIED` locally on 16 October 2026.

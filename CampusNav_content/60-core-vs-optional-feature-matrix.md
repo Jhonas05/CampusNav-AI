@@ -14,7 +14,7 @@
 | Strict Emergency Mode and safe no-route behavior | `CORE_FOR_DEFENSE` | Only verified/source-aligned data; no complete coverage or safety sign-off claim |
 | Grounded CLARA | `CONDITIONAL / FOUNDATION IMPLEMENTED; EXTERNAL PROVIDER DEFERRED` | Deterministic approved-FAQ/campus-tool grounding is implemented; production FAQ population and role-aware/live domains remain incomplete. External generation stays disabled, and Gemini public activation is blocked by the current under-18 audience terms |
 | PWA/offline capability in the defense | `CONDITIONAL / DEFERRED PENDING ADVISER DIRECTION` | Owner-authorized engineering is `COMPLETE — ACCEPTED_WITH_ADVISORY` under `DEC-PWA-001`; implementation does not select the academic classification. Offline Emergency routing remains blocked and excluded |
-| AR Guidance | `OPTIONAL / DEFERRED / NOT_IMPLEMENTED / NOT_READY` | Planning contract only; not required by the owner proposal |
+| AR Guidance | `OPTIONAL` | Local ordinary-route Lite preview implemented under DEC-MEDIA-001. Broader AR, ribbon and release acceptance remain deferred. Outside the owner-proposed defense core. |
 | Reports/analytics; advanced map editor/version rollback | `OPTIONAL / DEFERRED` | Reopen only if adviser-confirmed scope requires them |
 | GPS/BLE/Wi-Fi/UWB; hardware presence; native AR/SLAM/VPS; push/SMS; photorealistic 3D | `OPTIONAL / DEFERRED` | Not required by the owner proposal |
 
@@ -36,7 +36,7 @@ The formal defense scope remains `ADVISER_APPROVAL_REQUIRED`. This matrix does n
 ## Optional/enhancement
 - outdoor GPS location continuity
 - BLE indoor approximate positioning
-- AR-Assisted Camera Navigation / AR Guidance Mode as a future presentation layer over the existing A* route; planning only, not implemented or ready
+- Broader AR guidance beyond the ordinary-route Camera Directions Lite preview in 74.
 - web push
 - SMS gateway
 - advanced visual floor-plan editor/rollback if not completed in the core build

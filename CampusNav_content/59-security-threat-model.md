@@ -1,5 +1,9 @@
 # CampusNav AI — Security Threat Model
 
+## Media threat boundaries
+
+Treat recognition output as untrusted text. Explicit Send, the existing CLARA tool permissions, a per-request marker and allowlisted answer scope guard against unintended action and stale/private playback. The camera controller disposes of late grants and requests video only. The camera view consumes the existing route, rejects Emergency Mode and suppresses an unverified directional ribbon. Detailed contracts are [74](74-ar-assisted-navigation-contract.md) and [78](78-clara-voice-accessibility.md).
+
 ## Primary assets
 - user accounts/sessions
 - roles and authorization

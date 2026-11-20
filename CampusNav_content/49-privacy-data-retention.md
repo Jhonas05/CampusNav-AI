@@ -1,5 +1,9 @@
 # CampusNav AI — Privacy and Data Retention
 
+## Microphone, transcripts and camera frames
+
+On-device recognition receives one bounded utterance after explicit action. Only reviewed text enters CLARA conversation memory. Device-local playback accepts a positive public-answer classification. Camera tracks are video-only and locally displayed. The media layers introduce no recording store, telemetry payload, upload or worker cache. School/DPO approval for any remote audio processing is outstanding. See [78](78-clara-voice-accessibility.md).
+
 ## Core privacy stance
 CampusNav should help users find campus services/personnel without becoming an employee-tracking system.
 

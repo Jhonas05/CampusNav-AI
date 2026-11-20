@@ -1,5 +1,9 @@
 # CampusNav AI — UI Registry
 
+## Optional media controls
+
+The CLARA panel hosts Speak to CLARA, transcript review and playback controls. Navigate hosts Camera directions on ordinary routes. Its modal contains the selected instruction, planned mini-map, facing confirmation, step and position controls and Return to 2D. Both use the existing button styles. See [voice](78-clara-voice-accessibility.md) and [camera](74-ar-assisted-navigation-contract.md).
+
 ## Purpose
 This file is the compact UI source-of-truth for CampusNav. It tells Codex/Claude which screens, reusable components, visual states, map controls, image slots, and interaction patterns already exist or are expected.
 

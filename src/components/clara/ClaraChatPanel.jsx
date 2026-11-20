@@ -1,5 +1,9 @@
 import { forwardRef, useEffect, useState } from "react"
 import ClaraComposer from "./ClaraComposer"
+import ClaraVoice from "./ClaraVoice"
+import { mediaPreviewEnabled } from "@/lib/mediaPreview"
+import { useAuth } from "@/contexts/AuthContext"
+import { useLocation } from "react-router-dom"
 import ClaraHeader from "./ClaraHeader"
 import ClaraMessageList from "./ClaraMessageList"
 import ClaraSuggestionChips from "./ClaraSuggestionChips"
@@ -36,6 +40,8 @@ const useKeyboardInset = (enabled) => {
 const ClaraChatPanel = forwardRef(function ClaraChatPanel(/** @type {Record<string, any>} */ props, composerRef) {
   const { messages, pending, hasConversation, onSend, onRetry, onReset, onMinimize, onClose, onNavigate } = props
   const keyboardInset = useKeyboardInset(true)
+  const { user } = useAuth()
+  const location = useLocation()
 
   return (
     <section
@@ -57,6 +63,7 @@ const ClaraChatPanel = forwardRef(function ClaraChatPanel(/** @type {Record<stri
       <ClaraMessageList messages={messages} pending={pending} onNavigate={onNavigate} onRetry={onRetry}>
         {!hasConversation && <ClaraSuggestionChips prompts={CLARA_SUGGESTED_PROMPTS} onSelect={onSend} disabled={pending} />}
       </ClaraMessageList>
+      {mediaPreviewEnabled && <ClaraVoice key={`${location.key}:${user?.id || "guest"}`} messages={messages} pending={pending} onSend={onSend} />}
       <ClaraComposer ref={composerRef} onSend={onSend} pending={pending} notice={CLARA_SCOPE_NOTICE} />
     </section>
   )

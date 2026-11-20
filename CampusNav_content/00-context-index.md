@@ -51,8 +51,8 @@ Navigation, spatial truth, emergency, facilities/services, schedules/personnel, 
 ### Engineering/operations: `31–62`
 Environment/config, search, demo data, IDs, sources, thesis traceability, agent contract, module ownership, coding/state/API/validation/auth/storage, admin approval, map versioning, notification lifecycle, audit/privacy/observability/backup/release/Git/dependencies, device/timezone, fixtures/acceptance/security, scope/NFR/deployment.
 
-### Status/thesis/governance and future adoption contracts: `63–77`
-Implementation status, open questions, glossary, user stories, E2E flows, data ownership, risks, evaluation gaps, documentation governance, Definition of Ready, quality gates, the planning-only AR-assisted navigation contract, the adviser confirmation package, CLARA provider readiness, and facility-media readiness/validation boundaries.
+### Status, thesis, governance and feature contracts, 63–78
+Implementation status, open questions, glossary, use cases, flows, ownership, risks, evaluation, governance and release gates. [74](74-ar-assisted-navigation-contract.md) governs Camera Directions Lite and the full AR proposal. Documents 75–77 cover adviser confirmation, CLARA provider readiness and facility-media readiness. [78](78-clara-voice-accessibility.md) governs CLARA voice accessibility.
 
 ## Agent integration
 See `AGENTS-INTEGRATION.md` for a minimal `AGENTS.md` bridge.

@@ -24,7 +24,7 @@ A ready-to-paste bridge is provided in `AGENTS-INTEGRATION.md`.
 `31–62` — environment, search, demo data, IDs, sources, traceability, agent behavior, module boundaries, coding/state/API/validation/auth/storage, approval/map versioning, notifications/audit/privacy, observability, backup, release/Git/dependencies, compatibility/timezone, fixtures, acceptance/security, scope/NFR/deployment
 
 ### Status, thesis, governance, and future adoption contracts
-`63–76` — implementation truth, unresolved decisions, glossary, use cases, flows, ownership, risks, research-evaluation gap, documentation governance, Definition of Ready, release quality gates, the planning-only AR-assisted navigation contract, the adviser confirmation package, and CLARA provider readiness
+`63–78` — implementation evidence, decisions, terminology, use cases, flows, ownership, risks, evaluation, governance, readiness and quality gates. [74](74-ar-assisted-navigation-contract.md) governs Camera Directions Lite and broader AR planning. Documents 75–77 cover adviser confirmation, CLARA provider readiness and facility media. [78](78-clara-voice-accessibility.md) governs voice input and public playback.
 
 ## Core invariant
 **One campus dataset + one routing engine.** 2D, 3D, QR, Dashboard-linked navigation, schedules/personnel routing, emergency mode, Admin, and future CLARA must reference the same canonical records and route logic.

@@ -1,5 +1,9 @@
 # CampusNav AI — Accessibility Standards
 
+## Equivalent media controls
+
+Voice input offers editable text, retry, discard, explicit Send, visible answer and playback status. The camera dialog exposes step number, floor, destination and instruction as text. It supports Escape and Return to 2D, and keeps the mini-map out of the keyboard tab order. Verify native focus, text scaling, reduced motion, screen readers and mobile safe areas on target devices before release. See [73](73-quality-gates-release-checklist.md).
+
 ## UI accessibility
 Follow WCAG-oriented principles:
 - keyboard navigation

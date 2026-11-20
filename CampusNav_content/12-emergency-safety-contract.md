@@ -1,5 +1,9 @@
 # CampusNav AI — Emergency Safety Contract
 
+## Camera Directions Lite boundary
+
+The Emergency surface excludes Camera Directions Lite. Eligibility also rejects emergency context at the controller boundary. Emergency routing, no-route messages and posted-signage guidance use the existing safety contract. The September AR-7 proposal requires its own safety-authority decision.
+
 ## Purpose
 Emergency behavior is safety-critical and has stricter rules than normal navigation.
 

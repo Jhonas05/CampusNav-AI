@@ -1,5 +1,9 @@
 # CampusNav AI — Environment and Configuration Registry
 
+## Local media preview
+
+`VITE_ENABLE_MEDIA_PREVIEW` is an optional public build-time boolean. Local Vite development enables the previews. A production-format build enables them only for the literal value `true`. Leave the variable unset in deployment configuration. It carries no credentials and enables no hosted speech service. See [74](74-ar-assisted-navigation-contract.md) and [78](78-clara-voice-accessibility.md).
+
 ## Purpose
 Keep configuration explicit so agents do not hard-code secrets, URLs, or environment-specific behavior.
 

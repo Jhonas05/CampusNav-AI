@@ -33,6 +33,11 @@ import { supportsWebGL } from "@/lib/webgl"
 import { cn } from "@/lib/utils"
 import { useConnectivity } from "@/contexts/ConnectivityContext"
 import AsyncFeatureBoundary from "@/components/pwa/AsyncFeatureBoundary"
+import { canGuide } from "@/lib/cameraGuide"
+import { mediaPreviewEnabled } from "@/lib/mediaPreview"
+import { useAuth } from "@/contexts/AuthContext"
+
+const CameraGuide = mediaPreviewEnabled ? lazy(() => import("@/components/map/CameraGuide")) : null
 
 const MapVerificationPanel = lazy(() => import("@/components/map/MapVerificationPanel"))
 const QRScanner = lazy(() => import("@/components/map/QRScanner"))
@@ -135,6 +140,11 @@ function NavigateExperience({ searchParams }) {
 
   const [floorId, setFloorId] = useState(initialFloorId)
   const [currentPosition, setCurrentPosition] = useState(initialPosition)
+  const sampleOrigin = useRef(demoStart ? initialPosition : null)
+  const { user } = useAuth()
+  const [cameraSession, setCameraSession] = useState(null)
+  const cameraTrigger = useRef(null)
+  const closeCamera = useCallback(() => setCameraSession(null), [])
   const [destinationId, setDestinationId] = useState(initialDestination?.id || "")
   const [destinationQuery, setDestinationQuery] = useState(initialDestination?.name || "")
   const [route, setRoute] = useState(null)
@@ -323,6 +333,7 @@ function NavigateExperience({ searchParams }) {
   }, [resetEmergencyRoute, resetRoute])
 
   const useManualLocation = () => {
+    if (cameraSession) changeFloor(currentFloorId)
     setScannerOpen(false)
     if (immersive) fullscreen.exit()
     setLocationEditorOpen(true)
@@ -337,6 +348,7 @@ function NavigateExperience({ searchParams }) {
   }
 
   const openScanner = () => {
+    if (mediaPreviewEnabled && clara.open) clara.minimize()
     setScanError("")
     setScannerOpen(true)
   }
@@ -344,6 +356,15 @@ function NavigateExperience({ searchParams }) {
   const viewRouteFloor = (nextFloorId) => {
     setFloorId(nextFloorId)
     setCalibrationOptions(createCalibrationOptions(getFloorById(nextFloorId)))
+  }
+
+  const selectCameraStep = (index) => {
+    const nextFloor = instructions[index].floorId || currentFloorId
+    setActiveStep(index)
+    if (nextFloor !== floorId) {
+      viewRouteFloor(nextFloor)
+      setCameraSession(current => current && { ...current, floor: nextFloor })
+    }
   }
 
   const updateDestinationQuery = (value) => {
@@ -557,6 +578,15 @@ function NavigateExperience({ searchParams }) {
   // with Start Navigation before a route, then the route itself. A facility
   // tapped on the map has its own panel, so the destination sheet steps aside.
   const routeSheetActive = Boolean(!emergencyMode && route && instructions.length > 0)
+  const cameraEligible = mediaPreviewEnabled && Boolean(instructions.length) &&
+    canGuide({ route, position: currentPosition, destination, status: navigationStatus, emergency: emergencyMode,
+      confirmed: hasLocation && currentPosition !== sampleOrigin.current && !locationConfirmation })
+  const cameraVisible = cameraEligible && cameraSession?.route === route && cameraSession?.key === location.key &&
+    cameraSession?.userId === user?.id && cameraSession?.floor === floorId &&
+    !scannerOpen && !preferencesOpen && !immersive && !globalSearchOpen && !clara.open
+  useEffect(() => {
+    if (cameraSession && !cameraVisible) closeCamera()
+  }, [cameraSession, cameraVisible, closeCamera])
   const destinationSheetVisible = Boolean(!emergencyMode && !route && destination && !selectedFacility)
   const mobileSheetVisible = routeSheetActive || destinationSheetVisible
   const currentFloorLabel = getFloorById(currentFloorId)?.shortName || currentFloorId
@@ -602,6 +632,18 @@ function NavigateExperience({ searchParams }) {
             </Link>
           </nav>
         </header>
+        {mediaPreviewEnabled && !emergencyMode && <div className="mt-2 flex flex-wrap items-center gap-2">
+          <button ref={cameraTrigger} className={button.secondary} disabled={!cameraEligible}
+            onClick={() => { clara.minimize(); setMapView("2D"); setCameraSession({ route, key: location.key, userId: user?.id, floor: floorId }) }}>Camera directions</button>
+          {!cameraEligible && <span className="text-xs text-ink-soft">Confirm your QR or manual location and start a route to use the camera guide.</span>}
+        </div>}
+        {cameraVisible && CameraGuide && <AsyncFeatureBoundary resetKey={route} onFailure={() => { closeCamera(); setRouteAnnouncement("Camera guide unavailable. Continue in 2D.") }}>
+          <Suspense fallback={<p role="status">Opening camera guide…</p>}>
+            <CameraGuide route={route} instructions={instructions} activeStep={activeStep} selectStep={selectCameraStep}
+              position={currentPosition} destination={destination} onClose={closeCamera} trigger={cameraTrigger}
+              manual={useManualLocation} scan={openScanner} />
+          </Suspense>
+        </AsyncFeatureBoundary>}
 
         {/* Phones and tablets show the same context in the compact From row and
             the bottom sheet (Emergency Mode: the From row and the emergency panel). */}

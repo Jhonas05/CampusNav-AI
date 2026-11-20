@@ -1,5 +1,9 @@
 # CampusNav AI — Browser and Device Compatibility
 
+## Media capability gates
+
+Camera guidance needs a secure context, native modal support, a working video input and browser permission. Recognition additionally needs a browser that explicitly reports local recognition available for the requested language. Synthesis needs an available local voice. Unsupported cases retain text or 2D. Chromium with synthetic media supplies browser-only evidence. Representative Android/iOS, actual language packs, playback and assistive technologies remain open under [73](73-quality-gates-release-checklist.md).
+
 ## Product direction
 The current architecture is responsive web-based even though the formal proposal uses tablet-based wording.
 

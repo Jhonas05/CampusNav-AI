@@ -1,5 +1,9 @@
 # CampusNav AI — Canonical Progress and Roadmap
 
+## 20 November 2026 checkpoint
+
+DEC-MEDIA-001 delivered optional local CLARA voice and camera-instruction previews outside the FS sequence. Phase 4 remains in progress. FS-1 through FS-4 retain acceptance with advisory. FS-5 remains partially verified and its next task is isolated backend verification under [77](77-facility-media-readiness-and-contract.md). FS-6 and FS-7 have not started. Preview evidence and release gates are tracked in [73](73-quality-gates-release-checklist.md).
+
 ## Roadmap authority and reset
 
 `DEC-ROADMAP-001` resets the **active development process** to canonical Phase 1. This is not a code reset. Existing implementation remains intact and is mapped to the canonical contracts in `63-implementation-status-registry.md`.

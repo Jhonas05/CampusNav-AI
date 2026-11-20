@@ -1,5 +1,9 @@
 # CampusNav AI — PWA and Offline Emergency Strategy
 
+## Offline media previews
+
+The opt-in camera preview uses existing precached application assets and bundled map data. Reopening a confirmed route still requires the ordinary QR/manual flow. Device camera availability remains a separate requirement. Offline CLARA displays its existing connectivity state and releases voice capture/playback. Audio, video, transcript drafts and private responses have no new cache route. See [browser evidence](73-quality-gates-release-checklist.md).
+
 ## Purpose
 Defines the source requirement that essential emergency information should remain available after connectivity loss when previously cached.
 

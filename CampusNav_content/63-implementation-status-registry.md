@@ -1,5 +1,9 @@
 # CampusNav AI — Implementation Status Registry
 
+## Optional voice and camera engineering checkpoint — 20 November 2026
+
+**IMPLEMENTED** in the local preview under DEC-MEDIA-001. CLARA accepts reviewed on-device recognition and supports eligible local playback. Navigate presents confirmed ordinary route instructions and the canonical mini-map over opt-in camera video. Hosted STT, the illustrative ribbon and public rollout are **BLOCKED**. [73](73-quality-gates-release-checklist.md) records deterministic and browser evidence. Physical-device and production acceptance are **NOT_TESTED**. This checkpoint qualifies earlier full-AR planning entries only for Lite. The FS milestones below retain their acceptance and sequencing.
+
 ## Purpose
 Separate **required/design** documentation from what is actually implemented. Update only from code, tests, or live verification. The canonical development roadmap was reset by `DEC-ROADMAP-001`; existing implementation is preserved as baseline evidence and is not automatically complete under the reset roadmap.
 

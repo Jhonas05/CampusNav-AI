@@ -2,6 +2,10 @@
 
 This file records deliberate project decisions so future coding agents do not revive old assumptions or create conflicting implementations.
 
+## DEC-MEDIA-001 — Local CLARA voice and Camera Directions Lite engineering, 20 November 2026
+
+The owner's integration request authorizes optional engineering and local QA. CLARA uses its existing grounded answer and action pipeline. Reviewed voice questions opt into automatic playback of explicitly eligible public replies. Typed questions retain manual playback. Remote speech processing requires separate institutional and cost review. Ordinary Navigate may present camera instructions from its existing confirmed origin, route and steps. A floor ribbon requires credible maneuver geometry, orientation and safety evidence. The September planning-only decision remains historical for Lite and continues to govern broader AR. See 17, 74 and 78. This decision grants neither a production deployment nor academic or institutional acceptance. Phase 4 sequencing continues under the existing FS decisions.
+
 ## DEC-ARCH-001 — One dataset + one routing engine
 **Status:** APPROVED / NON-NEGOTIABLE
 

@@ -1,5 +1,9 @@
 # CampusNav AI — Definition of Ready
 
+## Media preview readiness
+
+Local implementation is authorized by DEC-MEDIA-001. Public voice and camera availability needs a separate release decision with target-device accessibility and lifecycle evidence. Hosted speech additionally needs the institutional, provider and cost decisions in [78](78-clara-voice-accessibility.md). A floor ribbon additionally needs camera-relative maneuver evidence and campus review under [74](74-ar-assisted-navigation-contract.md).
+
 A feature/task is ready for implementation when the following are sufficiently clear.
 
 ## Required

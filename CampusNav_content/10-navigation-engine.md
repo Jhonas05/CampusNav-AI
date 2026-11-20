@@ -1,5 +1,9 @@
 # CampusNav AI — Navigation Engine Contract
 
+## Camera instruction selection
+
+Camera Directions Lite consumes the same route and `generateNavigationInstructions` output as Navigate. Selecting a step changes the instruction and viewed floor only. A failed Avoid Stairs result cannot open camera guidance. See [74](74-ar-assisted-navigation-contract.md).
+
 ## Purpose
 Defines the single routing contract used by 2D, 3D, QR navigation, personnel/facility navigation, and future CLARA.
 

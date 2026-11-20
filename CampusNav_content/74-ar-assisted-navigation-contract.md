@@ -1,6 +1,24 @@
 # CampusNav AI — AR-Assisted Camera Navigation / AR Guidance Mode
 
-## Canonical status
+## Camera Directions Lite v1.0 — 20 November 2026
+
+**IMPLEMENTED in local preview.** DEC-MEDIA-001 authorizes ordinary camera instructions over an active standard or Avoid Stairs route. The existing full AR roadmap and its historical planning decision follow below. Physical-device, campus safety and production acceptance are outstanding. The owner supplied the [Lite proposal](../docs/architecture/references/CampusNav_AR_Camera_Directions_Lite_Architecture_v1_2026-11-20.pdf) as a supporting reference.
+
+| Stage | Runtime contract |
+| --- | --- |
+| Eligible | Navigate has a selected canonical destination, instructions, an active A* result and a user-confirmed QR/manual origin. The route start entrance must equal the position node and the last node must belong to the destination. A sample origin, pending confirmation, failed route, arrival or Emergency Mode prevents entry. Avoid Stairs retains its existing failure behavior. |
+| Open | **Camera directions** opens a lazy modal above the 2D map. It shows the selected instruction, canonical destination, selected floor and a mini-map rendered by the same CampusMapCanvas with the same floor segment. Its text remains readable with the camera off. |
+| Requesting | **Enable rear camera** requests video with an environment-facing preference and audio disabled. HTTPS or localhost and browser camera support are required. Exit remains available while permission is pending. |
+| Showing | The video stays in the browser. Confirm facing matches map records a manual assertion for the current instruction. Previous and Next select existing instructions and the corresponding map floor. They never update the confirmed origin or declare arrival. Stairs and connectors use their canonical text. |
+| Reconfirm or leave | Changing the step clears facing. Rescan QR or choose a manual location returns to the existing positioning workflow. Exit keeps the selected route in 2D. Route replacement, external floor change, account/navigation change, competing UI, background and unmount release owned tracks. A late permission grant is released. Track interruption and denied/unavailable devices expose status and a 2D exit. |
+
+The instruction data comes from `generateNavigationInstructions` and the currently selected Map route. Multi-floor steps carry a floor ID. Same-floor instructions use the confirmed floor. Map data contains coarse turn/straight instructions without a verified camera-relative direction, heading reference or safe corridor rendering envelope. The illustrative blue ribbon is **BLOCKED**, including after manual facing confirmation. The mini-map can draw the planned path. Never infer physical progress, corridor safety, distance calibration or physical presence from the camera or a tap.
+
+The modal uses semantic controls, text alternatives, an announced selected step, safe-area spacing and an inert mini-map. Native modal focus and Return to 2D keep background controls out of the camera workflow. Leaving CLARA ends its voice UI before starting a camera session. Static assets use the existing PWA policy. The component has no recording, frame extraction, upload, storage, sensor or external SDK dependency. A worker-controlled offline revisit is supported where the built shell and map data are available.
+
+QA and release gates are in [73](73-quality-gates-release-checklist.md). To enable a ribbon in future, map maintainers must supply an unambiguous segment and orientation reference per eligible step, and campus reviewers must verify the representative journey in person. Physical Android/iOS camera selection, stream handoff to QR, background interruptions, assistive technology, lighting and low-end performance require device testing. Ordinary 2D instructions remain the fallback.
+
+## Historical full AR planning record — 19 September 2026
 
 - **Planning status:** `PROPOSED / FUTURE_ENHANCEMENT`
 - **Implementation status:** `NOT_IMPLEMENTED`
@@ -223,9 +241,9 @@ The following are not part of the initial adoption plan:
 
 These items require separate owner approval, evidence, privacy/security review, and Definition of Ready. Their mention here is not roadmap authorization.
 
-## Proposed future stages
+## Proposed full AR stages from the September plan
 
-None of these stages is implemented or authorized to start.
+These historical stage definitions describe the broader proposal. The limited November authorization and current Lite evidence are specified above.
 
 ### AR-0 — Canonical Feasibility and Architecture
 
@@ -328,7 +346,7 @@ Before any implementation can be accepted, evidence must show:
 
 ## Definition-of-Ready gaps
 
-AR implementation remains `NOT_READY`. Before AR-0 or later implementation begins, canonical approval must resolve or explicitly define:
+The September full AR proposal recorded these readiness gaps. The Lite contract above resolves only its explicitly covered scope. Broader AR still requires decisions on:
 
 - final initial-scope classification and roadmap authorization after current Phase 3 work
 - final route-step adapter rules, maneuver derivation, and approximate-distance semantics

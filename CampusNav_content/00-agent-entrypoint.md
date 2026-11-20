@@ -24,9 +24,9 @@ Then read the task-specific files from the map below.
 | Dashboard/notifications | `15`, `22`, `47`, `49`, `68` |
 | Admin CMS | `05`, `16`, `45`, `48`, `68` |
 | Supabase/database | `04`, `05`, `19`, `31`, `42`, `48`, `51` |
-| CLARA | `17`, `18`, `20`, `41`, `49`, `59`, `60`, `76` |
+| CLARA, voice input and public playback | `17`, `18`, `20`, `41`, `49`, `59`, `60`, `76`, `78` |
 | UI/frontend | `06`, `07`, `21`, `26`, `40`, `55` |
-| AR/camera guidance planning | `03`, `10`, `11`, `12`, `20`, `21`, `25`, `26`, `49`, `55`, `58`, `60`, `63`, `69`, `72`, `73`, `74` |
+| Camera Directions Lite and broader AR planning | `03`, `10`, `11`, `12`, `20`, `21`, `25`, `26`, `49`, `55`, `58`, `60`, `63`, `69`, `72`, `73`, `74` |
 | Deployment/release | `08`, `25`, `31`, `51`, `52`, `62`, `73` |
 | Git delivery, branches, worktrees, cleanup | `37`, `38`, `52`, `53`, `71`, `73` |
 | Thesis/defense | `27`, `28`, `30`, `36`, `60`, `69`, `70`, `75` |
