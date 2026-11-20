@@ -92,7 +92,7 @@ export default function ClaraVoice({ messages, pending, onSend }) {
       {canRead && <button className={button.ghost} disabled={muted || recording || !isOnline} onClick={() => playback.current?.play(last)}>Read Aloud</button>}
     </div>
     {active && <>
-      <p className="text-ink-soft">Speak for up to 15 seconds using an installed on-device language. Review before sending. Public replies play aloud{muted ? " when unmuted" : ""}.</p>
+      <p className="text-ink-soft">Audio stays on this device. Speak for up to 15 seconds, then review the text before sending it to CLARA. Eligible public replies play aloud{muted ? " when unmuted" : ""}.</p>
       <div className="flex flex-wrap items-center gap-1">
         <select aria-label="Recognition language" className="min-h-11 bg-surface" value={language} disabled={recording} onChange={e => setLanguage(e.target.value)}>
           <option value="en-US">English</option><option value="fil-PH">Filipino</option>

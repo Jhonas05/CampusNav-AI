@@ -1,5 +1,9 @@
 # CampusNav Content Pack — Changelog
 
+## v3.64 — 20 November 2026
+
+Bounded the CLARA microphone capability check, clarified local media notices and kept 2D navigation available when native dialogs are missing. Added deterministic and simulated-browser coverage, the physical-device checklist and the gated production delivery record. The public Supabase DNS incident remains open. See [73](73-quality-gates-release-checklist.md).
+
 ## v3.63 — 20 November 2026
 
 Added an optional local CLARA voice layer and ordinary-route Camera Directions Lite, the source proposals, DEC-MEDIA-001 and canonical contracts 74/78. Public answers can play after transcript confirmation. The camera uses the current route instruction and canonical mini-map. Hosted speech, a directional ribbon and public rollout remain gated. See [73](73-quality-gates-release-checklist.md) for evidence and [09](09-progress-roadmap.md) for FS sequencing.

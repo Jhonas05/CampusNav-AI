@@ -7,7 +7,8 @@
 | Hosted transcription eligibility — school DPO, procurement and provider account owner | Student audio, minors, retention, cross-border processing and cost. Use on-device recognition where supported or type. | Record audience/region and contract approvals, server enforcement of zero-overage caps, accepted formats and approved English/Filipino/Taglish corpus under 78. |
 | Camera-relative maneuver — campus map owner and campus safety reviewer | A misplaced ribbon could imply a safe turn or physical location. Use text and the planned mini-map. | Identify verified segment/heading references for an ordinary route and conduct a field walkthrough under 74. |
 | Browser and accessibility acceptance — QA lead and accessibility reviewers | Hardware, speech, focus and assistive behavior vary. Keep preview-only access, typing and 2D. | Complete the physical-device matrix in 73 and record actual results before any release decision. |
-| Deployment — release owner | A main push starts Cloudflare deployment. Default builds omit media controls. | Review the tested feature commit and authorize delivery for a release window. |
+| Public preview enablement — release owner | The gated code has shipped. Default builds omit media controls. | Review physical-device, accessibility and privacy evidence before enabling public controls. |
+| Production Supabase availability — school project administrator | The configured project hostname returns NXDOMAIN. Guest navigation works with local data and fallbacks. | Confirm the designated project's status and public hostname, restore service through the owner if needed, then repeat guest backend and permitted auth checks. |
 
 Only unresolved decisions belong here. Resolved decisions move to `29-decision-log.md`.
 

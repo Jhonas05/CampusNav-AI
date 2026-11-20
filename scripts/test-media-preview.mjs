@@ -77,6 +77,27 @@ test('denied microphone and discarded transcript never send a question', async (
   assert.equal(engine.onresult, null)
 })
 
+test('a stalled local-language check times out and a late result cannot start the microphone', async t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  let finishCheck, started = false
+  class Recognition {
+    static available = () => new Promise(resolve => { finishCheck = resolve })
+    get processLocally() { return this.local }
+    set processLocally(value) { this.local = value }
+    start() { started = true }
+  }
+  const states = []
+  const mic = createLocalRecognition({ isSecureContext: true, SpeechRecognition: Recognition },
+    'en-US', state => states.push(state), assert.fail)
+  const checking = mic.start()
+  t.mock.timers.tick(20000)
+  assert.match(states.at(-1) || '', /timed out/)
+  finishCheck('available')
+  await checking
+  assert.equal(started, false)
+  assert.equal(states.length, 1)
+})
+
 test('camera guide consumes only a valid active ordinary route from the confirmed endpoints', () => {
   const input = { confirmed: true, status: 'active', destination: { id: 'library' },
     route: { startEntranceNodeId: 'a', nodes: [{ id: 'a' }, { facilityId: 'library' }] },

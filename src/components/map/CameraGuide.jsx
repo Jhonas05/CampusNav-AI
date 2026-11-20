@@ -4,7 +4,17 @@ import CampusMapCanvas from "./CampusMapCanvas"
 import { getRouteSegmentForFloor } from "@/lib/navigation"
 import { createGuideCamera } from "@/lib/cameraGuide"
 
-export default function CameraGuide({ route, instructions, activeStep, selectStep, position, destination, onClose, trigger, manual, scan }) {
+export default function CameraGuide(props) {
+  if (typeof globalThis.HTMLDialogElement?.prototype.showModal !== "function") {
+    return <div className="mt-2 flex flex-wrap items-center gap-2">
+      <p role="status">Camera directions are unavailable in this browser. Continue with the 2D map.</p>
+      <button className={button.secondary} onClick={() => { props.onClose(); props.trigger.current?.focus() }}>Return to 2D</button>
+    </div>
+  }
+  return <CameraDialog {...props} />
+}
+
+function CameraDialog({ route, instructions, activeStep, selectStep, position, destination, onClose, trigger, manual, scan }) {
   const dialog = useRef(null)
   const video = useRef(null)
   const owner = useRef(null)
@@ -64,6 +74,7 @@ export default function CameraGuide({ route, instructions, activeStep, selectSte
         </figure>
         <section className="space-y-2 rounded-2xl border border-line bg-surface p-3">
           <p role="status">{state}{state === "Camera on" && (aligned ? " · Facing manually confirmed for this instruction" : " · Facing unconfirmed")}</p>
+          {state === "Camera off" && <p className="text-sm">The camera preview stays on this device. The microphone stays off.</p>}
           <div className="flex flex-wrap gap-2">
             {state === "Camera off" && <button className={button.primary} onClick={enableCamera}>Enable rear camera</button>}
             {state === "Camera on" && <button className={button.secondary} aria-pressed={aligned} onClick={() => setAligned(!aligned)}>{aligned ? "Clear facing confirmation" : "Confirm facing matches map"}</button>}

@@ -73,10 +73,14 @@ export function createLocalRecognition(device, language, report, review) {
   async function start() {
     try {
       const Recognition = device.SpeechRecognition || device.webkitSpeechRecognition
+      captureTimer = setTimeout(() => { cancel(); report("Microphone request timed out. Retry or type your question.") }, 20000)
       if (!device.isSecureContext || !Recognition?.available ||
         !("processLocally" in Recognition.prototype) ||
         await Recognition.available({ langs: [language], processLocally: true }) !== "available") {
-        if (!cancelled) report("On-device recognition unavailable. Type your question.")
+        if (!cancelled) {
+          cancel()
+          report("On-device recognition unavailable. Type your question.")
+        }
         return
       }
       if (cancelled) return
@@ -102,7 +106,6 @@ export function createLocalRecognition(device, language, report, review) {
         report(event.error === "not-allowed" ? "Microphone permission denied" : "Recognition unavailable")
       }
       engine.onend = () => { cancel(); report("No transcript received") }
-      captureTimer = setTimeout(() => { cancel(); report("Microphone request timed out") }, 20000)
       engine.start()
     } catch { if (!cancelled) { cancel(); report("Recognition unavailable") } }
   }

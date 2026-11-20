@@ -1,5 +1,22 @@
 # CampusNav AI — Quality Gates and Release Checklist
 
+## Controlled release readiness — 20 November 2026
+
+Cloudflare Workers Builds reported success for `608d5d9`. The public entry changed from `index-rYEQVvGN.js` to `index-B3NMfred.js`. On the live site a fresh guest browser opened Home, Navigate, Facilities and Dashboard, received a typed CLARA answer, followed its Registrar action and displayed the route from the Library. The default release hid both preview controls. A service-worker-controlled offline reload restored the route with 47 static cached requests. A signature scan of 67 public text artifacts found zero recognized privileged credentials. [Cloudflare build check](https://github.com/Jhonas05/CampusNav-AI/runs/136017851330)
+
+**Open production incident.** The zero-error smoke check failed. The configured CampusNav Supabase hostname returned NXDOMAIN from the system resolver, Cloudflare DNS and Google DNS. Public screens rendered their fallbacks. Live provider-backed information and authentication remain unverified. The project owner must check the designated project's availability and its public API hostname before repeating online checks. This release changed no provider configuration.
+
+The controlled preview now bounds a stalled on-device language check within the microphone request deadline. The new deterministic test first reproduced the missing timeout, then verified timeout and rejection of a late result. All seven media cases passed. Chrome fixtures verified the typing fallback for a missing language pack and the active 2D route, zero camera requests and focus return on a browser missing native modal support. The default local entry and service-worker SHA-256 fingerprints matched the original feature build. Run `npm run test:media-preview` and the loopback procedure below to repeat the checks. These simulations establish application behavior only.
+
+### Physical-device checklist
+
+Use a **private, trusted HTTPS origin** serving the explicitly enabled preview. Test both a real Android phone with Chrome and a real iPhone with Safari. Repeat in installed or Home Screen mode. For every result record OS, browser version, display mode, language pack, permission state and pass/fail. Use public facility names as fixtures. Omit recordings, transcripts and identifiable camera images from evidence.
+
+1. Open CLARA and Navigate with fresh permissions. Confirm neither prompts on entry. Deny each explicit request, then verify typing and 2D remain usable. Repeat after granting permission in device settings.
+2. With an available local language, edit a sample transcript before sending. Compare the displayed public answer with actual playback. Check typed/manual playback, mute, pause, resume, stop and a text-only response. With an unavailable language confirm that typing works and no remote recognizer starts.
+3. Confirm the Library origin and Registrar destination. Open the rear-camera guide. Check destination, selected instruction, floor and mini-map. Advance through stairs, rescan QR, reconfirm manually and exit. Verify the camera indicator clears on exit and backgrounding, with a usable 2D return. Emergency Mode must have no camera guide.
+4. Use TalkBack or VoiceOver and large text. Check permission messages, focus on exit, controls in portrait/landscape, and interruption by locking the phone or switching apps. After the worker controls a prior online visit, disable network and reopen ordinary 2D navigation. Record failures per device before requesting public feature enablement.
+
 ## Local CLARA voice and Camera Directions Lite — 20 November 2026
 
 | Evidence | Scope |
