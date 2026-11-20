@@ -1,5 +1,9 @@
 # CampusNav AI — Implementation Status Registry
 
+## FS-5 on the new Windows workspace — 20 November 2026
+
+FS-5 remains `IN_PROGRESS / PARTIALLY VERIFIED`. The local media validator and sandbox preparation passed on `D:\CampusNav-AI`. The laptop lacks a running Linux container engine, so the six migrations, six pgTAP suites and Storage access checks await an isolated backend. The next milestone is the local replay and permission checks in the [FS-5 contract](77-facility-media-readiness-and-contract.md#windows-laptop-preflight--20-november-2026). FS-1 through FS-4 retain their acceptance. FS-6 and FS-7 remain unstarted.
+
 ## Controlled release readiness — 20 November 2026
 
 The default-gated implementation reached GitHub and Cloudflare at `608d5d9`. The public guest surfaces, typed CLARA handoff and cached ordinary route were verified. The production Supabase hostname failed DNS resolution, blocking live backend acceptance. The local preview adds a bounded language precheck and a missing-dialog fallback. Physical media behavior, public feature enablement, hosted STT and the ribbon remain gated. See the [release evidence and device checklist](73-quality-gates-release-checklist.md). FS-5 retains its existing partial verification.

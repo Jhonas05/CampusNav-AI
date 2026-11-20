@@ -1,10 +1,21 @@
 # CampusNav AI — Quality Gates and Release Checklist
 
+## FS-5 Windows backend preflight — 20 November 2026
+
+| Gate | Result on `f66fea7` |
+| --- | --- |
+| Local deterministic regression | 39/39 suites passed, including 103/103 media candidate and draft checks, 23/23 sandbox preparation checks and 7/7 voice and camera cases. |
+| Release tooling | Lint, typecheck, production build, PWA artifact checks after the build (47 precache entries) and the Git whitespace check passed. |
+| Isolated backend | **BLOCKED before startup.** The preflight found no Linux container engine. Zero migrations applied and zero pgTAP suites executed. Live RLS, private Storage, trusted audit and rollback verification are pending. |
+| Media acceptance | Existing placeholder and routing regressions passed. Populated media, device accessibility and gallery performance await eligible assets and a verified implementation. |
+
+The [FS-5 contract](77-facility-media-readiness-and-contract.md#windows-laptop-preflight--20-november-2026) records the local inventory, D: sandbox path and startup procedure.
+
 ## Controlled release readiness — 20 November 2026
 
 Cloudflare Workers Builds reported success for `608d5d9`. The public entry changed from `index-rYEQVvGN.js` to `index-B3NMfred.js`. On the live site a fresh guest browser opened Home, Navigate, Facilities and Dashboard, received a typed CLARA answer, followed its Registrar action and displayed the route from the Library. The default release hid both preview controls. A service-worker-controlled offline reload restored the route with 47 static cached requests. A signature scan of 67 public text artifacts found zero recognized privileged credentials. [Cloudflare build check](https://github.com/Jhonas05/CampusNav-AI/runs/136017851330)
 
-**Open production incident.** The zero-error smoke check failed. The configured CampusNav Supabase hostname returned NXDOMAIN from the system resolver, Cloudflare DNS and Google DNS. Public screens rendered their fallbacks. Live provider-backed information and authentication remain unverified. The project owner must check the designated project's availability and its public API hostname before repeating online checks. This release changed no provider configuration.
+**Production connectivity incident, resolved 20 November.** At the original release check the configured CampusNav Supabase hostname returned NXDOMAIN from the system resolver, Cloudflare DNS and Google DNS. Public screens rendered their fallbacks. During the subsequent recovery check the hostname resolved, the Dashboard showed a live connection, and all 21 observed backend requests succeeded. Auth health responded. Signed-in role verification and the historical cause remained open. The FS-5 backend preflight used local evidence only.
 
 The controlled preview now bounds a stalled on-device language check within the microphone request deadline. The new deterministic test first reproduced the missing timeout, then verified timeout and rejection of a late result. All seven media cases passed. Chrome fixtures verified the typing fallback for a missing language pack and the active 2D route, zero camera requests and focus return on a browser missing native modal support. The default local entry and service-worker SHA-256 fingerprints matched the original feature build. Run `npm run test:media-preview` and the loopback procedure below to repeat the checks. These simulations establish application behavior only.
 

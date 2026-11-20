@@ -121,16 +121,35 @@ Minimum ongoing local permissions: write access to the external sandbox, access 
 
 Current [Supabase runtime documentation](https://supabase.com/docs/guides/local-development/docker-and-native-runtimes) explicitly excludes native Windows. The newer experimental native runtime is not a reason to upgrade the pinned CLI blindly. Relevant changelog notices for TLS and PostgreSQL extensions were inspected; no remote maintenance or dependency change was performed.
 
+### Windows laptop preflight — 20 November 2026
+
+The primary worktree is `D:\CampusNav-AI`. On baseline `f66fea7`, Windows 11 Home Single Language build 26300 had 3.94 GiB of 15.84 GiB RAM available. Drive D had 639.89 GiB free. Node 22.23.4, npm 10.9.9 and the cached Supabase CLI 2.79.0 ran successfully.
+
+`wsl --status` exited 50 and reported WSL uninstalled. Docker Desktop, its CLI and a local engine pipe were absent. The PostgreSQL 16 directory contained data and an installation log. The inventory found no runnable PostgreSQL server or client, service or listener. VMware Workstation was installed, with no designated CampusNav guest. No disposable remote target was designated. The preflight found no listeners on 54320–54324 or 55320–55324.
+
+**Runtime verification is blocked.** The repository contains six ordered migrations and six rollback-only pgTAP suites. The preparation tests verified source and snapshot bytes. This preflight stopped before operational sandbox creation, Docker network creation or SQL execution. Anonymous/authenticated RLS, role enforcement, Storage access, audit attribution and post-rollback fixture counts still require the isolated stack. The FS-5 status is `IN_PROGRESS / PARTIALLY VERIFIED`.
+
 ### Exact safe resume commands — after owner/runtime readiness
 
-Run from the authoritative repository. This prepares files only; do not run database commands against the original `CampusNav_AI` project or a remote link.
+Run from the primary worktree after the local Linux engine is available. First verify that the active Docker context and any host override resolve to the intended local engine. Each preparation creates a new child directory outside Git on drive D.
 
 ```powershell
-$fs5Snapshot = node scripts/prepare-fs5-local-backend.mjs --parent 'C:\Users\St.Clare\Documents' | ConvertFrom-Json
+Set-Location -LiteralPath 'D:\CampusNav-AI' -ErrorAction Stop
+Get-Command docker -CommandType Application -ErrorAction Stop | Out-Null
+docker version
+if ($LASTEXITCODE -ne 0) { throw 'Docker client and server must both respond' }
+$fs5Engine = docker info --format '{{.OSType}}'
+if ($LASTEXITCODE -ne 0 -or $fs5Engine -ne 'linux') { throw 'A local Linux engine is required' }
+$listeners = Get-NetTCPConnection -State Listen -ErrorAction Stop
+if ($listeners | Where-Object { $_.LocalPort -in 55320,55321,55322 }) { throw 'An FS-5 port is in use' }
+$fs5Parent = 'D:\CampusNav-FS5-sandboxes'
+if (!(Test-Path -LiteralPath $fs5Parent)) { New-Item -ItemType Directory -Path $fs5Parent -ErrorAction Stop | Out-Null }
+$parentInfo = Get-Item -LiteralPath $fs5Parent -Force -ErrorAction Stop
+if (!$parentInfo.PSIsContainer -or ($parentInfo.Attributes -band [IO.FileAttributes]::ReparsePoint)) { throw 'Expected a local sandbox parent directory on D:' }
+$fs5Snapshot = node scripts/prepare-fs5-local-backend.mjs --parent $fs5Parent | ConvertFrom-Json
 if ($LASTEXITCODE -ne 0) { throw 'Snapshot preparation failed' }
 node scripts/prepare-fs5-local-backend.mjs --inspect $fs5Snapshot.directory
 if ($LASTEXITCODE -ne 0) { throw 'Fresh snapshot verification failed' }
-docker version
 ```
 
 Require a responding local Linux-container engine and recheck API 55321 / DB 55322 / shadow 55320 are unused. Before startup, create only this task's generated Docker network with loopback-default publishing:
@@ -138,7 +157,8 @@ Require a responding local Linux-container engine and recheck API 55321 / DB 553
 ```powershell
 docker network create --driver bridge --opt 'com.docker.network.bridge.host_binding_ipv4=127.0.0.1' $fs5Snapshot.network
 if ($LASTEXITCODE -ne 0) { throw 'Isolated network creation failed' }
-docker network inspect $fs5Snapshot.network --format '{{json .Options}}'
+$fs5NetworkOptions = docker network inspect $fs5Snapshot.network --format '{{json .Options}}' | ConvertFrom-Json
+if ($LASTEXITCODE -ne 0 -or $fs5NetworkOptions.'com.docker.network.bridge.host_binding_ipv4' -ne '127.0.0.1') { throw 'Loopback network verification failed' }
 npx --offline --yes supabase@2.79.0 start --workdir $fs5Snapshot.directory --network-id $fs5Snapshot.network
 ```
 
