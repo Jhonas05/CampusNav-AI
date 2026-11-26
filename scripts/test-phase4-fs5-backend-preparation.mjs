@@ -8,7 +8,7 @@ import { spawnSync } from 'node:child_process'
 import { prepareFs5LocalBackend as prepare, inspectFs5LocalBackend as inspect, FS5_LOCAL_PORTS } from './prepare-fs5-local-backend.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'campusnav-fs5-preparation-test-'))
+const temporary = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'campusnav-fs5-preparation-test-'))
 let count = 0
 const check = (label, fn) => { fn(); console.log(`PASS ${++count}: ${label}`) }
 const first = prepare(temporary), second = prepare(temporary)
@@ -32,6 +32,16 @@ check('Reject unexpected executable/helper in test snapshot', () => { const sand
 check('Reject moved-directory identity without changing its contents', () => { const sandbox = prepare(temporary), moved = path.join(temporary, 'moved-test'); fs.renameSync(sandbox.directory, moved); assert.throws(() => inspect(moved)); assert.ok(fs.existsSync(path.join(moved, 'fs5-sandbox.json'))) })
 check('Reject sandbox-directory symbolic-link/junction identity', () => { const sandbox = prepare(temporary), alias = path.join(temporary, 'sandbox-link'); fs.symlinkSync(sandbox.directory, alias, process.platform === 'win32' ? 'junction' : 'dir'); assert.throws(() => inspect(alias)) })
 check('Reject repository parent reached through a symbolic link/junction', () => { const alias = path.join(temporary, 'repository-link'); fs.symlinkSync(ROOT, alias, process.platform === 'win32' ? 'junction' : 'dir'); assert.throws(() => prepare(alias)) })
+check('Reject external preparation and inspection paths through a symbolic link/junction', () => {
+  const parent = fs.mkdtempSync(path.join(temporary, 'external-parent-'))
+  const sandbox = prepare(parent)
+  const alias = path.join(temporary, 'external-link')
+  fs.symlinkSync(parent, alias, process.platform === 'win32' ? 'junction' : 'dir')
+  assert.throws(() => prepare(alias))
+  assert.throws(() => inspect(path.join(alias, path.basename(sandbox.directory))))
+  assert.deepEqual(fs.readdirSync(parent), [path.basename(sandbox.directory)])
+  assert.equal(inspect(sandbox.directory).snapshotVerification, 'PASS_FILE_SNAPSHOT_ONLY')
+})
 check('No execution/network/environment/deletion authority is implemented', () => { const source = fs.readFileSync(new URL('./prepare-fs5-local-backend.mjs', import.meta.url), 'utf8'); assert.doesNotMatch(source, /child_process|\bfetch\s*\(|\bexec\w*\s*\(|\bspawn\w*\s*\(|process\.env|rmSync|rmdirSync|unlinkSync|supabase-js|\.upload\s*\(/); assert.match(source, /flag: 'wx'/); assert.match(source, /mkdtempSync/) })
 const cli = (...args) => spawnSync(process.execPath, [fileURLToPath(new URL('./prepare-fs5-local-backend.mjs', import.meta.url)), ...args], { encoding: 'utf8', timeout: 10000 })
 check('CLI help performs no preparation and states its evidence boundary', () => { const before = fs.readdirSync(temporary), r = cli('--help'); assert.equal(r.status, 0); assert.match(r.stdout, /does not start Docker\/Supabase/); assert.deepEqual(fs.readdirSync(temporary), before) })

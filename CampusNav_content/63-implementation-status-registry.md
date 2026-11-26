@@ -1,5 +1,9 @@
 # CampusNav AI — Implementation Status Registry
 
+## FS-5 Windows desktop recovery — 26 November 2026
+
+FS-5 remains `IN_PROGRESS / PARTIALLY VERIFIED`. The Windows desktop workspace at `E:\CAMPUSNAVAI` passed local recovery and the sandbox now rejects junctions and symlinks in supplied paths. The isolated migrations, PostgreSQL/RLS and Storage checks are blocked by the missing Linux engine. Remote project inventory is unknown because access was denied. The next authorized milestone is isolated replay and direct role, audit and Storage verification after runtime and read-only project access are restored. [FS-5 recovery and processor comparison](77-facility-media-readiness-and-contract.md#windows-desktop-recovery--26-november-2026) · [Verification evidence](73-quality-gates-release-checklist.md#fs-5-windows-desktop-recovery--26-november-2026)
+
 ## FS-5 on the new Windows workspace — 20 November 2026
 
 FS-5 remains `IN_PROGRESS / PARTIALLY VERIFIED`. The local media validator and sandbox preparation passed on `D:\CampusNav-AI`. The laptop lacks a running Linux container engine, so the six migrations, six pgTAP suites and Storage access checks await an isolated backend. The next milestone is the local replay and permission checks in the [FS-5 contract](77-facility-media-readiness-and-contract.md#windows-laptop-preflight--20-november-2026). FS-1 through FS-4 retain their acceptance. FS-6 and FS-7 remain unstarted.

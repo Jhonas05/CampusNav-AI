@@ -129,6 +129,16 @@ The primary worktree is `D:\CampusNav-AI`. On baseline `f66fea7`, Windows 11 Hom
 
 **Runtime verification is blocked.** The repository contains six ordered migrations and six rollback-only pgTAP suites. The preparation tests verified source and snapshot bytes. This preflight stopped before operational sandbox creation, Docker network creation or SQL execution. Anonymous/authenticated RLS, role enforcement, Storage access, audit attribution and post-rollback fixture counts still require the isolated stack. The FS-5 status is `IN_PROGRESS / PARTIALLY VERIFIED`.
 
+### Windows desktop recovery — 26 November 2026
+
+The clean clone at `E:\CAMPUSNAVAI` started from fetched `origin/main` at `ca1669fd0de31e73b5ed7a8a5d372e01fe45102f`. Windows 11 Home Single Language build 26300 is x64, with 63.7 GiB RAM and 953 GiB free on E: at inspection. CPU virtualization and SLAT are available. WSL is uninstalled and the Docker CLI and Linux engine are absent. PostgreSQL 17.11 answers on port 5432 on an existing service. That service was left untouched. The FS-5 shadow/API/DB ports 55320–55322 were free at inspection.
+
+Node 24.19.0 and npm 11.17.0 completed `npm ci`. The pinned Supabase CLI 2.79.0 ran after using the Windows certificate store for the npm session with `NODE_OPTIONS=--use-system-ca`. All three connected Supabase accounts denied access to the known CampusNav project. Its schema, buckets, policies and functions remain **UNKNOWN**. There is no designated disposable remote target.
+
+The external `E:\CampusNav-FS5-recovery-2026-11-26\sandboxes` directory contains the fresh `campusnav_fs5_956f4dc68301` file snapshot. Inspection verified generated project and network names, seed-disabled configuration, the exact six migration and six pgTAP hashes, and the expected file inventory. The preflight now rejects symbolic links and Windows junctions anywhere in the supplied path. The focused suite verifies rejection of a junction passed to `--parent` or used as an ancestor of `--inspect`. Database and Storage tests remain blocked before startup. See [73](73-quality-gates-release-checklist.md#fs-5-windows-desktop-recovery--26-november-2026) for the test results.
+
+Owner or IT must enable [WSL 2](https://learn.microsoft.com/windows/wsl/install) in an elevated session and restart Windows for the local path. Resume once a supported [Docker Desktop Linux engine](https://docs.docker.com/desktop/setup/install/windows-install/) is running and the current shell can access it. The supported alternative is an explicitly designated disposable CampusNav backend. Read-only access to the existing CampusNav project is required separately. Use the current workspace and a verified external parent on E: when adapting the commands below. Recheck ports and snapshot bytes at startup.
+
 ### Exact safe resume commands — after owner/runtime readiness
 
 Run from the primary worktree after the local Linux engine is available. First verify that the active Docker context and any host override resolve to the intended local engine. Each preparation creates a new child directory outside Git on drive D.
@@ -184,3 +194,12 @@ Do not add `--all`, `--no-backup`, `--linked`, remote `--db-url`, login/link/pus
 The deployed topology is static assets, with no accepted trusted ingestion endpoint or Images binding. Installed `sharp@0.35.4` is transitive **local Wrangler/Miniflare tooling**, not a declared deployed image-processing dependency or trusted-server proof. Do not import it into React or assume it runs in production Workers.
 
 Cloudflare's [Images binding](https://developers.cloudflare.com/images/optimization/binding/) can transform raw bytes, but needs a configured Worker binding and reviewed usage/billing. Its offline local implementation is documented as lower-fidelity than production. Neither a browser decode nor an offline simulator proves deployed sanitization or EXIF/GPS removal. No binding/resource, paid feature, secret, server endpoint, remote test or sanitizer was activated. After database/storage readiness, select a reviewed deployable trusted processor and directly verify full decoding, size/pixel/resource bounds, metadata removal and derivative-only delivery before uploads. File preparation does not waive this independent gate.
+
+#### Processor comparison for owner review — 26 November 2026
+
+| Candidate | Fit and verification required |
+| --- | --- |
+| Cloudflare Worker with Images binding | The binding accepts a byte stream and can generate derivatives within the planned Worker boundary. CampusNav still needs its own format, animation, byte and pixel limits, plus a configured binding and approved usage. A high-fidelity isolated test must verify full decode failures and the actual EXIF/GPS, XMP and ICC contents of JPEG, PNG and WebP outputs. [Binding and local test modes](https://developers.cloudflare.com/images/optimization/binding/) · [Provider limits](https://developers.cloudflare.com/images/get-started/limits/) |
+| Dedicated Node service with explicitly pinned Sharp/libvips | The service can allowlist decoders, bound input pixels and decode and re-encode to metadata-stripped output. It needs an approved private runtime with process-level CPU and memory limits, a hard deadline, a bounded queue and a patching owner. Verify binaries and byte-level output on that same target. [Sharp security](https://sharp.pixelplumbing.com/security/) · [Output metadata](https://sharp.pixelplumbing.com/api-output/) |
+
+Both candidates require a separate eligibility check at delivery, derivative-only access, non-cacheable responses and an attributable recovery path for failed writes. The chosen runtime needs synthetic tests for malformed files, resource exhaustion, output metadata, replacement and revocation. No processor, deployment or pricing decision is recorded here.

@@ -16,8 +16,14 @@ const regular = file => {
 }
 const externalDirectory = value => {
   if (typeof value !== 'string' || !path.isAbsolute(value) || /[\u0000-\u001f]/u.test(value) || /^[\\/]{2}/.test(value)) fail('Supply an absolute existing local directory, not a network share.')
-  const resolved = fs.realpathSync(value)
-  if (/^[\\/]{2}/.test(resolved) || !fs.statSync(resolved).isDirectory() || resolved === path.parse(resolved).root || inside(ROOT, resolved)) fail('Use an external non-root local directory, not the repository.')
+  const supplied = path.resolve(value)
+  // Inspect the supplied path before realpath can hide a link in an ancestor.
+  for (let current = supplied; ; current = path.dirname(current)) {
+    if (!fs.lstatSync(current).isDirectory()) fail('Use a directory path without symbolic links or junctions.')
+    if (current === path.dirname(current)) break
+  }
+  const resolved = fs.realpathSync(supplied)
+  if (/^[\\/]{2}/.test(resolved) || resolved === path.parse(resolved).root || inside(ROOT, resolved)) fail('Use an external non-root local directory, not the repository.')
   for (let current = resolved; ; current = path.dirname(current)) {
     if (fs.existsSync(path.join(current, '.git'))) fail('A sandbox must not be prepared inside any Git workspace.')
     if (current === path.dirname(current)) break
@@ -104,7 +110,6 @@ export const prepareFs5LocalBackend = parentDirectory => {
 /** Checks snapshot identity/content, not database/storage health or RLS. */
 export const inspectFs5LocalBackend = directory => {
   const resolved = externalDirectory(directory)
-  if (!fs.lstatSync(directory).isDirectory() || fs.lstatSync(directory).isSymbolicLink()) fail('Sandbox directory must not be a symbolic link.')
   const manifest = JSON.parse(regular(path.join(resolved, 'fs5-sandbox.json')).toString('utf8'))
   if (manifest.kind !== MARKER || manifest.directory !== resolved || !/^campusnav_fs5_[a-f0-9]{12}$/.test(manifest.projectId)
     || manifest.network !== manifest.projectId + '_loopback' || manifest.cliVersion !== '2.79.0'

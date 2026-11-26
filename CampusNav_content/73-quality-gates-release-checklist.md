@@ -1,5 +1,18 @@
 # CampusNav AI — Quality Gates and Release Checklist
 
+## FS-5 Windows desktop recovery — 26 November 2026
+
+| Gate | Result |
+| --- | --- |
+| Local tooling | `PASS`. `npm ci`, Vite startup on loopback, lint, typecheck, production build, PWA built-artifact and whitespace checks passed. |
+| Deterministic regression | `PASS`. 40 distinct suites, including FS-1 through FS-4 and Phase 8A through 8C.2 local checks, 103/103 media candidate and draft cases, 24/24 sandbox checks and 7/7 media-preview cases. |
+| Chrome 158 | `PASS`. Directory and detail checks at 390×844, 820×1180 and 1366×900 covered keyboard entry, overflow, accessible placeholders and no guessed photo requests. Synthetic JPEG/PNG/WebP underwent native decoding. Spoofed MIME, metadata and truncation were rejected. An undecodable synthetic image returned to the placeholder. The default build hid local previews. A separate loopback build passed the CLARA mock-speech, synthetic-camera, 2D fallback and installed-worker offline checks. |
+| Database, Auth and Storage | `BLOCKED`. The file-only snapshot passed all hash and inventory checks. Runtime startup, migration replay, pgTAP, role restrictions, Storage API, trusted audit and rollback checks were `NOT_EXECUTED`. Read-only remote project access was denied. |
+| Dependency advisory | `npm audit` reported 17 findings (1 low, 9 moderate, 7 high, 0 critical) on the existing lockfile. Build chunk-size warnings remain. |
+| Media release | `BLOCKED`. Trusted processing and delivery, verified upload and publication, populated gallery and institutional approval remain outstanding. Physical-device and screen-reader checks were `NOT_EXECUTED`. |
+
+Logs and synthetic screenshots are outside Git at `E:\CampusNav-FS5-recovery-2026-11-26`. See the [FS-5 recovery record](77-facility-media-readiness-and-contract.md#windows-desktop-recovery--26-november-2026) for environment and access details.
+
 ## FS-5 Windows backend preflight — 20 November 2026
 
 | Gate | Result on `f66fea7` |

@@ -8,13 +8,13 @@ Run `npm ci` and `npm run dev`. Open CLARA and choose **Speak to CLARA**. An ins
 
 Run `npm run test:media-preview` for the adapter tests. Default production builds omit the preview controls. For the loopback browser QA procedure, see the [QA record](CampusNav_content/73-quality-gates-release-checklist.md). The engineering boundaries are in [CLARA voice](CampusNav_content/78-clara-voice-accessibility.md) and [Camera Directions Lite](CampusNav_content/74-ar-assisted-navigation-contract.md).
 
-## Current FS-5 engineering checkpoint — 16 October 2026
+## Current FS-5 engineering checkpoint — 26 November 2026
 
 FS-5 is `IN_PROGRESS / PARTIALLY VERIFIED`. Independent local JPEG/PNG/WebP candidate and private-draft validation is implemented; it does not upload, store, approve or publish media. Maximum candidate size is 5 MiB, with 4096-pixel sides / 12-million-pixel bounds and real browser decoding. Unsupported embedded metadata is rejected, not removed. No official photograph, media provider/backend, schema, bucket, policy, secret, Admin upload or public gallery was added; existing placeholders/navigation remain unchanged.
 
 Run `node scripts/test-phase4-fs5-validation.mjs` for focused coverage. Canonical `77-facility-media-readiness-and-contract.md` records the readiness matrix, exact local validation contract and blocked resumption gate: an authorized isolated PostgreSQL + Storage/server environment, readable inventory and verified trusted ingestion/delivery/cleanup/RLS/audit are required before upload/publication work. Production mutations remain unauthorized; FS-6/FS-7 are not started. The earlier FS-4 checkpoint below preserves its historical then-unstarted FS-5 status, not current sequencing.
 
-The backend-unblocking follow-up adds `node scripts/prepare-fs5-local-backend.mjs --help` and `node scripts/test-phase4-fs5-backend-preparation.mjs`. Preparation creates only fresh external migration/rollback-only-test snapshots with seed-disabled config and strict hash/identity checks; it never starts services or applies SQL. Docker/PostgreSQL/WSL remain unavailable and no authorized CampusNav development target is visible in connected account lists. `77` contains exact owner/IT setup, minimum permissions and guarded resume commands. The prepared-target pgTAP connection failed before assertions, not passed. No backend, Images binding, upload, Admin media editor or public gallery was activated.
+Run `node scripts/prepare-fs5-local-backend.mjs --help` for file preparation options and `node scripts/test-phase4-fs5-backend-preparation.mjs` for the snapshot and junction checks. The current Windows workspace verified a file-only snapshot with exact migration and rollback-only test hashes. Local migration, PostgreSQL/RLS and Storage tests await a Linux container engine. Access to remote CampusNav inventory was denied. [Recovery and next milestone](CampusNav_content/77-facility-media-readiness-and-contract.md#windows-desktop-recovery--26-november-2026)
 
 ## Current FS-4 acceptance — 16 October 2026
 
@@ -34,7 +34,7 @@ Requirements:
 Install dependencies and start the Vite development server:
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 

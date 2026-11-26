@@ -1,5 +1,9 @@
 # CampusNav Content Pack — Changelog
 
+## v3.65 — 26 November 2026
+
+Recorded recovery on the Windows desktop workspace and verified that FS-5 sandbox preparation and inspection reject Windows junctions and symbolic links in supplied paths. Added the processor comparison for review. FS-5 remains partially verified pending a Linux container engine, read-only project access and real backend tests. [Recovery record](77-facility-media-readiness-and-contract.md#windows-desktop-recovery--26-november-2026) · [Quality evidence](73-quality-gates-release-checklist.md#fs-5-windows-desktop-recovery--26-november-2026)
+
 ## v3.64 — 20 November 2026
 
 Bounded the CLARA microphone capability check, clarified local media notices and kept 2D navigation available when native dialogs are missing. Added deterministic and simulated-browser coverage, the physical-device checklist and the gated production delivery record. The public Supabase DNS incident remains open. See [73](73-quality-gates-release-checklist.md).
