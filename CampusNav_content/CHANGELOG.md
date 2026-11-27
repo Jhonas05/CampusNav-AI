@@ -1,5 +1,9 @@
 # CampusNav Content Pack — Changelog
 
+## v3.66 — 27 November 2026
+
+Hardened CLARA preview speech cancellation and transcript focus, kept controls within the visible viewport, and made Camera Directions release its tracks before 2D or QR/manual handoff. Recorded browser coverage and the Android/iOS release checklist. [Media preview evidence](73-quality-gates-release-checklist.md#clara-voice-and-camera-directions-device-readiness--27-november-2026)
+
 ## v3.65 — 26 November 2026
 
 Recorded recovery on the Windows desktop workspace and verified that FS-5 sandbox preparation and inspection reject Windows junctions and symbolic links in supplied paths. Added the processor comparison for review. FS-5 remains partially verified pending a Linux container engine, read-only project access and real backend tests. [Recovery record](77-facility-media-readiness-and-contract.md#windows-desktop-recovery--26-november-2026) · [Quality evidence](73-quality-gates-release-checklist.md#fs-5-windows-desktop-recovery--26-november-2026)

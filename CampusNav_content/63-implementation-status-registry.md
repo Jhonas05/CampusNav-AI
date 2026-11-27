@@ -1,5 +1,9 @@
 # CampusNav AI — Implementation Status Registry
 
+## CLARA voice and Camera Directions device readiness — 27 November 2026
+
+The opt-in preview handles stopped paused speech, cancels stale recognition callbacks and correlates automatic speech with the latest reviewed voice turn. The voice panel keeps the typed fallback, editable transcript and focus controls available in compact layouts. Camera Directions releases its stream before returning to 2D or handing off to QR/manual positioning. Physical devices, public enablement, hosted recognition and campus ribbon calibration remain separate gates. [Browser evidence and device checklist](73-quality-gates-release-checklist.md#clara-voice-and-camera-directions-device-readiness--27-november-2026)
+
 ## FS-5 Windows desktop recovery — 26 November 2026
 
 FS-5 remains `IN_PROGRESS / PARTIALLY VERIFIED`. The Windows desktop workspace at `E:\CAMPUSNAVAI` passed local recovery and the sandbox now rejects junctions and symlinks in supplied paths. The isolated migrations, PostgreSQL/RLS and Storage checks are blocked by the missing Linux engine. Remote project inventory is unknown because access was denied. The next authorized milestone is isolated replay and direct role, audit and Storage verification after runtime and read-only project access are restored. [FS-5 recovery and processor comparison](77-facility-media-readiness-and-contract.md#windows-desktop-recovery--26-november-2026) · [Verification evidence](73-quality-gates-release-checklist.md#fs-5-windows-desktop-recovery--26-november-2026)

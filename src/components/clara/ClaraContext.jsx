@@ -9,7 +9,7 @@ import { useConnectivity } from "@/contexts/ConnectivityContext"
  * but is never written to browser storage.
  */
 
-/** @typedef {{ id: number, role: "user" | "assistant", text: string, facility?: any, link?: { href: string, label: string } | null, sources?: Array<{ id: string, label: string, verificationStatus?: string }>, verified?: boolean, error?: boolean, retryText?: string }} ClaraMessage */
+/** @typedef {{ id: number, role: "user" | "assistant", text: string, facility?: any, link?: { href: string, label: string } | null, sources?: Array<{ id: string, label: string, verificationStatus?: string }>, verified?: boolean, error?: boolean, retryText?: string, voiceRequest?: symbol }} ClaraMessage */
 
 const noop = () => {}
 
@@ -79,7 +79,7 @@ export function ClaraProvider({ children }) {
   const send = useCallback((value, voiceRequest = undefined) => {
     const text = String(value || "").trim()
     if (!text) return
-    append({ role: "user", text })
+    append({ role: "user", text, voiceRequest })
     request(text, voiceRequest)
   }, [append, request])
 

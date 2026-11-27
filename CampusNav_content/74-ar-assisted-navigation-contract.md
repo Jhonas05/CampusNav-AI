@@ -16,6 +16,8 @@ The instruction data comes from `generateNavigationInstructions` and the current
 
 The modal uses semantic controls, text alternatives, an announced selected step, safe-area spacing and an inert mini-map. Native modal focus and Return to 2D keep background controls out of the camera workflow. Leaving CLARA ends its voice UI before starting a camera session. Static assets use the existing PWA policy. The component has no recording, frame extraction, upload, storage, sensor or external SDK dependency. A worker-controlled offline revisit is supported where the built shell and map data are available.
 
+Enabling the camera focuses its status. At either end of the instruction list, focus moves to the selected instruction when the navigation button becomes unavailable. Return to 2D, Escape and QR/manual handoff release the guide stream before focus or camera ownership moves to the next surface. The modal respects safe-area insets on all sides.
+
 QA and release gates are in [73](73-quality-gates-release-checklist.md). To enable a ribbon in future, map maintainers must supply an unambiguous segment and orientation reference per eligible step, and campus reviewers must verify the representative journey in person. Physical Android/iOS camera selection, stream handoff to QR, background interruptions, assistive technology, lighting and low-end performance require device testing. Ordinary 2D instructions remain the fallback.
 
 ## Historical full AR planning record — 19 September 2026

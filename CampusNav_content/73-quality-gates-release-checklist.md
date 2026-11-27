@@ -1,5 +1,29 @@
 # CampusNav AI — Quality Gates and Release Checklist
 
+## CLARA voice and Camera Directions device readiness — 27 November 2026
+
+| Gate | Evidence |
+| --- | --- |
+| Local regression | `PASS`. Forty deterministic suites including 32 grounded CLARA cases and nine focused media cases. Lint, typecheck, default and opt-in builds, default PWA artifacts and whitespace checks passed. The default and opt-in workers precache 47 and 48 entries respectively. |
+| Voice preview | `BROWSER_VERIFIED` on Windows Chrome 158 with injected speech. Typed answers used manual playback. A reviewed voice turn spoke the exact visible public answer after a paused reply was stopped. Denial restored Retry focus, the transcript received focus, a Filipino recognizer selection was observed, and an edited Taglish phrase reached the existing grounding flow. Mute and the personnel text-only response produced no additional speech. |
+| Camera and route | `BROWSER_VERIFIED` with synthetic streams. Camera permission and background interruption exercised the 2D exit and track release. ZXing decoded a synthetic Library checkpoint after the guide released its stream. Confirming the QR result enabled restarting the canonical route. Cross-floor Avoid Stairs failure kept the guide disabled. Manual origin, stairs, offline cached navigation and Emergency isolation passed. |
+| Reflow and keyboard | `BROWSER_VERIFIED` at 390×844, 844×390, 820×1180 and 1180×820. The active-route CLARA and camera panels passed portrait and landscape checks, including 200% root text at phone width, a simulated tablet keyboard inset, reduced motion, and Tab/Escape and focus return. |
+| Release | Native recognition and audible speech, actual cameras and screen readers, installed iOS/Android mode and campus calibration await device evidence. Public previews, hosted recognition and the floor ribbon remain gated. |
+
+Run `npm run test:media-preview` and the loopback `npm run qa:media-preview` procedure below. The focused regressions reproduced the paused synthesizer and late transcript failures. Browser QA also caught clipped header controls at 200% text. The rerun verified the fixes and trapped unexpected console and page errors separately from the deliberate offline transport failure.
+
+### Android and iOS checklist for the 27 November preview
+
+Use a private HTTPS preview with `VITE_ENABLE_MEDIA_PREVIEW=true`. Run the following on Android Chrome and iPhone Safari, and on an Android tablet and iPad that represent the planned audience. Repeat in browser and installed or Home Screen mode wherever supported. Record the device, OS and browser versions, display mode, text scale, permission and local-language availability, and pass/fail for each row. Use public checkpoint and facility fixtures. Keep audio, transcript contents and identifiable frames out of the evidence.
+
+| Check | Pass condition |
+| --- | --- |
+| Permissions and fallback | Opening CLARA and Navigate prompts for neither device. Deny the explicit microphone and camera requests, verify typing and 2D remain usable, then grant from device settings and retry. A missing local language pack leaves typing available. |
+| Recognition and playback | Try English and Filipino separately when local packs are available. Include a safe Taglish facility question and record where editing was needed. Edit the candidate, submit once, and compare the audible public reply with the visible answer. A typed question requires **Read Aloud**. Pause then Stop, submit a new voice question, and check it plays once. Mute and a personnel question produce silence. |
+| Camera and routing | Confirm the Library origin and start Standard navigation to the Registrar. Check rear-camera preference, the selected step and floor through stairs, the mini-map, and track release on Return to 2D. Rescan the Library QR and repeat with a manual origin. Confirm the same route survives a 2D/3D view change where 3D is supported. Try Avoid Stairs to the Registrar and verify the no-route result, then try Library to Virtual Laboratory with Avoid Stairs. Emergency has no camera control. |
+| Interruption and accessibility | Rotate each device, increase text size, and use TalkBack or VoiceOver and an external keyboard where supported. Check labels, focus return, the transcript field above the software keyboard and the camera status and step announcements. Lock or background during permission, capture, playback and camera use. Check that the indicators clear and reopening requires a new explicit action. |
+| Installed and offline | After the worker controls an online visit, disable network and reopen the cached ordinary 2D route. Confirm the camera's supported fallback and the CLARA text status. Repeat in installed mode and record unsupported capabilities. |
+
 ## FS-5 Windows desktop recovery — 26 November 2026
 
 | Gate | Result |

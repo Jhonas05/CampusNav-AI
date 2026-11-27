@@ -13,6 +13,8 @@ export function createPlayback(device, report) {
     if (!current) return
     current = null
     synth.cancel()
+    // Cancelling the queue does not clear the synthesizer's paused state.
+    if (synth.paused) synth.resume()
     report("Stopped")
   }
   function play(reply) {
@@ -51,6 +53,7 @@ export function createPlayback(device, report) {
 export function createLocalRecognition(device, language, report, review) {
   let engine
   let cancelled = false
+  let finishing = false
   let captureTimer, finishTimer
   function cancel() {
     cancelled = true
@@ -64,11 +67,12 @@ export function createLocalRecognition(device, language, report, review) {
     }
   }
   function stop() {
-    if (cancelled || !engine) return
+    if (cancelled || finishing || !engine) return
+    finishing = true
     clearTimeout(captureTimer)
     report("Transcribing")
     finishTimer = setTimeout(() => { cancel(); report("Transcription timed out") }, 4000)
-    engine.stop()
+    try { engine.stop() } catch { cancel(); report("Recognition unavailable") }
   }
   async function start() {
     try {
@@ -91,21 +95,28 @@ export function createLocalRecognition(device, language, report, review) {
       engine.continuous = false
       engine.interimResults = false
       engine.onstart = () => {
+        if (cancelled || finishing) return
         clearTimeout(captureTimer)
         report("Listening")
         captureTimer = setTimeout(stop, 15000)
       }
       engine.onresult = event => {
+        if (cancelled) return
         const text = event.results[0]?.[0]?.transcript?.trim()
         cancel()
         if (text && text.length <= 500) review(text)
         else report("Please retry with a shorter question")
       }
       engine.onerror = event => {
+        if (cancelled) return
         cancel()
-        report(event.error === "not-allowed" ? "Microphone permission denied" : "Recognition unavailable")
+        report(["not-allowed", "service-not-allowed"].includes(event.error) ? "Microphone permission denied" : "Recognition unavailable")
       }
-      engine.onend = () => { cancel(); report("No transcript received") }
+      engine.onend = () => {
+        if (cancelled) return
+        cancel()
+        report("No transcript received")
+      }
       engine.start()
     } catch { if (!cancelled) { cancel(); report("Recognition unavailable") } }
   }

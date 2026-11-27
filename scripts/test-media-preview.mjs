@@ -40,6 +40,28 @@ test('speech uses only local voices, reports real events and ignores superseded 
   assert.equal(stops, 2)
 })
 
+test('stopping a paused reply allows the next eligible answer to start', () => {
+  const reply = { role: 'assistant', text: 'Public answer', speechScope: 'PUBLIC',
+    verified: true, mode: 'VERIFIED_DIRECT', sources: [{ id: 'library' }] }
+  let utterance
+  const states = []
+  const synth = { paused: false, getVoices: () => [{ lang: 'en-US', localService: true }],
+    speak(next) { utterance = next; if (!this.paused) next.onstart() },
+    cancel() { utterance = null },
+    pause() { this.paused = true; utterance.onpause() },
+    resume() { this.paused = false; utterance?.onresume() },
+  }
+  const audio = createPlayback({ speechSynthesis: synth, SpeechSynthesisUtterance: class {} }, state => states.push(state))
+  try {
+    audio.play(reply)
+    audio.pause()
+    assert.equal(states.at(-1), 'Paused')
+    audio.stop()
+    audio.play(reply)
+    assert.equal(states.at(-1), 'Speaking')
+  } finally { audio.stop() }
+})
+
 test('recognition refuses missing local capabilities and cancelled prechecks', async () => {
   let started = 0, resolve
   const states = []
@@ -96,6 +118,32 @@ test('a stalled local-language check times out and a late result cannot start th
   await checking
   assert.equal(started, false)
   assert.equal(states.length, 1)
+})
+
+test('cancelled recognition ignores a queued result and a second stop cannot extend finalization', async t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  let engine
+  class Recognition {
+    static available = async () => 'available'
+    constructor() { engine = this; this.stops = 0 }
+    get processLocally() { return this.local }
+    set processLocally(value) { this.local = value }
+    start() { this.onstart() }
+    stop() { this.stops++ }
+    abort() {}
+  }
+  const states = []
+  const mic = createLocalRecognition({ isSecureContext: true, SpeechRecognition: Recognition },
+    'fil-PH', state => states.push(state), assert.fail)
+  await mic.start()
+  const queuedResult = engine.onresult
+  mic.stop()
+  t.mock.timers.tick(3000)
+  mic.stop()
+  t.mock.timers.tick(1000)
+  queuedResult({ results: [[{ transcript: 'Nasaan ang Library?' }]] })
+  assert.equal(engine.stops, 1)
+  assert.equal(states.at(-1), 'Transcription timed out')
 })
 
 test('camera guide consumes only a valid active ordinary route from the confirmed endpoints', () => {
