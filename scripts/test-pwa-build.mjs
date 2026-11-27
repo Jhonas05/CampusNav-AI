@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
+import { resolve, sep } from 'node:path'
+import { pathToFileURL } from 'node:url'
 
-const distUrl = new URL('../dist/', import.meta.url)
+const previewDir = process.argv[2]
+const distUrl = previewDir ? pathToFileURL(resolve(previewDir) + sep) : new URL('../dist/', import.meta.url)
 const readDist = (file) => readFileSync(new URL(file, distUrl), 'utf8')
 
 assert.ok(existsSync(new URL('service-worker.js', distUrl)), 'production service worker must be generated')
@@ -32,7 +35,11 @@ for (const pattern of [/^assets\/index-.*\.js$/, /^assets\/Map-.*\.js$/, /^asset
 const forbidden = /(?:Admin|QRCheckpoints|MapVerificationPanel|Login-|Emergency-|EmergencyModePanel|Campus3D|three-renderer|QRScanner|qr-decoder|supabase-client)/
 assert.deepEqual(precacheUrls.filter((url) => forbidden.test(url)), [], 'restricted and opt-in bundles must not be precached')
 assert.match(worker, /campusnav-optional-static-/, 'optional 3D and QR cache policy must be built')
-assert.match(index, /rel="manifest" href="\/manifest\.json"/, 'production HTML must reference the canonical manifest')
+const manifest = index.match(/<link rel="manifest" href="\/manifest\.json"[^>]*>/)?.[0]
+assert.ok(manifest, 'HTML must reference the canonical manifest')
+const includesCredentials = manifest.includes('crossorigin="use-credentials"')
+assert.equal(includesCredentials, Boolean(previewDir), 'only the private preview manifest should send gateway credentials')
+assert.equal(precacheUrls.some((url) => /\/CameraGuide-.*\.js$/.test(url)), Boolean(previewDir), 'only the private preview should precache Camera Directions')
 assert.doesNotMatch(index, /(?:three-renderer|qr-decoder|supabase-client)-/, 'the HTML entry must not preload excluded or opt-in bundles')
 
-console.log(`PWA production build boundaries: PASS (${precacheUrls.length} precache entries)`)
+console.log(`PWA ${previewDir ? 'private preview' : 'production'} build boundaries: PASS (${precacheUrls.length} precache entries)`)

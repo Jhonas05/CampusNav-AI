@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import { VitePWA } from 'vite-plugin-pwa'
 
@@ -10,9 +10,20 @@ const optionalBundleName = (id) => {
 }
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
+    loadEnv(mode, process.cwd(), 'VITE_ENABLE_MEDIA_PREVIEW').VITE_ENABLE_MEDIA_PREVIEW === 'true' && {
+      name: 'private-preview-manifest',
+      apply: 'build',
+      transformIndexHtml(html) {
+        // A protected manifest needs the gateway session even on the same origin.
+        return html.replace(
+          '<link rel="manifest" href="/manifest.json"',
+          '<link rel="manifest" href="/manifest.json" crossorigin="use-credentials"',
+        )
+      },
+    },
     VitePWA({
       strategies: 'injectManifest',
       srcDir: 'src',
@@ -62,4 +73,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
